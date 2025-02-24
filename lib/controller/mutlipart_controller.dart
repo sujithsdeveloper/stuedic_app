@@ -8,7 +8,8 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
 
 class MutlipartController extends ChangeNotifier {
-  Future<String> uploadMedia(
+  String? imageUrl;
+  Future<void> uploadMedia(
       {required BuildContext context,
       required String filePath,
       required Uri API,
@@ -30,12 +31,12 @@ class MutlipartController extends ChangeNotifier {
           String videoUrl = decodedResponse['hlsUrl'];
           Logger().d('video uploaded successfully: $videoUrl');
 
-          return videoUrl;
         } else {
           String imgUrl = decodedResponse['fullUrl'];
 
           Logger().f('Image uploaded successfully: $imgUrl');
-          return imgUrl;
+          imageUrl = imgUrl;
+          notifyListeners();
         }
       } else if (streamedResponse.statusCode == 401) {
         await refreshAccessToken(context: context);
@@ -47,12 +48,10 @@ class MutlipartController extends ChangeNotifier {
         Logger().e(
             'Failed to upload image. Server response: ${errorResponse.body}');
 
-        return '';
       }
     } catch (e) {
       Logger().e(e.toString());
       errorSnackbar(label: e.toString(), context: context);
-      return '';
     }
   }
 }

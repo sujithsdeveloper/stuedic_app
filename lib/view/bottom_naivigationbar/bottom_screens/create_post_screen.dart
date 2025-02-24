@@ -3,8 +3,10 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
+import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -166,6 +168,7 @@ class PostSection extends StatelessWidget {
     final proRead = context.read<CrudOperationController>();
     final proReadAsset = context.read<AssetPickerController>();
     final proWatchAsset = context.watch<AssetPickerController>();
+    final multipartObj = context.watch<MutlipartController>();
     final controller = TextEditingController();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -245,12 +248,13 @@ class PostSection extends StatelessWidget {
               }
 
               proRead.uploadPost(
-                  imagePath: proWatchAsset.pickedAsset!.path,
+                  imagePath: multipartObj.imageUrl ?? '',
                   caption: controller.text.isEmpty ? '' : controller.text,
                   context: context);
               controller.clear();
               proReadAsset.pickedAsset = null;
               proReadAsset.notifyListeners();
+              context.read<HomefeedController>().getAllPost(context: context);
               Navigator.pop(context);
             },
           ),

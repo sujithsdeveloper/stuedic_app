@@ -6,6 +6,7 @@ import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart'
 import 'package:stuedic_app/controller/API_controller.dart/chat_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/chat_list_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -64,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
+        ChangeNotifierProvider(create: (context) => HomefeedController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

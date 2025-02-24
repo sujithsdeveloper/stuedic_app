@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
@@ -18,17 +20,26 @@ class PostCard extends StatelessWidget {
       required this.imageUrl,
       required this.caption,
       required this.name,
-      required this.index});
+      required this.index,
+      required this.isFollowed,
+      required this.isLiked,
+      required this.postId});
   final String profileUrl;
   final String imageUrl;
   final String caption;
   final String name;
   final int index;
+  final bool isFollowed;
+  final bool isLiked;
+  final String postId;
 
   @override
   Widget build(BuildContext context) {
     final proRead = context.read<AppContoller>();
     final proWatch = context.watch<AppContoller>();
+    final proWatchApi = context.watch<CrudOperationController>();
+    final proReadApi = context.read<CrudOperationController>();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -132,10 +143,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          Text(
-            caption,
-            style: TextStyle(fontSize: 16),
-          ),
+          Text(caption, style: TextStyle(fontSize: 16)),
           SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -144,8 +152,9 @@ class PostCard extends StatelessWidget {
                 GestureDetector(
                     onTap: () {
                       proRead.toggleLike(index: index);
+                      proReadApi.likePost(postId: postId, context: context);
                     },
-                    child: proRead.isPostLiked(index)
+                    child: proRead.isPostLiked(index) 
                         ? SizedBox(
                             height: 30,
                             child: Lottie.asset(
