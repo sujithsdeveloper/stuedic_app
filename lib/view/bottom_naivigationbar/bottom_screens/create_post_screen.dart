@@ -12,6 +12,8 @@ import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/view/screens/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_default_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -141,7 +143,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                           controller: tabController,
                           children: [
                             PostSection(),
-                            Center(child: Text("Create a Reel")),
+                            ReelSection(),
                             Center(child: Text("Create a Story")),
                           ],
                         ),
@@ -153,115 +155,6 @@ class _CreatePostScreenState extends State<CreatePostScreen>
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class PostSection extends StatelessWidget {
-  const PostSection({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final proRead = context.read<CrudOperationController>();
-    final proReadAsset = context.read<AssetPickerController>();
-    final proWatchAsset = context.watch<AssetPickerController>();
-    final multipartObj = context.watch<MutlipartController>();
-    final controller = TextEditingController();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        spacing: 20,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            height: 293,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Color(0xffF5FFE1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: proWatchAsset.pickedAsset == null
-                    ? GradientButton(
-                        label: 'Upload image',
-                        onTap: () {
-                          mediaBottomSheet(
-                              context: context,
-                              onCameraTap: () async {
-                                await proReadAsset.pickImage(
-                                    context: context,
-                                    source: ImageSource.camera);
-                              },
-                              onGalleryTap: () async {
-                                await proReadAsset.pickImage(
-                                    context: context,
-                                    source: ImageSource.gallery);
-                              });
-                        },
-                      )
-                    : Stack(
-                        children: [
-                          Image.file(proWatchAsset.pickedAsset!),
-                          Positioned(
-                            top: 5,
-                            right: 5,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                proReadAsset.pickedAsset = null;
-                                proReadAsset.notifyListeners();
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-              ),
-            ),
-          ),
-          Text(
-            'Caption',
-            style: StringStyle.normalTextBold(size: 18),
-          ),
-          TextfieldWidget(
-            hint: 'Write a caption',
-            controller: controller,
-            maxLength: 250,
-          ),
-          Spacer(),
-          GradientButton(
-            label: 'Post',
-            isColored: true,
-            onTap: () {
-              if (proWatchAsset.pickedAsset == null) {
-                return;
-              }
-
-              proRead.uploadPost(
-                  imagePath: multipartObj.imageUrl ?? '',
-                  caption: controller.text.isEmpty ? '' : controller.text,
-                  context: context);
-              controller.clear();
-              proReadAsset.pickedAsset = null;
-              proReadAsset.notifyListeners();
-              context.read<HomefeedController>().getAllPost(context: context);
-              Navigator.pop(context);
-            },
-          ),
-          SizedBox(
-            height: 30,
-          )
-        ],
       ),
     );
   }

@@ -41,4 +41,7 @@ class APIs {
   //chat
   static Uri chatList = Uri.parse('${baseUrl}api/v1/chat/screen');
 
+  //Upload video
+  static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');
+
 }

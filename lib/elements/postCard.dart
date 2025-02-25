@@ -155,15 +155,7 @@ class PostCard extends StatelessWidget {
                 GestureDetector(
                     onTap: () {
                       proReadInteraction.toggleLike(
-                          index: index, context: context, postId: postId);
-
-                      // if (isLiked) {
-                      //   proReadInteraction.unLikePost(
-                      //       postId: postId, context: context);
-                      // } else {
-                      //   proReadInteraction.likePost(
-                      //       postId: postId, context: context);
-                      // }
+                          index: index, postId: postId, context: context);
                     },
                     child: proReadInteraction.isPostLiked(index) || isLiked
                         ? SizedBox(

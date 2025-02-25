@@ -30,7 +30,6 @@ class MutlipartController extends ChangeNotifier {
         if (isVideo) {
           String videoUrl = decodedResponse['hlsUrl'];
           Logger().d('video uploaded successfully: $videoUrl');
-
         } else {
           String imgUrl = decodedResponse['fullUrl'];
 
@@ -46,8 +45,7 @@ class MutlipartController extends ChangeNotifier {
       } else {
         var errorResponse = await http.Response.fromStream(streamedResponse);
         Logger().e(
-            'Failed to upload image. Server response: ${errorResponse.body}');
-
+            'Failed to upload media. Server response: ${errorResponse.statusCode}');
       }
     } catch (e) {
       Logger().e(e.toString());
