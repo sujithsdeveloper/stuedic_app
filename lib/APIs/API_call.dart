@@ -45,7 +45,9 @@ class ApiCall {
       {required Uri url,
       required Function(http.Response) onSucces,
       required Function() onTokenExpired,
-      required BuildContext context}) async {
+      required BuildContext context,
+      
+      }) async {
     String? token = await AppUtils.getToken();
 
     try {
@@ -57,6 +59,8 @@ class ApiCall {
       if (response.statusCode == 200) {
         onSucces(response);
       } else if (response.statusCode == 401) {
+      await  refreshAccessToken(context: context);
+
         onTokenExpired();
       } else {
         log(response.body);

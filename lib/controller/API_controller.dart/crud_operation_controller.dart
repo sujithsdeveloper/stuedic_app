@@ -27,19 +27,6 @@ class CrudOperationController extends ChangeNotifier {
         context: context);
   }
 
-  bool isLiked = false;
-  Future<void> likePost(
-      {required String postId, required BuildContext context}) async {
-    await ApiCall.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/Post/likePost?postid=$postId'),
-        onSucces: (p0) {
-          Logger().f(p0.body);
-          isLiked = true;
-          notifyListeners();
-        },
-        onTokenExpired: () {},
-        context: context);
-  }
 
   void commentPost() {}
   void followUser() {}

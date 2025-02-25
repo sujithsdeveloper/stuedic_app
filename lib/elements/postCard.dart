@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
@@ -39,6 +40,8 @@ class PostCard extends StatelessWidget {
     final proWatch = context.watch<AppContoller>();
     final proWatchApi = context.watch<CrudOperationController>();
     final proReadApi = context.read<CrudOperationController>();
+    final proWatchInteraction = context.watch<PostInteractionController>();
+    final proReadInteraction = context.read<PostInteractionController>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -151,10 +154,18 @@ class PostCard extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      proRead.toggleLike(index: index);
-                      proReadApi.likePost(postId: postId, context: context);
+                      proReadInteraction.toggleLike(
+                          index: index, context: context, postId: postId);
+
+                      // if (isLiked) {
+                      //   proReadInteraction.unLikePost(
+                      //       postId: postId, context: context);
+                      // } else {
+                      //   proReadInteraction.likePost(
+                      //       postId: postId, context: context);
+                      // }
                     },
-                    child: proRead.isPostLiked(index) 
+                    child: proReadInteraction.isPostLiked(index) || isLiked
                         ? SizedBox(
                             height: 30,
                             child: Lottie.asset(

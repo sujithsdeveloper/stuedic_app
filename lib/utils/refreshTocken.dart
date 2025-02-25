@@ -1,15 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:stuedic_app/APIs/APIs.dart';
+import 'package:stuedic_app/model/refresh_token_model.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
-
+import 'package:stuedic_app/utils/app_utils.dart';
 
 Future<void> refreshAccessToken({required BuildContext context}) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('refreshToken');
+  String? token = await AppUtils.getToken(isRefreshToken: true);
   var response = await http.get(APIs.grantAccessTokenUrl, headers: {
     'Content-Type': 'application/json',
     "Authorization": "Bearer $token"
@@ -17,15 +18,13 @@ Future<void> refreshAccessToken({required BuildContext context}) async {
 
   try {
     if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      final newAccessToken = responseData['token'];
-      final newRefreshToken = responseData['refreshToken'];
-      prefs.setString('token', newAccessToken);
-      if (newRefreshToken != null) {
-        prefs.setString('refreshToken', newRefreshToken);
-      }
+      final resModel = refreshTokenModelFromJson(response.body);
+      // prefs.setString('', resModel.token??'');
+      SharedPreferences prefs = await SharedPreferences.getInstance();  
+      prefs.setString('token', resModel.token ?? '');
+      
     }
   } catch (e) {
-errorSnackbar(label: e.toString(), context: context);
+    errorSnackbar(label: e.toString(), context: context);
   }
 }

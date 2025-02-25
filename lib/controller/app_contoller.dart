@@ -85,16 +85,6 @@ class AppContoller extends ChangeNotifier {
     }
   }
 
-  Set<int> likedPosts = {};
-
-  void toggleLike({required int index}) {
-    if (likedPosts.contains(index)) {
-      likedPosts.remove(index);
-    } else {
-      likedPosts.add(index);
-    }
-    notifyListeners();
-  }
 
   Set<int> following = {};
 
@@ -154,9 +144,7 @@ class AppContoller extends ChangeNotifier {
     return following.contains(index);
   }
 
-  bool isPostLiked(int index) {
-    return likedPosts.contains(index);
-  }
+
 
   bool isClickedStoryLoading = false;
   int? tappedStoryIndex; // Store the tapped story index
