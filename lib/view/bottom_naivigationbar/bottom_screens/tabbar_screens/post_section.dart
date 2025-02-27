@@ -98,22 +98,21 @@ class PostSection extends StatelessWidget {
                   return;
                 }
 
-                proRead.uploadPost(
-                    imagePath: multipartObj.imageUrl ?? '',
-                    caption: controller.text.isEmpty ? '' : controller.text,
-                    context: context);
-                controller.clear();
-                proReadAsset.pickedImage = null;
-                context.read<PostInteractionController>().clearData();
-                context.read<HomefeedController>().getAllPost(context: context);
-                proReadAsset.notifyListeners();
-              },
-            ),
-            SizedBox(
-              height: 30,
-            )
-          ],
-        ),
+              proRead.uploadPost(
+                  imagePath: multipartObj.imageUrl ?? '',
+                  caption: controller.text.isEmpty ? '' : controller.text,
+                  context: context);
+              controller.clear();
+              proReadAsset.pickedImage = null;
+              proReadAsset.notifyListeners();
+              context.read<HomefeedController>().getAllPost(context: context);
+              Navigator.pop(context);
+            },
+          ),
+          SizedBox(
+            height: 30,
+          )
+        ],
       ),
     );
   }

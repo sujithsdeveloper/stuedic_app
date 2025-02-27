@@ -68,10 +68,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
-       
-        ChangeNotifierProvider(create: (context) => VideoEditController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
