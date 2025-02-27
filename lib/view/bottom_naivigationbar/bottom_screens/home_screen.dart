@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   isLiked: item?.isLiked ?? false,
                   isFollowed: false,
                   index: index,
+                  userId: item?.userId ?? '',
                   imageUrl: item?.postContentUrl ?? '',
                   name: item?.username ?? '',
                   profileUrl: item?.profilePicUrl ?? '',

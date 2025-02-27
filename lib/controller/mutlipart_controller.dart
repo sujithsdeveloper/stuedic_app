@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -8,6 +8,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
 
 class MutlipartController extends ChangeNotifier {
+  
   String? imageUrl;
   Future<void> uploadMedia(
       {required BuildContext context,
@@ -15,6 +16,7 @@ class MutlipartController extends ChangeNotifier {
       required Uri API,
       bool isVideo = false}) async {
     try {
+      log('uploading.............................................................');
       String? token = await AppUtils.getToken();
       var request = http.MultipartRequest('POST', API);
 
@@ -23,7 +25,9 @@ class MutlipartController extends ChangeNotifier {
       request.headers['Authorization'] = 'Bearer $token';
       var streamedResponse = await request.send();
 
+      log('response: ${streamedResponse.statusCode}');
       if (streamedResponse.statusCode == 200) {
+        log('response succes');
         var response = await http.Response.fromStream(streamedResponse);
         var decodedResponse = jsonDecode(response.body);
 
@@ -31,6 +35,8 @@ class MutlipartController extends ChangeNotifier {
           String videoUrl = decodedResponse['hlsUrl'];
           Logger().d('video uploaded successfully: $videoUrl');
         } else {
+          log('response image');
+          log(response.body);
           String imgUrl = decodedResponse['fullUrl'];
 
           Logger().f('Image uploaded successfully: $imgUrl');

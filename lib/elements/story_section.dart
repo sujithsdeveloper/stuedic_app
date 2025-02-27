@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/screens/pick_media_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
@@ -16,11 +17,10 @@ class StorySection extends StatefulWidget {
 
 class _StorySectionState extends State<StorySection> {
   List<Map<String, String>> items = [
-    {"username": "John", "profileUrl": "https://via.placeholder.com/150"},
-    {"username": "Jane", "profileUrl": "https://via.placeholder.com/150"},
-    {"username": "Alex", "profileUrl": "https://via.placeholder.com/150"},
+    {"username": "John", "profileUrl": ""},
+    {"username": "Jane", "profileUrl": ""},
+    {"username": "Alex", "profileUrl": ""},
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,9 +192,8 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
             child: GestureDetector(
               onTap: widget.onTap,
               child: CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(widget.profileUrl),
-              ),
+                  radius: 30,
+                  backgroundImage: AppUtils.getProfile(url: widget.profileUrl)),
             ),
           ),
         );

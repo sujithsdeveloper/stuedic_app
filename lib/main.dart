@@ -15,6 +15,7 @@ import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
+import 'package:stuedic_app/controller/video_edit_controller.dart';
 import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/auth/login_screen.dart';
@@ -68,7 +69,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(
+            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => VideoEditController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

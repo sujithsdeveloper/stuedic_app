@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
-
 import 'package:stuedic_app/styles/snackbar__style.dart';
 
 class AssetPickerController extends ChangeNotifier {
+
   File? pickedImage;
   File? pickedVideo;
   Future<void> pickMedia({
@@ -16,13 +16,13 @@ class AssetPickerController extends ChangeNotifier {
     required BuildContext context,
     required ImageSource source,
   }) async {
-    ImagePicker picker = ImagePicker();
+    final picker = ImagePicker();
     if (isVideo) {
       final video = await picker.pickVideo(source: source);
       if (video != null) {
         pickedVideo = File(video.path);
         notifyListeners();
-        log(pickedVideo.toString());
+        log('Picked video path ${pickedVideo.toString()}');
         try {
           await context.read<MutlipartController>().uploadMedia(
               context: context,
@@ -42,8 +42,9 @@ class AssetPickerController extends ChangeNotifier {
       if (image != null) {
         pickedImage = File(image.path);
         try {
-          context.read<MutlipartController>().uploadMedia(
+          await context.read<MutlipartController>().uploadMedia(
               context: context,
+              isVideo: false,
               filePath: image.path,
               API: APIs.uploadPicForPost);
           notifyListeners();

@@ -14,7 +14,6 @@ import 'package:stuedic_app/view/auth/registration_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();

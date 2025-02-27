@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -11,6 +13,7 @@ import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
@@ -24,7 +27,8 @@ class PostCard extends StatelessWidget {
       required this.index,
       required this.isFollowed,
       required this.isLiked,
-      required this.postId});
+      required this.postId,
+      required this.userId});
   final String profileUrl;
   final String imageUrl;
   final String caption;
@@ -33,14 +37,15 @@ class PostCard extends StatelessWidget {
   final bool isFollowed;
   final bool isLiked;
   final String postId;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
+    final commentController = TextEditingController();
     final proRead = context.read<AppContoller>();
     final proWatch = context.watch<AppContoller>();
     final proWatchApi = context.watch<CrudOperationController>();
     final proReadApi = context.read<CrudOperationController>();
-    final proWatchInteraction = context.watch<PostInteractionController>();
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Padding(
@@ -51,7 +56,7 @@ class PostCard extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(profileUrl),
+                backgroundImage: AppUtils.getProfile(url: profileUrl),
                 radius: 24,
               ),
               SizedBox(width: 12),
@@ -79,7 +84,8 @@ class PostCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      proRead.toggleFollow(index: index, context: context);
+                      proReadInteraction.toggleFollow(
+                          index: index, context: context, userId: userId);
                     },
                     child: Container(
                       height: 28,
@@ -94,7 +100,9 @@ class PostCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100)),
                       child: Center(
                         child: Text(
-                          proRead.isFollowing(index) ? 'Unfollow' : 'Follow',
+                          proReadInteraction.isFollowed(index)
+                              ? 'Unfollow'
+                              : 'Follow',
                           style: StringStyle.smallText(isBold: true),
                         ),
                       ),
@@ -185,7 +193,13 @@ class PostCard extends StatelessWidget {
                 SizedBox(width: 8),
                 GestureDetector(
                   onTap: () {
-                    commentBottomSheet(context);
+                    log('post id: $postId');
+                    proReadInteraction.getComment(
+                        postId: postId, context: context);
+                    commentBottomSheet(
+                        context: context,
+                        postId: postId,
+                        commentController: commentController);
                   },
                   child: Row(
                     spacing: 5,
@@ -213,10 +227,11 @@ class PostCard extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    proRead.toggleBookmark(index);
+                    proReadInteraction.toggleBookmark(
+                        context: context, index: index, postId: postId);
                   },
                   icon: Icon(
-                      proRead.isBookMarked(index)
+                      proReadInteraction.isBookMarked(index)
                           ? CupertinoIcons.bookmark_fill
                           : CupertinoIcons.bookmark,
                       color: Colors.black),

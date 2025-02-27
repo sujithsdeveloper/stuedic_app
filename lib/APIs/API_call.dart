@@ -9,9 +9,10 @@ import 'package:stuedic_app/utils/refreshTocken.dart';
 
 
 class ApiCall {
+
   static Future<void> post(
       {required Uri url,
-      required Map body,
+       Map? body,
       required Function(http.Response) onSucces,
       required Function() onTokenExpired,
       required BuildContext context}) async {

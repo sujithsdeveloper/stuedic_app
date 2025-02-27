@@ -14,7 +14,9 @@ class TextfieldWidget extends StatelessWidget {
     this.keyboardType,
     this.onChanged,
     this.maxLength,
-    this.helperText,  this.dismissKeyboardOnTapOutside=false, this.maxline,
+    this.helperText,
+    this.dismissKeyboardOnTapOutside = false,
+    this.maxline,
   });
   final String hint;
   final bool isPassword;
@@ -36,14 +38,14 @@ class TextfieldWidget extends StatelessWidget {
     // final prowatch=AppUtils.appProvider(context: context);
 
     return TextFormField(
-      maxLines: maxline,
-      maxLength: maxLength == null ? null : maxLength,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       key: key,
       onChanged: onChanged,
-      onTapOutside:dismissKeyboardOnTapOutside? (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      }:null,
+      onTapOutside: dismissKeyboardOnTapOutside
+          ? (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          : null,
       validator: validator,
       keyboardType: keyboardType,
       controller: controller,
