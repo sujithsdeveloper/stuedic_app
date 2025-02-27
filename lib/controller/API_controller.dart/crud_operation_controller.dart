@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
@@ -22,11 +24,11 @@ class CrudOperationController extends ChangeNotifier {
         body: data,
         onSucces: (p0) {
           Logger().f(p0.body);
+          log('Upload response code: ${p0.statusCode}');
         },
         onTokenExpired: () {},
         context: context);
   }
-
 
   void commentPost() {}
   void followUser() {}

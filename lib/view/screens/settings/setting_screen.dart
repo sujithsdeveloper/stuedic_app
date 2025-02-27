@@ -10,7 +10,6 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/screens/settings/language_screen.dart';
 import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 
-
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
@@ -79,37 +78,37 @@ class SettingScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: List.generate(
-              settingData.length,
-              (index) => SettingItem(
-                label: settingData[index]['label'],
-                iconData: settingData[index]['icon'],
-                onTap: settingData[index]['onTap'],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: List.generate(
+                settingData.length,
+                (index) => SettingItem(
+                  label: settingData[index]['label'],
+                  iconData: settingData[index]['icon'],
+                  onTap: settingData[index]['onTap'],
+                ),
               ),
             ),
-          ),
-          Column(
-            children: [
-              Text(
-                "Stuedic",
-                style: StringStyle.topHeading(size: 25),
-              ),
-              Text("Version 1.0.0"),
-              SizedBox(
-                height: 25,
-              ),
-            ],
-          )
-        ],
+            Column(
+              children: [
+                Text(
+                  "Stuedic",
+                  style: StringStyle.topHeading(size: 25),
+                ),
+                Text("Version 1.0.0"),
+                SizedBox(
+                  height: 25,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
-
-
 }
 
 class SettingItem extends StatelessWidget {

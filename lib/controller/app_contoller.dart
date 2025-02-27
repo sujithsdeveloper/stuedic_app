@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/screens/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
@@ -22,7 +21,7 @@ class AppContoller extends ChangeNotifier {
   void clearState() {
     isEmailSelected = true;
     isButtonColored = false;
-    changeMaxLine=false;
+    changeMaxLine = false;
     notifyListeners();
   }
 
@@ -85,66 +84,12 @@ class AppContoller extends ChangeNotifier {
     }
   }
 
-
   Set<int> following = {};
 
-  void toggleFollow({required int index, required BuildContext context}) {
-    if (following.contains(index)) {
-      showDialog(
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: Text("Do you want unfollow user?"),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: ColorConstants.secondaryColor),
-              ),
-            ),
-            CupertinoDialogAction(
-              onPressed: () {
-                following.remove(index);
-                notifyListeners();
-                Navigator.pop(context);
-              },
-              child: Text('Unfollow',
-                  style: TextStyle(color: ColorConstants.secondaryColor)),
-            ),
-          ],
-        ),
-      );
-    } else {
-      following.add(index);
-    }
-    notifyListeners();
-  }
-
-  Set<int> bookmarks = {};
-
-  void toggleBookmark(int index) {
-    if (bookmarks.contains(index)) {
-      bookmarks.remove(index);
-      AppUtils.showToast(msg: 'Unaved');
-    } else {
-      bookmarks.add(index);
-      AppUtils.showToast(msg: 'Saved');
-    }
-
-    notifyListeners();
-  }
-
-  bool isBookMarked(int index) {
-    return bookmarks.contains(index);
-  }
 
   bool isFollowing(int index) {
     return following.contains(index);
   }
-
-
 
   bool isClickedStoryLoading = false;
   int? tappedStoryIndex; // Store the tapped story index

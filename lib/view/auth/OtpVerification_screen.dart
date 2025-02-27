@@ -10,7 +10,6 @@ import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/screens/setup_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 
-
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
 
@@ -48,91 +47,93 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              Text(
-                "Enter Confirmation Code",
-                style: StringStyle.topHeading(size: 32),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Enter the 4-digit OTP code. We’ve just sent to",
-                style: StringStyle.normalText(),
-              ),
-              Text(
-                "+62 857 1700 5561", // Replace dynamically if needed
-                style: StringStyle.normalTextBold(),
-              ),
-              const SizedBox(height: 24),
-
-              // OTP Input Field
-              PinCodeTextField(
-                controller: _controller, // Assigned controller
-                length: 4,
-                obscureText: false,
-                animationType: AnimationType.fade,
-                keyboardType: TextInputType.number,
-                autoFocus: false, // Prevents keyboard flickering
-                autoDismissKeyboard: true,
-                enableActiveFill: true,
-                validator: (value) => otpValidator(value),
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
-                  borderRadius: BorderRadius.circular(100),
-                  fieldHeight: 48,
-                  fieldWidth: 76,
-                  activeFillColor: Colors.white,
-                  inactiveFillColor: const Color(0xffF6F8F9),
-                  selectedFillColor: Colors.white,
-                  inactiveColor: Colors.grey.shade400,
-                  selectedColor: ColorConstants.primaryColor2,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                Text(
+                  "Enter Confirmation Code",
+                  style: StringStyle.topHeading(size: 32),
                 ),
-                animationDuration: const Duration(milliseconds: 200),
-                appContext: context,
-                onChanged: (value) {
-                  proRead.changeButtonColor(); // Updates button color
-                },
-                onCompleted: (value) {
-                  proRead.changeButtonColor();
-                },
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
+                Text(
+                  "Enter the 4-digit OTP code. We’ve just sent to",
+                  style: StringStyle.normalText(),
+                ),
+                Text(
+                  "+62 857 1700 5561", // Replace dynamically if needed
+                  style: StringStyle.normalTextBold(),
+                ),
+                const SizedBox(height: 24),
 
-              // Resend OTP
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: () {
-                    // Add OTP resend logic
+                // OTP Input Field
+                PinCodeTextField(
+                  controller: _controller, // Assigned controller
+                  length: 4,
+                  obscureText: false,
+                  animationType: AnimationType.fade,
+                  keyboardType: TextInputType.number,
+                  autoFocus: false, // Prevents keyboard flickering
+                  autoDismissKeyboard: true,
+                  enableActiveFill: true,
+                  validator: (value) => otpValidator(value),
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(100),
+                    fieldHeight: 48,
+                    fieldWidth: 76,
+                    activeFillColor: Colors.white,
+                    inactiveFillColor: const Color(0xffF6F8F9),
+                    selectedFillColor: Colors.white,
+                    inactiveColor: Colors.grey.shade400,
+                    selectedColor: ColorConstants.primaryColor2,
+                  ),
+                  animationDuration: const Duration(milliseconds: 200),
+                  appContext: context,
+                  onChanged: (value) {
+                    proRead.changeButtonColor(); // Updates button color
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Didn’t receive OTP?",
-                        style: StringStyle.normalText(),
-                      ),
-                      Text(
-                        " Resend",
-                        style: StringStyle.normalTextBold(),
-                      )
-                    ],
+                  onCompleted: (value) {
+                    proRead.changeButtonColor();
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Resend OTP
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    onPressed: () {
+                      // Add OTP resend logic
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Didn’t receive OTP?",
+                          style: StringStyle.normalText(),
+                        ),
+                        Text(
+                          " Resend",
+                          style: StringStyle.normalTextBold(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Continue Button
-              GradientButton(
-                  width: double.infinity,
-                  label: 'Continue',
-                  isColored: true,
-                  onTap: () {
-                    AppRoutes.push(context, const SetupScreen());
-                  }),
-            ],
+                // Continue Button
+                GradientButton(
+                    width: double.infinity,
+                    label: 'Continue',
+                    isColored: true,
+                    onTap: () {
+                      AppRoutes.push(context, const SetupScreen());
+                    }),
+              ],
+            ),
           ),
         ),
       ),

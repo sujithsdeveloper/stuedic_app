@@ -13,7 +13,7 @@ class HomefeedController extends ChangeNotifier {
         onSucces: (p0) {
           homeFeed = homeFeedFromJson(p0.body);
           notifyListeners();
-          log(p0.body);
+          // log(p0.body);
         },
         onTokenExpired: () {
           getAllPost(context: context);
