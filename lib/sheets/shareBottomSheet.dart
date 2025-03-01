@@ -4,9 +4,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
-
 
 Future<dynamic> shareBottomSheet(BuildContext context) {
   return showModalBottomSheet(
@@ -130,14 +128,15 @@ Future<dynamic> shareBottomSheet(BuildContext context) {
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
-                  itemCount: items.length,
+                  itemCount: 5,
                   itemBuilder: (context, index) => ListTile(
                     leading: CircleAvatar(
                       radius: 18,
-                      backgroundImage: NetworkImage(items[index]['profileUrl']),
+                      backgroundImage: NetworkImage(''),
                     ),
                     title: Text(
-                      items[index]['username'],
+                      // items[index]['username'],
+                      '',
                       style: StringStyle.normalTextBold(),
                     ),
                     trailing: Container(

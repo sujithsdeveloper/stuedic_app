@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
 
 
@@ -32,7 +33,7 @@ class ApiCall {
         onTokenExpired();
       } else {
         log(response.body);
-        customSnackbar(label: "something went wrong", context: context);
+        customSnackbar(label: StringConstants.wrong, context: context);
       }
     } catch (e) {
       log(e.toString());
@@ -65,7 +66,7 @@ class ApiCall {
         onTokenExpired();
       } else {
         log(response.body);
-        customSnackbar(label: "something went wrong", context: context);
+        customSnackbar(label: StringConstants.wrong, context: context);
       }
     } catch (e) {
       log(e.toString());

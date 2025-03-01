@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.d
 import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
 import 'package:stuedic_app/view/screens/chat_list_screen.dart';
@@ -18,10 +21,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late String currentUserId;
   @override
   void initState() {
     super.initState();
     context.read<HomefeedController>().getAllPost(context: context);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        final currentUserId = await AppUtils.getUserId();
+        log('Current userid= $currentUserId');
+      },
+    );
   }
 
   @override

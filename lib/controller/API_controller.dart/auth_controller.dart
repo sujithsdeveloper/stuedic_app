@@ -39,6 +39,7 @@ class AuthController extends ChangeNotifier {
       if (response.statusCode == 200) {
         LoginModel loginModelResponse = loginModelFromJson(response.body);
         final preff = await SharedPreferences.getInstance();
+        // preff.setString(StringConstants.currentUserID, loginModelResponse.);
         preff.setString(StringConstants.refreshToken,
             loginModelResponse.refreshToken ?? '');
         preff

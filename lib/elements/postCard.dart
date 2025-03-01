@@ -48,6 +48,7 @@ class PostCard extends StatelessWidget {
     final proWatchApi = context.watch<CrudOperationController>();
     final proReadApi = context.read<CrudOperationController>();
     final proReadInteraction = context.read<PostInteractionController>();
+  
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -202,12 +203,13 @@ class PostCard extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     log('post id: $postId');
-                    proReadInteraction.getComment(
-                        postId: postId, context: context);
+
                     commentBottomSheet(
                         context: context,
                         postId: postId,
                         commentController: commentController);
+                    proReadInteraction.getComment(
+                        postId: postId, context: context);
                   },
                   child: Row(
                     spacing: 5,

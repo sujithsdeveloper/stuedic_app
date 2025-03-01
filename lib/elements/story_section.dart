@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -148,6 +149,13 @@ class AnimatedGradientRing extends StatefulWidget {
   _AnimatedGradientRingState createState() => _AnimatedGradientRingState();
 }
 
+int generateRandomTime() {
+  final random = Random();
+  int minTime = 100;
+  int maxTime = 2000;
+  return minTime + random.nextInt(maxTime - minTime + 1);
+}
+
 class _AnimatedGradientRingState extends State<AnimatedGradientRing>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
@@ -157,7 +165,7 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: Duration(milliseconds: generateRandomTime()),
     );
   }
 
@@ -171,7 +179,6 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
   Widget build(BuildContext context) {
     final proWatch = context.watch<AppContoller>();
 
-    // Animate only if this story is tapped
     if (proWatch.tappedStoryIndex == widget.index) {
       _controller.repeat();
     } else {
@@ -188,7 +195,7 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
               : 0),
           child: Padding(
             padding:
-                const EdgeInsets.all(4.0), // Space between gradient and image
+                const EdgeInsets.all(1),
             child: GestureDetector(
               onTap: widget.onTap,
               child: CircleAvatar(
@@ -212,7 +219,12 @@ class GradientRingPainter extends CustomPainter {
     final Rect rect = Rect.fromCircle(
         center: size.center(Offset.zero), radius: size.width / 2);
     final SweepGradient gradient = SweepGradient(
-      colors: [Colors.pink, Colors.orange, Colors.yellow, Colors.pink],
+      colors: [
+        ColorConstants.primaryColor,
+        ColorConstants.primaryColor2,
+        ColorConstants.primaryColor,
+        ColorConstants.primaryColor2
+      ],
       stops: [0.0, 0.3, 0.7, 1.0],
       transform: GradientRotation(2 * pi * progress),
     );

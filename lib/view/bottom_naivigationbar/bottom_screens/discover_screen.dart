@@ -5,6 +5,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/search_screen.dart';
 
 

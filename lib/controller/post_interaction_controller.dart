@@ -201,6 +201,7 @@ class PostInteractionController extends ChangeNotifier {
   void getComment({required BuildContext context, required String postId}) {
     isCommentLoading = true;
     notifyListeners();
+    log("Controller postID $postId");
 
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/comments?postid=$postId');
     ApiCall.get(
@@ -209,6 +210,7 @@ class PostInteractionController extends ChangeNotifier {
         getComments = getCommentsModelFromJson(p0.body);
         isCommentLoading = false;
         notifyListeners();
+        log(p0.body);
       },
       onTokenExpired: () {
         getComment(context: context, postId: postId);

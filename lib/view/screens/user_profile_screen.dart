@@ -9,6 +9,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
