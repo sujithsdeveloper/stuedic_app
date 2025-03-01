@@ -10,9 +10,9 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/profilePost_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
-
 
 class ProfileScreenStudent extends StatefulWidget {
   const ProfileScreenStudent({
@@ -28,7 +28,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
   @override
   void initState() {
     super.initState();
-    context.read<ProfileController>().getCurrentUserData(context: context);
+    // context.read<ProfileController>().getCurrentUserData(context: context);
 
     _tabController = TabController(length: 3, vsync: this);
   }
@@ -37,6 +37,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userCurrentDetails!.response;
+    final grids = userDataProviderWatch.userProfileGrid?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -104,12 +105,11 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                               ColorConstants.primaryColor,
                                           child: CircleAvatar(
                                               radius: 60,
-                                              backgroundImage: AppUtils.getProfile(
-                                                  url:
-                                                  user?.profilePicUrl ??
-                                                      null
-
-                                                  ))),
+                                              backgroundImage:
+                                                  AppUtils.getProfile(
+                                                      url:
+                                                          user?.profilePicUrl ??
+                                                              null))),
                                     ],
                                   ),
                                   Column(
@@ -122,7 +122,6 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                                 EditProfileScreen(
                                                   name: user?.userName ?? '',
                                                   Username: user?.userId ?? '',
-                                               
                                                   bio: 'Flutter developer',
                                                 ));
                                           },
@@ -188,12 +187,16 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                   counts(
                                       count: AppUtils.formatCounts(2000),
                                       label: "Posts"),
-                                  counts(count: AppUtils.formatCounts(
-                                      user?.followingCount ?? 0,
-                                      ), label: "Following"),
-                                  counts(count: AppUtils.formatCounts(
-                                      user?.followersCount ?? 0,
-                                      ), label: "Followers"),
+                                  counts(
+                                      count: AppUtils.formatCounts(
+                                        user?.followingCount ?? 0,
+                                      ),
+                                      label: "Following"),
+                                  counts(
+                                      count: AppUtils.formatCounts(
+                                        user?.followersCount ?? 0,
+                                      ),
+                                      label: "Followers"),
                                   counts(
                                       count: AppUtils.formatCounts(20000000),
                                       label: "Likes"),
@@ -240,41 +243,33 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                 ),
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                itemCount: items.length,
-                // itemCount: userDataProviderWatch
-                //         .profileGridPosts?.response?.posts
-                //         ?.where((post) =>
-                //             post.postContentUrl != null &&
-                //             post.postContentUrl!.isNotEmpty)
-                //         .length ??
-                //     0,
+                itemCount: grids?.length ?? 0,
                 itemBuilder: (context, index) {
-                  // final validPosts = userDataProviderWatch
-                  //         .profileGridPosts?.response?.posts
-                  //         ?.where((post) =>
-                  //             post.postContentUrl != null &&
-                  //             post.postContentUrl!.isNotEmpty)
-                  //         .toList() ??
-                  //     [];
+                  final grid = grids?[index];
 
-                  if (items.isEmpty) {
+                  if (grids?.isEmpty ?? true) {
                     return const Center(
-                      child: Text('No valid posts available'),
+                      child: Text('No posts available'),
                     );
                   }
 
-                  final data = items[index];
                   final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
 
                   return GestureDetector(
+                    onTap: () {
+                      AppRoutes.push(context,
+                          ProfilepostScreen(postId: grid.postId ?? ''));
+                    },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
                         height: containerHeight,
                         decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 187, 186, 186),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(data['profileUrl']),
+                            image:
+                                NetworkImage(grid!.postContentUrl.toString()),
                           ),
                         ),
                       ),

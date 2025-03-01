@@ -59,6 +59,7 @@ class PostInteractionController extends ChangeNotifier {
         context: context);
   }
 
+  void whenIsLikedTrue(bool isLiked) {}
   void unLikePost(
       {required String postId,
       required BuildContext context,
@@ -184,7 +185,8 @@ class PostInteractionController extends ChangeNotifier {
         url: url,
         body: body,
         onSucces: (p0) {
-          log(p0.body);
+          log("Comment added: ${p0.body}");
+          getComment(context: context, postId: postId); // Fetch new comments
         },
         onTokenExpired: () {
           addComment(postId: postId, comment: comment, context: context);
@@ -195,13 +197,17 @@ class PostInteractionController extends ChangeNotifier {
   }
 
   GetCommentsModel? getComments;
+  bool isCommentLoading = false;
   void getComment({required BuildContext context, required String postId}) {
+    isCommentLoading = true;
+    notifyListeners();
+
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/comments?postid=$postId');
     ApiCall.get(
       url: url,
       onSucces: (p0) {
-        // log(p0.body);
         getComments = getCommentsModelFromJson(p0.body);
+        isCommentLoading = false;
         notifyListeners();
       },
       onTokenExpired: () {
@@ -209,5 +215,7 @@ class PostInteractionController extends ChangeNotifier {
       },
       context: context,
     );
+    isCommentLoading = false;
+    notifyListeners();
   }
 }

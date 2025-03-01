@@ -71,6 +71,19 @@ class SettingScreen extends StatelessWidget {
       },
     ];
     return Scaffold(
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Stuedic",
+            style: StringStyle.topHeading(size: 25),
+          ),
+          Text("Version 1.0.0"),
+          SizedBox(
+            height: 25,
+          ),
+        ],
+      ),
       appBar: AppBar(
         title: Text(
           "Settings",
@@ -92,18 +105,6 @@ class SettingScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              children: [
-                Text(
-                  "Stuedic",
-                  style: StringStyle.topHeading(size: 25),
-                ),
-                Text("Version 1.0.0"),
-                SizedBox(
-                  height: 25,
-                ),
-              ],
-            )
           ],
         ),
       ),

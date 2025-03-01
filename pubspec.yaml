@@ -53,6 +53,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   photo_manager: ^3.6.4
   video_player: ^2.9.3
+  flutter_svg: ^2.0.17
 
 
 
@@ -87,6 +88,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

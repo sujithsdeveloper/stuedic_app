@@ -8,9 +8,9 @@ import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 
 class AssetPickerController extends ChangeNotifier {
-
   File? pickedImage;
   File? pickedVideo;
+  bool isLoading = false;
   Future<void> pickMedia({
     bool isVideo = false,
     required BuildContext context,
@@ -19,43 +19,58 @@ class AssetPickerController extends ChangeNotifier {
     final picker = ImagePicker();
     if (isVideo) {
       final video = await picker.pickVideo(source: source);
+      isLoading = true;
+      notifyListeners();
       if (video != null) {
         pickedVideo = File(video.path);
         notifyListeners();
         log('Picked video path ${pickedVideo.toString()}');
         try {
+          Navigator.pop(context);
+
           await context.read<MutlipartController>().uploadMedia(
               context: context,
               isVideo: true,
               filePath: video.path,
               API: APIs.uploadVideo);
           notifyListeners();
-          Navigator.pop(context);
         } catch (e) {
           errorSnackbar(label: 'Failed to upload video', context: context);
         }
       } else {
         errorSnackbar(label: 'No video selected', context: context);
+        Navigator.pop(context);
       }
+      isLoading = false;
+      notifyListeners();
     } else {
+      isLoading = true;
+      notifyListeners();
       final image = await picker.pickImage(source: source);
       if (image != null) {
         pickedImage = File(image.path);
         try {
+          Navigator.pop(context);
+
           await context.read<MutlipartController>().uploadMedia(
               context: context,
               isVideo: false,
               filePath: image.path,
               API: APIs.uploadPicForPost);
           notifyListeners();
-          Navigator.pop(context);
         } catch (e) {
           log("Error converting image: $e");
           errorSnackbar(label: "Error processing image", context: context);
         }
       } else {
+        Navigator.pop(context);
+
         errorSnackbar(label: "No image selected", context: context);
       }
+      isLoading = false;
+      notifyListeners();
     }
+    isLoading = false;
+    notifyListeners();
   }
 }

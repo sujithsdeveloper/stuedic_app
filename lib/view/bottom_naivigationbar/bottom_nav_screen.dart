@@ -37,6 +37,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     );
 
     context.read<ProfileController>().getCurrentUserData(context: context);
+    context.read<ProfileController>().getCurrentUserGrid(context: context);
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         final token = await AppUtils.getToken();

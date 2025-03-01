@@ -16,6 +16,7 @@ class APIs {
 
   //profile
   static Uri profileGridUrl = Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
+  
   static Uri getAllPostsOfUser = Uri.parse('${baseUrl}api/v1/Post/getAllPostsOfUser?userId=');
   static Uri getUserDetail = Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');
   static Uri logoutUser = Uri.parse('${baseUrl}api/v1/User/logoutuser');

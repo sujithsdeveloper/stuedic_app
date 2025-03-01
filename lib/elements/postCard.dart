@@ -12,6 +12,7 @@ import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
+import 'package:stuedic_app/styles/like_styles.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
@@ -162,31 +163,25 @@ class PostCard extends StatelessWidget {
               children: [
                 Consumer<PostInteractionController>(
                   builder: (context, postInteraction, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (isLiked) {
-                          proReadInteraction.unLikePost(
-                              index: index, postId: postId, context: context);
+                    return GestureDetector(onTap: () {
+                      postInteraction.toggleLike(
+                          isLiked: isLiked,
+                          index: index,
+                          postId: postId,
+                          context: context);
+                    }, child: Builder(
+                      builder: (context) {
+                        if (isLiked || proReadInteraction.isPostLiked(index)) {
+                          return LikeAnimation();
+                        } else if (proReadInteraction.isPostLiked(index) ==
+                                false &&
+                            isLiked) {
+                          return UnlikeIcon();
                         } else {
-                          postInteraction.toggleLike(
-                              isLiked: isLiked,
-                              index: index,
-                              postId: postId,
-                              context: context);
+                          return UnlikeIcon();
                         }
                       },
-                      child: postInteraction.isPostLiked(index) || isLiked
-                          ? SizedBox(
-                              height: 30,
-                              child: Lottie.asset(
-                                  repeat: false, LottieAnimations.like),
-                            )
-                          : Icon(
-                              CupertinoIcons.heart,
-                              color: Colors.grey,
-                              size: 30,
-                            ),
-                    );
+                    ));
                   },
                 ),
                 Row(
@@ -220,7 +215,9 @@ class PostCard extends StatelessWidget {
                       Icon(HugeIcons.strokeRoundedMessageMultiple01,
                           color: Colors.black),
                       Text(
-                        '760',
+                        proReadInteraction.getComments?.comments?.length
+                                .toString() ??
+                            'No',
                         style: StringStyle.smallText(isBold: true),
                       ),
                       Text(

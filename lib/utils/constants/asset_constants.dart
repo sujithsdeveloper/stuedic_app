@@ -1,8 +1,13 @@
-class ImageConstants{
-  static const String avathar='assets/images/avathar.png';
+class ImageConstants {
+  static const String avathar = 'assets/images/avathar.png';
 }
 
 class LottieAnimations {
-  static const String like='assets/animations/like.json';
-  static const String bottomLike='assets/animations/bottomLike.json';
+  static const String like = 'assets/animations/like.json';
+  static const String bottomLike = 'assets/animations/bottomLike.json';
+  static const String tick = 'assets/animations/tick.json';
+}
+
+class SVGConstants {
+  static const String comments = 'assets/svg/comments.svg';
 }

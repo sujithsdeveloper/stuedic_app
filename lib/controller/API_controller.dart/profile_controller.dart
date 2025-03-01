@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
+import 'package:stuedic_app/model/auth/login_response_model.dart';
+import 'package:stuedic_app/model/currentuser_grid_model.dart';
 import 'package:stuedic_app/model/getuserbyUserId_model.dart';
+import 'package:stuedic_app/model/single_post_model.dart';
 import 'package:stuedic_app/model/user_current_detail_model.dart';
 
 class ProfileController extends ChangeNotifier {
-
   UserCurrentDetailsModel? userCurrentDetails;
   Future<void> getCurrentUserData({required BuildContext context}) async {
     await ApiCall.get(
@@ -39,6 +41,38 @@ class ProfileController extends ChangeNotifier {
         },
         onTokenExpired: () {
           getUserByUserID(userId: userId, context: context);
+        },
+        context: context);
+  }
+
+  UserProfileGrid? userProfileGrid;
+  Future<void> getCurrentUserGrid({required BuildContext context}) async {
+    await ApiCall.get(
+        url: APIs.profileGridUrl,
+        onSucces: (p0) {
+          // log(p0.body);
+          userProfileGrid = userProfileGridFromJson(p0.body);
+          notifyListeners();
+        },
+        onTokenExpired: () {
+          getCurrentUserGrid(context: context);
+        },
+        context: context);
+  }
+
+  SinglePostModel? singlePostModel;
+  Future<void> getSinglePost(
+      {required BuildContext context, required String postId}) async {
+    var url = Uri.parse('${APIs.baseUrl}api/v1/Post/getSinglePost/$postId');
+    await ApiCall.get(
+        url: url,
+        onSucces: (p0) {
+          // log(p0.body);
+          singlePostModel = singlePostModelFromJson(p0.body);
+          notifyListeners();
+        },
+        onTokenExpired: () {
+          getSinglePost(context: context, postId: postId);
         },
         context: context);
   }
