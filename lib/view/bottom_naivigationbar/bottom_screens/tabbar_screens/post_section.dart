@@ -9,6 +9,7 @@ import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
+import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
@@ -101,29 +102,28 @@ class PostSection extends StatelessWidget {
                 maxLength: 250,
               ),
               GradientButton(
-                label: 'Post',
-                isColored: true,
-                onTap: () {
-                  if (proWatchAsset.pickedImage == null) {
-                    return;
-                  }
+                  label: 'Post',
+                  isColored: true,
+                  onTap: () {
+                    if (proWatchAsset.pickedImage == null) {
+                      return;
+                    }
 
-                  proRead.uploadPost(
-                      imagePath: multipartObj.imageUrl ?? '',
-                      caption: controller.text.isEmpty ? '' : controller.text,
-                      context: context);
-                  controller.clear();
-                  proReadAsset.pickedImage = null;
-                  proReadAsset.notifyListeners();
-                  context
-                      .read<HomefeedController>()
-                      .getAllPost(context: context);
-                  context
-                      .read<ProfileController>()
-                      .getCurrentUserGrid(context: context);
-                  Navigator.pop(context);
-                },
-              ),
+                    proRead.uploadPost(
+                        imagePath: multipartObj.imageUrl ?? '',
+                        caption: controller.text.isEmpty ? '' : controller.text,
+                        context: context);
+                    controller.clear();
+                    proReadAsset.pickedImage = null;
+                    proReadAsset.notifyListeners();
+                    context
+                        .read<HomefeedController>()
+                        .getAllPost(context: context);
+                    context
+                        .read<ProfileController>()
+                        .getCurrentUserGrid(context: context);
+                    Navigator.pop(context);
+                  }),
               SizedBox(
                 height: 30,
               )

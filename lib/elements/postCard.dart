@@ -9,6 +9,7 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
+import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
@@ -17,6 +18,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class PostCard extends StatelessWidget {
   const PostCard(
@@ -48,7 +50,6 @@ class PostCard extends StatelessWidget {
     final proWatchApi = context.watch<CrudOperationController>();
     final proReadApi = context.read<CrudOperationController>();
     final proReadInteraction = context.read<PostInteractionController>();
-  
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -57,29 +58,38 @@ class PostCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                backgroundImage: AppUtils.getProfile(url: profileUrl),
-                radius: 24,
-              ),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+              GestureDetector(
+                onTap: () {
+                  AppRoutes.push(context, UserProfileScreen(userId: userId));
+                },
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AppUtils.getProfile(url: profileUrl),
+                      radius: 24,
                     ),
-                  ),
-                  Text(
-                    '1 min ago',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
+                    SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          '1 min ago',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Spacer(),
               Row(

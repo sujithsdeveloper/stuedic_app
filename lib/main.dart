@@ -13,6 +13,7 @@ import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
+import 'package:stuedic_app/controller/pdf_controller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
@@ -69,9 +70,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(
+            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PdfController()),
       ],
       child: MaterialApp(
+        
           theme: AppTheme.lightTheme,
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,

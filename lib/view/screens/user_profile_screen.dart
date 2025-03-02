@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -6,14 +7,16 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/delegates/tabbarDelegate.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
-import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
+
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
-
+import 'package:stuedic_app/widgets/profile_action_button.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -33,9 +36,16 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
   void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        context
+            .read<ProfileController>()
+            .getUserByUserID(context: context, userId: widget.userId);
+      },
+    );
     context
         .read<ProfileController>()
-        .getUserByUserID(context: context, userId: widget.userId);
+        .getUseGrid(context: context, userID: widget.userId);
 
     _tabController = TabController(length: 3, vsync: this);
   }
@@ -44,6 +54,7 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userProfile?.response;
+    final grids = userDataProviderWatch.userGridModel?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -57,9 +68,8 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
             SliverAppBar(
               backgroundColor: Colors.white,
               pinned: true,
-              // toolbarHeight: 90,
               floating: true,
-              expandedHeight: 450,
+              expandedHeight: 400,
               actions: [
                 IconButton(
                     onPressed: () {},
@@ -73,19 +83,18 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Background image
                     Stack(
                       children: [
                         Container(
-                          height: 250,
+                          height: 178,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://images.pexels.com/photos/19942412/pexels-photo-19942412/free-photo-of-portrait-of-woman-in-hat-in-winter.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load'))),
+                                  image: AssetImage(
+                                      ImageConstants.userProfileBg))),
                         ),
                         Column(
                           children: [
@@ -106,35 +115,52 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                                         height: 110,
                                       ),
                                       CircleAvatar(
-                                          radius: 62,
-                                          backgroundColor:
-                                              ColorConstants.primaryColor,
-                                          child: CircleAvatar(
-                                              radius: 60,
-                                              backgroundImage:
-                                                  AppUtils.getProfile(
-                                                      url:
-                                                          user?.profilePicUrl ??
-                                                              null))),
+                                        radius: 62,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundImage: AppUtils.getProfile(
+                                              url: user?.profilePicUrl ?? null),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                  Row(
+                                    spacing: 8,
                                     children: [
+                                      ProfileActionButton(
+                                        iconData: CupertinoIcons.doc_text,
+                                        onTap: () {
+                                          AppRoutes.push(
+                                              context,
+                                              PdfViewerScreen(
+                                                url: pdfUrl,
+                                              ));
+                                        },
+                                      ),
+                                      ProfileActionButton(
+                                        iconData: CupertinoIcons.envelope,
+                                        onTap: () {
+                                          AppRoutes.push(
+                                              context,
+                                              PdfViewerScreen(
+                                                url: pdfUrl,
+                                              ));
+                                        },
+                                      ),
                                       GradientButton(
-                                          onTap: () {
-                                            AppRoutes.push(
-                                                context,
-                                                EditProfileScreen(
-                                                  name: user?.userName ?? '',
-                                                  Username: user?.userId ?? '',
-                                                  bio: 'Flutter developer',
-                                                ));
-                                          },
+                                          outline: user?.isFollowed ?? false
+                                              ? true
+                                              : false,
+                                          onTap: () {},
                                           height: 48,
-                                          width: 130,
-                                          isColored: true,
-                                          label: 'Edit Profile')
+                                          width: 100,
+                                          isColored: user?.isFollowed ?? false
+                                              ? false
+                                              : true,
+                                          label: user?.isFollowed ?? false
+                                              ? 'Unfollow'
+                                              : 'Follow'),
                                     ],
                                   )
                                 ],
@@ -157,9 +183,6 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
                                       Text(
                                         user?.userName ?? '',
                                         style: const TextStyle(
@@ -178,17 +201,56 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 70,
-                                width: double.infinity,
-                                child: Text(
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    "Lorem Ipsum is simply printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
+                              Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    spacing: 9,
+                                    children: [
+                                      Text(
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        user?.collageName ?? '',
+                                        style: StringStyle.normalText(),
+                                      ),
+                                      Text(
+                                        'Trivandrum, Kerala',
+                                        style: StringStyle.normalText(),
+                                      )
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    height: 35,
+                                    width: 77,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstants.greyColor,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: Center(
+                                      child: Row(
+                                        spacing: 3,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              fit: BoxFit.cover,
+                                              height: 22,
+                                              width: 22,
+                                              ImageConstants.points),
+                                          Text('500',
+                                              style:
+                                                  StringStyle.normalTextBold())
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 45,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   counts(
                                       count: AppUtils.formatCounts(2000),
@@ -215,6 +277,7 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                 ),
               ),
             ),
+
             // TabBar
             SliverPersistentHeader(
               pinned: true,
@@ -247,30 +310,14 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                 ),
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                itemCount: items.length,
-                // itemCount: userDataProviderWatch
-                //         .profileGridPosts?.response?.posts
-                //         ?.where((post) =>
-                //             post.postContentUrl != null &&
-                //             post.postContentUrl!.isNotEmpty)
-                //         .length ??
-                //     0,
+                itemCount: grids?.length ?? 0,
                 itemBuilder: (context, index) {
-                  // final validPosts = userDataProviderWatch
-                  //         .profileGridPosts?.response?.posts
-                  //         ?.where((post) =>
-                  //             post.postContentUrl != null &&
-                  //             post.postContentUrl!.isNotEmpty)
-                  //         .toList() ??
-                  //     [];
-
-                  if (items.isEmpty) {
+                  if (grids!.isEmpty || grids == null) {
                     return const Center(
-                      child: Text('No valid posts available'),
+                      child: Text('No posts available'),
                     );
                   }
 
-                  final data = items[index];
                   final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
 
                   return GestureDetector(
@@ -281,7 +328,8 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(data['profileUrl']),
+                            image: NetworkImage(
+                                grids[index].postContentUrl.toString()),
                           ),
                         ),
                       ),

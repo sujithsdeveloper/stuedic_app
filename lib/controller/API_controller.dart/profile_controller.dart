@@ -7,6 +7,7 @@ import 'package:stuedic_app/model/auth/login_response_model.dart';
 import 'package:stuedic_app/model/currentuser_grid_model.dart';
 import 'package:stuedic_app/model/getuserbyUserId_model.dart';
 import 'package:stuedic_app/model/single_post_model.dart';
+import 'package:stuedic_app/model/userGridModel.dart';
 import 'package:stuedic_app/model/user_current_detail_model.dart';
 
 class ProfileController extends ChangeNotifier {
@@ -45,19 +46,38 @@ class ProfileController extends ChangeNotifier {
         context: context);
   }
 
-  UserProfileGrid? userProfileGrid;
+  UserProfileGrid? currentUserProfileGrid;
   Future<void> getCurrentUserGrid({required BuildContext context}) async {
     await ApiCall.get(
         url: APIs.profileGridUrl,
         onSucces: (p0) {
           // log(p0.body);
-          userProfileGrid = userProfileGridFromJson(p0.body);
+          currentUserProfileGrid = userProfileGridFromJson(p0.body);
           notifyListeners();
         },
         onTokenExpired: () {
           getCurrentUserGrid(context: context);
         },
         context: context);
+  }
+
+  UserGridModel? userGridModel;
+  Future<void> getUseGrid(
+      {required BuildContext context, required String userID}) async {
+    var url = Uri.parse(
+        'https://api.stuedic.com/api/v1/Profile/getProfileGrid?userId=$userID');
+    await ApiCall.get(
+      url: url,
+      onSucces: (p0) {
+        log(p0.body);
+        userGridModel = userGridModelFromJson(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () {
+        getUseGrid(context: context, userID: userID);
+      },
+      context: context,
+    );
   }
 
   SinglePostModel? singlePostModel;

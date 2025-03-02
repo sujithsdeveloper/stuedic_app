@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -6,13 +9,17 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/delegates/tabbarDelegate.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
-import 'package:stuedic_app/view/screens/profilePost_screen.dart';
+import 'package:stuedic_app/utils/data/dummyDB.dart';
+import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
+
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
+import 'package:stuedic_app/widgets/profile_action_button.dart';
 
 class ProfileScreenStudent extends StatefulWidget {
   const ProfileScreenStudent({
@@ -28,7 +35,13 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
   @override
   void initState() {
     super.initState();
-    // context.read<ProfileController>().getCurrentUserData(context: context);
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        context.read<ProfileController>().getCurrentUserData(context: context);
+      },
+    );
+    context.read<ProfileController>().getCurrentUserGrid(context: context);
 
     _tabController = TabController(length: 3, vsync: this);
   }
@@ -36,8 +49,8 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
   @override
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
-    final user = userDataProviderWatch.userCurrentDetails!.response;
-    final grids = userDataProviderWatch.userProfileGrid?.response?.posts;
+    final user = userDataProviderWatch.userCurrentDetails?.response;
+    final grids = userDataProviderWatch.currentUserProfileGrid?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,12 +64,14 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             SliverAppBar(
               backgroundColor: Colors.white,
               pinned: true,
-              // toolbarHeight: 90,
               floating: true,
-              expandedHeight: 450,
+              expandedHeight: 410,
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppRoutes.push(context,
+                          CollegeUserProfileScreen(userId: '68806004'));
+                    },
                     icon: Icon(HugeIcons.strokeRoundedNotification01)),
                 IconButton(
                     onPressed: () {
@@ -67,19 +82,18 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Background image
                     Stack(
                       children: [
                         Container(
-                          height: 250,
+                          height: 178,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      'https://images.pexels.com/photos/19942412/pexels-photo-19942412/free-photo-of-portrait-of-woman-in-hat-in-winter.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load'))),
+                                  image: AssetImage(
+                                      ImageConstants.userProfileBg))),
                         ),
                         Column(
                           children: [
@@ -100,35 +114,40 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                         height: 110,
                                       ),
                                       CircleAvatar(
-                                          radius: 62,
-                                          backgroundColor:
-                                              ColorConstants.primaryColor,
-                                          child: CircleAvatar(
-                                              radius: 60,
-                                              backgroundImage:
-                                                  AppUtils.getProfile(
-                                                      url:
-                                                          user?.profilePicUrl ??
-                                                              null))),
+                                        radius: 62,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundImage: AppUtils.getProfile(
+                                              url: user?.profilePicUrl ?? null),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                  Row(
+                                    spacing: 8,
                                     children: [
+                                      ProfileActionButton(
+                                        iconData: CupertinoIcons.doc_text,
+                                        onTap: () {
+                                          AppRoutes.push(
+                                              context,
+                                              PdfViewerScreen(
+                                                url: pdfUrl,
+                                              ));
+                                        },
+                                      ),
                                       GradientButton(
-                                          onTap: () {
-                                            AppRoutes.push(
-                                                context,
-                                                EditProfileScreen(
-                                                  name: user?.userName ?? '',
-                                                  Username: user?.userId ?? '',
-                                                  bio: 'Flutter developer',
-                                                ));
-                                          },
+                                          outline: user?.isFollowed ?? false
+                                              ? true
+                                              : false,
+                                          onTap: () {},
                                           height: 48,
-                                          width: 130,
-                                          isColored: true,
-                                          label: 'Edit Profile')
+                                          width: 120,
+                                          isColored: user?.isFollowed ?? false
+                                              ? false
+                                              : true,
+                                          label: 'Edit Profile'),
                                     ],
                                   )
                                 ],
@@ -151,9 +170,6 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
                                       Text(
                                         user?.userName ?? '',
                                         style: const TextStyle(
@@ -172,30 +188,71 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                   ),
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    spacing: 9,
+                                    children: [
+                                      Text(
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: true,
+                                        user?.collageName ?? '',
+                                        style: StringStyle.normalText(),
+                                      ),
+                                      Text(
+                                        'Trivandrum, Kerala',
+                                        style: StringStyle.normalText(),
+                                      )
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    height: 35,
+                                    width: 77,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstants.greyColor,
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: Center(
+                                      child: Row(
+                                        spacing: 3,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              fit: BoxFit.cover,
+                                              height: 22,
+                                              width: 22,
+                                              ImageConstants.points),
+                                          Text('500',
+                                              style:
+                                                  StringStyle.normalTextBold())
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                               SizedBox(
-                                height: 70,
-                                width: double.infinity,
-                                child: Text(
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    "Lorem Ipsum is simply printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
+                                height: 9,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 45,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   counts(
                                       count: AppUtils.formatCounts(2000),
                                       label: "Posts"),
                                   counts(
                                       count: AppUtils.formatCounts(
-                                        user?.followingCount ?? 0,
-                                      ),
+                                          user?.followingCount ?? 0),
                                       label: "Following"),
                                   counts(
                                       count: AppUtils.formatCounts(
-                                        user?.followersCount ?? 0,
-                                      ),
+                                          user?.followersCount ?? 0),
                                       label: "Followers"),
                                   counts(
                                       count: AppUtils.formatCounts(20000000),
@@ -211,6 +268,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                 ),
               ),
             ),
+
             // TabBar
             SliverPersistentHeader(
               pinned: true,
@@ -245,35 +303,34 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                 crossAxisSpacing: 8,
                 itemCount: grids?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final grid = grids?[index];
-
-                  if (grids?.isEmpty ?? true) {
-                    return const Center(
-                      child: Text('No posts available'),
-                    );
-                  }
-
                   final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
 
-                  return GestureDetector(
-                    onTap: () {
-                      AppRoutes.push(context,
-                          ProfilepostScreen(postId: grid.postId ?? ''));
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 187, 186, 186),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image:
-                                NetworkImage(grid!.postContentUrl.toString()),
+                  return Builder(
+                    builder: (context) {
+                      if (grids == null) {
+                        log('Tab null');
+                        return const Center(
+                          child: Text('No posts available'),
+                        );
+                      } else {
+                        log(grids.toString());
+                        return GestureDetector(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: containerHeight,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      grids[index].postContentUrl ?? ''),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
+                        );
+                      }
+                    },
                   );
                 },
               ),

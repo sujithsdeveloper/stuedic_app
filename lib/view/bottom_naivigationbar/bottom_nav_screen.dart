@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -13,6 +12,7 @@ import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_pos
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile_screen_student.dart';
+import 'package:stuedic_app/view/screens/college_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -24,51 +24,34 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  // late Animation<double> _iconAnimation;
-  bool _isOpened = false;
-
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
 
-    context.read<ProfileController>().getCurrentUserData(context: context);
-    context.read<ProfileController>().getCurrentUserGrid(context: context);
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         final token = await AppUtils.getToken();
         log(token);
+        context.read<ProfileController>().getCurrentUserData(context: context);
+        context.read<ProfileController>().getCurrentUserGrid(context: context);
       },
     );
   }
 
-  List<Widget> screens = [
+  List<Widget> userScreens = [
     HomeScreen(),
     DiscoverScreen(),
     Container(),
     Container(),
     ProfileScreenStudent()
   ];
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  // void _toggleAnimation() {
-  //   setState(() {
-  //     _isOpened = !_isOpened;
-  //     if (_isOpened) {
-  //       _animationController.forward();
-  //     } else {
-  //       _animationController.reverse();
-  //     }
-  //   });
-  // }
+  List<Widget> CollegeuserScreens = [
+    HomeScreen(),
+    DiscoverScreen(),
+    Container(),
+    Container(),
+    CollegeProfileScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +66,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         return true;
       },
       child: Scaffold(
-        body: screens[proWatch.currentIndex],
+        body: userScreens[proWatch.currentIndex],
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 10),
@@ -95,19 +78,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
                   AppRoutes.push(context, CreatePostScreen());
                 },
                 child: Icon(Icons.add),
-                // child: Center(
-                //   child: AnimatedSwitcher(
-                //     duration: const Duration(milliseconds: 150),
-                //     transitionBuilder: (child, animation) {
-                //       return RotationTransition(
-                //           turns: animation, child: child);
-                //     },
-                //     child: Icon(
-                //       _isOpened ? Icons.close : Icons.add,
-                //       key: ValueKey<bool>(_isOpened),
-                //     ),
-                //   ),
-                // ),
               ),
             ],
           ),
@@ -141,38 +111,3 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     );
   }
 }
-
-// class ArcPainter extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     Paint paint = Paint()
-//       ..style = PaintingStyle.fill
-//       ..isAntiAlias = true;
-
-//     double radius = 120; // Increased radius for a larger arc
-//     Offset center = Offset(size.width / 2, size.height / 2 + 7);
-
-//     drawArcSegment(canvas, center, radius, 180, 240, Color(0xff8B8CF7), paint);
-//     drawArcSegment(canvas, center, radius, 240, 300, Color(0xff1F2232), paint);
-//     drawArcSegment(canvas, center, radius, 300, 360, Color(0xffFEC031), paint);
-//   }
-
-//   void drawArcSegment(Canvas canvas, Offset center, double radius,
-//       double startAngle, double endAngle, Color color, Paint paint) {
-//     paint.color = color;
-//     canvas.drawArc(
-//       Rect.fromCircle(center: center, radius: radius),
-//       radians(startAngle),
-//       radians(endAngle - startAngle),
-//       true,
-//       paint,
-//     );
-//   }
-
-//   double radians(double degrees) {
-//     return degrees * math.pi / 180;
-//   }
-
-//   @override
-//   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-// }

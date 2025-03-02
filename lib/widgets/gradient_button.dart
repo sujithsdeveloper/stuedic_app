@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
-
 class GradientButton extends StatelessWidget {
   const GradientButton(
       {super.key,
@@ -11,11 +10,13 @@ class GradientButton extends StatelessWidget {
       this.width = 327,
       required this.label,
       this.onTap,
-      this.isColored = false});
+      this.isColored = false,
+      this.outline = false});
   final double height;
   final double width;
   final String label;
   final bool isColored;
+  final bool outline;
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class GradientButton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
+          border: outline ? Border.all() : null,
           color: prowatch.isButtonColored ? null : Color(0xffE7ECF0),
           gradient: prowatch.isButtonColored || isColored
               ? ColorConstants.primaryGradientHorizontal

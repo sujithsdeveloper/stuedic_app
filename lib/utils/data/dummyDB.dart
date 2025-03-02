@@ -1,4 +1,3 @@
-
 List<Map> items = [
   {
     "imageUrl":
@@ -87,3 +86,6 @@ List<Map> comments = [
         "https://images.pexels.com/photos/1136575/pexels-photo-1136575.jpeg?auto=compress&cs=tinysrgb&w=600"
   }
 ];
+
+String pdfUrl =
+    "https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf";

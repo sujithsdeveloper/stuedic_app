@@ -8,11 +8,11 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/screens/chat_screen.dart';
-
+import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
-
+  const SearchScreen({super.key, this.toChat = false});
+  final bool toChat;
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -94,12 +94,17 @@ class _SearchScreenState extends State<SearchScreen>
               } else if (users?.isNotEmpty ?? true) {
                 return ListTile(
                   onTap: () {
-                    AppRoutes.push(
-                        context,
-                        ChatScreen(
-                            url: user?.profilePicUrl ?? '',
-                            name: user?.username ?? '',
-                            userId: user?.userId ?? ''));
+                    if (widget.toChat) {
+                      AppRoutes.push(
+                          context,
+                          ChatScreen(
+                              url: user?.profilePicUrl ?? '',
+                              name: user?.username ?? '',
+                              userId: user?.userId ?? ''));
+                    } else {
+                      AppRoutes.push(context,
+                          UserProfileScreen(userId: user?.userId ?? ''));
+                    }
                   },
                   leading: CircleAvatar(
                     backgroundImage:

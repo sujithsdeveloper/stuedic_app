@@ -47,113 +47,134 @@ class _CreatePostScreenState extends State<CreatePostScreen>
     final proWatchAsset = context.watch<AssetPickerController>();
     final proWatchApp = context.watch<AppContoller>();
 
-    return Scaffold(
-      backgroundColor: ColorConstants.greyColor,
-      appBar: AppBar(
-        title: Text(
-          "Stuedic",
-          style: StringStyle.normalTextBold(),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              HugeIcons.strokeRoundedNotification01,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              AppRoutes.push(context, NotificationDefaultScreen());
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        if (proWatchAsset.pickedImage != null) {
+          proWatchAsset.pickedImage = null;
+          proWatchAsset.pickedVideo = null;
+          return true;
+        }
+
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: ColorConstants.greyColor,
+        appBar: AppBar(
+          title: Text(
+            "Stuedic",
+            style: StringStyle.normalTextBold(),
           ),
-          IconButton(
-            icon: Icon(
-              HugeIcons.strokeRoundedMessage01,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              AppRoutes.push(context, ChatListScreen());
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 18),
-            Text(
-              'Create',
-              style: StringStyle.normalTextBold(size: 18),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TabBar(
-                      splashFactory: NoSplash.splashFactory,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      tabAlignment: TabAlignment.start,
-                      isScrollable: true,
-                      indicator: BoxDecoration(
-                        color: ColorConstants.primaryColor2,
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                      controller: tabController,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      dividerHeight: 0,
-                      tabs: [
-                        Tab(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Text('Post'),
-                          ),
-                        ),
-                        Tab(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Text('Reel'),
-                          ),
-                        ),
-                        Tab(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Text('Story'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: TabBarView(
-                          controller: tabController,
-                          children: [
-                            PostSection(),
-                            ReelSection(),
-                            Center(child: Text("Create a Story")),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                HugeIcons.strokeRoundedNotification01,
+                color: Colors.black,
               ),
+              onPressed: () {
+                AppRoutes.push(context, NotificationDefaultScreen());
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                HugeIcons.strokeRoundedMessage01,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                AppRoutes.push(context, ChatListScreen());
+              },
             ),
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 18),
+              Text(
+                'Create',
+                style: StringStyle.normalTextBold(size: 18),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TabBar(
+                        indicatorPadding: EdgeInsets.only(bottom: 2),
+                        splashFactory: NoSplash.splashFactory,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        tabAlignment: TabAlignment.start,
+                        isScrollable: true,
+                        indicator: BoxDecoration(
+                          color: ColorConstants.primaryColor2,
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                        controller: tabController,
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        dividerHeight: 0,
+                        tabs: [
+                          Tab(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                'Post',
+                                style: StringStyle.normalTextBold(),
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                'Reel',
+                                style: StringStyle.normalTextBold(),
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                'Story',
+                                style: StringStyle.normalTextBold(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TabBarView(
+                            controller: tabController,
+                            children: [
+                              PostSection(),
+                              ReelSection(),
+                              Center(child: Text("Create a Story")),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

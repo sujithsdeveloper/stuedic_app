@@ -31,64 +31,68 @@ class _ReelSectionState extends State<ReelSection> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Container(
-              height: 418,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xffF5FFE1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GradientButton(
-                    label: 'Upload video',
-                    onTap: () {
-                      mediaBottomSheet(
-                        context: context,
-                        onCameraTap: () async {
-                          await proReadAsset.pickMedia(
-                              context: context,
-                              source: ImageSource.camera,
-                              isVideo: true);
-                        },
-                        onGalleryTap: () async {
-                          await proReadAsset.pickMedia(
-                              context: context,
-                              source: ImageSource.gallery,
-                              isVideo: true);
-                        },
-                      );
-                    },
-                  ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            Container(
+                height: 418,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xffF5FFE1),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              )),
-          const SizedBox(height: 10),
-          Text(
-            'Caption',
-            style: StringStyle.normalTextBold(size: 18),
-          ),
-          const SizedBox(height: 9),
-          TextfieldWidget(
-            hint: 'Write a caption',
-            controller: controller,
-            maxLength: 250,
-          ),
-          const Spacer(),
-          GradientButton(
-            label: 'Post',
-            isColored: true,
-            onTap: () {
-              AppRoutes.push(context,
-                  VideoPlayerScreen(videoFile: proWatchAsset.pickedVideo!));
-            },
-          ),
-          const SizedBox(height: 30),
-        ],
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: GradientButton(
+                      label: 'Upload video',
+                      onTap: () {
+                        mediaBottomSheet(
+                          context: context,
+                          onCameraTap: () async {
+                            await proReadAsset.pickMedia(
+                                context: context,
+                                source: ImageSource.camera,
+                                isVideo: true);
+                          },
+                          onGalleryTap: () async {
+                            await proReadAsset.pickMedia(
+                                context: context,
+                                source: ImageSource.gallery,
+                                isVideo: true);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                )),
+            const SizedBox(height: 10),
+            Text(
+              'Caption',
+              style: StringStyle.normalTextBold(size: 18),
+            ),
+            const SizedBox(height: 9),
+            TextfieldWidget(
+              hint: 'Write a caption',
+              controller: controller,
+              maxLength: 250,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GradientButton(
+              label: 'Post',
+              isColored: true,
+              onTap: () {
+                AppRoutes.push(context,
+                    VideoPlayerScreen(videoFile: proWatchAsset.pickedVideo!));
+              },
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
       ),
     );
   }
