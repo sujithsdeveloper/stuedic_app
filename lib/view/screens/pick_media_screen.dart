@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:story_designer/story_designer.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
@@ -20,7 +17,6 @@ class PickMediaScreen extends StatefulWidget {
 }
 
 class _PickMediaScreenState extends State<PickMediaScreen> {
-  late VideoPlayerController controller;
   @override
   void initState() {
     super.initState();
@@ -31,8 +27,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
   Widget build(BuildContext context) {
     final proRead = context.read<MediaController>();
     final proWatch = context.watch<MediaController>();
-    final proReadAppController = context.read<AppContoller>();
-    final proWatchAppController = context.watch<AppContoller>();
+
     return WillPopScope(
       onWillPop: () async {
         proWatch.selectedMediaList.clear();
@@ -43,30 +38,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
             title: const Text("Select Media"),
             actions: [
               TextButton(
-                onPressed: () async {
-                  if (proWatch.selectedMedia != null) {
-                    File? selectedFile = await proWatch.selectedMedia!.file;
-
-                    if (selectedFile != null) {
-                      String filePath =
-                          selectedFile.path; // Extract the file path as String
-
-                      File? editedFile = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => StoryDesigner(
-                            filePath: filePath, // Pass the String path
-                          ),
-                        ),
-                      );
-
-                      if (editedFile != null) {
-                        log("Edited file path: ${editedFile.path}");
-                      }
-                    } else {
-                      log("Failed to retrieve file path");
-                    }
-                  }
-                },
+                onPressed: () async {},
                 child: Text("Continue",
                     style: TextStyle(
                         color: ColorConstants.secondaryColor, fontSize: 16)),
@@ -75,61 +47,106 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
           ),
           body: Column(
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 300,
-                    width: double.infinity,
-                    color: Colors.white12,
-                    child: proWatch.selectedMedia != null
-                        ? FutureBuilder<File?>(
-                            future: proWatch.selectedMedia!.file,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              }
-                              if (snapshot.hasData && snapshot.data != null) {
-                                return Image.file(
-                                  snapshot.data!,
-                                  fit: proWatch.isCover
-                                      ? BoxFit.cover
-                                      : BoxFit.contain,
-                                );
-                              } else {
-                                return const Icon(Icons.image_not_supported,
-                                    size: 50, color: Colors.grey);
-                              }
+              proWatch.selectedMedia?.type == AssetType.video
+                  ? Container(
+                      height: 300,
+                      width: double.infinity,
+                    )
+                  : Stack(
+                      children: [
+                        Container(
+                          height: 300,
+                          width: double.infinity,
+                          color: Colors.white12,
+                          child: proWatch.selectedMedia != null
+                              ? FutureBuilder<File?>(
+                                  future: proWatch.selectedMedia!.file,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return SizedBox();
+                                    }
+                                    if (snapshot.hasData &&
+                                        snapshot.data != null) {
+                                      return Image.file(
+                                        snapshot.data!,
+                                        fit: proWatch.isCover
+                                            ? BoxFit.cover
+                                            : BoxFit.contain,
+                                      );
+                                    } else {
+                                      return const Icon(
+                                          Icons.image_not_supported,
+                                          size: 50,
+                                          color: Colors.grey);
+                                    }
+                                  },
+                                )
+                              : const Center(child: Text("No media selected")),
+                        ),
+                        Positioned(
+                          bottom: 5,
+                          left: 5,
+                          child: GestureDetector(
+                            onTap: () {
+                              proRead.changeImageFit();
                             },
-                          )
-                        : const Center(child: Text("No media selected")),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: GestureDetector(
-                      onTap: () {
-                        proRead.changeImageFit();
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.fit_screen),
-                      ),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.fit_screen),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
               Container(
                 height: 50,
                 width: double.infinity,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(HugeIcons.strokeRoundedCamera01)),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Consumer<MediaController>(
+                        builder: (context, mediaController, _) {
+                          return DropdownButtonHideUnderline(
+                            child: DropdownButton<AssetPathEntity>(
+                              padding: EdgeInsets.only(left: 20),
+                              dropdownColor: Colors.white,
+                              menuWidth: 200,
+                              isExpanded: true,
+                              isDense: true, // Helps with UI spacing
+                              value: mediaController.selectedAlbum,
+                              items: mediaController.albums.map((album) {
+                                return DropdownMenuItem(
+                                  value: album,
+                                  child: Text(
+                                    album.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (AssetPathEntity? newAlbum) {
+                                if (newAlbum != null) {
+                                  mediaController.loadMediaFromAlbum(newAlbum);
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Add camera functionality here
+                      },
+                      icon: Icon(HugeIcons.strokeRoundedCamera01),
+                    ),
+                  ],
                 ),
               ),
-              proWatch.mediaList.isEmpty
+              proWatch.mediaList.isEmpty || proWatch.isLoading
                   ? Expanded(
                       child: GridView.builder(
                         gridDelegate:
@@ -156,8 +173,9 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                             final thumbnail = proWatch.mediaThumbnails[media];
 
                             return GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 proRead.toggleSelection(media, index);
+
                                 log(proWatch.selectedMediaList[index].id);
                               },
                               child: Stack(

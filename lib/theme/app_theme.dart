@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
@@ -12,5 +13,11 @@ class AppTheme {
       scrolledUnderElevation: 0,
     ),
     iconTheme: IconThemeData(color: ColorConstants.secondaryColor),
+    dropdownMenuTheme: DropdownMenuThemeData(
+        menuStyle: MenuStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.white),
+        ),
+        textStyle: TextStyle(
+            color: ColorConstants.secondaryColor, fontFamily: 'latoRegular')),
   );
 }

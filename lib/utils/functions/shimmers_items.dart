@@ -13,6 +13,16 @@ class ShimmersItems {
       ),
     ),
   );
+
 }
+
+  static Widget imageShimmer(){
+    return Shimmer.fromColors(child: Container(
+      height: double.infinity,
+      width: double.infinity,
+    ),    baseColor: Colors.grey.shade300,
+    highlightColor: Colors.grey.shade100,);
+  }
+
 
 }

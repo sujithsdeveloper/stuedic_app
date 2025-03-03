@@ -10,29 +10,22 @@ class MediaController extends ChangeNotifier {
   List<AssetEntity> mediaList = [];
   List<AssetEntity> selectedMediaList = [];
   int selectedIndex = 0;
+  List<AssetPathEntity> albums = [];
+  AssetPathEntity? selectedAlbum;
   AssetEntity? selectedMedia;
   Map<AssetEntity, Uint8List?> mediaThumbnails = {};
-
   Future<void> fetchMedia() async {
-    final PermissionState permission =
-        await PhotoManager.requestPermissionExtend();
+    List<AssetPathEntity> fetchedAlbums = await PhotoManager.getAssetPathList();
 
-    if (permission.isAuth) {
-      List<AssetPathEntity> albums =
-          await PhotoManager.getAssetPathList(type: RequestType.common);
+    if (fetchedAlbums.isNotEmpty) {
+      albums = fetchedAlbums;
 
-      if (albums.isNotEmpty) {
-        mediaList = await albums.first.getAssetListPaged(page: 0, size: 200);
-
-        for (var media in mediaList) {
-          mediaThumbnails[media] =
-              await media.thumbnailDataWithSize(const ThumbnailSize(200, 200));
-        }
-
-        notifyListeners();
+      // Set default album if none is selected
+      if (selectedAlbum == null) {
+        selectedAlbum = albums.first;
       }
-    } else {
-      PhotoManager.openSetting();
+
+      notifyListeners();
     }
   }
 
@@ -74,5 +67,20 @@ class MediaController extends ChangeNotifier {
       isPlaying = true;
       notifyListeners();
     }
+  }
+
+  bool isLoading = false;
+  Future<void> loadMediaFromAlbum(AssetPathEntity album) async {
+    isLoading = true;
+    notifyListeners();
+    mediaList = await album.getAssetListPaged(page: 0, size: 200);
+    mediaThumbnails.clear();
+    for (var media in mediaList) {
+      mediaThumbnails[media] =
+          await media.thumbnailDataWithSize(const ThumbnailSize(200, 200));
+    }
+    selectedAlbum = album;
+    isLoading = false;
+    notifyListeners();
   }
 }
