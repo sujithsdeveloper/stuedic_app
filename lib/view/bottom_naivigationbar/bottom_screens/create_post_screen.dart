@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
-import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/view/screens/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_default_screen.dart';
-import 'package:stuedic_app/widgets/gradient_button.dart';
-import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});

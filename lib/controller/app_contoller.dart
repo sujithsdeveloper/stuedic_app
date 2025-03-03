@@ -124,12 +124,5 @@ class AppContoller extends ChangeNotifier {
     );
   }
 
-  bool isCover = false;
-  changeImageFit() {
-    log('Before $isCover');
-    isCover = !isCover;
-    log('after $isCover');
-
-    notifyListeners();
-  }
+  
 }

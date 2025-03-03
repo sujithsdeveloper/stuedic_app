@@ -9,7 +9,9 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/assetVideoController.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
@@ -58,6 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ShortsController()),
         ChangeNotifierProvider(create: (context) => AppContoller()),
         ChangeNotifierProvider(create: (context) => ProfileController()),
         ChangeNotifierProvider(create: (context) => AuthController()),
@@ -69,13 +72,13 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
-        ChangeNotifierProvider(create: (context) => HomefeedController()),
+        ChangeNotifierProvider(create: (context) => HomefeedController()), 
+        ChangeNotifierProvider(create: (context) => Assetvideocontroller()), 
         ChangeNotifierProvider(
             create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
       ],
       child: MaterialApp(
-        
           theme: AppTheme.lightTheme,
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,

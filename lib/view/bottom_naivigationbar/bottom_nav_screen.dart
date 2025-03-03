@@ -12,6 +12,7 @@ import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_pos
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile_screen_student.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/video_screen.dart';
 import 'package:stuedic_app/view/screens/college_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
@@ -42,14 +43,14 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     HomeScreen(),
     DiscoverScreen(),
     Container(),
-    Container(),
+    VideoScreen(),
     ProfileScreenStudent()
   ];
   List<Widget> CollegeuserScreens = [
     HomeScreen(),
     DiscoverScreen(),
     Container(),
-    Container(),
+    VideoScreen(),
     CollegeProfileScreen()
   ];
 

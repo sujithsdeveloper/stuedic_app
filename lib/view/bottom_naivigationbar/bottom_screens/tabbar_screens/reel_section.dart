@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,11 +8,9 @@ import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
-import 'package:stuedic_app/view/screens/trim_video_screen.dart';
 import 'package:stuedic_app/view/screens/video_player_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
-import 'package:video_player/video_player.dart';
 
 class ReelSection extends StatefulWidget {
   const ReelSection({super.key});

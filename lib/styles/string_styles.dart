@@ -24,8 +24,8 @@ class StringStyle {
           fontSize: size,
           fontWeight: isBold ? FontWeight.bold : null);
 
-  static TextStyle normalTextBold({double? size}) => TextStyle(
-      color: ColorConstants.secondaryColor,
+  static TextStyle normalTextBold({double? size,Color color=ColorConstants.secondaryColor,}) => TextStyle(
+      color: color,
       fontFamily: 'latoRegular',
       fontSize: size==null?null:size,
       fontWeight: FontWeight.bold);

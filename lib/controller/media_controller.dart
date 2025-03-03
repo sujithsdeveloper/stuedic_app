@@ -1,7 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:video_player/video_player.dart';
 
 class MediaController extends ChangeNotifier {
   List<AssetEntity> mediaList = [];
@@ -19,10 +22,7 @@ class MediaController extends ChangeNotifier {
           await PhotoManager.getAssetPathList(type: RequestType.common);
 
       if (albums.isNotEmpty) {
-        List<AssetEntity> media =
-            await albums.first.getAssetListPaged(page: 0, size: 100);
-
-        mediaList = media;
+        mediaList = await albums.first.getAssetListPaged(page: 0, size: 200);
 
         for (var media in mediaList) {
           mediaThumbnails[media] =
@@ -36,16 +36,19 @@ class MediaController extends ChangeNotifier {
     }
   }
 
-  void toggleSelection(AssetEntity media, int index) {
-    selectedIndex = index;
+  bool isCover = false;
+  changeImageFit() {
+    isCover = !isCover;
+
     notifyListeners();
-    if (selectedMediaList.contains(media)) {
-      if (selectedIndex == index) {
-      } else {
-        selectedMediaList.remove(media);
-      }
+  }
+
+  void toggleSelection(AssetEntity media, int index) {
+    isCover = false;
+    if (selectedMedia == media) {
     } else {
-      selectedMediaList.add(media);
+      selectedMedia = media;
+      selectedIndex = index;
     }
     notifyListeners();
   }
@@ -53,5 +56,23 @@ class MediaController extends ChangeNotifier {
   bool onPop() {
     selectedMediaList.clear();
     return true;
+  }
+
+  void initialiseVideo(
+      {required VideoPlayerController controller, required File file}) {
+    controller = VideoPlayerController.file(file)..initialize();
+  }
+
+  bool isPlaying = false;
+  void togglePlayPause({required VideoPlayerController controller}) {
+    if (isPlaying) {
+      controller.pause();
+      isPlaying = false;
+      notifyListeners();
+    } else {
+      controller.play();
+      isPlaying = true;
+      notifyListeners();
+    }
   }
 }
