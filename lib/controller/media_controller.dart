@@ -4,15 +4,16 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:video_player/video_player.dart';
 
 class MediaController extends ChangeNotifier {
   List<AssetEntity> mediaList = [];
+  File? file;
   List<AssetEntity> selectedMediaList = [];
   int selectedIndex = 0;
   List<AssetPathEntity> albums = [];
   AssetPathEntity? selectedAlbum;
   AssetEntity? selectedMedia;
+
   Map<AssetEntity, Uint8List?> mediaThumbnails = {};
   Future<void> fetchMedia() async {
     List<AssetPathEntity> fetchedAlbums = await PhotoManager.getAssetPathList();
@@ -36,11 +37,12 @@ class MediaController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleSelection(AssetEntity media, int index) {
+  Future<void> toggleSelection(AssetEntity media, int index) async {
     isCover = false;
     if (selectedMedia == media) {
     } else {
       selectedMedia = media;
+      file=await media.file;
       selectedIndex = index;
     }
     notifyListeners();
@@ -51,23 +53,7 @@ class MediaController extends ChangeNotifier {
     return true;
   }
 
-  void initialiseVideo(
-      {required VideoPlayerController controller, required File file}) {
-    controller = VideoPlayerController.file(file)..initialize();
-  }
 
-  bool isPlaying = false;
-  void togglePlayPause({required VideoPlayerController controller}) {
-    if (isPlaying) {
-      controller.pause();
-      isPlaying = false;
-      notifyListeners();
-    } else {
-      controller.play();
-      isPlaying = true;
-      notifyListeners();
-    }
-  }
 
   bool isLoading = false;
   Future<void> loadMediaFromAlbum(AssetPathEntity album) async {

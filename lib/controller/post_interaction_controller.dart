@@ -8,168 +8,144 @@ import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 
 class PostInteractionController extends ChangeNotifier {
-  //clear datas
-
-  void clearData() {
-    likedPosts.clear();
-    followers.clear();
-    bookmarks.clear();
-    notifyListeners();
-  }
-
-  //like
   Set<int> likedPosts = {};
-  void toggleLike(
-      {required int index,
-      required String postId,
-      required bool isLiked,
-      required BuildContext context}) {
+  Set<int> followers = {};
+  Set<int> bookmarks = {};
+
+  // ✅ Like/Unlike Post
+  void toggleLike({
+    required int index,
+    required String postId,
+    required BuildContext context,
+  }) async {
     if (likedPosts.contains(index)) {
       likedPosts.remove(index);
-      log('unliked');
-      unLikePost(postId: postId, context: context, index: index);
+      await unLikePost(postId: postId, context: context, index: index);
     } else {
       likedPosts.add(index);
-      likePost(postId: postId, context: context);
-      log('liked');
+      await likePost(postId: postId, context: context);
     }
-    notifyListeners();
+    notifyListeners(); // ✅ UI will rebuild
   }
 
-  bool isPostLiked(int index) {
-    if (likedPosts.contains(index)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  bool isPostLiked(int index) => likedPosts.contains(index);
 
-  Future<void> likePost(
-      {required String postId, required BuildContext context}) async {
+  Future<void> likePost({
+    required String postId,
+    required BuildContext context,
+  }) async {
     await ApiCall.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/Post/likePost?postid=$postId'),
-        onSucces: (p0) {
-          Logger().f(p0.body);
-
-          notifyListeners();
-        },
-        onTokenExpired: () {
-          likePost(postId: postId, context: context);
-        },
-        context: context);
+      url: Uri.parse('${APIs.baseUrl}api/v1/Post/likePost?postid=$postId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => likePost(postId: postId, context: context),
+      context: context,
+    );
   }
 
-  void whenIsLikedTrue(bool isLiked) {}
-  void unLikePost(
-      {required String postId,
-      required BuildContext context,
-      required int index}) async {
+  Future<void> unLikePost({
+    required String postId,
+    required BuildContext context,
+    required int index,
+  }) async {
     await ApiCall.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
-        onSucces: (p0) {
-          Logger().f(p0.body);
-          likedPosts.remove(index);
-          notifyListeners();
-        },
-        onTokenExpired: () {
-          unLikePost(postId: postId, context: context, index: index);
-        },
-        context: context);
+      url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => unLikePost(postId: postId, context: context, index: index),
+      context: context,
+    );
   }
 
-//follow
-  Set<int> followers = {};
-
-  void toggleFollow(
-      {required int index,
-      required BuildContext context,
-      required String userId}) {
+  // ✅ Follow/Unfollow User
+  void toggleFollow({
+    required int index,
+    required BuildContext context,
+    required String userId,
+  }) {
     if (followers.contains(index)) {
       unFollowUserDialog(
-          context: context,
-          index: index,
-          OnUnfollow: () {
-            unfollowUser(userId: userId, context: context);
-            followers.remove(index);
-            notifyListeners();
-            Navigator.pop(context);
-          });
+        context: context,
+        index: index,
+        OnUnfollow: () {
+          unfollowUser(userId: userId, context: context);
+          followers.remove(index);
+          notifyListeners();
+          Navigator.pop(context);
+        },
+      );
     } else {
       followers.add(index);
       followUser(userId: userId, context: context);
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  bool isFollowed(int index) {
-    return followers.contains(index);
+  bool isFollowed(int index) => followers.contains(index);
+
+  void followUser({required String userId, required BuildContext context}) async {
+    await ApiCall.get(
+      url: Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => followUser(userId: userId, context: context),
+      context: context,
+    );
   }
 
-  void followUser({required String userId, required BuildContext context}) {
-    var url =
-        Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId');
-    ApiCall.get(
-        url: url,
-        onSucces: (p0) {
-          log(p0.body);
-        },
-        onTokenExpired: () {
-          followUser(userId: userId, context: context);
-        },
-        context: context);
+  void unfollowUser({required String userId, required BuildContext context}) async {
+    await ApiCall.get(
+      url: Uri.parse('${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => unfollowUser(userId: userId, context: context),
+      context: context,
+    );
   }
 
-  void unfollowUser({required String userId, required BuildContext context}) {
-    var url =
-        Uri.parse('${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId');
-    ApiCall.get(
-        url: url,
-        onSucces: (p0) {
-          log(p0.body);
-        },
-        onTokenExpired: () {
-          followUser(userId: userId, context: context);
-        },
-        context: context);
-  }
-//bookmark
-
-  void bookmarkPost(
-      {required String postId, required BuildContext context}) async {
-    await ApiCall.post(
-        url: Uri.parse('${APIs.baseUrl}api/v1/Post/addBookmark'),
-        body: {'postid': postId},
-        onSucces: (p0) {
-          Logger().f(p0.body);
-          notifyListeners();
-        },
-        onTokenExpired: () {
-          bookmarkPost(postId: postId, context: context);
-        },
-        context: context);
-  }
-
-  Set<int> bookmarks = {};
-
-  void toggleBookmark(
-      {required int index,
-      required String postId,
-      required BuildContext context}) {
+  // ✅ Bookmark/Unbookmark Post
+  void toggleBookmark({
+    required int index,
+    required String postId,
+    required BuildContext context,
+  }) {
     if (bookmarks.contains(index)) {
       bookmarks.remove(index);
-      AppUtils.showToast(msg: 'Unaved');
+      AppUtils.showToast(msg: 'Unsaved');
     } else {
       bookmarks.add(index);
       bookmarkPost(postId: postId, context: context);
       AppUtils.showToast(msg: 'Saved');
     }
-
     notifyListeners();
   }
 
-  bool isBookMarked(int index) {
-    return bookmarks.contains(index);
+  bool isBookmarked(int index) => bookmarks.contains(index);
+
+  Future<void> bookmarkPost({
+    required String postId,
+    required BuildContext context,
+  }) async {
+    await ApiCall.post(
+      url: Uri.parse('${APIs.baseUrl}api/v1/Post/addBookmark'),
+      body: {'postid': postId},
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => bookmarkPost(postId: postId, context: context),
+      context: context,
+    );
   }
+
 
   //comment
   void addComment(

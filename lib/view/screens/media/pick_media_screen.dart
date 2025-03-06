@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/assetVideoController.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
@@ -47,58 +48,35 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
           ),
           body: Column(
             children: [
-              proWatch.selectedMedia?.type == AssetType.video
-                  ? Container(
-                      height: 300,
-                      width: double.infinity,
-                    )
-                  : Stack(
-                      children: [
-                        Container(
-                          height: 300,
-                          width: double.infinity,
-                          color: Colors.white12,
-                          child: proWatch.selectedMedia != null
-                              ? FutureBuilder<File?>(
-                                  future: proWatch.selectedMedia!.file,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return SizedBox();
-                                    }
-                                    if (snapshot.hasData &&
-                                        snapshot.data != null) {
-                                      return Image.file(
-                                        snapshot.data!,
-                                        fit: proWatch.isCover
-                                            ? BoxFit.cover
-                                            : BoxFit.contain,
-                                      );
-                                    } else {
-                                      return const Icon(
-                                          Icons.image_not_supported,
-                                          size: 50,
-                                          color: Colors.grey);
-                                    }
-                                  },
-                                )
-                              : const Center(child: Text("No media selected")),
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          left: 5,
-                          child: GestureDetector(
-                            onTap: () {
-                              proRead.changeImageFit();
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.fit_screen),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+              Builder(
+                builder: (context) {
+                  if (proWatch.selectedMedia == null) {
+                    return SizedBox();
+                  }
+
+                  if (proWatch.selectedMedia?.type == AssetType.video) {
+                    if (proWatch.file == null) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    VideoPlayerController _controller =
+                        VideoPlayerController.file(proWatch.file!)
+                          ..initialize().then((_) {
+                            log("Video initialized successfully");
+                            setState(() {}); // Refresh UI
+                          }).catchError((error) {
+                            log("Video initialization error: $error");
+                          });
+
+                    return VideoView(
+                      controller: _controller,
+                      file: proWatch.file!,
+                    );
+                  } else {
+                    return ImageView(proWatch: proWatch, proRead: proRead);
+                  }
+                },
+              ),
               Container(
                 height: 50,
                 width: double.infinity,
@@ -208,6 +186,101 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                     ),
             ],
           )),
+    );
+  }
+}
+
+class ImageView extends StatelessWidget {
+  const ImageView({
+    super.key,
+    required this.proWatch,
+    required this.proRead,
+  });
+
+  final MediaController proWatch;
+  final MediaController proRead;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: 300,
+          width: double.infinity,
+          color: Colors.white12,
+          child: proWatch.selectedMedia != null
+              ? FutureBuilder<File?>(
+                  future: proWatch.selectedMedia!.file,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox();
+                    }
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return Image.file(
+                        snapshot.data!,
+                        fit: proWatch.isCover ? BoxFit.cover : BoxFit.contain,
+                      );
+                    } else {
+                      return const Icon(Icons.image_not_supported,
+                          size: 50, color: Colors.grey);
+                    }
+                  },
+                )
+              : const Center(child: Text("No media selected")),
+        ),
+        Positioned(
+          bottom: 5,
+          left: 5,
+          child: GestureDetector(
+            onTap: () {
+              proRead.changeImageFit();
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(Icons.fit_screen),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class VideoView extends StatefulWidget {
+  const VideoView({
+    super.key,
+    required this.controller,
+    required this.file,
+  });
+  final VideoPlayerController controller;
+  final File file;
+
+  @override
+  State<VideoView> createState() => _VideoViewState();
+}
+
+class _VideoViewState extends State<VideoView> {
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<Assetvideocontroller>()
+        .initialiseVideo(controller: widget.controller, file: widget.file);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final prowatch = context.watch<Assetvideocontroller>();
+    final proRead = context.read<Assetvideocontroller>();
+    return GestureDetector(
+      onTap: () {
+        proRead.togglePlayPause(controller: widget.controller);
+      },
+      child: Container(
+        height: 300,
+        width: double.infinity,
+        child: VideoPlayer(widget.controller),
+      ),
     );
   }
 }

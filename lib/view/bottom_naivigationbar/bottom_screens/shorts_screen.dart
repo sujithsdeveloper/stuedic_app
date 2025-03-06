@@ -9,8 +9,8 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoScreen extends StatelessWidget {
-  const VideoScreen({super.key});
+class ShortsScreen extends StatelessWidget {
+  const ShortsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,16 @@ class _VideoPageState extends State<VideoPage> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<ShortsController>()
-        .initialiseVideo(url: videoUrls[widget.index]);
-    context.read<ShortsController>().onLongPressEnd();
+    Future.microtask(() {
+      Provider.of<ShortsController>(context, listen: false)
+          .initialiseVideo(url: videoUrls[widget.index]);
+    });
+  }
+
+  @override
+  void dispose() {
+    Provider.of<ShortsController>(context, listen: false).disposeVideo();
+    super.dispose();
   }
 
   @override
@@ -126,9 +132,12 @@ class _VideoPageState extends State<VideoPage> {
         ),
         Column(
           children: [
-            LinearProgressIndicator(
-              color: ColorConstants.primaryColor2,
-              backgroundColor: ColorConstants.greyColor,
+            Visibility(
+              visible: proWatch.isBuffering || !proWatch.isInitialised,
+              child: LinearProgressIndicator(
+                color: ColorConstants.primaryColor2,
+                backgroundColor: ColorConstants.greyColor,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 20),

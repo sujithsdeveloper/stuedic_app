@@ -8,7 +8,7 @@ import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
-import 'package:stuedic_app/view/screens/video_player_screen.dart';
+import 'package:stuedic_app/view/screens/media/video_player_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 

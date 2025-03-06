@@ -22,15 +22,16 @@ class _VideoPlayingScreenState extends State<VideoPlayingScreen> {
     context
         .read<Assetvideocontroller>()
         .initialiseVideo(controller: controller, file: widget.file);
-        controller.play();
+    controller.play();
   }
 
-@override
+  @override
   void dispose() {
     super.dispose();
     controller.pause();
     controller.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +42,7 @@ class _VideoPlayingScreenState extends State<VideoPlayingScreen> {
       ),
       body: AspectRatio(
         aspectRatio: 9 / 16,
-        child: GestureDetector(
-     
-          
-          child: VideoPlayer(controller)),
+        child: GestureDetector(child: VideoPlayer(controller)),
       ),
     );
   }

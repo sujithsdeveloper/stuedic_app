@@ -19,5 +19,9 @@ class AppTheme {
         ),
         textStyle: TextStyle(
             color: ColorConstants.secondaryColor, fontFamily: 'latoRegular')),
+    textSelectionTheme: TextSelectionThemeData(
+        selectionColor: ColorConstants.primaryColor2.withOpacity(0.7),
+        cursorColor: ColorConstants.secondaryColor,
+        selectionHandleColor: ColorConstants.secondaryColor),
   );
 }

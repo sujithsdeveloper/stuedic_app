@@ -72,8 +72,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
-        ChangeNotifierProvider(create: (context) => HomefeedController()), 
-        ChangeNotifierProvider(create: (context) => Assetvideocontroller()), 
+        ChangeNotifierProvider(create: (context) => HomefeedController()),
+        ChangeNotifierProvider(create: (context) => Assetvideocontroller()),
         ChangeNotifierProvider(
             create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
           theme: AppTheme.lightTheme,
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
+          // showPerformanceOverlay: true,
           home: (widget.token == null || widget.token!.isEmpty)
               ? LoginScreen()
               : BottomNavScreen()),

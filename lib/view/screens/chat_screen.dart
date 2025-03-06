@@ -4,9 +4,9 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/chat_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/date_formater.dart';
-
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(
@@ -45,8 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
             spacing: 9,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(widget.url),
-              ),
+                  backgroundImage: AppUtils.getProfile(url: widget.url)),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -82,44 +81,12 @@ class _ChatScreenState extends State<ChatScreen> {
               right: 10,
               top: 5,
               bottom: MediaQuery.viewInsetsOf(context).bottom + 20),
-          child: TextField(
-            onChanged: (value) {},
-            maxLines: 4,
-            minLines: 1,
-            controller: controller,
-            decoration: InputDecoration(
-                hintText: 'Message..',
-                hintStyle: TextStyle(
-                    color: isDarkTheme ? Colors.grey : Colors.black54),
-                filled: true,
-                fillColor: isDarkTheme
-                    ? Color(0xff242638)
-                    : Color.fromARGB(255, 78, 80, 94).withOpacity(0.6),
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      chatProRead.sentMessage(
-                          message: controller.text, context: context);
-                      controller.clear();
-                    },
-                    icon: Icon(
-                      HugeIcons.strokeRoundedNavigation03,
-                      size: 30,
-                      color: Colors.white,
-                    )),
-                prefixIcon: IconButton(
-                    onPressed: () {},
-                    icon: CircleAvatar(
-                      child: Icon(Icons.add),
-                    )),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ))),
-          ),
+          child: ChatTextfeild(
+              controller: controller,
+              isDarkTheme: isDarkTheme,
+              chatProRead: chatProRead),
         ),
-        body: chatProWatch.isLoading || chatProWatch.isChatLoading
+        body: chatProWatch.isLoading
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 controller: chatProWatch
@@ -183,5 +150,74 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 },
               ));
+  }
+}
+
+class ChatTextfeild extends StatelessWidget {
+  const ChatTextfeild({
+    super.key,
+    required this.controller,
+    required this.isDarkTheme,
+    required this.chatProRead,
+  });
+
+  final TextEditingController controller;
+  final bool isDarkTheme;
+  final ChatController chatProRead;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: (value) {},
+      maxLines: 4,
+      minLines: 1,
+      controller: controller,
+      decoration: InputDecoration(
+          hintText: 'Message..',
+          hintStyle:
+              TextStyle(color: isDarkTheme ? Colors.grey : Colors.black54),
+          filled: true,
+          fillColor: isDarkTheme
+              ? Color(0xff242638)
+              : Color.fromARGB(255, 78, 80, 94).withOpacity(0.6),
+          suffixIcon: IconButton(
+              onPressed: () {
+                chatProRead.sendMessage(
+                  controller.text,
+                  context,
+                );
+                controller.clear();
+              },
+              icon: Icon(
+                HugeIcons.strokeRoundedNavigation03,
+                size: 30,
+                color: Colors.white,
+              )),
+          prefixIcon: IconButton(
+              onPressed: () {
+                // mediaBottomSheet(BottomsheetItems: [
+                //   BottomsheetItems(
+                //       onTap: () {
+                //         // context
+                //         //     .read<PickImageController>()
+                //         //     .pickImage(context: context, source: ImageSource.gallery,API: APIs.uplo);
+                //       },
+                //       label: 'Image',
+                //       iconData: HugeIcons.strokeRoundedImage01),
+                //   BottomsheetItems(
+                //       label: 'Video',
+                //       iconData: HugeIcons.strokeRoundedAiVideo),
+                // ], context: context);
+              },
+              icon: CircleAvatar(
+                child: Icon(Icons.add),
+              )),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                width: 0,
+                style: BorderStyle.none,
+              ))),
+    );
   }
 }

@@ -13,7 +13,6 @@ import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
@@ -145,7 +144,13 @@ class _RegistrationScreenState extends State<RegistrationScreen>
               SizedBox(height: 40),
               GradientButton(
                   onTap: () {
-                    AppRoutes.push(context, OtpVerificationScreen());
+                    AppRoutes.push(
+                        context,
+                        OtpVerificationScreen(
+                          number: phoneNumberController.text,
+                          email: emailController.text,
+                          isMail: phoneNumberController.text.isEmpty,
+                        ));
                   },
                   width: double.infinity,
                   label: prowatch.isEmailSelected

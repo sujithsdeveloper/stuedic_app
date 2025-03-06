@@ -22,6 +22,8 @@ class AppContoller extends ChangeNotifier {
     isEmailSelected = true;
     isButtonColored = false;
     changeMaxLine = false;
+    singleFieldColored = false;
+
     notifyListeners();
   }
 
@@ -63,8 +65,8 @@ class AppContoller extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeSingleFeildButtonColor({required String controller}) {
-    if (controller.isEmpty) {
+  void changeSingleFeildButtonColor({required String value}) {
+    if (value.length == 6) {
       singleFieldColored = true;
     } else {
       singleFieldColored = false;
@@ -85,7 +87,6 @@ class AppContoller extends ChangeNotifier {
   }
 
   Set<int> following = {};
-
 
   bool isFollowing(int index) {
     return following.contains(index);
@@ -124,5 +125,17 @@ class AppContoller extends ChangeNotifier {
     );
   }
 
-  
+  final formKey = GlobalKey<FormState>();
+  String selectedUserType = 'Student';
+  List<String> userTypes = [
+    "Student",
+    "School/University",
+    "Teacher/University professor",
+    "Public User"
+  ];
+
+  void changeRadio(String value) {
+    selectedUserType = value;
+    notifyListeners();
+  }
 }

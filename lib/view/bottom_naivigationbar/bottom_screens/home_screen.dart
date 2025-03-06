@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
+import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
@@ -40,14 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final proWatchHomeFeed = context.watch<HomefeedController>();
     final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(onPressed: () {
-      //   refreshAccessToken(context: context);
-      // }),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<HomefeedController>().getAllPost(context: context);
         },
         child: CustomScrollView(
+          cacheExtent: context.screenHeight,
           slivers: [
             SliverAppBar(
                 floating: true,
@@ -92,7 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
+              delegate: SliverChildBuilderDelegate(addAutomaticKeepAlives: true,
+                  (context, index) {
                 final item = items?[index];
                 return PostCard(
                   isLiked: item?.isLiked ?? false,

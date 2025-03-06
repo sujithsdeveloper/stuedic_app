@@ -1,26 +1,23 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
-import 'package:stuedic_app/styles/like_styles.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   const PostCard(
       {super.key,
       required this.profileUrl,
@@ -43,6 +40,25 @@ class PostCard extends StatelessWidget {
   final String userId;
 
   @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<int> scaleAnimation;
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 90),
+        lowerBound: 1,
+        upperBound: 1.5);
+    scaleAnimation = Tween(begin: 20, end: 25).animate(animationController);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final commentController = TextEditingController();
     final proRead = context.read<AppContoller>();
@@ -60,12 +76,14 @@ class PostCard extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  AppRoutes.push(context, UserProfileScreen(userId: userId));
+                  AppRoutes.push(
+                      context, UserProfileScreen(userId: widget.userId));
                 },
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: AppUtils.getProfile(url: profileUrl),
+                      backgroundImage:
+                          AppUtils.getProfile(url: widget.profileUrl),
                       radius: 24,
                     ),
                     SizedBox(width: 12),
@@ -73,7 +91,7 @@ class PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          widget.name,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -92,43 +110,15 @@ class PostCard extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      proReadInteraction.toggleFollow(
-                          index: index, context: context, userId: userId);
-                    },
-                    child: Container(
-                      height: 28,
-                      width: proRead.isFollowing(index) ? 61 : 69,
-                      decoration: BoxDecoration(
-                          color: proRead.isFollowing(index)
-                              ? ColorConstants.greyColor
-                              : null,
-                          gradient: proRead.isFollowing(index)
-                              ? null
-                              : ColorConstants.primaryGradientHorizontal,
-                          borderRadius: BorderRadius.circular(100)),
-                      child: Center(
-                        child: Text(
-                          proReadInteraction.isFollowed(index)
-                              ? 'Unfollow'
-                              : 'Follow',
-                          style: StringStyle.smallText(isBold: true),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
+                    IconButton(
                     onPressed: () {
                       postBottomSheet(
-                          context: context, imageUrl: imageUrl, username: name);
+                          context: context,
+                          imageUrl: widget.imageUrl,
+                          username: widget.name);
                     },
                     icon: Icon(Icons.more_vert, color: Colors.black),
                   )
-                ],
-              ),
             ],
           ),
           SizedBox(height: 16),
@@ -144,7 +134,7 @@ class PostCard extends StatelessWidget {
                     Image.network(
                       height: 290,
                       width: double.infinity,
-                      imageUrl,
+                      widget.imageUrl,
                       fit: BoxFit.cover,
                     ),
                     Positioned(
@@ -166,7 +156,7 @@ class PostCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          Text(caption, style: TextStyle(fontSize: 16)),
+          Text(widget.caption, style: TextStyle(fontSize: 16)),
           SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -174,25 +164,37 @@ class PostCard extends StatelessWidget {
               children: [
                 Consumer<PostInteractionController>(
                   builder: (context, postInteraction, child) {
-                    return GestureDetector(onTap: () {
-                      postInteraction.toggleLike(
-                          isLiked: isLiked,
-                          index: index,
-                          postId: postId,
-                          context: context);
-                    }, child: Builder(
-                      builder: (context) {
-                        if (isLiked || proReadInteraction.isPostLiked(index)) {
-                          return LikeAnimation();
-                        } else if (proReadInteraction.isPostLiked(index) ==
-                                false &&
-                            isLiked) {
-                          return UnlikeIcon();
-                        } else {
-                          return UnlikeIcon();
-                        }
+                    return GestureDetector(
+                      onTap: () {
+                        postInteraction.toggleLike(
+                          index: widget.index,
+                          postId: widget.postId,
+                          context: context,
+                        );
+
+                        animationController.forward().then((_) {
+                          animationController.reverse();
+                        });
                       },
-                    ));
+                      child: AnimatedBuilder(
+                        animation: animationController,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: animationController
+                                .value, // Fixed missing scale value
+                            child: Icon(
+                              postInteraction.isPostLiked(widget.index)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: postInteraction.isPostLiked(widget.index)
+                                  ? Colors.red
+                                  : Colors.black,
+                              size: 25, // Increased size for better visibility
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   },
                 ),
                 Row(
@@ -212,14 +214,14 @@ class PostCard extends StatelessWidget {
                 SizedBox(width: 8),
                 GestureDetector(
                   onTap: () {
-                    log('post id: $postId');
+                    log('post id: ${widget.postId}');
 
                     commentBottomSheet(
                         context: context,
-                        postId: postId,
+                        postId: widget.postId,
                         commentController: commentController);
                     proReadInteraction.getComment(
-                        postId: postId, context: context);
+                        postId: widget.postId, context: context);
                   },
                   child: Row(
                     spacing: 5,
@@ -247,16 +249,26 @@ class PostCard extends StatelessWidget {
                   icon:
                       Icon(HugeIcons.strokeRoundedShare05, color: Colors.black),
                 ),
-                IconButton(
-                  onPressed: () {
-                    proReadInteraction.toggleBookmark(
-                        context: context, index: index, postId: postId);
+                Consumer<PostInteractionController>(
+                  builder: (context, postInteraction, child) {
+                    bool isBookmarked =
+                        postInteraction.isBookmarked(widget.index);
+                    return IconButton(
+                      icon: Icon(
+                        isBookmarked
+                            ? CupertinoIcons.bookmark_fill
+                            : CupertinoIcons.bookmark,
+                        color: ColorConstants.secondaryColor,
+                      ),
+                      onPressed: () {
+                        postInteraction.toggleBookmark(
+                          index: widget.index,
+                          postId: widget.postId,
+                          context: context,
+                        );
+                      },
+                    );
                   },
-                  icon: Icon(
-                      proReadInteraction.isBookMarked(index)
-                          ? CupertinoIcons.bookmark_fill
-                          : CupertinoIcons.bookmark,
-                      color: Colors.black),
                 ),
               ],
             ),

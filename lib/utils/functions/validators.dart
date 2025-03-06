@@ -66,7 +66,7 @@ String? phoneNumberValidator(String? value) {
   return null;
 }
 
-String? nameValidator(String? value,String itemName) {
+String? nameValidator(String? value, String itemName) {
   if (value == null || value.isEmpty) {
     return '$itemName is required';
   }
@@ -87,9 +87,10 @@ String? dropdownValidator(String? value) {
 String? otpValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "Please enter OTP";
-  } else if (value.length < 4) { // Assuming a 4-digit OTP
-    return "OTP must be 4 digits";
-  } else if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+  } else if (value.length < 6) {
+    // Assuming a 4-digit OTP
+    return "OTP must be 6 digits";
+  } else if (!RegExp(r'^\d{6}$').hasMatch(value)) {
     return "Invalid OTP format";
   }
   return null; // Valid OTP
