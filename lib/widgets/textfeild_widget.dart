@@ -17,13 +17,14 @@ class TextfieldWidget extends StatelessWidget {
     this.helperText,
     this.dismissKeyboardOnTapOutside = false,
     this.maxline,
+    this.borderColor,
   });
   final String hint;
   final bool isPassword;
   final bool dismissKeyboardOnTapOutside;
   final int? maxLength;
   final String? helperText;
-
+  final Color? borderColor;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
@@ -58,7 +59,12 @@ class TextfieldWidget extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40),
             borderSide: BorderSide(color: ColorConstants.primaryColor2)),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide(
+                color: borderColor == null
+                    ? ColorConstants.secondaryColor
+                    : borderColor!)),
         suffixIcon: isPassword
             ? IconButton(
                 onPressed: () {

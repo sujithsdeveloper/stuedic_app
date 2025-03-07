@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/dialogs/desgination_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/screens/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
@@ -127,6 +127,9 @@ class AppContoller extends ChangeNotifier {
 
   final formKey = GlobalKey<FormState>();
   String selectedUserType = 'Student';
+  bool publicUser = false;
+  bool collegeStaff = false;
+  bool student = false;
   List<String> userTypes = [
     "Student",
     "School/University",
@@ -137,5 +140,35 @@ class AppContoller extends ChangeNotifier {
   void changeRadio(String value) {
     selectedUserType = value;
     notifyListeners();
+  }
+
+  void onDesiginationContinue({
+    required BuildContext context,
+    required Function() nextPage,
+  }) {
+    // Reset all variables before setting the selected one
+    publicUser = false;
+    collegeStaff = false;
+    student = false;
+
+    if (selectedUserType == 'Public User') {
+      publicUser = true;
+      log('Public User selected');
+      nextPage();
+    } else if (selectedUserType == 'School/University') {
+      collegeStaff = true;
+      log('School/University selected');
+      DesiginationDialog(context);
+    } else if (selectedUserType == 'Teacher/University professor') {
+      collegeStaff = true;
+      log('Teacher/University professor selected');
+      nextPage();
+    } else if (selectedUserType == 'Student') {
+      student = true;
+      log('Student selected');
+      nextPage();
+    }
+
+    notifyListeners(); // Notify UI about changes
   }
 }

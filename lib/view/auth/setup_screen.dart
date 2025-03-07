@@ -1,21 +1,12 @@
-import 'dart:developer';
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
-import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
-import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/auth/setup_screens/desigination_selection.dart';
+import 'package:stuedic_app/view/auth/setup_screens/finish_setup.dart';
 import 'package:stuedic_app/view/auth/setup_screens/form_fill.dart';
 import 'package:stuedic_app/view/auth/setup_screens/upload_profile.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
-import 'package:stuedic_app/widgets/gradient_button.dart';
-import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});
@@ -105,7 +96,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 itemBuilder: (context, index) {
                   switch (index) {
                     case 0:
-                      return DesiginationSelection(
+                      return DesignationSelection(
                           prowatch: prowatch,
                           proRead: proRead,
                           nextPage: nextPage);
@@ -122,36 +113,10 @@ class _SetupScreenState extends State<SetupScreen> {
                           nextPage: nextPage);
 
                     case 3:
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 24),
-                            Text(
-                              'All Done',
-                              style: StringStyle.topHeading(size: 32),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Review your details before proceeding.',
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                            const SizedBox(height: 40),
-                            GradientButton(
-                              isColored: true,
-                              label: 'Finish Setup',
-                              onTap: () {
-                                AppRoutes.pushAndRemoveUntil(
-                                    context, BottomNavScreen());
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                      return FinishSetup();
 
                     default:
-                      return Container(); // Handle unexpected index
+                      return SizedBox();
                   }
                 },
               ),
