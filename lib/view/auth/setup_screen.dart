@@ -6,7 +6,8 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/auth/setup_screens/desigination_selection.dart';
 import 'package:stuedic_app/view/auth/setup_screens/finish_setup.dart';
 import 'package:stuedic_app/view/auth/setup_screens/form_fill.dart';
-import 'package:stuedic_app/view/auth/setup_screens/upload_profile.dart';
+import 'package:stuedic_app/view/auth/setup_screens/club_selection.dart';
+import 'package:stuedic_app/view/auth/setup_screens/upload_id.dart';
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});
@@ -52,8 +53,13 @@ class _SetupScreenState extends State<SetupScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        return proRead.setupPop(
-            index: pageIndex, pageController: pageController);
+        if (pageIndex != 0) {
+          pageController.previousPage(
+              duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -92,7 +98,7 @@ class _SetupScreenState extends State<SetupScreen> {
               child: PageView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 controller: pageController,
-                itemCount: 4,
+                itemCount: 5,
                 itemBuilder: (context, index) {
                   switch (index) {
                     case 0:
@@ -107,12 +113,15 @@ class _SetupScreenState extends State<SetupScreen> {
                           nextPage: nextPage);
 
                     case 2:
-                      return UploadProfile(
+                      return IDUpload();
+
+                    case 3:
+                      return ClubSelection(
                           prowatch: prowatch,
                           proRead: proRead,
                           nextPage: nextPage);
 
-                    case 3:
+                    case 4:
                       return FinishSetup();
 
                     default:

@@ -1,18 +1,21 @@
+// To parse this JSON data, do
+//
+//     final registrationModel = registrationModelFromJson(jsonString);
 
 import 'dart:convert';
 
-RegistrationResponse registrationResponseFromJson(String str) => RegistrationResponse.fromJson(json.decode(str));
+RegistrationModel registrationModelFromJson(String str) => RegistrationModel.fromJson(json.decode(str));
 
-String registrationResponseToJson(RegistrationResponse data) => json.encode(data.toJson());
+String registrationModelToJson(RegistrationModel data) => json.encode(data.toJson());
 
-class RegistrationResponse {
+class RegistrationModel {
     int? respCode;
     String? message;
     String? token;
     String? refreshToken;
     Response? response;
 
-    RegistrationResponse({
+    RegistrationModel({
         this.respCode,
         this.message,
         this.token,
@@ -20,7 +23,7 @@ class RegistrationResponse {
         this.response,
     });
 
-    factory RegistrationResponse.fromJson(Map<String, dynamic> json) => RegistrationResponse(
+    factory RegistrationModel.fromJson(Map<String, dynamic> json) => RegistrationModel(
         respCode: json["respCode"],
         message: json["message"],
         token: json["token"],

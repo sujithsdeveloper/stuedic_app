@@ -4,7 +4,6 @@ import 'package:stuedic_app/elements/editProfileItem.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
-
 class EditProfileScreen extends StatefulWidget {
   EditProfileScreen({
     super.key,
@@ -105,7 +104,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     right: 0,
                     child: GestureDetector(
                       onTap: () {
-                        mediaBottomSheet(context:context);
+                        mediaBottomSheet(
+                          context: context,
+                          onCameraTap: (pickedImage) {},
+                          onGalleryTap: (pickedImage) {},
+                        );
                       },
                       child: CircleAvatar(
                         radius: 20,
@@ -121,13 +124,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
             const Text(
               "About you",
               style: TextStyle(fontSize: 16, fontFamily: 'latoRegular'),
             ),
             const SizedBox(height: 10),
-
             ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -139,15 +140,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               separatorBuilder: (context, index) => const Divider(),
               itemCount: profileData.length,
             ),
-
             const SizedBox(height: 20),
-
             const Text(
               "Social",
               style: TextStyle(fontSize: 16, fontFamily: 'latoRegular'),
             ),
             const SizedBox(height: 10),
-
             ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

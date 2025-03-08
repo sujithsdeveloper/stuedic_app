@@ -13,6 +13,7 @@ class ApiCall {
 
   static Future<void> post(
       {required Uri url,
+      String snackbarText=StringConstants.wrong,
        Map? body,
       required Function(http.Response) onSucces,
       required Function() onTokenExpired,
@@ -33,7 +34,7 @@ class ApiCall {
         onTokenExpired();
       } else {
         log(response.body);
-        customSnackbar(label: StringConstants.wrong, context: context);
+        customSnackbar(label: snackbarText, context: context);
       }
     } catch (e) {
       log(e.toString());

@@ -49,13 +49,13 @@ class _ReelSectionState extends State<ReelSection> {
                       onTap: () {
                         mediaBottomSheet(
                           context: context,
-                          onCameraTap: () async {
+                          onCameraTap: (Pickedimage) async {
                             await proReadAsset.pickMedia(
                                 context: context,
                                 source: ImageSource.camera,
                                 isVideo: true);
                           },
-                          onGalleryTap: () async {
+                          onGalleryTap: (pickedImage) async {
                             await proReadAsset.pickMedia(
                                 context: context,
                                 source: ImageSource.gallery,

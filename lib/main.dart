@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/chat_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/chat_list_controller.dart';
@@ -10,6 +11,7 @@ import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/assetVideoController.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -17,6 +19,7 @@ import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/controller/pdf_controller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
+import 'package:stuedic_app/controller/scanImage_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
 import 'package:stuedic_app/theme/app_theme.dart';
@@ -71,12 +74,16 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListController()),
+        ChangeNotifierProvider(
+            create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => Assetvideocontroller()),
+        ChangeNotifierProvider(create: (context) => OtpController()),
         ChangeNotifierProvider(
             create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
+        ChangeNotifierProvider(create: (context) => ScanimageController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

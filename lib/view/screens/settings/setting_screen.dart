@@ -15,7 +15,7 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final proReadAuth = context.read<AuthController>();
+    final proReadAuth =  context.read<AuthController>();
     final proWatchAuth = context.watch<AuthController>();
     List<Map> settingData = [
       {

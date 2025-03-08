@@ -11,7 +11,7 @@ import 'package:stuedic_app/utils/refreshTocken.dart';
 
 class MutlipartController extends ChangeNotifier {
   String? imageUrl;
-
+  bool isUploading = false;
   Future<void> uploadMedia({
     required BuildContext context,
     required String filePath,
@@ -20,6 +20,8 @@ class MutlipartController extends ChangeNotifier {
   }) async {
     try {
       log('Uploading media...');
+      isUploading = true;
+      notifyListeners();
       String? token = await AppUtils.getToken();
       var request = http.MultipartRequest('POST', API);
       request.files.add(await http.MultipartFile.fromPath('file', filePath));
@@ -29,6 +31,8 @@ class MutlipartController extends ChangeNotifier {
       log('Response code: ${streamedResponse.statusCode}');
 
       if (streamedResponse.statusCode == 200) {
+        isUploading = false;
+        notifyListeners();
         var response = await http.Response.fromStream(streamedResponse);
         var decodedResponse = jsonDecode(response.body);
 
@@ -43,10 +47,14 @@ class MutlipartController extends ChangeNotifier {
           notifyListeners();
         }
       } else if (streamedResponse.statusCode == 401) {
+        isUploading = false;
+        notifyListeners();
         await refreshAccessToken(context: context);
         return await uploadMedia(
             context: context, API: API, filePath: filePath);
       } else if (streamedResponse.statusCode == 413) {
+        isUploading = false;
+        notifyListeners();
         errorSnackbar(
             label: 'Failed to upload. File is too large', context: context);
 
@@ -55,11 +63,14 @@ class MutlipartController extends ChangeNotifier {
         assetPicker.pickedImage = null;
         assetPicker.notifyListeners();
       } else {
+        isUploading = false;
+        notifyListeners();
         var errorResponse = await http.Response.fromStream(streamedResponse);
-        Logger().e(
-            'Failed to upload media. Server response: ${errorResponse.statusCode}');
+        log(errorResponse.body);
       }
     } catch (e) {
+      isUploading = false;
+      notifyListeners();
       Logger().e(e.toString());
       errorSnackbar(label: 'Error: ${e.toString()}', context: context);
     }

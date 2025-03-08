@@ -1,11 +1,24 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
-
-Future<dynamic> mediaBottomSheet({required BuildContext context,  Function()? onCameraTap,Function()? onGalleryTap}) {
+Future<dynamic> mediaBottomSheet(
+    {required BuildContext context,
+    bool isVideo = false,
+    required Function(File? pickedMedia) onCameraTap,
+    required Function(File? pickedMedia) onGalleryTap}) {
+  final pickerControllerWatch =
+      Provider.of<AssetPickerController>(context, listen: false);
+  final pickerControllerRead =
+      Provider.of<AssetPickerController>(context, listen: false);
   return showModalBottomSheet(
     context: context,
     builder: (context) => Container(
@@ -17,7 +30,14 @@ Future<dynamic> mediaBottomSheet({required BuildContext context,  Function()? on
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
-            onTap: onCameraTap,
+            onTap: () async {
+              await pickerControllerRead.pickMedia(
+                  isVideo: isVideo,
+                  context: context,
+                  source: ImageSource.camera);
+              File? image = pickerControllerWatch.pickedImage;
+              onCameraTap(image);
+            },
             child: Container(
               height: 112,
               width: 159,
@@ -47,7 +67,21 @@ Future<dynamic> mediaBottomSheet({required BuildContext context,  Function()? on
             ),
           ),
           GestureDetector(
-            onTap: onGalleryTap,
+            onTap: () async {
+              await pickerControllerRead.pickMedia(
+                  isVideo: isVideo,
+                  context: context,
+                  source: ImageSource.gallery);
+
+              File? media = pickerControllerRead.pickedImage;
+
+              if (media != null) {
+                onGalleryTap(media);
+                log('media ${media.path}');
+              } else {
+                log("Error: No image picked");
+              }
+            },
             child: Container(
               height: 112,
               width: 159,

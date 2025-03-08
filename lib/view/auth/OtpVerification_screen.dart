@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -116,6 +117,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     appContext: context,
                     onChanged: (value) {
                       proRead.changeSingleFeildButtonColor(value: value);
+                      if (_controller.text.length > 5) {
+                        context.read<OtpController>().checkOtp(
+                            context: context,
+                            email: widget.email,
+                            otp: _controller.text);
+                      }
                     },
                     // onCompleted: (value) {
                     //   proRead.changeSingleFeildButtonColor(value: value);
@@ -156,9 +163,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       label: 'Continue',
                       isColored: proWatch.singleFieldColored,
                       onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          AppRoutes.push(context, const SetupScreen());
-                        }
+                        // if (_formKey.currentState!.validate()) {
+                        //   AppRoutes.push(context, const SetupScreen());
+                        // }
+                        AppRoutes.push(context, const SetupScreen());
                       }),
                 ),
               ],

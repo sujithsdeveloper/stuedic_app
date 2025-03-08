@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/API_response.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/model/auth/login_response_model.dart';
+import 'package:stuedic_app/model/auth/registration_response_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -42,6 +44,7 @@ class AuthController extends ChangeNotifier {
         // preff.setString(StringConstants.currentUserID, loginModelResponse.);
         preff.setString(StringConstants.refreshToken,
             loginModelResponse.refreshToken ?? '');
+
         preff
             .setString(
                 StringConstants.accessToken, loginModelResponse.token ?? '')
@@ -83,7 +86,6 @@ class AuthController extends ChangeNotifier {
       if (response.statusCode == 200) {
         AppUtils.deleteToken();
         AppRoutes.pushAndRemoveUntil(context, LoginScreen());
-        context.watch<AppContoller>().currentIndex=0;
       } else {
         // log(response.body);
         errorSnackbar(label: "Something went wrong", context: context);
@@ -92,5 +94,47 @@ class AuthController extends ChangeNotifier {
       log(e.toString());
       errorSnackbar(label: e.toString(), context: context);
     }
+  }
+
+  RegistrationModel? registrationModel;
+  Future<void> createAccount(
+      {required BuildContext context,
+      required String email,
+      required String userName,
+      required String collageName,
+      required String phoneNumber,
+      required String collegeIDUrl,
+      required String password,
+      required String role}) async {
+    final data = {
+      "email": email,
+      "userName": userName,
+      "collageName": collegeIDUrl,
+      "phone": phoneNumber,
+      "collageIDurl": collegeIDUrl,
+      "password": password,
+      "role": role
+    };
+
+    await ApiCall.post(
+        body: data,
+        url: APIs.onBoardUrl,
+        onSucces: (p0) {
+          // log(p0.body);
+          registrationModel = registrationModelFromJson(p0.body);
+          notifyListeners();
+        },
+        onTokenExpired: () {
+          createAccount(
+              context: context,
+              email: email,
+              userName: userName,
+              collageName: collageName,
+              phoneNumber: phoneNumber,
+              collegeIDUrl: collegeIDUrl,
+              password: password,
+              role: role);
+        },
+        context: context);
   }
 }

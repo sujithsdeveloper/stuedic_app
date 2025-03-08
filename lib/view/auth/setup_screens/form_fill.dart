@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/auth/setup_screens/college_registration.dart';
 import 'package:stuedic_app/widgets/dropdown_widget.dart';
@@ -27,6 +30,10 @@ class FormFill extends StatefulWidget {
 }
 
 class _FormFillState extends State<FormFill> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final ConfirmpasswordController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -36,8 +43,6 @@ class _FormFillState extends State<FormFill> {
   @override
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
     final key = GlobalKey<FormState>();
 
     return Builder(
@@ -57,8 +62,9 @@ class _FormFillState extends State<FormFill> {
               key: key,
               child: SingleChildScrollView(
                 child: Column(
+                  spacing: 9,
                   children: [
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
 
                     /// Full Name
                     FormItem(
@@ -79,10 +85,33 @@ class _FormFillState extends State<FormFill> {
                         controller: emailController,
                         hint: 'Email',
                         keyboardType: TextInputType.emailAddress,
-                        validator:
-                            emailValidator, // Fixed: Added email validation
+                        validator: (p0) => emailValidator(p0),
                       ),
                     ),
+                    FormItem(
+                      title: "Password",
+                      child: TextfieldWidget(
+                        dismissKeyboardOnTapOutside: false,
+                        borderColor: ColorConstants.greyColor,
+                        controller: passwordController,
+                        isPassword: true,
+                        hint: 'Password',
+                        validator: (p0) => passwordValidator(p0),
+                      ),
+                    ),
+                    FormItem(
+                      title: "Confirm Password",
+                      child: TextfieldWidget(
+                        dismissKeyboardOnTapOutside: false,
+                        borderColor: ColorConstants.greyColor,
+                        controller: ConfirmpasswordController,
+                        isPassword: true,
+                        hint: 'Confirm Password',
+                        validator: (p0) => confirmPasswordValidator(
+                            p0, passwordController.text),
+                      ),
+                    ),
+
                     SizedBox(
                       height: 24,
                     ),
@@ -91,10 +120,11 @@ class _FormFillState extends State<FormFill> {
                     GradientButton(
                       width: double.infinity,
                       label: 'Continue',
-                      onTap: () {
+                      onTap: () async {
                         // if (key.currentState!.validate()) {
                         //   nextPage();
                         // }
+                    AppUtils.saveToken(accessToken: '');
                         widget.nextPage();
                       },
                     ),

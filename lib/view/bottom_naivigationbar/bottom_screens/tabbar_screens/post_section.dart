@@ -46,7 +46,8 @@ class PostSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Builder(
                         builder: (context) {
-                          if (proWatchAsset.isLoading) {
+                          if (proWatchAsset.isLoading ||
+                              multipartObj.isUploading) {
                             return loadingIndicator();
                           }
                           if (proWatchAsset.pickedImage == null) {
@@ -55,16 +56,8 @@ class PostSection extends StatelessWidget {
                               onTap: () {
                                 mediaBottomSheet(
                                     context: context,
-                                    onCameraTap: () async {
-                                      await proReadAsset.pickMedia(
-                                          context: context,
-                                          source: ImageSource.camera);
-                                    },
-                                    onGalleryTap: () async {
-                                      await proReadAsset.pickMedia(
-                                          context: context,
-                                          source: ImageSource.gallery);
-                                    });
+                                    onCameraTap: (pickedImage) async {},
+                                    onGalleryTap: (pickedImage) async {});
                               },
                             );
                           } else {

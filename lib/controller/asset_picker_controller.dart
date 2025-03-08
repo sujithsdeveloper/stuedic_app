@@ -25,7 +25,7 @@ class AssetPickerController extends ChangeNotifier {
       if (video != null) {
         pickedVideo = File(video.path);
         notifyListeners();
-       
+
         log('Picked video path ${pickedVideo.toString()}');
         try {
           Navigator.pop(context);
@@ -51,28 +51,30 @@ class AssetPickerController extends ChangeNotifier {
       final image = await picker.pickImage(source: source);
       if (image != null) {
         pickedImage = File(image.path);
-        try {
-          Navigator.pop(context);
 
-          await context.read<MutlipartController>().uploadMedia(
-              context: context,
-              isVideo: false,
-              filePath: image.path,
-              API: APIs.uploadPicForPost);
-          notifyListeners();
-        } catch (e) {
-          log("Error converting image: $e");
-          errorSnackbar(label: "Error processing image", context: context);
-        }
-      } else {
+        log('Picked image path: ${pickedImage?.path}');
+        notifyListeners();
         Navigator.pop(context);
 
+        await context.read<MutlipartController>().uploadMedia(
+            context: context,
+            isVideo: false,
+            filePath: pickedImage!.path,
+            API: APIs.uploadPicForPost);
+      } else {
+        Navigator.pop(context);
         errorSnackbar(label: "No image selected", context: context);
       }
       isLoading = false;
       notifyListeners();
     }
     isLoading = false;
+    notifyListeners();
+  }
+
+  void clearAsset() {
+    pickedImage = null;
+    pickedVideo = null;
     notifyListeners();
   }
 }

@@ -16,11 +16,11 @@ class APIs {
 
   //profile
   static Uri profileGridUrl = Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
+  static Uri uploadProfile = Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');
   
   static Uri getAllPostsOfUser = Uri.parse('${baseUrl}api/v1/Post/getAllPostsOfUser?userId=');
   static Uri getUserDetail = Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');
   static Uri logoutUser = Uri.parse('${baseUrl}api/v1/User/logoutuser');
-  static Uri uploadProfilePic = Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');
 
   //product
   static Uri addNewProduct = Uri.parse('${baseUrl}api/v1/Marketplace/addNewProduct');
@@ -44,5 +44,11 @@ class APIs {
 
   //Upload video
   static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');
+
+
+  //OTP
+  static Uri getOtp = Uri.parse('${baseUrl}api/v1/auth/generateOtp');
+  static Uri checkOtp = Uri.parse('${baseUrl}api/v1/auth/verifyOtp');
+
 
 }

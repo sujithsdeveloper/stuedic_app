@@ -42,7 +42,7 @@ class DesignationSelection extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => proRead.changeRadio(type),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                       gradient: prowatch.selectedUserType == type
                           ? ColorConstants.primaryGradientHorizontal

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
-import 'package:stuedic_app/model/auth/login_response_model.dart';
 import 'package:stuedic_app/model/currentuser_grid_model.dart';
 import 'package:stuedic_app/model/getuserbyUserId_model.dart';
 import 'package:stuedic_app/model/single_post_model.dart';
@@ -19,6 +18,7 @@ class ProfileController extends ChangeNotifier {
       onSucces: (res) async {
         Logger().f(res.body);
         userCurrentDetails = userCurrentDetailsModelFromJson(res.body);
+
         log(userCurrentDetails!.response!.followersCount.toString());
         notifyListeners();
       },

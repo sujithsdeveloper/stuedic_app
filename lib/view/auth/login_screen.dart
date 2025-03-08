@@ -123,11 +123,7 @@ class _LoginScreenState extends State<LoginScreen>
                             controller: emailController,
                           ),
                           TextfieldWidget(
-                            onChanged: (p0) {
-                              proRead.password = p0!;
-                              proRead.changeButtonColor();
-                            },
-                            // validator: (p0) => passwordValidator(p0),
+                            validator: (p0) => passwordValidator(p0),
                             controller: passwordController,
                             hint: "Password",
                             isPassword: true,

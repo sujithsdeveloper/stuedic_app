@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-
 
 class AppUtils {
   static Future<String> getToken({bool isRefreshToken = false}) async {
@@ -25,6 +25,12 @@ class AppUtils {
     prefs.remove(StringConstants.accessToken);
     prefs.remove(StringConstants.refreshToken);
     log(prefs.getString(StringConstants.accessToken).toString());
+  }
+
+  static Future<void> saveToken({String? refreshToken,String? accessToken}) async {
+    final preff = await SharedPreferences.getInstance();
+    preff.setString(StringConstants.refreshToken,refreshToken?? '');
+    preff.setString(StringConstants.accessToken,accessToken?? '');
   }
 
   static void showToast({required String msg}) {
@@ -55,13 +61,19 @@ class AppUtils {
     return isStudent;
   }
 
-
-
-  static ImageProvider getProfile({ String? url}) {
+  static ImageProvider getProfile({String? url}) {
     if (url == null || url.isEmpty) {
       return AssetImage(ImageConstants.avathar);
     } else {
       return NetworkImage(url);
+    }
+  }
+
+  static ImageProvider getProfileLocal({File? image}) {
+    if (image == null) {
+      return AssetImage(ImageConstants.avathar);
+    } else {
+      return FileImage(image);
     }
   }
 

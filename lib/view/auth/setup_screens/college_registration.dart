@@ -17,6 +17,10 @@ class CollegeRegistration extends StatelessWidget {
   final Function() nextPage;
   @override
   Widget build(BuildContext context) {
+      final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Form(
@@ -60,6 +64,29 @@ class CollegeRegistration extends StatelessWidget {
                   validator: emailValidator, // Fixed: Added email validation
                 ),
               ),
+                FormItem(
+                      title: "Password",
+                      child: TextfieldWidget(
+                        dismissKeyboardOnTapOutside: false,
+                        borderColor: ColorConstants.greyColor,
+                        controller: passwordController,
+                        isPassword: true,
+                        hint: 'Password',
+                        validator: (p0) => passwordValidator(p0),
+                      ),
+                    ),
+                    FormItem(
+                      title: "Confirm Password",
+                      child: TextfieldWidget(
+                        dismissKeyboardOnTapOutside: false,
+                        borderColor: ColorConstants.greyColor,
+                        controller: confirmPasswordController,
+                        isPassword: true,
+                        hint: 'Confirm Password',
+                        validator: (p0) => confirmPasswordValidator(
+                            p0, passwordController.text),
+                      ),
+                    ),
 
               /// Continue Button
               GradientButton(

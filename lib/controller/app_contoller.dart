@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/dialogs/desgination_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/view/screens/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
@@ -75,16 +77,6 @@ class AppContoller extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool setupPop({required int index, required PageController pageController}) {
-    if (index != 0) {
-      pageController.previousPage(
-          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   Set<int> following = {};
 
@@ -170,5 +162,11 @@ class AppContoller extends ChangeNotifier {
     }
 
     notifyListeners(); // Notify UI about changes
+  }
+  List<String> val = [];
+
+  void changeChip(List<String> selected){
+                  val = selected;
+notifyListeners();
   }
 }
