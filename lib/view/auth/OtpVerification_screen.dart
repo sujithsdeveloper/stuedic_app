@@ -134,23 +134,26 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 // Resend OTP
                 Align(
                   alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () {
-                      // Add OTP resend logic
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Didn’t receive OTP?",
-                          style: StringStyle.normalText(),
-                        ),
-                        Text(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Didn’t receive OTP?",
+                        style: StringStyle.normalText(),
+                      ),
+                      InkWell(
+                        splashFactory: NoSplash.splashFactory,
+                        onTap: () {
+                          context
+                              .read<OtpController>()
+                              .getOTP(email: widget.email, context: context);
+                        },
+                        child: Text(
                           " Resend",
                           style: StringStyle.normalTextBold(),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -163,9 +166,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       label: 'Continue',
                       isColored: proWatch.singleFieldColored,
                       onTap: () {
-                        // if (_formKey.currentState!.validate()) {
-                        //   AppRoutes.push(context, const SetupScreen());
-                        // }
+                        if (_formKey.currentState!.validate()) {
+                          if (_controller.text.length > 5) {
+                            context.read<OtpController>().checkOtp(
+                                context: context,
+                                email: widget.email,
+                                otp: _controller.text);
+                          }
+                        }
                         AppRoutes.push(context, const SetupScreen());
                       }),
                 ),

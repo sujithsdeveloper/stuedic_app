@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/delegates/tabbarDelegate.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -14,6 +15,7 @@ import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -35,8 +37,14 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
+      (timeStamp) async {
         context.read<ProfileController>().getCurrentUserData(context: context);
+        final data = await context
+            .watch<ProfileController>()
+            .userCurrentDetails
+            ?.response
+            ?.profilePicUrl;
+        log('profiel url: ${data}');
       },
     );
     context.read<ProfileController>().getCurrentUserGrid(context: context);
@@ -139,7 +147,19 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                           outline: user?.isFollowed ?? false
                                               ? true
                                               : false,
-                                          onTap: () {},
+                                          onTap: () {
+                                            AppRoutes.push(
+                                                context,
+                                                EditProfileScreen(
+                                                  username:
+                                                      user?.userName ?? '',
+                                                  bio: 'bio',
+                                                  number: user?.phone ??
+                                                      'No Number',
+                                                  url:
+                                                      user?.profilePicUrl ?? '',
+                                                ));
+                                          },
                                           height: 48,
                                           width: 120,
                                           isColored: user?.isFollowed ?? false

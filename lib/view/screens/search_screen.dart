@@ -17,17 +17,13 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  final controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 4, vsync: this);
+class _SearchScreenState extends State<SearchScreen> {
+    final controller = TextEditingController();
+@override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final prowatch = context.watch<UserSearchController>();
@@ -50,77 +46,45 @@ class _SearchScreenState extends State<SearchScreen>
                 borderRadius: BorderRadius.circular(99),
               )),
         ),
-        bottom: TabBar(
-            dividerColor: ColorConstants.secondaryColor,
-            controller: tabController,
-            splashFactory: NoSplash.splashFactory,
-            unselectedLabelColor: ColorConstants.greyColor,
-            unselectedLabelStyle: TextStyle(color: ColorConstants.greyColor),
-            indicatorColor: ColorConstants.secondaryColor,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: [
-              Tab(
-                  child: Text(
-                'Top',
-                style: StringStyle.normalTextBold(),
-              )),
-              Tab(
-                  child: Text(
-                'Account',
-                style: StringStyle.normalTextBold(),
-              )),
-              Tab(
-                  child: Text(
-                'Video',
-                style: StringStyle.normalTextBold(),
-              )),
-              Tab(
-                  child: Text(
-                'Hashtag',
-                style: StringStyle.normalTextBold(),
-              )),
-            ]),
       ),
-      body: TabBarView(controller: tabController, children: [
-        ListView.builder(
-            itemCount: prowatch.reslust?.response?.users?.length ?? 0,
-            itemBuilder: (context, index) {
-              final users = prowatch.reslust?.response!.users;
-              final user = prowatch.reslust?.response!.users?[index];
-              if (prowatch.isSearchLoading) {
-                return loadingIndicator();
-              } else if (users?.isEmpty ?? true) {
-                return SizedBox();
-              } else if (users?.isNotEmpty ?? true) {
-                return ListTile(
-                  onTap: () {
-                    if (widget.toChat) {
-                      AppRoutes.push(
-                          context,
-                          ChatScreen(
-                              url: user?.profilePicUrl ?? '',
-                              name: user?.username ?? '',
-                              userId: user?.userId ?? ''));
-                    } else {
-                      AppRoutes.push(context,
-                          UserProfileScreen(userId: user?.userId ?? ''));
-                    }
-                  },
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        AppUtils.getProfile(url: user?.profilePicUrl ?? null),
-                  ),
-                  title: Text(
-                    user?.username ?? '',
-                    style: StringStyle.normalTextBold(),
-                  ),
-                  subtitle: Text(user?.userId ?? ''),
-                );
-              } else {
-                return SizedBox();
-              }
-            })
-      ]),
+      body: ListView.builder(
+          itemCount: prowatch.reslust?.response?.users?.length ?? 0,
+          itemBuilder: (context, index) {
+            final users = prowatch.reslust?.response!.users;
+            final user = prowatch.reslust?.response!.users?[index];
+            if (prowatch.isSearchLoading) {
+              return loadingIndicator();
+            } else if (users?.isEmpty ?? true) {
+              return SizedBox();
+            } else if (users?.isNotEmpty ?? true) {
+              return ListTile(
+                onTap: () {
+                  if (widget.toChat) {
+                    AppRoutes.push(
+                        context,
+                        ChatScreen(
+                            url: user?.profilePicUrl ?? '',
+                            name: user?.username ?? '',
+                            userId: user?.userId ?? ''));
+                  } else {
+                    AppRoutes.push(
+                        context, UserProfileScreen(userId: user?.userId ?? ''));
+                  }
+                },
+                leading: CircleAvatar(
+                  backgroundImage:
+                      AppUtils.getProfile(url: user?.profilePicUrl ?? null),
+                ),
+                title: Text(
+                  user?.username ?? '',
+                  style: StringStyle.normalTextBold(),
+                ),
+                subtitle: Text(user?.userId ?? ''),
+              );
+            } else {
+              return SizedBox();
+            }
+          }),
     );
   }
 }

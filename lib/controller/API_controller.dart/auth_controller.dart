@@ -2,18 +2,17 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/API_response.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/auth/login_response_model.dart';
 import 'package:stuedic_app/model/auth/registration_response_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/refreshTocken.dart';
 import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
 
@@ -30,13 +29,8 @@ class AuthController extends ChangeNotifier {
     try {
       isLoginLoading = true;
       notifyListeners();
-      var response = await http.post(
-        APIs.loginUrl,
-        body: jsonEncode(loginDetails),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      );
+      var response = await http.post(APIs.loginUrl,
+          body: jsonEncode(loginDetails), headers: ApiServices.getHeaders());
 
       if (response.statusCode == 200) {
         LoginModel loginModelResponse = loginModelFromJson(response.body);
@@ -50,7 +44,11 @@ class AuthController extends ChangeNotifier {
                 StringConstants.accessToken, loginModelResponse.token ?? '')
             .then(
           (value) {
-            AppRoutes.pushAndRemoveUntil(context, BottomNavScreen());
+            AppRoutes.pushAndRemoveUntil(
+                context,
+                BottomNavScreen(
+                  isColege: true,
+                ));
           },
         );
         log(response.body);
@@ -77,15 +75,15 @@ class AuthController extends ChangeNotifier {
 
     try {
       var response = await http.post(APIs.logoutUser,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $refreshToken"
-          },
+          headers: ApiServices.getHeadersWithToken(refreshToken),
           body: jsonEncode(data));
 
       if (response.statusCode == 200) {
-        AppUtils.deleteToken();
-        AppRoutes.pushAndRemoveUntil(context, LoginScreen());
+        AppUtils.deleteToken().then(
+          (value) {
+            AppRoutes.pushAndRemoveUntil(context, LoginScreen());
+          },
+        );
       } else {
         // log(response.body);
         errorSnackbar(label: "Something went wrong", context: context);
@@ -101,7 +99,7 @@ class AuthController extends ChangeNotifier {
       {required BuildContext context,
       required String email,
       required String userName,
-      required String collageName,
+      required String collegeName,
       required String phoneNumber,
       required String collegeIDUrl,
       required String password,
@@ -109,32 +107,43 @@ class AuthController extends ChangeNotifier {
     final data = {
       "email": email,
       "userName": userName,
-      "collageName": collegeIDUrl,
+      "collageName": collegeName,
       "phone": phoneNumber,
       "collageIDurl": collegeIDUrl,
       "password": password,
-      "role": role
+      "role": role,
+      "Phone": "234567890"
     };
 
-    await ApiCall.post(
-        body: data,
-        url: APIs.onBoardUrl,
-        onSucces: (p0) {
-          // log(p0.body);
-          registrationModel = registrationModelFromJson(p0.body);
-          notifyListeners();
-        },
-        onTokenExpired: () {
-          createAccount(
-              context: context,
-              email: email,
-              userName: userName,
-              collageName: collageName,
-              phoneNumber: phoneNumber,
-              collegeIDUrl: collegeIDUrl,
-              password: password,
-              role: role);
-        },
-        context: context);
+    try {
+      var response = await http.post(APIs.onBoardUrl,
+          body: jsonEncode(data), headers: ApiServices.getHeaders());
+
+      if (response.statusCode == 200) {
+        registrationModel = registrationModelFromJson(response.body);
+        notifyListeners();
+        await AppUtils.saveToken(
+            accessToken: registrationModel?.token ?? '',
+            refreshToken: registrationModel?.refreshToken ?? '');
+        AppRoutes.pushAndRemoveUntil(context, BottomNavScreen());
+      } else if (response.statusCode == 401) {
+        await refreshAccessToken(context: context);
+        createAccount(
+            context: context,
+            email: email,
+            userName: userName,
+            collegeName: collegeName,
+            phoneNumber: phoneNumber,
+            collegeIDUrl: collegeIDUrl,
+            password: password,
+            role: role);
+      } else if (response.body.contains(ApiResponse.userAlreadyExist)) {
+        errorSnackbar(
+            label: 'User with this email already exists', context: context);
+      }
+    } catch (e) {
+      log(e.toString());
+      errorSnackbar(label: StringConstants.wrong, context: context);
+    }
   }
 }

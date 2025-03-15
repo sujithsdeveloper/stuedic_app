@@ -1,31 +1,47 @@
-
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/styles/string_styles.dart';
 
 class EditItem extends StatelessWidget {
   const EditItem({
     super.key,
     required this.label,
-    required this.data,
-    this.onTap,
+    required this.controller,
+    required this.suffix,
   });
 
   final String label;
-  final String data;
-  final Function()? onTap;
-
+  final TextEditingController controller;
+  final String suffix;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+    final key = GlobalKey<FormState>();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 9),
+      child: Form(
+        key: key,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(data, style: const TextStyle(color: Colors.grey)),
-            const SizedBox(width: 10),
-            const Icon(Icons.arrow_forward_ios, size: 16),
+            Text(
+              label,
+              style: StringStyle.normalTextBold(),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),

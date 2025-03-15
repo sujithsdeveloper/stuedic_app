@@ -49,6 +49,7 @@ class TextfieldWidget extends StatelessWidget {
           : null,
       validator: validator,
       keyboardType: keyboardType,
+      maxLength: maxLength,
       controller: controller,
       obscureText: isPassword ? prowatch.isObscure : false,
       decoration: InputDecoration(

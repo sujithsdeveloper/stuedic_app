@@ -123,7 +123,11 @@ class _LoginScreenState extends State<LoginScreen>
                             controller: emailController,
                           ),
                           TextfieldWidget(
-                            validator: (p0) => passwordValidator(p0),
+                            validator: (p0) {
+                              if (p0 == null || p0.isEmpty) {
+                                return "Password is required";
+                              }
+                            },
                             controller: passwordController,
                             hint: "Password",
                             isPassword: true,
@@ -187,19 +191,7 @@ class _LoginScreenState extends State<LoginScreen>
                 Center(
                     child: Text("Or sign in with",
                         style: StringStyle.normalText())),
-                SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SocialMediaContainer(
-                        child: Brand(size: 30, Brands.facebook)),
-                    SizedBox(width: 20),
-                    SocialMediaContainer(child: Brand(size: 30, Brands.google)),
-                    SizedBox(width: 20),
-                    SocialMediaContainer(
-                        child: Icon(size: 30, BoxIcons.bxl_apple)),
-                  ],
-                ),
+
                 SizedBox(height: 24),
                 Center(
                   child: Text.rich(

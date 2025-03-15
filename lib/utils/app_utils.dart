@@ -27,10 +27,11 @@ class AppUtils {
     log(prefs.getString(StringConstants.accessToken).toString());
   }
 
-  static Future<void> saveToken({String? refreshToken,String? accessToken}) async {
+  static Future<void> saveToken(
+      {String? refreshToken, String? accessToken}) async {
     final preff = await SharedPreferences.getInstance();
-    preff.setString(StringConstants.refreshToken,refreshToken?? '');
-    preff.setString(StringConstants.accessToken,accessToken?? '');
+    preff.setString(StringConstants.refreshToken, refreshToken ?? '');
+    preff.setString(StringConstants.accessToken, accessToken ?? '');
   }
 
   static void showToast({required String msg}) {
@@ -91,5 +92,66 @@ class AppUtils {
     }
   }
 
-  static getAccessToken() {}
+  static Future<void> saveCredentials(
+      {required String email, required String password}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.email, email);
+    prefs.setString(StringConstants.password, password);
+  }
+
+  static Future<String?> getCredentials({required bool getMail}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString(StringConstants.email);
+    String? password = prefs.getString(StringConstants.password);
+    if (getMail) {
+      return email;
+    } else {
+      return password;
+    }
+  }
+
+  static Future<void> saveRole(String role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.role, role);
+  }
+
+  static Future<String?> getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? role = prefs.getString(StringConstants.role);
+    return role;
+  }
+
+  static Future<void> saveForm(
+      {required String userName,
+      required String collegeName,
+      required String deptName}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.collageName, collegeName);
+    prefs.setString(StringConstants.userName, userName);
+    prefs.setString(StringConstants.deptName, deptName);
+  }
+
+  static Future<String?> getForm(
+      {bool isCollegeName = false, bool isDeptName = false}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final collegeName = prefs.getString(StringConstants.collageName);
+    final userName = prefs.getString(StringConstants.userName);
+    final deptName = prefs.getString(StringConstants.deptName);
+    if (isCollegeName) {
+      return collegeName;
+    }
+    if (isDeptName) {
+      return deptName;
+    } else {
+      return userName;
+    }
+  }
+
+  static Future<void> deleteCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(StringConstants.email);
+    prefs.remove(StringConstants.password);
+    prefs.remove(StringConstants.role);
+    prefs.remove(StringConstants.userName);
+  }
 }

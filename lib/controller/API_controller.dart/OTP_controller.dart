@@ -17,7 +17,9 @@ class OtpController extends ChangeNotifier {
         log(p0.body);
       },
       
-      onTokenExpired: () {},
+      onTokenExpired: () {
+        getOTP(email: email, context: context);
+      },
       context: context,
     );
   }
@@ -35,7 +37,9 @@ class OtpController extends ChangeNotifier {
         log(p0.body);
         AppRoutes.push(context, const SetupScreen());
       },
-      onTokenExpired: () {},
+      onTokenExpired: () {
+        checkOtp(context: context, email: email, otp: otp);
+      },
       context: context,
     );
   }

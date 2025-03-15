@@ -1,12 +1,13 @@
-
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
+import 'package:stuedic_app/players/custom_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/view/screens/media/video_player_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -35,37 +36,52 @@ class _ReelSectionState extends State<ReelSection> {
           children: [
             const SizedBox(height: 20),
             Container(
-                height: 418,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xffF5FFE1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: GradientButton(
-                      label: 'Upload video',
-                      onTap: () {
-                        mediaBottomSheet(
-                          context: context,
-                          onCameraTap: (Pickedimage) async {
-                            await proReadAsset.pickMedia(
-                                context: context,
-                                source: ImageSource.camera,
-                                isVideo: true);
+              height: 418,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xffF5FFE1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Builder(
+                builder: (context) {
+                  if (proWatchAsset.isLoading) {
+                    return loadingIndicator();
+                  } else if (proWatchAsset.pickedVideo != null) {
+                    return Stack(
+                      children: [
+                        CustomVideoPlayer(
+                            videoFile: proWatchAsset.pickedVideo!),
+                        Positioned(
+                            right: 0,
+                            child: IconButton(
+                                onPressed: () {
+                                  proWatchAsset.pickedVideo = null;
+                                  proWatchAsset.notifyListeners();
+                                },
+                                icon: Icon(Icons.delete)))
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: GradientButton(
+                          label: 'Upload video',
+                          onTap: () {
+                            mediaBottomSheet(
+                              isVideo: true,
+                              context: context,
+                              onCameraTap: (Pickedimage) async {},
+                              onGalleryTap: (pickedImage) async {},
+                            );
                           },
-                          onGalleryTap: (pickedImage) async {
-                            await proReadAsset.pickMedia(
-                                context: context,
-                                source: ImageSource.gallery,
-                                isVideo: true);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                )),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
             const SizedBox(height: 10),
             Text(
               'Caption',

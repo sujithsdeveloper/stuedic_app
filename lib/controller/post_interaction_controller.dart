@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/dialogs/unfollowdialog.dart';
@@ -11,8 +12,13 @@ class PostInteractionController extends ChangeNotifier {
   Set<int> likedPosts = {};
   Set<int> followers = {};
   Set<int> bookmarks = {};
+  void addLike(int index, BuildContext context) {
+    likedPosts.add(index);
+  }
+  void removeLike(int index, BuildContext context) {
+    likedPosts.add(index);
+  }
 
-  // ✅ Like/Unlike Post
   void toggleLike({
     required int index,
     required String postId,
@@ -25,7 +31,7 @@ class PostInteractionController extends ChangeNotifier {
       likedPosts.add(index);
       await likePost(postId: postId, context: context);
     }
-    notifyListeners(); // ✅ UI will rebuild
+    notifyListeners();
   }
 
   bool isPostLiked(int index) => likedPosts.contains(index);
@@ -56,12 +62,12 @@ class PostInteractionController extends ChangeNotifier {
         Logger().f(p0.body);
         notifyListeners();
       },
-      onTokenExpired: () => unLikePost(postId: postId, context: context, index: index),
+      onTokenExpired: () =>
+          unLikePost(postId: postId, context: context, index: index),
       context: context,
     );
   }
 
-  // ✅ Follow/Unfollow User
   void toggleFollow({
     required int index,
     required BuildContext context,
@@ -87,7 +93,8 @@ class PostInteractionController extends ChangeNotifier {
 
   bool isFollowed(int index) => followers.contains(index);
 
-  void followUser({required String userId, required BuildContext context}) async {
+  void followUser(
+      {required String userId, required BuildContext context}) async {
     await ApiCall.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
@@ -99,9 +106,11 @@ class PostInteractionController extends ChangeNotifier {
     );
   }
 
-  void unfollowUser({required String userId, required BuildContext context}) async {
+  void unfollowUser(
+      {required String userId, required BuildContext context}) async {
     await ApiCall.get(
-      url: Uri.parse('${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
+      url: Uri.parse(
+          '${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
         notifyListeners();
@@ -111,7 +120,6 @@ class PostInteractionController extends ChangeNotifier {
     );
   }
 
-  // ✅ Bookmark/Unbookmark Post
   void toggleBookmark({
     required int index,
     required String postId,
@@ -145,7 +153,6 @@ class PostInteractionController extends ChangeNotifier {
       context: context,
     );
   }
-
 
   //comment
   void addComment(

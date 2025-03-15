@@ -8,6 +8,7 @@ import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/data/app_db.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
@@ -17,7 +18,8 @@ import 'package:stuedic_app/view/screens/college_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+  const BottomNavScreen({super.key, this.isColege = false});
+  final bool isColege;
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -25,13 +27,27 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen>
     with SingleTickerProviderStateMixin {
+  bool? isStudent;
+  bool? isPublic;
+
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         final token = await AppUtils.getToken();
+
+        isPublic = context
+            .read<ProfileController>()
+            .userCurrentDetails
+            ?.response
+            ?.isPublic;
+        isStudent = context
+            .read<ProfileController>()
+            .userCurrentDetails
+            ?.response
+            ?.isStudent;
+
         log(token);
         context.read<ProfileController>().getCurrentUserData(context: context);
         context.read<ProfileController>().getCurrentUserGrid(context: context);
@@ -39,25 +55,11 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     );
   }
 
-  List<Widget> userScreens = [
-    HomeScreen(),
-    DiscoverScreen(),
-    Container(),
-    ShortsScreen(),
-    ProfileScreenStudent()
-  ];
-  List<Widget> CollegeuserScreens = [
-    HomeScreen(),
-    DiscoverScreen(),
-    Container(),
-    ShortsScreen(),
-    CollegeProfileScreen()
-  ];
-
   @override
   Widget build(BuildContext context) {
     final proWatch = context.watch<AppContoller>();
     final proRead = context.read<AppContoller>();
+
     return WillPopScope(
       onWillPop: () async {
         if (proWatch.currentIndex != 0) {
@@ -67,7 +69,9 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         return true;
       },
       child: Scaffold(
-        body: userScreens[proWatch.currentIndex],
+        body: widget.isColege
+            ? CollegeuserScreens[proWatch.currentIndex]
+            : userScreens[proWatch.currentIndex],
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 10),

@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/widgets/dropdown_widget.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-class CollegeRegistration extends StatelessWidget {
-  const CollegeRegistration(
-      {super.key,
-      required this.nameController,
-      required this.nextPage,
-      required this.emailController});
-  final TextEditingController nameController;
-  final TextEditingController emailController;
+class CollegeRegistration extends StatefulWidget {
+  const CollegeRegistration({
+    super.key,
+    required this.nextPage,
+  });
+
   final Function() nextPage;
+
+  @override
+  State<CollegeRegistration> createState() => _CollegeRegistrationState();
+}
+
+class _CollegeRegistrationState extends State<CollegeRegistration> {
+  final key = GlobalKey<FormState>();
+  final nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-      final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Form(
@@ -53,50 +56,20 @@ class CollegeRegistration extends StatelessWidget {
                   child: DropdownWidget(
                       hint: 'Dept Name', onChanged: (value) {}, items: [])),
 
-              /// Email
-              FormItem(
-                title: "Email",
-                child: TextfieldWidget(
-                  borderColor: ColorConstants.greyColor,
-                  controller: emailController,
-                  hint: 'Email',
-                  keyboardType: TextInputType.emailAddress,
-                  validator: emailValidator, // Fixed: Added email validation
-                ),
-              ),
-                FormItem(
-                      title: "Password",
-                      child: TextfieldWidget(
-                        dismissKeyboardOnTapOutside: false,
-                        borderColor: ColorConstants.greyColor,
-                        controller: passwordController,
-                        isPassword: true,
-                        hint: 'Password',
-                        validator: (p0) => passwordValidator(p0),
-                      ),
-                    ),
-                    FormItem(
-                      title: "Confirm Password",
-                      child: TextfieldWidget(
-                        dismissKeyboardOnTapOutside: false,
-                        borderColor: ColorConstants.greyColor,
-                        controller: confirmPasswordController,
-                        isPassword: true,
-                        hint: 'Confirm Password',
-                        validator: (p0) => confirmPasswordValidator(
-                            p0, passwordController.text),
-                      ),
-                    ),
-
               /// Continue Button
               GradientButton(
                 width: double.infinity,
                 label: 'Continue',
-                onTap: () {
-                  // if (key.currentState!.validate()) {
-                  //   nextPage();
-                  // }
-                  nextPage();
+                onTap: () async {
+                  if (key.currentState!.validate()) {
+                         await AppUtils.saveForm(
+                              userName: nameController.text,
+                              collegeName: 'Providence college of engineering',
+                              deptName: 'Department of computer science');
+                  widget.nextPage();
+
+                  }
+
                 },
               ),
             ],

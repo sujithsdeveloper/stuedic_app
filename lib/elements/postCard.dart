@@ -56,6 +56,17 @@ class _PostCardState extends State<PostCard>
         lowerBound: 1,
         upperBound: 1.5);
     scaleAnimation = Tween(begin: 20, end: 25).animate(animationController);
+    log('like from api: ${widget.isLiked.toString()}');
+    final like =
+        context.read<PostInteractionController>().isPostLiked(widget.index);
+    log('like from local ${like.toString()}');
+
+    if (widget.isLiked) {
+      context.read<PostInteractionController>().addLike(widget.index, context);
+
+      log('after adding : like from local ${like.toString()}');
+      log('after adding :like form api   ${widget.isLiked.toString()}');
+    }
   }
 
   @override
@@ -110,15 +121,15 @@ class _PostCardState extends State<PostCard>
                 ),
               ),
               Spacer(),
-                    IconButton(
-                    onPressed: () {
-                      postBottomSheet(
-                          context: context,
-                          imageUrl: widget.imageUrl,
-                          username: widget.name);
-                    },
-                    icon: Icon(Icons.more_vert, color: Colors.black),
-                  )
+              IconButton(
+                onPressed: () {
+                  postBottomSheet(
+                      context: context,
+                      imageUrl: widget.imageUrl,
+                      username: widget.name);
+                },
+                icon: Icon(Icons.more_vert, color: Colors.black),
+              )
             ],
           ),
           SizedBox(height: 16),
@@ -172,6 +183,19 @@ class _PostCardState extends State<PostCard>
                           context: context,
                         );
 
+                        // if (widget.isLiked &&
+                        //     proReadInteraction.isPostLiked(widget.index) ==
+                        //         false) {
+                        //   proReadInteraction.removeLike(widget.index, context);
+                        // }
+                        if (widget.isLiked) {
+                          proReadInteraction.notifyListeners();
+                        }
+                        log('like from api: ${widget.isLiked.toString()}');
+                        final like =
+                            proReadInteraction.isPostLiked(widget.index);
+                        log('like from local ${like.toString()}');
+
                         animationController.forward().then((_) {
                           animationController.reverse();
                         });
@@ -183,13 +207,16 @@ class _PostCardState extends State<PostCard>
                             scale: animationController
                                 .value, // Fixed missing scale value
                             child: Icon(
-                              postInteraction.isPostLiked(widget.index)
+                              postInteraction.isPostLiked(widget.index) ||
+                                      widget.isLiked
                                   ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: postInteraction.isPostLiked(widget.index)
-                                  ? Colors.red
-                                  : Colors.black,
-                              size: 25, // Increased size for better visibility
+                                  : Icons.favorite_border_outlined,
+                              color:
+                                  postInteraction.isPostLiked(widget.index) ||
+                                          widget.isLiked
+                                      ? Colors.red
+                                      : null,
+                              size: 25,
                             ),
                           );
                         },

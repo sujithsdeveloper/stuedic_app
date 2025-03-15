@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/chat_list_controller.dart';
@@ -7,6 +8,8 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/functions/date_formater.dart';
 import 'package:stuedic_app/view/screens/chat_screen.dart';
+import 'package:stuedic_app/view/screens/search_screen.dart';
+import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -31,6 +34,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
     final prowatch = context.watch<ChatListController>();
     final users = prowatch.chatList;
     return Scaffold(
+        floatingActionButton: GradientCircleAvathar(
+          child: Icon(CupertinoIcons.add),
+          onTap: () {
+            AppRoutes.push(
+                context,
+                SearchScreen(
+                  toChat: true,
+                ));
+          },
+        ),
         appBar: AppBar(
           title: Text(
             'Chats',
@@ -39,6 +52,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
         body: Builder(
           builder: (context) {
+            if (prowatch.chatList.isEmpty) {
+              return Center(
+                child: Text('No chats found'),
+              );
+            }
             if (prowatch.isListLoading) {
               return loadingIndicator();
             } else {

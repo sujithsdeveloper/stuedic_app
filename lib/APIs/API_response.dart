@@ -3,4 +3,5 @@ class ApiResponse {
   static const String invalidPassword="Invalid password";
   static const String userNotFound="User not found";
   static const String like='like';
+  static const String InvalidOTP='Invalid OTP';
 }

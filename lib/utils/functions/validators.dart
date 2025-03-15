@@ -66,6 +66,17 @@ String? phoneNumberValidator(String? value) {
   return null;
 }
 
+String? ageValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Age is required';
+  }
+  final RegExp ageRegex = RegExp(r'^(1[89]|[2-9]\d|\d{3,})$');
+  if (!ageRegex.hasMatch(value)) {
+    return 'Age must be grater than 18';
+  }
+  return null;
+}
+
 String? nameValidator(String? value, String itemName) {
   if (value == null || value.isEmpty) {
     return '$itemName is required';

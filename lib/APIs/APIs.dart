@@ -1,6 +1,6 @@
 class APIs {
   static Uri baseUrl = Uri.parse('https://api.stuedic.com/');
-  static Uri socketBaseUrl = Uri.parse('ws://15.207.10.0:8080/');
+  static Uri socketBaseUrl = Uri.parse('ws:https://api.stuedic.com/');
 
   //auth
   static Uri onBoardUrl = Uri.parse('${baseUrl}api/v1/User/onBoard');
@@ -17,6 +17,7 @@ class APIs {
   //profile
   static Uri profileGridUrl = Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
   static Uri uploadProfile = Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');
+  static Uri editProfile= Uri.parse('${baseUrl}api/v1/Profile/editUserDetails');
   
   static Uri getAllPostsOfUser = Uri.parse('${baseUrl}api/v1/Post/getAllPostsOfUser?userId=');
   static Uri getUserDetail = Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');

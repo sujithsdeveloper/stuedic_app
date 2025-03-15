@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/dialogs/desgination_dialog.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 
@@ -67,9 +68,10 @@ class DesignationSelection extends StatelessWidget {
             GradientButton(
               width: double.infinity,
               label: 'Continue',
-              onTap: () {
+              onTap: () async {
                 proRead.onDesiginationContinue(
                     context: context, nextPage: nextPage);
+await AppUtils.saveRole(prowatch.selectedUserType);
               },
               isColored: true,
             ),

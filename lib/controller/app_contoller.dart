@@ -19,6 +19,7 @@ class AppContoller extends ChangeNotifier {
   String email = "";
   String phoneNumber = "";
   String password = "";
+  String confrimPassword = "";
 
   void clearState() {
     isEmailSelected = true;
@@ -76,7 +77,6 @@ class AppContoller extends ChangeNotifier {
 
     notifyListeners();
   }
-
 
   Set<int> following = {};
 
@@ -163,10 +163,11 @@ class AppContoller extends ChangeNotifier {
 
     notifyListeners(); // Notify UI about changes
   }
+
   List<String> val = [];
 
-  void changeChip(List<String> selected){
-                  val = selected;
-notifyListeners();
+  void changeChip(List<String> selected) {
+    val = selected;
+    notifyListeners();
   }
 }
