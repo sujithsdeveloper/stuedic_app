@@ -45,14 +45,14 @@ class AppContoller extends ChangeNotifier {
   void chnageBottomNav({required int index, required BuildContext context}) {
     currentIndex = index;
     if (currentIndex != 2) {
-      Provider.of<VideoTypeController>(context, listen: false)
-          .controller
-          .pause();
+      // Provider.of<VideoTypeController>(context, listen: false)
+      //     .controller
+      //     .pause();
     }
     if (currentIndex == 2) {
-      Provider.of<VideoTypeController>(context, listen: false)
-          .controller
-          .play();
+      // Provider.of<VideoTypeController>(context, listen: false)
+      //     .controller
+      //     .play();
     }
     notifyListeners();
   }

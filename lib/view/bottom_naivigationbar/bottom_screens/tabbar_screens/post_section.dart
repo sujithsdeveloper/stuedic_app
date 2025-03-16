@@ -109,13 +109,8 @@ class PostSection extends StatelessWidget {
                     controller.clear();
                     proReadAsset.pickedImage = null;
                     proReadAsset.notifyListeners();
-                    context
-                        .read<HomefeedController>()
-                        .getAllPost(context: context);
-                    context
-                        .read<ProfileController>()
-                        .getCurrentUserGrid(context: context);
-                    Navigator.pop(context);
+                   
+                    // Navigator.pop(context);
                   }),
               SizedBox(
                 height: 30,

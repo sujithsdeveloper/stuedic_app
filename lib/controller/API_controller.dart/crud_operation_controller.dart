@@ -2,8 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 
 class CrudOperationController extends ChangeNotifier {
   Future<void> uploadPost(
@@ -26,15 +30,18 @@ class CrudOperationController extends ChangeNotifier {
         onSucces: (p0) {
           Logger().f(p0.body);
           log('Upload response code: ${p0.statusCode}');
+          context.read<HomefeedController>().getAllPost(context: context);
+          context
+              .read<ProfileController>()
+              .getCurrentUserGrid(context: context);
           Navigator.pop(context);
         },
-        onTokenExpired: () {},
+        onTokenExpired: () {
+          uploadPost(mediaUrl: mediaUrl, caption: caption, context: context);
+        },
         context: context);
   }
 
-  void commentPost() {}
-  void followUser() {}
-  void sharePost() {}
   Future<void> deletePost({
     required BuildContext context,
     required String postId,
@@ -45,8 +52,17 @@ class CrudOperationController extends ChangeNotifier {
         url: APIs.deletePost,
         onSucces: (p0) {
           log(p0.body);
+          Navigator.pop(context);
+          context.read<HomefeedController>().getAllPost(context: context);
+          AppUtils.showToast(msg: 'Post deleted');
         },
-        onTokenExpired: () {},
+        onTokenExpired: () {
+          deletePost(context: context, postId: postId);
+        },
         context: context);
   }
+
+  void commentPost() {}
+  void followUser() {}
+  void sharePost() {}
 }

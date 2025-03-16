@@ -8,6 +8,7 @@ import 'package:stuedic_app/elements/story_section.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_default_screen.dart';
@@ -47,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
     return Scaffold(
       body: RefreshIndicator(
+        backgroundColor: ColorConstants.greyColor,
+        color: ColorConstants.secondaryColor,
+        
         onRefresh: () async {
           context.read<HomefeedController>().getAllPost(context: context);
         },
@@ -100,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   (context, index) {
                 final item = items?[index];
                 return PostCard(
-                  likeCount: item?.likescount.toString()??'0',
+                  likeCount: item?.likescount.toString() ?? '0',
                   postType: item?.postType ?? '',
                   isLiked: item?.isLiked ?? false,
                   isFollowed: false,

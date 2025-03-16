@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
 import 'package:stuedic_app/players/asset_video_player.dart';
@@ -218,12 +219,20 @@ class _PostCardState extends State<PostCard>
                         if (widget.isLiked) {
                           proReadInteraction.notifyListeners();
                         }
-                        final like =
-                            proReadInteraction.isPostLiked(widget.index);
+            
 
-                        animationController.forward().then((_) {
-                          animationController.reverse();
-                        });
+                        animationController.forward().then(
+                          (_) {
+                            animationController.reverse();
+                          },
+                        );
+                        Future.delayed(Duration(microseconds: 700)).then(
+                          (value) {
+                            context
+                                .read<HomefeedController>()
+                                .getAllPost(context: context);
+                          },
+                        );
                       },
                       child: AnimatedBuilder(
                         animation: animationController,
