@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
+import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -31,6 +32,7 @@ dynamic commentBottomSheet({
       builder: (context, setState) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         minChildSize: 0.4,
+        maxChildSize: 0.9,
         builder: (context, scrollController) {
           log('postID $postId');
           return SafeArea(
@@ -90,69 +92,73 @@ dynamic commentBottomSheet({
                       }
                       if (proWatchInteraction.getComments?.comments?.isEmpty ??
                           true) {
-                        return Column(
-                          spacing: 20,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                                height: 160, SVGConstants.comments),
-                            Text(
-                              'No Commments',
-                              style: StringStyle.normalTextBold(size: 20),
-                            )
-                          ],
+                        return SingleChildScrollView(
+                          child: Column(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                  height: 160, SVGConstants.comments),
+                              Text(
+                                'No Commments',
+                                style: StringStyle.normalTextBold(size: 20),
+                              )
+                            ],
+                          ),
                         );
                       } else {
-                        return ListView.builder(
-                          controller: scrollController,
-                          itemCount: commentData?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            final data = commentData?[index];
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 18,
-                                    backgroundImage: AppUtils.getProfile(
-                                      url: data?.profilePicUrl ?? '',
+                        return Expanded(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: commentData?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              final data = commentData?[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 18,
+                                      backgroundImage: AppUtils.getProfile(
+                                        url: data?.profilePicUrl ?? '',
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data?.username ?? 'Unknown',
-                                          style: StringStyle.normalTextBold(),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          data?.content ?? '',
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: true,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              data?.createdAt ?? '',
-                                              style: StringStyle.greyText(),
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            data?.username ?? 'Unknown',
+                                            style: StringStyle.normalTextBold(),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            data?.content ?? '',
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: true,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                data?.createdAt ?? '',
+                                                style: StringStyle.greyText(),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                ],
-                              ),
-                            );
-                          },
+                                    const SizedBox(width: 16),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         );
                       }
                     },

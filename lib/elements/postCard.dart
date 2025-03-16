@@ -32,7 +32,8 @@ class PostCard extends StatefulWidget {
       required this.isLiked,
       required this.postId,
       required this.userId,
-      required this.postType});
+      required this.postType,
+      required this.likeCount});
   final String profileUrl;
   final String mediaUrl;
   final String caption;
@@ -41,6 +42,7 @@ class PostCard extends StatefulWidget {
   final bool isFollowed;
   final bool isLiked;
   final String postId;
+  final String likeCount;
   final String userId;
   final String postType;
 
@@ -216,10 +218,8 @@ class _PostCardState extends State<PostCard>
                         if (widget.isLiked) {
                           proReadInteraction.notifyListeners();
                         }
-                        log('like from api: ${widget.isLiked.toString()}');
                         final like =
                             proReadInteraction.isPostLiked(widget.index);
-                        log('like from local ${like.toString()}');
 
                         animationController.forward().then((_) {
                           animationController.reverse();
@@ -252,8 +252,11 @@ class _PostCardState extends State<PostCard>
                 Row(
                   spacing: 5,
                   children: [
+                    SizedBox(
+                      width: 5,
+                    ),
                     Text(
-                      '349',
+                      widget.likeCount,
                       style: StringStyle.smallText(isBold: true),
                     ),
                     Text(

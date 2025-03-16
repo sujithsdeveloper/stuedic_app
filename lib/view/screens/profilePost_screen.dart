@@ -46,6 +46,7 @@ class _ProfilepostScreenState extends State<ProfilepostScreen> {
         ),
       ),
       body: PostCard(
+          likeCount: singlePostData?.likescount.toString() ?? '0',
           postType: singlePostData?.postType ?? '',
           profileUrl: singlePostData?.profilePicUrl ?? '',
           mediaUrl: singlePostData?.postContentUrl ?? '',

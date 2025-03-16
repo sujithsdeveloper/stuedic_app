@@ -12,8 +12,8 @@ Future<dynamic> shareBottomSheet(BuildContext context) {
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.7, // Start with 60% of screen height
-      minChildSize: 0.4, // Min height when dragged down
+      initialChildSize: 0.7, 
+      minChildSize: 0.4, 
       builder: (context, scrollController) => SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -135,7 +135,7 @@ Future<dynamic> shareBottomSheet(BuildContext context) {
                       backgroundImage: NetworkImage(''),
                     ),
                     title: Text(
-                      // items[index]['username'],
+                      
                       '',
                       style: StringStyle.normalTextBold(),
                     ),

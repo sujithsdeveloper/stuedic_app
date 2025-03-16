@@ -100,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   (context, index) {
                 final item = items?[index];
                 return PostCard(
+                  likeCount: item?.likescount.toString()??'0',
                   postType: item?.postType ?? '',
                   isLiked: item?.isLiked ?? false,
                   isFollowed: false,

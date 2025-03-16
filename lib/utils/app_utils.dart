@@ -10,7 +10,6 @@ import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class AppUtils {
   static Future<String> getToken({bool isRefreshToken = false}) async {
-    // Get the access token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(isRefreshToken
             ? StringConstants.refreshToken
