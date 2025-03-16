@@ -9,7 +9,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
-import 'package:stuedic_app/view/screens/chat_list_screen.dart';
+import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_default_screen.dart';
 
 class CreatePostScreen extends StatefulWidget {

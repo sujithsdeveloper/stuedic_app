@@ -11,6 +11,7 @@ import 'package:stuedic_app/utils/refreshTocken.dart';
 
 class MutlipartController extends ChangeNotifier {
   String? imageUrl;
+  String? videoUrl;
   bool isUploading = false;
   Future<void> uploadMedia({
     required BuildContext context,
@@ -37,12 +38,12 @@ class MutlipartController extends ChangeNotifier {
         var decodedResponse = jsonDecode(response.body);
 
         if (isVideo) {
-          String videoUrl = decodedResponse['hlsUrl'];
-          Logger().d('Video uploaded successfully: $videoUrl');
+          videoUrl = decodedResponse['hlsUrl'];
+          log('Video uploaded successfully: $videoUrl');
         } else {
           log('Image uploaded successfully.');
           String imgUrl = decodedResponse['fullUrl'];
-          Logger().f('Image URL: $imgUrl');
+          log('Image URL: $imgUrl');
           imageUrl = imgUrl;
           notifyListeners();
         }

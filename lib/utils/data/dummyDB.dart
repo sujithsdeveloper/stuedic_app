@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 List<Map> items = [
   {
     "imageUrl":
@@ -89,3 +91,47 @@ List<Map> comments = [
 
 String pdfUrl =
     "https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf";
+
+
+List<Map<String, dynamic>> departments = [
+  {
+    "icon": const Icon(Icons.computer, color: Colors.black),
+    "label": "Department of Computer Science",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.engineering, color: Colors.black),
+    "label": "Department of Mechanical Engineering",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.computer, color: Colors.black),
+    "label": "Department of Computer Science",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.engineering, color: Colors.black),
+    "label": "Department of Mechanical Engineering",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.computer, color: Colors.black),
+    "label": "Department of Computer Science",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.engineering, color: Colors.black),
+    "label": "Department of Mechanical Engineering",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.computer, color: Colors.black),
+    "label": "Department of Computer Science",
+    "strength": 596
+  },
+  {
+    "icon": const Icon(Icons.engineering, color: Colors.black),
+    "label": "Department of Mechanical Engineering",
+    "strength": 596
+  },
+];

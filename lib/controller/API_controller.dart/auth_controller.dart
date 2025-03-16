@@ -34,23 +34,20 @@ class AuthController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         LoginModel loginModelResponse = loginModelFromJson(response.body);
-        final preff = await SharedPreferences.getInstance();
-        // preff.setString(StringConstants.currentUserID, loginModelResponse.);
-        preff.setString(StringConstants.refreshToken,
-            loginModelResponse.refreshToken ?? '');
+      
 
-        preff
-            .setString(
-                StringConstants.accessToken, loginModelResponse.token ?? '')
-            .then(
-          (value) {
-            AppRoutes.pushAndRemoveUntil(
-                context,
-                BottomNavScreen(
-                  isColege: true,
-                ));
-          },
-        );
+       await AppUtils.saveToken(
+            accessToken: loginModelResponse.token ?? '',
+            refreshToken: loginModelResponse.refreshToken ?? '');
+        
+      
+
+        AppRoutes.pushAndRemoveUntil(
+            context,
+            BottomNavScreen(
+              isColege: true,
+            ));
+
         log(response.body);
       } else if (response.body.contains(ApiResponse.userNotFound)) {
         errorSnackbar(label: 'User Not Found', context: context);

@@ -77,10 +77,8 @@ Future<dynamic> mediaBottomSheet(
 
               if (media != null) {
                 onGalleryTap(media);
-                log('media ${media.path}');
-              } else {
-                log("Error: No image picked");
-              }
+                log('picked media path: ${media.path}');
+              } 
             },
             child: Container(
               height: 112,

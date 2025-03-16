@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -12,33 +16,39 @@ import 'package:stuedic_app/widgets/gradient_button.dart';
 dynamic postBottomSheet(
     {required BuildContext context,
     required String imageUrl,
+    required String postId,
+    required bool isRightUser,
     required String username}) {
   return showModalBottomSheet(
-    isScrollControlled: true,
+    isScrollControlled: false,
     context: context,
     builder: (context) {
-      final proRead = context.read<StorageController>();
-      final proWatch = context.watch<StorageController>();
+      log("Is right user: $isRightUser");
       return Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        height: 191,
+        // height: 191,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               _sheetItems(
-                onTap: () {
-                  Future.delayed(Duration(milliseconds: 300), () {
-                    proRead.saveNetworkImage(
-                        imageUrl: imageUrl,
-                        context: context,
-                        username: username);
-                  });
-                },
+                onTap: () {},
                 iconData: CupertinoIcons.bookmark,
                 label: 'Save Post',
+              ),
+              Visibility(
+                visible: isRightUser,
+                child: _sheetItems(
+                  onTap: () {
+                    context
+                        .read<CrudOperationController>()
+                        .deletePost(context: context, postId: postId);
+                  },
+                  iconData: CupertinoIcons.delete,
+                  label: 'Delete Post',
+                ),
               ),
               _sheetItems(
                 onTap: () {},

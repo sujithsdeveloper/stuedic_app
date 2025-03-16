@@ -14,6 +14,10 @@ class APIs {
   static Uri deletePost = Uri.parse('${baseUrl}api/v1/Post/deletePost');
   static Uri homeFeedAPI = Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=20');
 
+  //reel
+  static Uri reelAPI = Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=20&reelonly=true');
+
+
   //profile
   static Uri profileGridUrl = Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
   static Uri uploadProfile = Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');

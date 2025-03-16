@@ -103,7 +103,7 @@ class PostSection extends StatelessWidget {
                     }
 
                     proRead.uploadPost(
-                        imagePath: multipartObj.imageUrl ?? '',
+                        mediaUrl: multipartObj.imageUrl ?? '',
                         caption: controller.text.isEmpty ? '' : controller.text,
                         context: context);
                     controller.clear();

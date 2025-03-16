@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +9,7 @@ import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/utils/refreshTocken.dart';
-import 'package:stuedic_app/view/screens/chat_list_screen.dart';
+import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_default_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -102,11 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   (context, index) {
                 final item = items?[index];
                 return PostCard(
+                  postType: item?.postType ?? '',
                   isLiked: item?.isLiked ?? false,
                   isFollowed: false,
                   index: index,
                   userId: item?.userId ?? '',
-                  imageUrl: item?.postContentUrl ?? '',
+                  mediaUrl: item?.postContentUrl ?? '',
                   name: item?.username ?? '',
                   profileUrl: item?.profilePicUrl ?? '',
                   caption: item?.postDescription ?? '',

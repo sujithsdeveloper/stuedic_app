@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/currentuser_grid_model.dart';
@@ -8,6 +7,7 @@ import 'package:stuedic_app/model/getuserbyUserId_model.dart';
 import 'package:stuedic_app/model/single_post_model.dart';
 import 'package:stuedic_app/model/userGridModel.dart';
 import 'package:stuedic_app/model/user_current_detail_model.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 
 class ProfileController extends ChangeNotifier {
   UserCurrentDetailsModel? userCurrentDetails;
@@ -16,8 +16,9 @@ class ProfileController extends ChangeNotifier {
       url: APIs.getUserDetail,
       context: context,
       onSucces: (res) async {
-        Logger().f(res.body);
+        log("Current user response ${res.body}");
         userCurrentDetails = userCurrentDetailsModelFromJson(res.body);
+        AppUtils.saveUserId(userID: userCurrentDetails?.response?.userId??'');
 
         log(userCurrentDetails!.response!.followersCount.toString());
         notifyListeners();

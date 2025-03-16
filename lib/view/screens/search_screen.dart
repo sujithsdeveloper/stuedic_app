@@ -7,7 +7,7 @@ import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/view/screens/chat_screen.dart';
+import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {

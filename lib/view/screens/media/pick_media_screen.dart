@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/assetVideoController.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
+import 'package:stuedic_app/players/asset_video_player.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:video_player/video_player.dart';
@@ -59,17 +60,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    VideoPlayerController _controller =
-                        VideoPlayerController.file(proWatch.file!)
-                          ..initialize().then((_) {
-                            log("Video initialized successfully");
-                            setState(() {}); // Refresh UI
-                          }).catchError((error) {
-                            log("Video initialization error: $error");
-                          });
-
                     return VideoView(
-                      controller: _controller,
                       file: proWatch.file!,
                     );
                   } else {
@@ -91,7 +82,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                             child: DropdownButton<AssetPathEntity>(
                               padding: EdgeInsets.only(left: 20),
                               dropdownColor: Colors.white,
-                              menuWidth: 200,
+                              menuWidth: 100,
                               isExpanded: true,
                               isDense: true, // Helps with UI spacing
                               value: mediaController.selectedAlbum,
@@ -133,7 +124,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                           crossAxisSpacing: 2,
                           mainAxisSpacing: 2,
                         ),
-                        itemCount: 200, // Placeholder items for shimmer
+                        itemCount: 99, // Placeholder items for shimmer
                         itemBuilder: (context, index) =>
                             ShimmersItems.imagePickerShimmer(),
                       ),
@@ -249,10 +240,8 @@ class ImageView extends StatelessWidget {
 class VideoView extends StatefulWidget {
   const VideoView({
     super.key,
-    required this.controller,
     required this.file,
   });
-  final VideoPlayerController controller;
   final File file;
 
   @override
@@ -260,27 +249,20 @@ class VideoView extends StatefulWidget {
 }
 
 class _VideoViewState extends State<VideoView> {
+  late VideoPlayerController controller;
   @override
   void initState() {
     super.initState();
-    context
-        .read<Assetvideocontroller>()
-        .initialiseVideo(controller: widget.controller, file: widget.file);
+    controller = VideoPlayerController.file(widget.file)..initialize();
   }
 
   @override
   Widget build(BuildContext context) {
-    final prowatch = context.watch<Assetvideocontroller>();
-    final proRead = context.read<Assetvideocontroller>();
-    return GestureDetector(
-      onTap: () {
-        proRead.togglePlayPause(controller: widget.controller);
-      },
-      child: Container(
+    return SizedBox(
         height: 300,
-        width: double.infinity,
-        child: VideoPlayer(widget.controller),
-      ),
-    );
+        child: AspectRatio(
+          aspectRatio: controller.value.aspectRatio,
+          child: VideoPlayer(controller),
+        ));
   }
 }

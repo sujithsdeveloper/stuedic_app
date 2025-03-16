@@ -4,8 +4,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/chat_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/chat_list_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
@@ -14,7 +12,9 @@ import 'package:stuedic_app/controller/API_controller.dart/search_controller.dar
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
-import 'package:stuedic_app/controller/assetVideoController.dart';
+import 'package:stuedic_app/controller/chat/chat_controller.dart';
+import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
@@ -27,7 +27,6 @@ import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
-import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,11 +74,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => MutlipartController()),
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
-        ChangeNotifierProvider(create: (context) => ChatListController()),
+        ChangeNotifierProvider(create: (context) => ChatListScreenController()),
         ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
-        ChangeNotifierProvider(create: (context) => Assetvideocontroller()),
+        ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
         ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
@@ -93,9 +92,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           home: (widget.token == null || widget.token!.isEmpty)
               ? LoginScreen()
-              : BottomNavScreen()
-              
-              ),
+              : BottomNavScreen()),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/assetVideoController.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
 import 'package:video_player/video_player.dart';
 
@@ -20,8 +20,8 @@ class _VideoPlayingScreenState extends State<VideoPlayingScreen> {
   void initState() {
     super.initState();
     context
-        .read<Assetvideocontroller>()
-        .initialiseVideo(controller: controller, file: widget.file);
+        .read<VideoTypeController>()
+        .initialiseAssetVideo( file: widget.file);
     controller.play();
   }
 

@@ -4,18 +4,18 @@
 
 import 'dart:convert';
 
-List<ChatListModel> chatListModelFromJson(String str) => List<ChatListModel>.from(json.decode(str).map((x) => ChatListModel.fromJson(x)));
+List<ChatListUsersModel> chatListUsersModelFromJson(String str) => List<ChatListUsersModel>.from(json.decode(str).map((x) => ChatListUsersModel.fromJson(x)));
 
-String chatListModelToJson(List<ChatListModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String chatListModelToJson(List<ChatListUsersModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ChatListModel {
+class ChatListUsersModel {
     int? userId;
     String? lastMessage;
     DateTime? timestamp;
     String? username;
     String? profilePicUrl;
 
-    ChatListModel({
+    ChatListUsersModel({
         this.userId,
         this.lastMessage,
         this.timestamp,
@@ -23,7 +23,7 @@ class ChatListModel {
         this.profilePicUrl,
     });
 
-    factory ChatListModel.fromJson(Map<String, dynamic> json) => ChatListModel(
+    factory ChatListUsersModel.fromJson(Map<String, dynamic> json) => ChatListUsersModel(
         userId: json["userID"],
         lastMessage: json["lastMessage"],
         timestamp: json["timestamp"] == null ? null : DateTime.parse(json["timestamp"]),

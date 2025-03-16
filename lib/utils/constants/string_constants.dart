@@ -1,6 +1,5 @@
 class StringConstants {
   static const String appName = 'STUEDIC';
-
   static const String accessToken = 'token';
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
@@ -10,9 +9,11 @@ class StringConstants {
   static const String email = 'email';
   static const String password= 'password';
   static const String userName = 'userName';
-  static const isStudent = 'IsStudent';
+  static const String isStudent = 'IsStudent';
+  static const String reel = 'reel';
+  static const String pic = 'pic';
   static const currentUserID = 'currentUserID';
-  static const wrong = 'something went wrong';
+  static const String wrong = 'something went wrong';
 
    static   List<String> clubOptions = [
       'NSS',

@@ -69,4 +69,37 @@ class ApiCall {
       throw Exception("API Call Failed: $e");
     }
   }
+
+  static Future<void> delete({
+    required Uri url,
+    Map? body,
+    required Function(http.Response) onSucces,
+    required Function() onTokenExpired,
+    required BuildContext context,
+  }) async {
+    String? token = await AppUtils.getToken();
+
+    try {
+      var response = await http.delete(
+          body: jsonEncode(body),
+          url,
+          headers: ApiServices.getHeadersWithToken(token));
+
+      if (response.statusCode == 200) {
+        onSucces(response);
+      } else if (response.statusCode == 401) {
+        await refreshAccessToken(context: context);
+
+        onTokenExpired();
+      } else {
+        log(response.body);
+        customSnackbar(label: StringConstants.wrong, context: context);
+      }
+    } catch (e) {
+      log(e.toString());
+      errorSnackbar(label: e.toString(), context: context);
+
+      throw Exception("API Call Failed: $e");
+    }
+  }
 }

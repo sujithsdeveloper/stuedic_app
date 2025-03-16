@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/post_interaction_controller.dart';
+import 'package:stuedic_app/players/asset_video_player.dart';
+import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
@@ -15,22 +17,24 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard(
       {super.key,
       required this.profileUrl,
-      required this.imageUrl,
+      required this.mediaUrl,
       required this.caption,
       required this.name,
       required this.index,
       required this.isFollowed,
       required this.isLiked,
       required this.postId,
-      required this.userId});
+      required this.userId,
+      required this.postType});
   final String profileUrl;
-  final String imageUrl;
+  final String mediaUrl;
   final String caption;
   final String name;
   final int index;
@@ -38,6 +42,7 @@ class PostCard extends StatefulWidget {
   final bool isLiked;
   final String postId;
   final String userId;
+  final String postType;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -55,17 +60,9 @@ class _PostCardState extends State<PostCard>
         duration: Duration(milliseconds: 90),
         lowerBound: 1,
         upperBound: 1.5);
-    scaleAnimation = Tween(begin: 20, end: 25).animate(animationController);
-    log('like from api: ${widget.isLiked.toString()}');
-    final like =
-        context.read<PostInteractionController>().isPostLiked(widget.index);
-    log('like from local ${like.toString()}');
 
     if (widget.isLiked) {
       context.read<PostInteractionController>().addLike(widget.index, context);
-
-      log('after adding : like from local ${like.toString()}');
-      log('after adding :like form api   ${widget.isLiked.toString()}');
     }
   }
 
@@ -79,95 +76,123 @@ class _PostCardState extends State<PostCard>
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  AppRoutes.push(
-                      context, UserProfileScreen(userId: widget.userId));
-                },
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage:
-                          AppUtils.getProfile(url: widget.profileUrl),
-                      radius: 24,
-                    ),
-                    SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    AppRoutes.push(
+                        context, UserProfileScreen(userId: widget.userId));
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage:
+                            AppUtils.getProfile(url: widget.profileUrl),
+                        radius: 24,
+                      ),
+                      SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '1 min ago',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
+                          Text(
+                            '1 min ago',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Spacer(),
-              IconButton(
-                onPressed: () {
-                  postBottomSheet(
-                      context: context,
-                      imageUrl: widget.imageUrl,
-                      username: widget.name);
-                },
-                icon: Icon(Icons.more_vert, color: Colors.black),
-              )
-            ],
+                Spacer(),
+                IconButton(
+                  onPressed: () async {
+                    bool isRightUser = await AppUtils.checkUserIdForCurrentUser(
+                        IDtoCheck: widget.userId);
+
+                    postBottomSheet(
+                        postId: widget.postId,
+                        isRightUser: isRightUser,
+                        context: context,
+                        imageUrl: widget.mediaUrl,
+                        username: widget.name);
+                  },
+                  icon: Icon(Icons.more_vert, color: Colors.black),
+                )
+              ],
+            ),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 10),
           GestureDetector(
             onDoubleTap: () {
               proRead.toggleLikeVisible();
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Center(
-                child: Stack(
-                  children: [
-                    Image.network(
-                      height: 290,
-                      width: double.infinity,
-                      widget.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: Visibility(
-                          visible: proWatch.isLikeVisible,
-                          child: Column(
-                            children: [
-                              Lottie.asset(LottieAnimations.like),
-                            ],
-                          )),
-                    )
-                  ],
-                ),
-              ),
+              // borderRadius: BorderRadius.circular(10),
+              child: Center(child: Builder(
+                builder: (context) {
+                  if (widget.postType == StringConstants.pic) {
+                    return Stack(
+                      children: [
+                        Image.network(
+                          height: 450,
+                          width: double.infinity,
+                          widget.mediaUrl,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Visibility(
+                              visible: proWatch.isLikeVisible,
+                              child: Column(
+                                children: [Lottie.asset(LottieAnimations.like)],
+                              )),
+                        )
+                      ],
+                    );
+                  }
+                  if (widget.postType == StringConstants.reel) {
+                    return NetworkVideoPlayer(
+                      url: widget.mediaUrl,
+                      inistatePlay: false,
+                    );
+                  } else {
+                    return Container(
+                      height: 50,
+                      width: 50,
+                      color: Colors.grey,
+                      child: Center(
+                        child: Text('Invalid media type'),
+                      ),
+                    );
+                  }
+                },
+              )),
             ),
           ),
           SizedBox(height: 12),
-          Text(widget.caption, style: TextStyle(fontSize: 16)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(widget.caption, style: TextStyle(fontSize: 16)),
+          ),
           SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),

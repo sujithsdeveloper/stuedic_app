@@ -7,15 +7,16 @@ import 'package:stuedic_app/APIs/APIs.dart';
 
 class CrudOperationController extends ChangeNotifier {
   Future<void> uploadPost(
-      {required String imagePath,
+      {required String mediaUrl,
       required String caption,
       String visibility = 'Public',
+      String postType = 'pic',
       required BuildContext context}) async {
     Map<String, dynamic> data = {
-      "postContentURL": imagePath,
+      "postContentURL": mediaUrl,
       "postDescription": caption,
-      "postType": "pic",
-      "postVisibility": "public",
+      "postType": postType,
+      "postVisibility": visibility,
       "postColor": "red"
     };
 
@@ -25,6 +26,7 @@ class CrudOperationController extends ChangeNotifier {
         onSucces: (p0) {
           Logger().f(p0.body);
           log('Upload response code: ${p0.statusCode}');
+          Navigator.pop(context);
         },
         onTokenExpired: () {},
         context: context);
@@ -33,5 +35,18 @@ class CrudOperationController extends ChangeNotifier {
   void commentPost() {}
   void followUser() {}
   void sharePost() {}
-  void deletePost() {}
+  Future<void> deletePost({
+    required BuildContext context,
+    required String postId,
+  }) async {
+    final data = {"postID": postId};
+    await ApiCall.delete(
+        body: data,
+        url: APIs.deletePost,
+        onSucces: (p0) {
+          log(p0.body);
+        },
+        onTokenExpired: () {},
+        context: context);
+  }
 }

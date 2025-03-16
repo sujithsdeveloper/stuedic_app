@@ -1,11 +1,10 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/dialogs/desgination_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/view/screens/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
@@ -43,8 +42,18 @@ class AppContoller extends ChangeNotifier {
     } else {}
   }
 
-  void chnageBottomNav({required int index}) {
+  void chnageBottomNav({required int index, required BuildContext context}) {
     currentIndex = index;
+    if (currentIndex != 2) {
+      Provider.of<VideoTypeController>(context, listen: false)
+          .controller
+          .pause();
+    }
+    if (currentIndex == 2) {
+      Provider.of<VideoTypeController>(context, listen: false)
+          .controller
+          .play();
+    }
     notifyListeners();
   }
 

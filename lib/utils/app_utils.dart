@@ -42,15 +42,32 @@ class AppUtils {
         msg: msg);
   }
 
+  static Future<void> saveUserId({String? userID}) async {
+    // log('saveUserId function called with userID: $userID');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.userId, userID ?? '');
+    // log('User ID saved: ${prefs.getString(StringConstants.userId)}');
+  }
+
   static Future<String> getUserId() async {
-    // Get the access token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(StringConstants.userId) ?? "";
     return token;
   }
 
+  static Future<bool> checkUserIdForCurrentUser(
+      {required String IDtoCheck}) async {
+    String? userid = await getUserId();
+    // log('Current userId $userid');
+    // log('Id to check  $IDtoCheck');
+    if (IDtoCheck == userid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static Future<String> getUserName() async {
-    // Get the access token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(StringConstants.userName) ?? "";
     return token;

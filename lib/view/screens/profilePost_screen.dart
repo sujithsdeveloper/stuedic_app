@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
@@ -15,10 +17,21 @@ class ProfilepostScreen extends StatefulWidget {
 class _ProfilepostScreenState extends State<ProfilepostScreen> {
   @override
   void initState() {
-    context
-        .read<ProfileController>()
-        .getSinglePost(context: context, postId: widget.postId);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        // final pic = await context
+        //     .watch<ProfileController>()
+        //     .userProfile
+        //     ?.response
+        //     ?.profilePicUrl
+        //     .toString();
+        // log('profile ${pic.toString()}');
+        context
+            .read<ProfileController>()
+            .getSinglePost(context: context, postId: widget.postId);
+      },
+    );
   }
 
   @override
@@ -33,8 +46,9 @@ class _ProfilepostScreenState extends State<ProfilepostScreen> {
         ),
       ),
       body: PostCard(
+          postType: singlePostData?.postType ?? '',
           profileUrl: singlePostData?.profilePicUrl ?? '',
-          imageUrl: singlePostData?.postContentUrl ?? '',
+          mediaUrl: singlePostData?.postContentUrl ?? '',
           caption: singlePostData?.postDescription ?? '',
           name: singlePostData?.username ?? 'No Name',
           index: 0,
