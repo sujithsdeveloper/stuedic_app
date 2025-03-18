@@ -30,11 +30,11 @@ class AssetPickerController extends ChangeNotifier {
         try {
           Navigator.pop(context);
 
-          await context.read<MutlipartController>().uploadMedia(
-              context: context,
-              isVideo: true,
-              filePath: video.path,
-              API: APIs.uploadVideo);
+          // await context.read<MutlipartController>().uploadMedia(
+          //     context: context,
+          //     isVideo: true,
+          //     filePath: video.path,
+          //     API: APIs.uploadVideo);
           notifyListeners();
         } catch (e) {
           errorSnackbar(label: 'Failed to upload video', context: context);
@@ -56,11 +56,11 @@ class AssetPickerController extends ChangeNotifier {
         notifyListeners();
         Navigator.pop(context);
 
-        await context.read<MutlipartController>().uploadMedia(
-            context: context,
-            isVideo: false,
-            filePath: pickedImage!.path,
-            API: APIs.uploadPicForPost);
+        // await context.read<MutlipartController>().uploadMedia(
+        //     context: context,
+        //     isVideo: false,
+        //     filePath: pickedImage!.path,
+        //     API: APIs.uploadPicForPost);
       } else {
         Navigator.pop(context);
         errorSnackbar(label: "No image selected", context: context);

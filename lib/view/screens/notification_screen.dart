@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/notification_controller.dart';
 import 'package:stuedic_app/model/getNotification_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
@@ -58,72 +57,88 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   },
                 );
               } else {
-                return ListView.builder(
-                  itemCount: notifications?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final notification = notifications?[index];
-                    final time = AppUtils.timeAgo(
-                        notification?.created ?? DateTime.now());
-                    return CustomListTile(
-                      onTap: () {
-                        AppRoutes.push(
-                            context,
-                            SinglepostScreen(
-                                postID: notification?.postId.toString() ?? ''));
-                      },
-                      leading: LeadingAvathar(
-                        notification: notification,
-                        onTap: () {
-                          AppRoutes.push(
-                              context,
-                              UserProfileScreen(
-                                  userId: notification?.fromUserId.toString() ??
-                                      ''));
-                        },
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Recent",
+                        style: StringStyle.normalTextBold(),
                       ),
-                      title: GestureDetector(
-                        onTap: () {
-                          AppRoutes.push(
-                              context,
-                              UserProfileScreen(
-                                  userId: notification?.fromUserId.toString() ??
-                                      ''));
-                        },
-                        child: Text(
-                          notification?.fromUserName ?? '',
-                          style: StringStyle.normalTextBold(),
-                        ),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Builder(
-                            builder: (context) {
-                              if (notification!.type == StringConstants.like) {
-                                return Text(
-                                    '${notification.fromUserName}Liked your post');
-                              } else {
-                                return Text(
-                                    '${notification.fromUserName} Commented on your post');
-                              }
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: notifications?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final notification = notifications?[index];
+                          final time = AppUtils.timeAgo(
+                              notification?.created ?? DateTime.now());
+                          return CustomListTile(
+                            onTap: () {
+                              AppRoutes.push(
+                                  context,
+                                  SinglepostScreen(
+                                      postID: notification?.postId.toString() ??
+                                          ''));
                             },
-                          ),
-                          Text('$time ago')
-                        ],
+                            leading: LeadingAvathar(
+                              notification: notification,
+                              onTap: () {
+                                AppRoutes.push(
+                                    context,
+                                    UserProfileScreen(
+                                        userId: notification?.fromUserId
+                                                .toString() ??
+                                            ''));
+                              },
+                            ),
+                            title: GestureDetector(
+                              onTap: () {
+                                AppRoutes.push(
+                                    context,
+                                    UserProfileScreen(
+                                        userId: notification?.fromUserId
+                                                .toString() ??
+                                            ''));
+                              },
+                              child: Text(
+                                notification?.fromUserName ?? '',
+                                style: StringStyle.normalTextBold(),
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Builder(
+                                  builder: (context) {
+                                    if (notification!.type ==
+                                        StringConstants.like) {
+                                      return Text(
+                                          '${notification.fromUserName}Liked your post');
+                                    } else {
+                                      return Text(
+                                          '${notification.fromUserName} Commented on your post');
+                                    }
+                                  },
+                                ),
+                                Text('$time ago')
+                              ],
+                            ),
+                            trailing: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          notification?.postContentUrl ?? ''))),
+                            ),
+                          );
+                        },
                       ),
-                      trailing: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    notification?.postContentUrl ?? ''))),
-                      ),
-                    );
-                  },
+                    ],
+                  ),
                 );
               }
             },

@@ -5,11 +5,10 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
+import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
-import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
@@ -23,6 +22,7 @@ class PostSection extends StatelessWidget {
     final proReadAsset = context.read<AssetPickerController>();
     final proWatchAsset = context.watch<AssetPickerController>();
     final multipartObj = context.watch<MutlipartController>();
+    final proWatchCrop = context.watch<MutlipartController>();
     final controller = TextEditingController();
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,7 +57,11 @@ class PostSection extends StatelessWidget {
                                 mediaBottomSheet(
                                     context: context,
                                     onCameraTap: (pickedImage) async {},
-                                    onGalleryTap: (pickedImage) async {});
+                                    onGalleryTap: (pickedImage) async {
+                                      await context
+                                          .read<ImageEditController>()
+                                          .cropImage(image: pickedImage!);
+                                    });
                               },
                             );
                           } else {
@@ -109,7 +113,7 @@ class PostSection extends StatelessWidget {
                     controller.clear();
                     proReadAsset.pickedImage = null;
                     proReadAsset.notifyListeners();
-                   
+
                     // Navigator.pop(context);
                   }),
               SizedBox(

@@ -16,6 +16,7 @@ import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => VideoEditController()),
         ChangeNotifierProvider(create: (context) => EditprofileController()),
         ChangeNotifierProvider(create: (context) => NotificationController()),
+        ChangeNotifierProvider(create: (context) => ImageEditController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

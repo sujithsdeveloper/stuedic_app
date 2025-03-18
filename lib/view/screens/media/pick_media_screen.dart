@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
@@ -38,7 +39,12 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
             title: const Text("Select Media"),
             actions: [
               TextButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  final file = await proWatch.selectedMedia!.file;
+                  await context
+                      .read<ImageEditController>()
+                      .cropImage(image: file!);
+                },
                 child: Text("Continue",
                     style: TextStyle(
                         color: ColorConstants.secondaryColor, fontSize: 16)),
