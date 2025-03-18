@@ -53,7 +53,6 @@ class _ProfilepostScreenState extends State<ProfilepostScreen> {
           caption: singlePostData?.postDescription ?? '',
           name: singlePostData?.username ?? 'No Name',
           index: 0,
-          isFollowed: false,
           isLiked: singlePostData?.isLiked ?? false,
           postId: singlePostData?.postId ?? '',
           userId: singlePostData?.userId ?? ''),

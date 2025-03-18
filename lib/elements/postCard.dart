@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
-import 'package:stuedic_app/controller/post_interaction_controller.dart';
-import 'package:stuedic_app/players/asset_video_player.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
@@ -29,7 +28,6 @@ class PostCard extends StatefulWidget {
       required this.caption,
       required this.name,
       required this.index,
-      required this.isFollowed,
       required this.isLiked,
       required this.postId,
       required this.userId,
@@ -40,7 +38,6 @@ class PostCard extends StatefulWidget {
   final String caption;
   final String name;
   final int index;
-  final bool isFollowed;
   final bool isLiked;
   final String postId;
   final String likeCount;

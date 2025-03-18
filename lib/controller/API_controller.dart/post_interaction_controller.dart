@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
+import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/dialogs/unfollowdialog.dart';
 import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -26,8 +27,9 @@ class PostInteractionController extends ChangeNotifier {
   }) async {
     if (likedPosts.contains(index)) {
       likedPosts.remove(index);
-      await unLikePost(postId: postId, context: context, index: index);
-    } else {
+      await unLikePost(postId: postId, context: context, );
+      }
+    else {
       likedPosts.add(index);
       await likePost(postId: postId, context: context);
     }
@@ -54,7 +56,7 @@ class PostInteractionController extends ChangeNotifier {
   Future<void> unLikePost({
     required String postId,
     required BuildContext context,
-    required int index,
+    
   }) async {
     await ApiCall.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
@@ -63,7 +65,7 @@ class PostInteractionController extends ChangeNotifier {
         notifyListeners();
       },
       onTokenExpired: () =>
-          unLikePost(postId: postId, context: context, index: index),
+          unLikePost(postId: postId, context: context),
       context: context,
     );
   }
@@ -202,5 +204,17 @@ class PostInteractionController extends ChangeNotifier {
     );
     isCommentLoading = false;
     notifyListeners();
+  }
+
+
+  void singlePostLike({required bool isLiked,required String postId,required BuildContext context}){
+if (isLiked) {
+  unLikePost(postId: postId, context: context);
+  Provider.of<GetSinglepostController>(context).getSinglePost(context: context, postId: postId);
+} else {
+  likePost(postId: postId, context: context);
+  Provider.of<GetSinglepostController>(context).getSinglePost(context: context, postId: postId);
+
+}
   }
 }

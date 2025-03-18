@@ -11,7 +11,8 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
-import 'package:stuedic_app/view/screens/notification_default_screen.dart';
+import 'package:stuedic_app/view/screens/notification_screen.dart';
+import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,10 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final proWatchHomeFeed = context.watch<HomefeedController>();
     final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
     return Scaffold(
-      body: RefreshIndicator(
-        backgroundColor: ColorConstants.greyColor,
-        color: ColorConstants.secondaryColor,
-        
+      body: customRefreshIndicator(
         onRefresh: () async {
           context.read<HomefeedController>().getAllPost(context: context);
         },
@@ -77,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      AppRoutes.push(context, NotificationDefaultScreen());
+                      AppRoutes.push(context, NotificationScreen());
                     },
                   ),
                   IconButton(
@@ -107,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   likeCount: item?.likescount.toString() ?? '0',
                   postType: item?.postType ?? '',
                   isLiked: item?.isLiked ?? false,
-                  isFollowed: false,
                   index: index,
                   userId: item?.userId ?? '',
                   mediaUrl: item?.postContentUrl ?? '',

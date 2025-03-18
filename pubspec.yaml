@@ -61,6 +61,7 @@ dependencies:
   chips_choice: ^3.0.1
   google_mlkit_text_recognition: ^0.14.0
   stacked: ^3.4.4
+  cached_network_image: ^3.4.1
 
 
 

@@ -18,7 +18,7 @@ class ProfileController extends ChangeNotifier {
       onSucces: (res) async {
         log("Current user response ${res.body}");
         userCurrentDetails = userCurrentDetailsModelFromJson(res.body);
-        AppUtils.saveUserId(userID: userCurrentDetails?.response?.userId??'');
+        AppUtils.saveUserId(userID: userCurrentDetails?.response?.userId ?? '');
 
         log(userCurrentDetails!.response!.followersCount.toString());
         notifyListeners();
@@ -29,19 +29,25 @@ class ProfileController extends ChangeNotifier {
     );
   }
 
+  bool userByUserIdIsloading = false;
   GetUserByUserIdModel? userProfile;
   Future<void> getUserByUserID(
       {required String userId, required BuildContext context}) async {
+    userByUserIdIsloading = true;
+    notifyListeners();
     await ApiCall.get(
         url: Uri.parse(
             '${APIs.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
         onSucces: (p0) {
           // log(p0.body);
           userProfile = getUserByUserIdModelFromJson(p0.body);
+          userByUserIdIsloading = false;
           notifyListeners();
           log(userProfile!.response!.followersCount.toString());
         },
         onTokenExpired: () {
+          userByUserIdIsloading = false;
+          notifyListeners();
           getUserByUserID(userId: userId, context: context);
         },
         context: context);

@@ -4,6 +4,8 @@ import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    
     scaffoldBackgroundColor: Colors.white,
     primaryColor: Colors.white,
     appBarTheme: AppBarTheme(

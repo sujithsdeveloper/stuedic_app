@@ -10,7 +10,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
-import 'package:stuedic_app/view/screens/notification_default_screen.dart';
+import 'package:stuedic_app/view/screens/notification_screen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -64,7 +64,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                 color: Colors.black,
               ),
               onPressed: () {
-                AppRoutes.push(context, NotificationDefaultScreen());
+                AppRoutes.push(context, NotificationScreen());
               },
             ),
             IconButton(

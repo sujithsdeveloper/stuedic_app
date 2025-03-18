@@ -12,6 +12,8 @@ class StringConstants {
   static const String isStudent = 'IsStudent';
   static const String reel = 'reel';
   static const String pic = 'pic';
+  static const String like = 'like';
+  static const String comment= 'comment';
   static const currentUserID = 'currentUserID';
   static const String wrong = 'something went wrong';
 

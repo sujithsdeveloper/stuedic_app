@@ -6,7 +6,9 @@ import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/notification_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
@@ -19,7 +21,7 @@ import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/controller/pdf_controller.dart';
-import 'package:stuedic_app/controller/post_interaction_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/scanImage_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
@@ -65,6 +67,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ShortsController()),
+        ChangeNotifierProvider(create: (context) => GetSinglepostController()),
         ChangeNotifierProvider(create: (context) => AppContoller()),
         ChangeNotifierProvider(create: (context) => ProfileController()),
         ChangeNotifierProvider(create: (context) => AuthController()),
@@ -85,6 +88,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
         ChangeNotifierProvider(create: (context) => EditprofileController()),
+        ChangeNotifierProvider(create: (context) => NotificationController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

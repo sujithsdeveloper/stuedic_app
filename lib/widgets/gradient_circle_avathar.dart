@@ -21,7 +21,7 @@ class GradientCircleAvathar extends StatelessWidget {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: ColorConstants.primaryGradientHorizontal),
-          child: child),
+          child: Center(child: child)),
     );
   }
 }
