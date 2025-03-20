@@ -7,6 +7,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
+import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -18,23 +19,48 @@ dynamic commentBottomSheet({
   required String postId,
   required TextEditingController commentController,
 }) {
-  final proWatchInteraction =
-      Provider.of<PostInteractionController>(context, listen: false);
-  final commentData =
-      proWatchInteraction.getComments?.comments?.reversed.toList();
-  final proReadInteraction = context.read<PostInteractionController>();
-
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
-    builder: (context) => StatefulBuilder(
+    builder: (context) => CommentUI(
+      postId: postId,
+    ),
+  );
+}
+
+class CommentUI extends StatefulWidget {
+  const CommentUI({super.key, required this.postId});
+  final String postId;
+
+  @override
+  State<CommentUI> createState() => _CommentUIState();
+}
+
+class _CommentUIState extends State<CommentUI> {
+  final commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<PostInteractionController>(context, listen: false)
+        .getComment(context: context, postId: widget.postId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final proWatchInteraction =
+        Provider.of<PostInteractionController>(context, listen: false);
+    final commentData =
+        proWatchInteraction.getComments?.comments?.reversed.toList();
+    final proReadInteraction = context.read<PostInteractionController>();
+    return StatefulBuilder(
       builder: (context, setState) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
+        initialChildSize: 0.95,
         minChildSize: 0.4,
-        maxChildSize: 0.9,
+        maxChildSize: 0.95,
         builder: (context, scrollController) {
-          log('postID $postId');
+          // log('postID $postId');
           return SafeArea(
             child: Container(
               decoration: BoxDecoration(
@@ -92,7 +118,7 @@ dynamic commentBottomSheet({
                       }
                       if (proWatchInteraction.getComments?.comments?.isEmpty ??
                           true) {
-                        return SingleChildScrollView(
+                        return Center(
                           child: Column(
                             spacing: 20,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -191,16 +217,14 @@ dynamic commentBottomSheet({
                         GradientCircleAvathar(
                           onTap: () async {
                             proReadInteraction.addComment(
-                                postId: postId,
+                                postId: widget.postId,
                                 comment: commentController.text,
                                 context: context);
 
                             commentController.clear();
 
-                            setState(() {
-                              proReadInteraction.getComment(
-                                  context: context, postId: postId);
-                            });
+                            proReadInteraction.getComment(
+                                context: context, postId: widget.postId);
                           },
                           radius: 30,
                           child: const Icon(
@@ -217,6 +241,6 @@ dynamic commentBottomSheet({
           );
         },
       ),
-    ),
-  );
+    );
+  }
 }

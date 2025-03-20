@@ -6,7 +6,7 @@ class StringStyle {
       color: ColorConstants.secondaryColor,
       fontSize: 18,
       fontWeight: FontWeight.w700,
-      fontFamily: 'latoRegular');
+      fontFamily: 'Calistoga');
 
   static TextStyle smallText({bool isBold = false}) => TextStyle(
       color: ColorConstants.secondaryColor,
@@ -24,11 +24,15 @@ class StringStyle {
           fontSize: size,
           fontWeight: isBold ? FontWeight.bold : null);
 
-  static TextStyle normalTextBold({double? size,Color color=ColorConstants.secondaryColor,}) => TextStyle(
-      color: color,
-      fontFamily: 'latoRegular',
-      fontSize: size==null?null:size,
-      fontWeight: FontWeight.bold);
+  static TextStyle normalTextBold({
+    double? size,
+    Color color = ColorConstants.secondaryColor,
+  }) =>
+      TextStyle(
+          color: color,
+          fontFamily: 'latoRegular',
+          fontSize: size == null ? null : size,
+          fontWeight: FontWeight.bold);
 
   static TextStyle topHeading({double size = 45}) {
     return TextStyle(

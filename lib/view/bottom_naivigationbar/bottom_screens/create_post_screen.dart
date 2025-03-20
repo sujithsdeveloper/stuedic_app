@@ -7,10 +7,12 @@ import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
+import 'package:stuedic_app/widgets/gradient_container.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -53,9 +55,16 @@ class _CreatePostScreenState extends State<CreatePostScreen>
       child: Scaffold(
         backgroundColor: ColorConstants.greyColor,
         appBar: AppBar(
-          title: Text(
-            "Stuedic",
-            style: StringStyle.normalTextBold(),
+          title: Row(
+            spacing: 9,
+            children: [
+              GradientContainer(
+                height: 23,
+                width: 9,
+                verticalGradient: true,
+              ),
+              Text(StringConstants.appName, style: StringStyle.appBarText()),
+            ],
           ),
           actions: [
             IconButton(
@@ -73,7 +82,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                 color: Colors.black,
               ),
               onPressed: () {
-                AppRoutes.push(context, ChatListScreen());
+                // AppRoutes.push(context, ChatListScreen());
               },
             ),
           ],

@@ -188,11 +188,7 @@ class _LoginScreenState extends State<LoginScreen>
                         label: 'Login',
                       ),
                 SizedBox(height: 24),
-                Center(
-                    child: Text("Or sign in with",
-                        style: StringStyle.normalText())),
 
-                SizedBox(height: 24),
                 Center(
                   child: Text.rich(
                     textAlign: TextAlign.center,

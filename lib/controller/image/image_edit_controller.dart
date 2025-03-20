@@ -2,12 +2,16 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/APIs/APIs.dart';
+import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
 class ImageEditController extends ChangeNotifier {
   File? croppedImage;
 
-  Future<void> cropImage({required File image}) async {
+  Future<void> cropImage(
+      {required File image, required BuildContext context}) async {
     // log(image.path);
     final CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image.path,
@@ -34,6 +38,11 @@ class ImageEditController extends ChangeNotifier {
 
     if (croppedFile != null) {
       croppedImage = File(croppedFile.path);
+      notifyListeners();
+      await context.read<MutlipartController>().uploadMedia(
+          context: context,
+          filePath: croppedFile.path,
+          API: APIs.uploadPicForPost);
       notifyListeners();
     }
   }

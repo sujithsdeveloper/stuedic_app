@@ -34,19 +34,12 @@ class AuthController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         LoginModel loginModelResponse = loginModelFromJson(response.body);
-      
 
-       await AppUtils.saveToken(
+        await AppUtils.saveToken(
             accessToken: loginModelResponse.token ?? '',
             refreshToken: loginModelResponse.refreshToken ?? '');
-        
-      
 
-        AppRoutes.pushAndRemoveUntil(
-            context,
-            BottomNavScreen(
-              isColege: true,
-            ));
+        AppRoutes.pushAndRemoveUntil(context, HomePage());
 
         log(response.body);
       } else if (response.body.contains(ApiResponse.userNotFound)) {
@@ -122,7 +115,7 @@ class AuthController extends ChangeNotifier {
         await AppUtils.saveToken(
             accessToken: registrationModel?.token ?? '',
             refreshToken: registrationModel?.refreshToken ?? '');
-        AppRoutes.pushAndRemoveUntil(context, BottomNavScreen());
+        AppRoutes.pushAndRemoveUntil(context, HomePage());
       } else if (response.statusCode == 401) {
         await refreshAccessToken(context: context);
         createAccount(

@@ -43,7 +43,7 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
                   final file = await proWatch.selectedMedia!.file;
                   await context
                       .read<ImageEditController>()
-                      .cropImage(image: file!);
+                      .cropImage(image: file!, context: context);
                 },
                 child: Text("Continue",
                     style: TextStyle(

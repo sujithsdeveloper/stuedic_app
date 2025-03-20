@@ -49,7 +49,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
     );
     context.read<ProfileController>().getCurrentUserGrid(context: context);
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -297,9 +297,10 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                   splashFactory: NoSplash.splashFactory,
                   controller: _tabController,
                   tabs: const [
-                    Tab(icon: Icon(HugeIcons.strokeRoundedImage01)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedGrid)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
                     Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
                   ],
                 ),
               ),
@@ -311,48 +312,25 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
           children: [
             // Tab 1: Grid view
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MasonryGridView.builder(
-                gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                itemCount: grids?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
-
-                  return Builder(
-                    builder: (context) {
-                      if (grids == null) {
-                        log('Tab null');
-                        return const Center(
-                          child: Text('No posts available'),
-                        );
-                      } else {
-                        log(grids.toString());
-                        return GestureDetector(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              height: containerHeight,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      grids[index].postContentUrl ?? ''),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  itemCount: grids?.length ?? 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 9 / 16),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xffF5FFBB),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  grids?[index].postContentUrl ?? ''))),
+                    );
+                  },
+                )),
 
             // Tab 2: Videos
             const Center(
@@ -361,6 +339,9 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             // Tab 3: Photos
             const Center(
               child: Text('Photos Tab Content'),
+            ),
+            const Center(
+              child: Text('Market Tab Content'),
             ),
           ],
         ),

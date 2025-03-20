@@ -21,6 +21,9 @@ class _StorySectionState extends State<StorySection> {
     {"username": "John", "profileUrl": ""},
     {"username": "Jane", "profileUrl": ""},
     {"username": "Alex", "profileUrl": ""},
+    {"username": "John", "profileUrl": ""},
+    {"username": "Jane", "profileUrl": ""},
+    {"username": "Alex", "profileUrl": ""},
   ];
 
   @override
@@ -194,8 +197,7 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
               ? _controller.value
               : 0),
           child: Padding(
-            padding:
-                const EdgeInsets.all(1),
+            padding: const EdgeInsets.all(1),
             child: GestureDetector(
               onTap: widget.onTap,
               child: CircleAvatar(

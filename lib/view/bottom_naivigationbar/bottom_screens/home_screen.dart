@@ -7,11 +7,13 @@ import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
+import 'package:stuedic_app/widgets/gradient_container.dart';
 import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -59,14 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 floating: true,
                 backgroundColor: Colors.white,
                 elevation: 0,
-                title: Text(
-                  StringConstants.appName,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontFamily: 'latoRegular',
-                    fontWeight: FontWeight.bold,
-                  ),
+                title: Row(
+                  spacing: 9,
+                  children: [
+                    GradientContainer(
+                      height: 23,
+                      width: 9,
+                      verticalGradient: true,
+                    ),
+                    Text(StringConstants.appName,
+                        style: StringStyle.appBarText()),
+                  ],
                 ),
                 actions: [
                   IconButton(
@@ -84,7 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      AppRoutes.push(context, ChatListScreen());
+                      // AppRoutes.push(context, ChatListScreen());
+                      
                     },
                   ),
                 ]),
@@ -101,11 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
               delegate: SliverChildBuilderDelegate(addAutomaticKeepAlives: true,
                   (context, index) {
                 final item = items?[index];
+                final time=AppUtils.timeAgo(item?.createdAt??DateTime.now());
+
                 return PostCard(
                   likeCount: item?.likescount.toString() ?? '0',
                   postType: item?.postType ?? '',
                   isLiked: item?.isLiked ?? false,
                   index: index,
+                  time: time,
                   userId: item?.userId ?? '',
                   mediaUrl: item?.postContentUrl ?? '',
                   name: item?.username ?? '',

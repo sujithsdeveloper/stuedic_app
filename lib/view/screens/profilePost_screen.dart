@@ -45,17 +45,17 @@ class _ProfilepostScreenState extends State<ProfilepostScreen> {
           style: StringStyle.appBarText(),
         ),
       ),
-      body: PostCard(
-          likeCount: singlePostData?.likescount.toString() ?? '0',
-          postType: singlePostData?.postType ?? '',
-          profileUrl: singlePostData?.profilePicUrl ?? '',
-          mediaUrl: singlePostData?.postContentUrl ?? '',
-          caption: singlePostData?.postDescription ?? '',
-          name: singlePostData?.username ?? 'No Name',
-          index: 0,
-          isLiked: singlePostData?.isLiked ?? false,
-          postId: singlePostData?.postId ?? '',
-          userId: singlePostData?.userId ?? ''),
+      // body: PostCard(
+      //     likeCount: singlePostData?.likescount.toString() ?? '0',
+      //     postType: singlePostData?.postType ?? '',
+      //     profileUrl: singlePostData?.profilePicUrl ?? '',
+      //     mediaUrl: singlePostData?.postContentUrl ?? '',
+      //     caption: singlePostData?.postDescription ?? '',
+      //     name: singlePostData?.username ?? 'No Name',
+      //     index: 0,
+      //     isLiked: singlePostData?.isLiked ?? false,
+      //     postId: singlePostData?.postId ?? '',
+      //     userId: singlePostData?.userId ?? ''),
     );
   }
 }

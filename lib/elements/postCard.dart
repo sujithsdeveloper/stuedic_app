@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
@@ -32,7 +33,8 @@ class PostCard extends StatefulWidget {
       required this.postId,
       required this.userId,
       required this.postType,
-      required this.likeCount});
+      required this.likeCount,
+      required this.time});
   final String profileUrl;
   final String mediaUrl;
   final String caption;
@@ -43,6 +45,7 @@ class PostCard extends StatefulWidget {
   final String likeCount;
   final String userId;
   final String postType;
+  final String time;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -60,10 +63,6 @@ class _PostCardState extends State<PostCard>
         duration: Duration(milliseconds: 90),
         lowerBound: 1,
         upperBound: 1.5);
-
-    if (widget.isLiked) {
-      context.read<PostInteractionController>().addLike(widget.index, context);
-    }
   }
 
   @override
@@ -108,7 +107,7 @@ class _PostCardState extends State<PostCard>
                             ),
                           ),
                           Text(
-                            '1 min ago',
+                            '${widget.time} ago',
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -132,7 +131,7 @@ class _PostCardState extends State<PostCard>
                         imageUrl: widget.mediaUrl,
                         username: widget.name);
                   },
-                  icon: Icon(Icons.more_vert, color: Colors.black),
+                  icon: Icon(Icons.more_horiz, color: Colors.black),
                 )
               ],
             ),
@@ -140,7 +139,7 @@ class _PostCardState extends State<PostCard>
           SizedBox(height: 10),
           GestureDetector(
             onDoubleTap: () {
-              proRead.toggleLikeVisible();
+              // proRead.toggleLikeVisible();
             },
             child: ClipRRect(
               // borderRadius: BorderRadius.circular(10),
@@ -154,6 +153,21 @@ class _PostCardState extends State<PostCard>
                           width: double.infinity,
                           widget.mediaUrl,
                           fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Shimmer.fromColors(
+                                child: Container(
+                                  height: 450,
+                                  width: double.infinity,
+                                  color: Colors.white,
+                                ),
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                              );
+                            }
+                          },
                         ),
                         Positioned(
                           bottom: 0,
@@ -203,27 +217,17 @@ class _PostCardState extends State<PostCard>
                     return GestureDetector(
                       onTap: () {
                         postInteraction.toggleLike(
-                          index: widget.index,
+                          isLiked: widget.isLiked,
                           postId: widget.postId,
                           context: context,
                         );
-
-                        // if (widget.isLiked &&
-                        //     proReadInteraction.isPostLiked(widget.index) ==
-                        //         false) {
-                        //   proReadInteraction.removeLike(widget.index, context);
-                        // }
-                        if (widget.isLiked) {
-                          proReadInteraction.notifyListeners();
-                        }
-            
 
                         animationController.forward().then(
                           (_) {
                             animationController.reverse();
                           },
                         );
-                        Future.delayed(Duration(microseconds: 700)).then(
+                        Future.delayed(Duration(milliseconds: 50)).then(
                           (value) {
                             context
                                 .read<HomefeedController>()
@@ -238,15 +242,10 @@ class _PostCardState extends State<PostCard>
                             scale: animationController
                                 .value, // Fixed missing scale value
                             child: Icon(
-                              postInteraction.isPostLiked(widget.index) ||
-                                      widget.isLiked
+                              widget.isLiked
                                   ? Icons.favorite
                                   : Icons.favorite_border_outlined,
-                              color:
-                                  postInteraction.isPostLiked(widget.index) ||
-                                          widget.isLiked
-                                      ? Colors.red
-                                      : null,
+                              color: widget.isLiked ? Colors.red : null,
                               size: 25,
                             ),
                           );
@@ -281,8 +280,8 @@ class _PostCardState extends State<PostCard>
                         context: context,
                         postId: widget.postId,
                         commentController: commentController);
-                    proReadInteraction.getComment(
-                        postId: widget.postId, context: context);
+                    // proReadInteraction.getComment(
+                    //     postId: widget.postId, context: context);
                   },
                   child: Row(
                     spacing: 5,

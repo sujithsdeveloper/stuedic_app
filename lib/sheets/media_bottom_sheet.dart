@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -68,17 +66,19 @@ Future<dynamic> mediaBottomSheet(
           ),
           GestureDetector(
             onTap: () async {
-              await pickerControllerRead.pickMedia(
-                  isVideo: isVideo,
-                  context: context,
-                  source: ImageSource.gallery);
+              final pickerController =
+                  context.read<AssetPickerController>();
 
-              File? media = pickerControllerRead.pickedImage;
+              await pickerController.pickMedia(
+                isVideo: isVideo,
+                context: context,
+                source: ImageSource.gallery,
+              );
 
+              File? media = pickerController.pickedImage;
               if (media != null) {
                 onGalleryTap(media);
-                log('picked media path: ${media.path}');
-              } 
+              }
             },
             child: Container(
               height: 112,

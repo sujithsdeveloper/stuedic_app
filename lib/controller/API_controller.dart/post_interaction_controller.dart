@@ -10,33 +10,24 @@ import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 
 class PostInteractionController extends ChangeNotifier {
-  Set<int> likedPosts = {};
   Set<int> followers = {};
   Set<int> bookmarks = {};
-  void addLike(int index, BuildContext context) {
-    likedPosts.add(index);
-  }
-  void removeLike(int index, BuildContext context) {
-    likedPosts.add(index);
-  }
+
 
   void toggleLike({
-    required int index,
+    required bool isLiked,
     required String postId,
     required BuildContext context,
   }) async {
-    if (likedPosts.contains(index)) {
-      likedPosts.remove(index);
+    if (isLiked) {
       await unLikePost(postId: postId, context: context, );
       }
     else {
-      likedPosts.add(index);
       await likePost(postId: postId, context: context);
     }
     notifyListeners();
   }
 
-  bool isPostLiked(int index) => likedPosts.contains(index);
 
   Future<void> likePost({
     required String postId,

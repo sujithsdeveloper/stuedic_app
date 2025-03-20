@@ -12,11 +12,14 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/app_db.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
+import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
+import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key, this.isColege = false});
-  final bool isColege;
+  const BottomNavScreen({super.key, required this.controller});
+final PageController controller;
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -24,21 +27,22 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen>
     with SingleTickerProviderStateMixin {
-  bool? isStudent;
-  bool? isPublic;
+  bool isCollege = false;
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
-     
-      
-
         final token = await AppUtils.getToken();
         log(token);
 
         final profileController = context.read<ProfileController>();
+        final profileControllerWatch = context.watch<ProfileController>();
+        // isCollege =
+        //     profileControllerWatch.userCurrentDetails?.response!.isStudent! ??
+        //         false;
+
         profileController.getCurrentUserData(context: context);
         profileController.getCurrentUserGrid(context: context);
       },
@@ -59,7 +63,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         return true;
       },
       child: Scaffold(
-        body: widget.isColege
+        body: isCollege
             ? CollegeuserScreens[proWatch.currentIndex]
             : userScreens[proWatch.currentIndex],
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -103,6 +107,26 @@ class _BottomNavScreenState extends State<BottomNavScreen>
           ],
         ),
       ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final pagecontroller = PageController(
+      initialPage: 1,
+    );
+    List<Widget> pages = [
+      PickMediaScreen(),
+      BottomNavScreen(controller: pagecontroller,),
+      ChatListScreen(controller: pagecontroller,)
+    ];
+    return PageView.builder(
+      controller: pagecontroller,
+      itemBuilder: (context, index) => pages[index],
     );
   }
 }

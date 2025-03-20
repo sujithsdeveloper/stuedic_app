@@ -8,12 +8,12 @@ import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/search_screen.dart';
 
 class ChatListScreen extends StatefulWidget {
-  const ChatListScreen({super.key});
+  const ChatListScreen({super.key, required this.controller});
+final PageController controller;
 
   @override
   State<ChatListScreen> createState() => _ChatListScreenState();
 }
-
 class _ChatListScreenState extends State<ChatListScreen> {
   @override
   void initState() {
