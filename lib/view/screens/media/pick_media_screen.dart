@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -11,13 +12,16 @@ import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:video_player/video_player.dart';
 
 class PickMediaScreen extends StatefulWidget {
-  const PickMediaScreen({super.key});
-
+  const PickMediaScreen({super.key, required this.controller});
+  final PageController controller;
   @override
   State<PickMediaScreen> createState() => _PickMediaScreenState();
 }
 
-class _PickMediaScreenState extends State<PickMediaScreen> {
+class _PickMediaScreenState extends State<PickMediaScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
@@ -26,16 +30,24 @@ class _PickMediaScreenState extends State<PickMediaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final proRead = context.read<MediaController>();
     final proWatch = context.watch<MediaController>();
 
     return WillPopScope(
       onWillPop: () async {
         proWatch.selectedMediaList.clear();
-        return await proRead.onPop();
+        return await proRead.onPop(widget.controller);
       },
       child: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  widget.controller.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeIn);
+                },
+                icon: Icon(CupertinoIcons.multiply)),
             title: const Text("Select Media"),
             actions: [
               TextButton(

@@ -34,7 +34,8 @@ class PostCard extends StatefulWidget {
       required this.userId,
       required this.postType,
       required this.likeCount,
-      required this.time});
+      required this.time,
+      required this.commentCount});
   final String profileUrl;
   final String mediaUrl;
   final String caption;
@@ -43,6 +44,7 @@ class PostCard extends StatefulWidget {
   final bool isLiked;
   final String postId;
   final String likeCount;
+  final String commentCount;
   final String userId;
   final String postType;
   final String time;
@@ -74,266 +76,301 @@ class _PostCardState extends State<PostCard>
     final proReadApi = context.read<CrudOperationController>();
     final proReadInteraction = context.read<PostInteractionController>();
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    AppRoutes.push(
-                        context, UserProfileScreen(userId: widget.userId));
-                  },
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            AppUtils.getProfile(url: widget.profileUrl),
-                        radius: 24,
-                      ),
-                      SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            '${widget.time} ago',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                IconButton(
-                  onPressed: () async {
-                    bool isRightUser = await AppUtils.checkUserIdForCurrentUser(
-                        IDtoCheck: widget.userId);
-
-                    postBottomSheet(
-                        postId: widget.postId,
-                        isRightUser: isRightUser,
-                        context: context,
-                        imageUrl: widget.mediaUrl,
-                        username: widget.name);
-                  },
-                  icon: Icon(Icons.more_horiz, color: Colors.black),
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          GestureDetector(
-            onDoubleTap: () {
-              // proRead.toggleLikeVisible();
-            },
-            child: ClipRRect(
-              // borderRadius: BorderRadius.circular(10),
-              child: Center(child: Builder(
-                builder: (context) {
-                  if (widget.postType == StringConstants.pic) {
-                    return Stack(
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      AppRoutes.push(
+                          context, UserProfileScreen(userId: widget.userId));
+                    },
+                    child: Row(
                       children: [
-                        Image.network(
-                          height: 450,
-                          width: double.infinity,
-                          widget.mediaUrl,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else {
-                              return Shimmer.fromColors(
-                                child: Container(
-                                  height: 450,
-                                  width: double.infinity,
-                                  color: Colors.white,
-                                ),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                              );
-                            }
-                          },
+                        CircleAvatar(
+                          backgroundImage:
+                              AppUtils.getProfile(url: widget.profileUrl),
+                          radius: 24,
                         ),
-                        Positioned(
-                          bottom: 0,
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: Visibility(
-                              visible: proWatch.isLikeVisible,
-                              child: Column(
-                                children: [Lottie.asset(LottieAnimations.like)],
-                              )),
-                        )
-                      ],
-                    );
-                  }
-                  if (widget.postType == StringConstants.reel) {
-                    return NetworkVideoPlayer(
-                      url: widget.mediaUrl,
-                      inistatePlay: false,
-                    );
-                  } else {
-                    return Container(
-                      height: 50,
-                      width: 50,
-                      color: Colors.grey,
-                      child: Center(
-                        child: Text('Invalid media type'),
-                      ),
-                    );
-                  }
-                },
-              )),
-            ),
-          ),
-          SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(widget.caption, style: TextStyle(fontSize: 16)),
-          ),
-          SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                Consumer<PostInteractionController>(
-                  builder: (context, postInteraction, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        postInteraction.toggleLike(
-                          isLiked: widget.isLiked,
-                          postId: widget.postId,
-                          context: context,
-                        );
-
-                        animationController.forward().then(
-                          (_) {
-                            animationController.reverse();
-                          },
-                        );
-                        Future.delayed(Duration(milliseconds: 50)).then(
-                          (value) {
-                            context
-                                .read<HomefeedController>()
-                                .getAllPost(context: context);
-                          },
-                        );
-                      },
-                      child: AnimatedBuilder(
-                        animation: animationController,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: animationController
-                                .value, // Fixed missing scale value
-                            child: Icon(
-                              widget.isLiked
-                                  ? Icons.favorite
-                                  : Icons.favorite_border_outlined,
-                              color: widget.isLiked ? Colors.red : null,
-                              size: 25,
+                        SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
+                            Row(
+                              spacing: 20,
+                              children: [
+                                Text(
+                                  '${widget.time} ago',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.language,
+                                  color: Colors.grey,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () async {
+                      bool isRightUser =
+                          await AppUtils.checkUserIdForCurrentUser(
+                              IDtoCheck: widget.userId);
+
+                      postBottomSheet(
+                          postId: widget.postId,
+                          isRightUser: isRightUser,
+                          context: context,
+                          imageUrl: widget.mediaUrl,
+                          username: widget.name);
+                    },
+                    icon: Icon(Icons.more_horiz, color: Colors.black),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            GestureDetector(
+              onDoubleTap: () {
+                // proRead.toggleLikeVisible();
+              },
+              child: ClipRRect(
+                // borderRadius: BorderRadius.circular(10),
+                child: Center(child: Builder(
+                  builder: (context) {
+                    if (widget.postType == StringConstants.pic) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return Image.network(
+                                    widget.mediaUrl,
+                                    fit: BoxFit
+                                        .contain, // Ensures the image fits while maintaining aspect ratio
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: child,
+                                        );
+                                      } else {
+                                        return Shimmer.fromColors(
+                                          child: Container(
+                                            height: 230,
+                                            width: double.infinity,
+                                            color: Colors.white,
+                                          ),
+                                          baseColor: Colors.grey[300]!,
+                                          highlightColor: Colors.grey[100]!,
+                                        );
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: Visibility(
+                                  visible: proWatch.isLikeVisible,
+                                  child: Column(
+                                    children: [
+                                      Lottie.asset(LottieAnimations.like)
+                                    ],
+                                  )),
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                    if (widget.postType == StringConstants.reel) {
+                      return NetworkVideoPlayer(
+                        url: widget.mediaUrl,
+                        inistatePlay: false,
+                      );
+                    } else {
+                      return Container(
+                        height: 50,
+                        width: 50,
+                        color: Colors.grey,
+                        child: Center(
+                          child: Text('Invalid media type'),
+                        ),
+                      );
+                    }
+                  },
+                )),
+              ),
+            ),
+            SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(widget.caption, style: TextStyle(fontSize: 16)),
+            ),
+            SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Row(
+                children: [
+                  Consumer<PostInteractionController>(
+                    builder: (context, postInteraction, child) {
+                      return GestureDetector(
+                        onTap: () {
+                          postInteraction.toggleLike(
+                            isLiked: widget.isLiked,
+                            postId: widget.postId,
+                            context: context,
+                          );
+
+                          animationController.forward().then(
+                            (_) {
+                              animationController.reverse();
+                            },
+                          );
+                          Future.delayed(Duration(milliseconds: 50)).then(
+                            (value) {
+                              context
+                                  .read<HomefeedController>()
+                                  .getAllPost(context: context);
+                            },
                           );
                         },
-                      ),
-                    );
-                  },
-                ),
-                Row(
-                  spacing: 5,
-                  children: [
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      widget.likeCount,
-                      style: StringStyle.smallText(isBold: true),
-                    ),
-                    Text(
-                      'Likes',
-                      style: StringStyle.smallText(),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 16),
-                SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    log('post id: ${widget.postId}');
-
-                    commentBottomSheet(
-                        context: context,
-                        postId: widget.postId,
-                        commentController: commentController);
-                    // proReadInteraction.getComment(
-                    //     postId: widget.postId, context: context);
-                  },
-                  child: Row(
+                        child: AnimatedBuilder(
+                          animation: animationController,
+                          builder: (context, child) {
+                            return Transform.scale(
+                              scale: animationController
+                                  .value, // Fixed missing scale value
+                              child: Icon(
+                                widget.isLiked
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
+                                color: widget.isLiked ? Colors.red : null,
+                                size: 25,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  Row(
                     spacing: 5,
                     children: [
-                      Icon(HugeIcons.strokeRoundedMessageMultiple01,
-                          color: Colors.black),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Text(
-                        proReadInteraction.getComments?.comments?.length
-                                .toString() ??
-                            'No',
+                        widget.likeCount,
                         style: StringStyle.smallText(isBold: true),
                       ),
                       Text(
-                        'Comments',
+                        'Likes',
                         style: StringStyle.smallText(),
                       ),
                     ],
                   ),
-                ),
-                Spacer(),
-                IconButton(
-                  onPressed: () {
-                    shareBottomSheet(context);
-                  },
-                  icon:
-                      Icon(HugeIcons.strokeRoundedShare05, color: Colors.black),
-                ),
-                Consumer<PostInteractionController>(
-                  builder: (context, postInteraction, child) {
-                    bool isBookmarked =
-                        postInteraction.isBookmarked(widget.index);
-                    return IconButton(
-                      icon: Icon(
-                        isBookmarked
-                            ? CupertinoIcons.bookmark_fill
-                            : CupertinoIcons.bookmark,
-                        color: ColorConstants.secondaryColor,
-                      ),
-                      onPressed: () {
-                        postInteraction.toggleBookmark(
-                          index: widget.index,
-                          postId: widget.postId,
+                  SizedBox(width: 16),
+                  SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () async {
+                      log('post id: ${widget.postId}');
+
+                      await proReadInteraction.getComment(
+                          context: context, postId: widget.postId);
+                      final comments = proReadInteraction
+                              .getComments?.comments?.reversed
+                              .toList() ??
+                          [];
+                      commentBottomSheet(
+                          postID: widget.postId,
+                          comments: comments,
                           context: context,
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+                          commentController: commentController);
+                      // proReadInteraction.getComment(
+                      //     postId: widget.postId, context: context);
+                    },
+                    child: Row(
+                      spacing: 5,
+                      children: [
+                        Icon(HugeIcons.strokeRoundedMessageMultiple01,
+                            color: Colors.black),
+                        Text(
+                          widget.commentCount ?? 'No',
+                          style: StringStyle.smallText(isBold: true),
+                        ),
+                        Text(
+                          'Comments',
+                          style: StringStyle.smallText(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      shareBottomSheet(context);
+                    },
+                    icon: Icon(HugeIcons.strokeRoundedShare05,
+                        color: Colors.black),
+                  ),
+                  Consumer<PostInteractionController>(
+                    builder: (context, postInteraction, child) {
+                      bool isBookmarked =
+                          postInteraction.isBookmarked(widget.index);
+                      return IconButton(
+                        icon: Icon(
+                          isBookmarked
+                              ? CupertinoIcons.bookmark_fill
+                              : CupertinoIcons.bookmark,
+                          color: ColorConstants.secondaryColor,
+                        ),
+                        onPressed: () {
+                          postInteraction.toggleBookmark(
+                            index: widget.index,
+                            postId: widget.postId,
+                            context: context,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

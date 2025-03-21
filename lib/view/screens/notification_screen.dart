@@ -71,7 +71,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         itemBuilder: (context, index) {
                           final notification = notifications?[index];
                           final time = AppUtils.timeAgo(
-                              notification?.created ?? DateTime.now());
+                              notification?.created.toString() ??
+                                  DateTime.now().toString());
                           return CustomListTile(
                             onTap: () {
                               AppRoutes.push(

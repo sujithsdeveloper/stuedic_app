@@ -29,7 +29,7 @@ class ApiCall {
         refreshAccessToken(context: context);
         onTokenExpired();
       } else {
-        log(response.body);
+        log('Error API:${url},Response: ${response.body}');
         customSnackbar(label: snackbarText, context: context);
       }
     } catch (e) {
@@ -59,7 +59,7 @@ class ApiCall {
 
         onTokenExpired();
       } else {
-        log(response.body);
+        log('Error API:${url},Response: ${response.body}');
         customSnackbar(label: StringConstants.wrong, context: context);
       }
     } catch (e) {
@@ -92,7 +92,7 @@ class ApiCall {
 
         onTokenExpired();
       } else {
-        log(response.body);
+        log('Error API:${url},Response: ${response.body}');
         customSnackbar(label: StringConstants.wrong, context: context);
       }
     } catch (e) {

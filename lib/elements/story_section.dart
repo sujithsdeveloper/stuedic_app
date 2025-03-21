@@ -10,20 +10,44 @@ import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class StorySection extends StatefulWidget {
-  const StorySection({super.key});
-
+  const StorySection({super.key, required this.controller});
+final PageController controller;
   @override
   State<StorySection> createState() => _StorySectionState();
 }
 
 class _StorySectionState extends State<StorySection> {
-  List<Map<String, String>> items = [
-    {"username": "John", "profileUrl": ""},
-    {"username": "Jane", "profileUrl": ""},
-    {"username": "Alex", "profileUrl": ""},
-    {"username": "John", "profileUrl": ""},
-    {"username": "Jane", "profileUrl": ""},
-    {"username": "Alex", "profileUrl": ""},
+  final List<Map<String, String>> users = [
+    {
+      "username": "John",
+      "profileUrl":
+          "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
+    },
+    {
+      "username": "Jane",
+      "profileUrl":
+          "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg"
+    },
+    {
+      "username": "Alex",
+      "profileUrl":
+          "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg"
+    },
+    {
+      "username": "John",
+      "profileUrl":
+          "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
+    },
+    {
+      "username": "Jane",
+      "profileUrl":
+          "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg"
+    },
+    {
+      "username": "Alex",
+      "profileUrl":
+          "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg"
+    },
   ];
 
   @override
@@ -76,7 +100,7 @@ class _StorySectionState extends State<StorySection> {
                           //   },
                           // );
 
-                          AppRoutes.push(context, PickMediaScreen());
+                          AppRoutes.push(context, PickMediaScreen(controller:widget.controller ,));
                         },
                         child: GradientCircleAvathar(
                           radius: 20,
@@ -103,9 +127,9 @@ class _StorySectionState extends State<StorySection> {
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: items.length,
+            itemCount: users.length,
             itemBuilder: (context, index) {
-              final data = items[index];
+              final data = users[index];
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(

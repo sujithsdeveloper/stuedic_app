@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/API_response.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
@@ -135,5 +136,23 @@ class AuthController extends ChangeNotifier {
       log(e.toString());
       errorSnackbar(label: StringConstants.wrong, context: context);
     }
+  }
+
+  Future<void> forgotPassword(
+      {required String email, required BuildContext context}) async {
+    Map data = {"userIdentifier": "email@sdhjsd.com"};
+
+    await ApiCall.post(
+        url: APIs.forgotPasswordUrl,
+        body: data,
+        onSucces: (p0) {
+          customSnackbar(
+              label: 'Check your mail to reset your password',
+              context: context);
+        },
+        onTokenExpired: () {
+          forgotPassword(email: email, context: context);
+        },
+        context: context);
   }
 }

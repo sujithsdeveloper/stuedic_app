@@ -171,23 +171,28 @@ class AppUtils {
     prefs.remove(StringConstants.userName);
   }
 
- static String timeAgo(DateTime time) {
-  DateTime dateTime = time.toLocal();
-  Duration diff = DateTime.now().difference(dateTime);
+  static String timeAgo(String time) {
+    try {
+      DateTime dateTime = DateTime.parse(time.replaceAll(' UTC', '')).toLocal();
 
-  if (diff.inSeconds < 60) {
-    return '${diff.inSeconds}s';
-  } else if (diff.inMinutes < 60) {
-    return '${diff.inMinutes}m';
-  } else if (diff.inHours < 24) {
-    return '${diff.inHours}h';
-  } else if (diff.inDays < 30) {
-    return '${diff.inDays}d';
-  } else if (diff.inDays < 365) {
-    return '${(diff.inDays / 30).floor()}mo';
-  } else {
-    return '${(diff.inDays / 365).floor()}y';
+      Duration diff = DateTime.now().difference(dateTime);
+
+      if (diff.inSeconds < 60) {
+        return '${diff.inSeconds}s';
+      } else if (diff.inMinutes < 60) {
+        return '${diff.inMinutes}m';
+      } else if (diff.inHours < 24) {
+        return '${diff.inHours}h';
+      } else if (diff.inDays < 30) {
+        return '${diff.inDays}d';
+      } else if (diff.inDays < 365) {
+        return '${(diff.inDays / 30).floor()}mo';
+      } else {
+        return '${(diff.inDays / 365).floor()}y';
+      }
+    } catch (e) {
+      debugPrint("Error parsing date: $e");
+      return "Invalid date";
+    }
   }
-}
-
 }

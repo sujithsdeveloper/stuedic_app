@@ -10,6 +10,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
+import 'package:stuedic_app/view/auth/forgot_password.dart';
 import 'package:stuedic_app/view/auth/registration_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
@@ -163,7 +164,9 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                     Spacer(),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        AppRoutes.push(context, ForgotPassword());
+                      },
                       child: Text("Forgot Password?",
                           style: StringStyle.normalTextBold()),
                     ),

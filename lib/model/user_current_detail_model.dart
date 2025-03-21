@@ -43,12 +43,15 @@ class Response {
     int? followersCount;
     int? followingCount;
     String? profilePicUrl;
+    String? bio;
     int? collageStrength;
     String? staffDesignation;
     bool? isPublic;
     bool? isCurrentUser;
     bool? isStudent;
     bool? isFollowed;
+    int? postCount;
+    bool? isCollege;
 
     Response({
         this.userId,
@@ -61,12 +64,15 @@ class Response {
         this.followersCount,
         this.followingCount,
         this.profilePicUrl,
+        this.bio,
         this.collageStrength,
         this.staffDesignation,
         this.isPublic,
         this.isCurrentUser,
         this.isStudent,
         this.isFollowed,
+        this.postCount,
+        this.isCollege,
     });
 
     factory Response.fromJson(Map<String, dynamic> json) => Response(
@@ -80,12 +86,15 @@ class Response {
         followersCount: json["followersCount"],
         followingCount: json["followingCount"],
         profilePicUrl: json["profilePicURL"],
+        bio: json["bio"],
         collageStrength: json["collageStrength"],
         staffDesignation: json["staffDesignation"],
         isPublic: json["isPublic"],
         isCurrentUser: json["isCurrentUser"],
         isStudent: json["isStudent"],
         isFollowed: json["isFollowed"],
+        postCount: json["postCount"],
+        isCollege: json["isCollege"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -99,11 +108,14 @@ class Response {
         "followersCount": followersCount,
         "followingCount": followingCount,
         "profilePicURL": profilePicUrl,
+        "bio": bio,
         "collageStrength": collageStrength,
         "staffDesignation": staffDesignation,
         "isPublic": isPublic,
         "isCurrentUser": isCurrentUser,
         "isStudent": isStudent,
         "isFollowed": isFollowed,
+        "postCount": postCount,
+        "isCollege": isCollege,
     };
 }

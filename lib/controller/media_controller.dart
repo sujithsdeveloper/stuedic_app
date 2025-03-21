@@ -42,18 +42,19 @@ class MediaController extends ChangeNotifier {
     if (selectedMedia == media) {
     } else {
       selectedMedia = media;
-      file=await media.file;
+      file = await media.file;
       selectedIndex = index;
     }
     notifyListeners();
   }
 
-  bool onPop() {
+  bool onPop(PageController controller) {
     selectedMediaList.clear();
-    return true;
+
+    controller.nextPage(
+        duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+    return false;
   }
-
-
 
   bool isLoading = false;
   Future<void> loadMediaFromAlbum(AssetPathEntity album) async {

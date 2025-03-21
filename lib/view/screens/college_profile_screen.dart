@@ -4,7 +4,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
-import 'package:stuedic_app/delegates/tabbarDelegate.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -23,8 +22,7 @@ class CollegeProfileScreen extends StatefulWidget {
   const CollegeProfileScreen({super.key});
 
   @override
-  State<CollegeProfileScreen> createState() =>
-      _CollegeUserProfileScreenState();
+  State<CollegeProfileScreen> createState() => _CollegeUserProfileScreenState();
 }
 
 class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
@@ -212,22 +210,22 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
             ),
 
             // TabBar
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: TabBarDelegate(
-                TabBar(
-                  labelColor: ColorConstants.secondaryColor,
-                  indicatorColor: ColorConstants.secondaryColor,
-                  splashFactory: NoSplash.splashFactory,
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(icon: Icon(HugeIcons.strokeRoundedImage01)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedGrid)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-                  ],
-                ),
-              ),
-            ),
+            // SliverPersistentHeader(
+            //   pinned: true,
+            //   delegate: TabBarDelegate(
+            //     TabBar(
+            //       labelColor: ColorConstants.secondaryColor,
+            //       indicatorColor: ColorConstants.secondaryColor,
+            //       splashFactory: NoSplash.splashFactory,
+            //       controller: _tabController,
+            //       tabs: const [
+            //         Tab(icon: Icon(HugeIcons.strokeRoundedImage01)),
+            //         Tab(icon: Icon(HugeIcons.strokeRoundedGrid)),
+            //         Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ];
         },
         body: TabBarView(

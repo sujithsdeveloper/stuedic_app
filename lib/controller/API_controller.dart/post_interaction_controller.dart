@@ -13,21 +13,21 @@ class PostInteractionController extends ChangeNotifier {
   Set<int> followers = {};
   Set<int> bookmarks = {};
 
-
   void toggleLike({
     required bool isLiked,
     required String postId,
     required BuildContext context,
   }) async {
     if (isLiked) {
-      await unLikePost(postId: postId, context: context, );
-      }
-    else {
+      await unLikePost(
+        postId: postId,
+        context: context,
+      );
+    } else {
       await likePost(postId: postId, context: context);
     }
     notifyListeners();
   }
-
 
   Future<void> likePost({
     required String postId,
@@ -47,7 +47,6 @@ class PostInteractionController extends ChangeNotifier {
   Future<void> unLikePost({
     required String postId,
     required BuildContext context,
-    
   }) async {
     await ApiCall.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
@@ -55,8 +54,7 @@ class PostInteractionController extends ChangeNotifier {
         Logger().f(p0.body);
         notifyListeners();
       },
-      onTokenExpired: () =>
-          unLikePost(postId: postId, context: context),
+      onTokenExpired: () => unLikePost(postId: postId, context: context),
       context: context,
     );
   }
@@ -148,21 +146,22 @@ class PostInteractionController extends ChangeNotifier {
   }
 
   //comment
-  void addComment(
+  Future<void> addComment(
       {required String postId,
       required String comment,
-      required BuildContext context}) {
+      required BuildContext context}) async {
     Map body = {
       "content": comment,
     };
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/addcomment?postid=$postId');
     if (comment.isNotEmpty) {
-      ApiCall.post(
+      await ApiCall.post(
         url: url,
         body: body,
-        onSucces: (p0) {
+        onSucces: (p0) async {
           log("Comment added: ${p0.body}");
-          getComment(context: context, postId: postId); // Fetch new comments
+          await getComment(
+              context: context, postId: postId); // Fetch new comments
         },
         onTokenExpired: () {
           addComment(postId: postId, comment: comment, context: context);
@@ -174,13 +173,14 @@ class PostInteractionController extends ChangeNotifier {
 
   GetCommentsModel? getComments;
   bool isCommentLoading = false;
-  void getComment({required BuildContext context, required String postId}) {
+  Future<void> getComment(
+      {required BuildContext context, required String postId}) async {
     isCommentLoading = true;
     notifyListeners();
     log("Controller postID $postId");
 
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/comments?postid=$postId');
-    ApiCall.get(
+    await ApiCall.get(
       url: url,
       onSucces: (p0) {
         getComments = getCommentsModelFromJson(p0.body);
@@ -197,15 +197,18 @@ class PostInteractionController extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void singlePostLike({required bool isLiked,required String postId,required BuildContext context}){
-if (isLiked) {
-  unLikePost(postId: postId, context: context);
-  Provider.of<GetSinglepostController>(context).getSinglePost(context: context, postId: postId);
-} else {
-  likePost(postId: postId, context: context);
-  Provider.of<GetSinglepostController>(context).getSinglePost(context: context, postId: postId);
-
-}
+  void singlePostLike(
+      {required bool isLiked,
+      required String postId,
+      required BuildContext context}) {
+    if (isLiked) {
+      unLikePost(postId: postId, context: context);
+      Provider.of<GetSinglepostController>(context)
+          .getSinglePost(context: context, postId: postId);
+    } else {
+      likePost(postId: postId, context: context);
+      Provider.of<GetSinglepostController>(context)
+          .getSinglePost(context: context, postId: postId);
+    }
   }
 }
