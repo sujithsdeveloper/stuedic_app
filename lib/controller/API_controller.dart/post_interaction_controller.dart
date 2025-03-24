@@ -5,13 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/dialogs/unfollowdialog.dart';
 import 'package:stuedic_app/model/get_comment_model.dart';
+import 'package:stuedic_app/model/getbookamark_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 
 class PostInteractionController extends ChangeNotifier {
   Set<int> followers = {};
-  Set<int> bookmarks = {};
+  GetBookamark? getBookamark;
 
   void toggleLike({
     required bool isLiked,
@@ -82,8 +84,6 @@ class PostInteractionController extends ChangeNotifier {
     }
   }
 
-  bool isFollowed(int index) => followers.contains(index);
-
   void followUser(
       {required String userId, required BuildContext context}) async {
     await ApiCall.get(
@@ -111,38 +111,67 @@ class PostInteractionController extends ChangeNotifier {
     );
   }
 
-  void toggleBookmark({
-    required int index,
-    required String postId,
-    required BuildContext context,
-  }) {
-    if (bookmarks.contains(index)) {
-      bookmarks.remove(index);
-      AppUtils.showToast(msg: 'Unsaved');
-    } else {
-      bookmarks.add(index);
-      bookmarkPost(postId: postId, context: context);
-      AppUtils.showToast(msg: 'Saved');
-    }
-    notifyListeners();
-  }
-
-  bool isBookmarked(int index) => bookmarks.contains(index);
-
   Future<void> bookmarkPost({
     required String postId,
     required BuildContext context,
   }) async {
     await ApiCall.post(
-      url: Uri.parse('${APIs.baseUrl}api/v1/Post/addBookmark'),
+      url: APIs.addBookmark,
       body: {'postid': postId},
       onSucces: (p0) {
         Logger().f(p0.body);
+        context.read<HomefeedController>().getAllPost(context: context);
         notifyListeners();
       },
       onTokenExpired: () => bookmarkPost(postId: postId, context: context),
       context: context,
     );
+  }
+
+  Future<void> deleteBookmark({
+    required String postId,
+    required BuildContext context,
+  }) async {
+    await ApiCall.post(
+      url: APIs.deleteBookmark,
+      body: {'postid': postId},
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        context.read<HomefeedController>().getAllPost(context: context);
+        notifyListeners();
+      },
+      onTokenExpired: () => deleteBookmark(postId: postId, context: context),
+      context: context,
+    );
+  }
+
+  Future<void> getBookmark({
+    required BuildContext context,
+  }) async {
+    await ApiCall.get(
+      url: APIs.getBookmark,
+      onSucces: (p0) {
+        // Logger().f(p0.body);
+        // log(p0.body);
+        getBookamark = getBookamarkFromJson(p0.body);
+        notifyListeners();
+      },
+      onTokenExpired: () => getBookmark(context: context),
+      context: context,
+    );
+  }
+
+  void toggleBookmark({
+    required bool isBookmarked,
+    required String postId,
+    required BuildContext context,
+  }) {
+    if (isBookmarked) {
+      deleteBookmark(postId: postId, context: context);
+    } else {
+      bookmarkPost(postId: postId, context: context);
+    }
+    notifyListeners();
   }
 
   //comment

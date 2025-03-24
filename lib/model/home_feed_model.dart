@@ -51,6 +51,7 @@ class Response {
     String? collageName;
     bool? isLiked;
     bool? isFollowed;
+    bool? isBookmarked;
     String? shareableLink;
     String? timeAgo;
 
@@ -73,6 +74,7 @@ class Response {
         this.collageName,
         this.isLiked,
         this.isFollowed,
+        this.isBookmarked,
         this.shareableLink,
         this.timeAgo,
     });
@@ -96,6 +98,7 @@ class Response {
         collageName: json["collageName"],
         isLiked: json["isLiked"],
         isFollowed: json["isFollowed"],
+        isBookmarked: json["isBookmarked"],
         shareableLink: json["shareableLink"],
         timeAgo: json["timeAgo"],
     );
@@ -119,6 +122,7 @@ class Response {
         "collageName": collageName,
         "isLiked": isLiked,
         "isFollowed": isFollowed,
+        "isBookmarked": isBookmarked,
         "shareableLink": shareableLink,
         "timeAgo": timeAgo,
     };

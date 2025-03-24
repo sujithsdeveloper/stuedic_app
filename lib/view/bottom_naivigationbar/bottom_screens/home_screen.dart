@@ -124,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final item = items?[index];
                   final time = AppUtils.timeAgo(
                       item?.createdAt.toString() ?? DateTime.now().toString());
+                  // log('Home isbookmarked: ${item?.isBookmarked}');
 
                   return Container(
                     color: ColorConstants.greyColor,
@@ -131,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 8),
                       child: PostCard(
+                        isBookmarked: item?.isBookmarked ?? false,
                         likeCount: item?.likescount.toString() ?? '0',
                         postType: item?.postType ?? '',
                         isLiked: item?.isLiked ?? false,

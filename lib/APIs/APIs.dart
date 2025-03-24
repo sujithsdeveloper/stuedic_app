@@ -43,6 +43,8 @@ class APIs {
 
   //bookmark
   static Uri addBookmark = Uri.parse('${baseUrl}api/v1/Post/addBookmark');
+  static Uri getBookmark = Uri.parse('${baseUrl}api/v1/Post/getbookmarks');
+  static Uri deleteBookmark = Uri.parse('${baseUrl}api/v1/Post/deleteBookmark');
 
   //chat
   static Uri chatList = Uri.parse('${baseUrl}api/v1/chat/screen');
@@ -50,6 +52,8 @@ class APIs {
   //Upload video
   static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');
 
+//Discover
+  static Uri discover= Uri.parse('${baseUrl}api/v1/Post/discover');
 
   //OTP
   static Uri getOtp = Uri.parse('${baseUrl}api/v1/auth/generateOtp');

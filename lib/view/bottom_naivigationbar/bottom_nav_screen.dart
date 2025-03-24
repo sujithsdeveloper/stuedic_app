@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -39,12 +40,14 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         log(token);
 
         final profileController = context.read<ProfileController>();
+        final discoverController = context.read<DiscoverController>();
         // isCollege =
         //     profileControllerWatch.userCurrentDetails?.response!.isStudent! ??
         //         false;
 
         profileController.getCurrentUserData(context: context);
         profileController.getCurrentUserGrid(context: context);
+        discoverController.getDiscoverData(context);
       },
     );
   }

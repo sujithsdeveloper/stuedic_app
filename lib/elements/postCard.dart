@@ -35,7 +35,8 @@ class PostCard extends StatefulWidget {
       required this.postType,
       required this.likeCount,
       required this.time,
-      required this.commentCount});
+      required this.commentCount,
+      required this.isBookmarked});
   final String profileUrl;
   final String mediaUrl;
   final String caption;
@@ -48,6 +49,7 @@ class PostCard extends StatefulWidget {
   final String userId;
   final String postType;
   final String time;
+  final bool isBookmarked;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -69,6 +71,7 @@ class _PostCardState extends State<PostCard>
 
   @override
   Widget build(BuildContext context) {
+    // log('post card isBookmarked: ${widget.isBookmarked}');
     final commentController = TextEditingController();
     final proRead = context.read<AppContoller>();
     final proWatch = context.watch<AppContoller>();
@@ -347,21 +350,19 @@ class _PostCardState extends State<PostCard>
                   ),
                   Consumer<PostInteractionController>(
                     builder: (context, postInteraction, child) {
-                      bool isBookmarked =
-                          postInteraction.isBookmarked(widget.index);
                       return IconButton(
                         icon: Icon(
-                          isBookmarked
+                          widget.isBookmarked
                               ? CupertinoIcons.bookmark_fill
                               : CupertinoIcons.bookmark,
                           color: ColorConstants.secondaryColor,
                         ),
                         onPressed: () {
-                          postInteraction.toggleBookmark(
-                            index: widget.index,
-                            postId: widget.postId,
-                            context: context,
-                          );
+                          // log('isbookmarked: ${widget.isBookmarked}');
+                          proReadInteraction.toggleBookmark(
+                              isBookmarked: widget.isBookmarked,
+                              postId: widget.postId,
+                              context: context);
                         },
                       );
                     },

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
@@ -79,20 +80,19 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
         ChangeNotifierProvider(create: (context) => EditprofileController()),
         ChangeNotifierProvider(create: (context) => NotificationController()),
         ChangeNotifierProvider(create: (context) => ImageEditController()),
+        ChangeNotifierProvider(create: (context) => DiscoverController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

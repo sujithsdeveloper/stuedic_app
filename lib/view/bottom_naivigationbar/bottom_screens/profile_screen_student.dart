@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
+import 'package:stuedic_app/model/getbookamark_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -43,8 +45,13 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
   @override
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
+    final postInteractionProviderWatch =
+        context.watch<PostInteractionController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
-    final grids = userDataProviderWatch.currentUserProfileGrid?.response?.posts;
+    final photoGrid =
+        userDataProviderWatch.currentUserProfileGrid?.response?.posts;
+    final bookmarkGrid =
+        postInteractionProviderWatch.getBookamark?.response?.bookmarks;
 
     return Scaffold(
       body: NestedScrollView(
@@ -195,6 +202,23 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                   labelColor: ColorConstants.secondaryColor,
                   indicatorColor: ColorConstants.secondaryColor,
                   controller: _tabController,
+                  onTap: (value) {
+                    if (value == 0) {
+                      context
+                          .read<ProfileController>()
+                          .getCurrentUserGrid(context: context);
+                    }
+                    if (value == 1) {
+                      // context
+                      //     .read<ProfileController>()
+                      //     .getCurrentUserVideos(context: context);
+                    }
+                    if (value == 2) {
+                      context
+                          .read<PostInteractionController>()
+                          .getBookmark(context: context);
+                    }
+                  },
                   tabs: const [
                     Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
                     Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
@@ -212,7 +236,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
-                itemCount: grids?.length ?? 0,
+                itemCount: photoGrid?.length ?? 0,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 9 / 16,
                     crossAxisCount: 3,
@@ -225,7 +249,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                grids?[index].postContentUrl ?? ''))),
+                                photoGrid?[index].postContentUrl ?? ''))),
                   );
                 },
               ),
@@ -237,10 +261,40 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             ),
 
             // Bookmarked Items
-            Center(
-              child: Text("Bookmarked content will appear here",
-                  style: TextStyle(fontSize: 16)),
-            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Builder(
+                  builder: (context) {
+                    if (bookmarkGrid == null) {
+                      return Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [Text('No Items')],
+                        ),
+                      );
+                    } else {
+                      return GridView.builder(
+                        itemCount: bookmarkGrid?.length ?? 0,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 9 / 16,
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4),
+                        itemBuilder: (context, index) {
+                          final bookmarkedItem = bookmarkGrid?[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xffF5FFBB),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        bookmarkedItem?.postContentUrl ?? ''))),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
 
             // Shopping Items
             Center(
