@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -147,10 +148,12 @@ class _HomePageState extends State<HomePage> {
     pagecontroller = PageController(
       initialPage: 1,
     );
+    context.read<HomefeedController>().getAllPost(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final proWatch = context.watch<AppContoller>();
     List<Widget> pages = [
       PickMediaScreen(
         controller: pagecontroller,
@@ -163,6 +166,8 @@ class _HomePageState extends State<HomePage> {
       )
     ];
     return PageView(
+      physics:
+          proWatch.currentIndex == 0 ? null : NeverScrollableScrollPhysics(),
       controller: pagecontroller,
       restorationId: 'home_page_view',
       children: pages,

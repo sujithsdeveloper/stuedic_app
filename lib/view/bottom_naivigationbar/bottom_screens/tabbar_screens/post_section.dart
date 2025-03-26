@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -58,19 +59,19 @@ class PostSection extends StatelessWidget {
                                 onTap: () {
                                   mediaBottomSheet(
                                       context: context,
-                                      onCameraTap: (pickedImage) async {
-                                        await context
-                                            .read<ImageEditController>()
-                                            .cropImage(
-                                                image: pickedImage!,
-                                                context: context);
+                                      onCameraTap: () async {
+                                        await proReadAsset.pickMedia(
+                                            context: context,
+                                            cropImage: true,
+                                            UplaodMedia: true,
+                                            source: ImageSource.camera);
                                       },
-                                      onGalleryTap: (pickedImage) async {
-                                        await context
-                                            .read<ImageEditController>()
-                                            .cropImage(
-                                                image: pickedImage!,
-                                                context: context);
+                                      onGalleryTap: () async {
+                                        await proReadAsset.pickMedia(
+                                            UplaodMedia: true,
+                                            cropImage: true,
+                                            context: context,
+                                            source: ImageSource.gallery);
                                       });
                                 },
                               );
@@ -116,13 +117,12 @@ class PostSection extends StatelessWidget {
                 GradientButton(
                     label: 'Post',
                     isColored: true,
-                    onTap: () {
+                    onTap: () async {
                       if (formKey.currentState!.validate()) {
                         if (proWatchAsset.pickedImage == null) {
                           return;
                         }
-
-                        proRead.uploadPost(
+                        await proRead.uploadPost(
                             mediaUrl: multipartObj.imageUrl ?? '',
                             caption:
                                 controller.text.isEmpty ? '' : controller.text,

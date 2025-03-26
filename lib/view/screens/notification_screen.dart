@@ -59,10 +59,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
               } else {
                 return SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Recent",
-                        style: StringStyle.normalTextBold(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Recent",
+                          style: StringStyle.normalTextBold(size: 20),
+                        ),
                       ),
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
@@ -114,7 +118,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     if (notification!.type ==
                                         StringConstants.like) {
                                       return Text(
-                                          '${notification.fromUserName}Liked your post');
+                                          '${notification.fromUserName} Liked your post');
                                     } else {
                                       return Text(
                                           '${notification.fromUserName} Commented on your post');

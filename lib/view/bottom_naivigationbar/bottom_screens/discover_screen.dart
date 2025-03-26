@@ -90,8 +90,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              Colors.black.withOpacity(0.6), // Dark at bottom
-                              Colors.transparent, // Transparent at top
+                              Colors.black.withOpacity(0.6),
+                              Colors.transparent,
                             ],
                           ),
                         ),
@@ -100,7 +100,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              items[index]['username']!,
+                              discover?.authorName ?? '',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

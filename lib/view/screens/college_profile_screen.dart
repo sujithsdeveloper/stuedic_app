@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
+import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
+import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
@@ -39,14 +44,15 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
     );
     context.read<ProfileController>().getCurrentUserGrid(context: context);
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
-    final grids = userDataProviderWatch.currentUserProfileGrid?.response?.posts;
+
+    final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +67,7 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
               backgroundColor: Colors.white,
               pinned: true,
               floating: true,
-              expandedHeight: 450,
+              expandedHeight: context.screenHeight,
               actions: [
                 IconButton(
                     onPressed: () {},
@@ -169,7 +175,7 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
                     Align(
                       alignment: Alignment.center,
                       child: StuedicPointContainer(
-                        point: '23456780',
+                        point: '0',
                       ),
                     ),
                     Padding(
@@ -184,21 +190,56 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   counts(
-                                      count: AppUtils.formatCounts(2000),
-                                      label: "Posts"),
-                                  counts(
                                       count: AppUtils.formatCounts(
-                                          user?.followingCount ?? 0),
-                                      label: "Following"),
+                                          user?.collageStrength ?? 0),
+                                      label: "Students"),
                                   counts(
+                                      count: AppUtils.formatCounts(0),
+                                      label: "Staffs"),
+                                  counts(
+                                      onTap: () {
+                                        AppRoutes.push(
+                                            context, CollegeDepartments());
+                                      },
                                       count: AppUtils.formatCounts(
-                                          user?.followersCount ?? 0),
-                                      label: "Followers"),
+                                          user?.allDepartments?.length ?? 0),
+                                      label: "Departments"),
                                   counts(
-                                      count: AppUtils.formatCounts(20000000),
-                                      label: "Likes"),
+                                      count: AppUtils.formatCounts(0),
+                                      label: "Clubs"),
                                 ],
                               )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Details',
+                                  style: StringStyle.normalTextBold(size: 16),
+                                ),
+                              ),
+                              DetailsItem(
+                                  title: 'Address',
+                                  subtitle: lorum,
+                                  iconData: CupertinoIcons.location),
+                              DetailsItem(
+                                  title: 'Email',
+                                  subtitle: user?.email ?? 'Not Provided',
+                                  iconData: CupertinoIcons.envelope),
+                              DetailsItem(
+                                  title: 'Phone Number',
+                                  subtitle: user?.phone ?? 'Not Provided',
+                                  iconData: HugeIcons.strokeRoundedCall),
+                              DetailsItem(
+                                  title: 'Affiliation',
+                                  subtitle: "Dummy University",
+                                  iconData: Icons.school_outlined),
                             ],
                           ),
                         ],
@@ -207,76 +248,77 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
                   ],
                 ),
               ),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Container(
+                  color: Colors.white, // Set the background color to white
+                  child: TabBar(
+                    labelColor: ColorConstants.secondaryColor,
+                    indicatorColor: ColorConstants.secondaryColor,
+                    controller: _tabController,
+                    onTap: (value) {
+                      if (value == 0) {
+                        context
+                            .read<ProfileController>()
+                            .getCurrentUserGrid(context: context);
+                      }
+                      if (value == 1) {
+                        // context
+                        //     .read<ProfileController>()
+                        //     .getCurrentUserVideos(context: context);
+                      }
+                      if (value == 2) {
+                        context
+                            .read<PostInteractionController>()
+                            .getBookmark(context: context);
+                      }
+                    },
+                    tabs: const [
+                      Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                    ],
+                  ),
+                ),
+              ),
             ),
-
-            // TabBar
-            // SliverPersistentHeader(
-            //   pinned: true,
-            //   delegate: TabBarDelegate(
-            //     TabBar(
-            //       labelColor: ColorConstants.secondaryColor,
-            //       indicatorColor: ColorConstants.secondaryColor,
-            //       splashFactory: NoSplash.splashFactory,
-            //       controller: _tabController,
-            //       tabs: const [
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedImage01)),
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedGrid)),
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ];
         },
         body: TabBarView(
           controller: _tabController,
           children: [
-            // Tab 1: Grid view
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MasonryGridView.builder(
-                gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                itemCount: grids?.length ?? 0,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: GridView.builder(
+                itemCount: photoGrid?.length ?? 0,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 9 / 16,
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4),
                 itemBuilder: (context, index) {
-                  if (grids!.isEmpty || grids == null) {
-                    return const Center(
-                      child: Text('No posts available'),
-                    );
-                  }
-
-                  final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
-
-                  return GestureDetector(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffF5FFBB),
+                        image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                grids[index].postContentUrl.toString()),
-                          ),
-                        ),
-                      ),
-                    ),
+                                photoGrid?[index].postContentUrl ?? ''))),
                   );
                 },
               ),
             ),
-
-            // Tab 2: Videos
-            const Center(
-              child: Text('Videos Tab Content'),
+            // Videos Section
+            Center(
+              child: Text("Videos will be displayed here",
+                  style: TextStyle(fontSize: 16)),
             ),
-            // Tab 3: Photos
-            const Center(
-              child: Text('Photos Tab Content'),
+
+            // Shopping Items
+            Center(
+              child: Text("Shopping items will be displayed here",
+                  style: TextStyle(fontSize: 16)),
             ),
           ],
         ),

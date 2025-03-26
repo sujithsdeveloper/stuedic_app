@@ -50,6 +50,9 @@ class Response {
     bool? isCurrentUser;
     bool? isStudent;
     bool? isFollowed;
+    List<dynamic>? allDepartments;
+    List<dynamic>? allCourses;
+    String? department;
     int? postCount;
     bool? isCollege;
 
@@ -71,6 +74,9 @@ class Response {
         this.isCurrentUser,
         this.isStudent,
         this.isFollowed,
+        this.allDepartments,
+        this.allCourses,
+        this.department,
         this.postCount,
         this.isCollege,
     });
@@ -93,6 +99,9 @@ class Response {
         isCurrentUser: json["isCurrentUser"],
         isStudent: json["isStudent"],
         isFollowed: json["isFollowed"],
+        allDepartments: json["allDepartments"] == null ? [] : List<dynamic>.from(json["allDepartments"]!.map((x) => x)),
+        allCourses: json["allCourses"] == null ? [] : List<dynamic>.from(json["allCourses"]!.map((x) => x)),
+        department: json["department"],
         postCount: json["postCount"],
         isCollege: json["isCollege"],
     );
@@ -115,6 +124,9 @@ class Response {
         "isCurrentUser": isCurrentUser,
         "isStudent": isStudent,
         "isFollowed": isFollowed,
+        "allDepartments": allDepartments == null ? [] : List<dynamic>.from(allDepartments!.map((x) => x)),
+        "allCourses": allCourses == null ? [] : List<dynamic>.from(allCourses!.map((x) => x)),
+        "department": department,
         "postCount": postCount,
         "isCollege": isCollege,
     };

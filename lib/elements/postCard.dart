@@ -187,7 +187,7 @@ class _PostCardState extends State<PostCard>
                                       } else {
                                         return Shimmer.fromColors(
                                           child: Container(
-                                            height: 230,
+                                            height: 400,
                                             width: double.infinity,
                                             color: Colors.white,
                                           ),

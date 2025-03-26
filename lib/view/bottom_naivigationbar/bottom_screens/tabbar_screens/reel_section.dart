@@ -77,8 +77,8 @@ class _ReelSectionState extends State<ReelSection> {
                               mediaBottomSheet(
                                 isVideo: true,
                                 context: context,
-                                onCameraTap: (Pickedimage) async {},
-                                onGalleryTap: (pickedImage) async {},
+                                onCameraTap: () async {},
+                                onGalleryTap: () async {},
                               );
                             },
                           ),

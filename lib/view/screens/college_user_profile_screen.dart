@@ -8,8 +8,6 @@ import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
-import 'package:stuedic_app/utils/constants/color_constants.dart';
-
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
@@ -171,7 +169,7 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
                     Align(
                       alignment: Alignment.center,
                       child: StuedicPointContainer(
-                        point: '23456780',
+                        point: '0',
                       ),
                     ),
                     Padding(

@@ -27,18 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<HomefeedController>().getAllPost(context: context);
-    final like = context
-        .read<HomefeedController>()
-        .homeFeed
-        ?.response?[0]
-        .isLiked
-        .toString();
+
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         final currentUserId = await AppUtils.getUserId();
         log('Current userid= $currentUserId');
-        log('isLiked $like');
       },
     );
   }

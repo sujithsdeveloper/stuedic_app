@@ -11,7 +11,7 @@ import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class StorySection extends StatefulWidget {
   const StorySection({super.key, required this.controller});
-final PageController controller;
+  final PageController controller;
   @override
   State<StorySection> createState() => _StorySectionState();
 }
@@ -100,7 +100,11 @@ class _StorySectionState extends State<StorySection> {
                           //   },
                           // );
 
-                          AppRoutes.push(context, PickMediaScreen(controller:widget.controller ,));
+                          AppRoutes.push(
+                              context,
+                              PickMediaScreen(
+                                controller: widget.controller,
+                              ));
                         },
                         child: GradientCircleAvathar(
                           radius: 20,

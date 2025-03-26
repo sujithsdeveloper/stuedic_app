@@ -18,12 +18,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-    final controller = TextEditingController();
-@override
+  final controller = TextEditingController();
+  @override
   void dispose() {
     super.dispose();
     controller.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final prowatch = context.watch<UserSearchController>();
@@ -63,7 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     AppRoutes.push(
                         context,
                         ChatScreen(
-                            url: user?.profilePicUrl ?? '',
+                            imageUrl: user?.profilePicUrl ?? '',
                             name: user?.username ?? '',
                             userId: user?.userId ?? ''));
                   } else {

@@ -76,18 +76,18 @@ class _IDUploadState extends State<IDUpload> {
                         onTap: () {
                           mediaBottomSheet(
                             context: context,
-                            onCameraTap: (pickedImage) {
-                              proReadML.scanImage(image: pickedImage);
-                              proReadML.verifyText(
-                                  text: controller.text,
-                                  file: proWatch.pickedImage);
+                            onCameraTap: () {
+                              // proReadML.scanImage(image: pickedImage);
+                              // proReadML.verifyText(
+                              //     text: controller.text,
+                              //     file: proWatch.pickedImage);
                             },
-                            onGalleryTap: (pickedImage) {
-                              proReadML.scanImage(image: pickedImage);
-                              log('picked image: ${pickedImage!.path}');
-                              proReadML.verifyText(
-                                  text: controller.text,
-                                  file: proWatch.pickedImage);
+                            onGalleryTap: () {
+                              // proReadML.scanImage(image: pickedImage);
+                              // log('picked image: ${pickedImage!.path}');
+                              // proReadML.verifyText(
+                              //     text: controller.text,
+                              //     file: proWatch.pickedImage);
                             },
                           );
                         },

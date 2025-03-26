@@ -153,13 +153,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         onTap: () {
                           mediaBottomSheet(
                             context: context,
-                            onCameraTap: (pickedImage) {
-                              context.read<MutlipartController>().uploadMedia(
-                                  context: context,
-                                  filePath: pickedImage!.path,
-                                  API: APIs.uploadPicForPost);
+                            onCameraTap: () {
+                              // context.read<MutlipartController>().uploadMedia(
+                              //     context: context,
+                              //     filePath: pickedImage!.path,
+                              //     API: APIs.uploadPicForPost);
                             },
-                            onGalleryTap: (pickedImage) {},
+                            onGalleryTap: () {},
                           );
                         },
                         child: CircleAvatar(

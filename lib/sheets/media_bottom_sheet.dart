@@ -11,12 +11,9 @@ import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 Future<dynamic> mediaBottomSheet(
     {required BuildContext context,
     bool isVideo = false,
-    required Function(File? pickedMedia) onCameraTap,
-    required Function(File? pickedMedia) onGalleryTap}) {
-  final pickerControllerWatch =
-      Provider.of<AssetPickerController>(context, listen: false);
-  final pickerControllerRead =
-      Provider.of<AssetPickerController>(context, listen: false);
+    required Function() onCameraTap,
+    required Function() onGalleryTap}) {
+
   return showModalBottomSheet(
     context: context,
     builder: (context) => Container(
@@ -28,14 +25,7 @@ Future<dynamic> mediaBottomSheet(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
-            onTap: () async {
-              await pickerControllerRead.pickMedia(
-                  isVideo: isVideo,
-                  context: context,
-                  source: ImageSource.camera);
-              File? image = pickerControllerWatch.pickedImage;
-              onCameraTap(image);
-            },
+            onTap: onCameraTap,
             child: Container(
               height: 112,
               width: 159,
@@ -65,21 +55,7 @@ Future<dynamic> mediaBottomSheet(
             ),
           ),
           GestureDetector(
-            onTap: () async {
-              final pickerController =
-                  context.read<AssetPickerController>();
-
-              await pickerController.pickMedia(
-                isVideo: isVideo,
-                context: context,
-                source: ImageSource.gallery,
-              );
-
-              File? media = pickerController.pickedImage;
-              if (media != null) {
-                onGalleryTap(media);
-              }
-            },
+            onTap: onGalleryTap,
             child: Container(
               height: 112,
               width: 159,
