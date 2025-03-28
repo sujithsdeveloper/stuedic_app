@@ -15,8 +15,10 @@ import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
 class PostSection extends StatelessWidget {
-  const PostSection({super.key});
-
+  const PostSection(
+      {super.key, required this.onGalleryTap, required this.onCameraTap});
+  final Function() onGalleryTap;
+  final Function() onCameraTap;
   @override
   Widget build(BuildContext context) {
     final proRead = context.read<CrudOperationController>();
@@ -62,21 +64,16 @@ class PostSection extends StatelessWidget {
                             if (proWatchAsset.pickedImage == null) {
                               return GradientButton(
                                 label: 'Upload image',
-                                onTap: () {
+                                onTap: () async {
                                   mediaBottomSheet(
-                                      context: context,
-                                      onCameraTap: () async {
-                                        await proReadAsset.pickMedia(
-                                            context: context,
-                                            cropImage: true,
-                                            UplaodMedia: true,
-                                            source: ImageSource.camera);
-                                      },
-                                      onGalleryTap: () async {
-                                        await proReadAsset.pickImage(
-                                            source: ImageSource.gallery,
-                                            context: context);
-                                      });
+                                    context: context,
+                                    onCameraTap: onCameraTap,
+                                    onGalleryTap: onGalleryTap,
+                                  );
+
+                                  // await proReadAsset.pickImage(
+                                  //     source: ImageSource.gallery,
+                                  //     context: context);
                                 },
                               );
                             } else {

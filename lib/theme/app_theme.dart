@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
@@ -13,47 +12,21 @@ class AppTheme {
       surfaceTintColor: Colors.white,
       scrolledUnderElevation: 0,
     ),
-    bottomNavigationBarTheme:
-        BottomNavigationBarThemeData(backgroundColor: Colors.white),
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      bodyMedium: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      bodySmall: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      titleLarge: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      titleMedium: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      titleSmall: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      labelLarge: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      labelMedium: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
-      ),
-      labelSmall: TextStyle(
-        color: ColorConstants.secondaryColor,
-        fontFamily: 'latoRegular',
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: ColorConstants.secondaryColor,
+        unselectedItemColor: Colors.grey),
+    textTheme: lightTextTheme(),
+    
+    iconTheme: IconThemeData(color: ColorConstants.secondaryColor),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: ColorConstants.secondaryColor,
+        textStyle: TextStyle(
+          fontFamily: 'latoRegular',
+        ),
       ),
     ),
-    iconTheme: IconThemeData(color: ColorConstants.secondaryColor),
     dropdownMenuTheme: DropdownMenuThemeData(
         menuStyle: MenuStyle(
           backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -65,6 +38,8 @@ class AppTheme {
         cursorColor: ColorConstants.secondaryColor,
         selectionHandleColor: ColorConstants.secondaryColor),
   );
+
+
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: ColorConstants.darkColor,
@@ -72,48 +47,17 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: ColorConstants.darkColor,
       elevation: 0,
-      // surfaceTintColor: Colors.white,
-
       scrolledUnderElevation: 0,
     ),
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(
-        color: Colors.white,
-        fontFamily: 'Calistoga',
-      ),
-      bodyMedium: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      bodySmall: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      titleLarge: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      titleMedium: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      titleSmall: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      labelLarge: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      labelMedium: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
-      ),
-      labelSmall: TextStyle(
-        color: Colors.white,
-        fontFamily: 'latoRegular',
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(
+          fontFamily: 'latoRegular',
+        ),
       ),
     ),
+    textTheme: darkTextTheme(),
     iconTheme: IconThemeData(color: ColorConstants.darkColor2),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: ColorConstants.darkSecondaryColor,
@@ -134,4 +78,87 @@ class AppTheme {
       indicatorColor: Colors.white,
     ),
   );
+
+
+  static TextTheme darkTextTheme() {
+    return TextTheme(
+    bodyLarge: TextStyle(
+      color: Colors.white,
+      fontFamily: 'Calistoga',
+    ),
+    bodyMedium: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    bodySmall: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    titleLarge: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    titleMedium: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    titleSmall: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    labelLarge: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    labelMedium: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+    labelSmall: TextStyle(
+      color: Colors.white,
+      fontFamily: 'latoRegular',
+    ),
+  );
+  }
+
+    static TextTheme lightTextTheme() {
+    return TextTheme(
+    bodyLarge: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    bodyMedium: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    bodySmall: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    titleLarge: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    titleMedium: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    titleSmall: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    labelLarge: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    labelMedium: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+    labelSmall: TextStyle(
+      color: ColorConstants.secondaryColor,
+      fontFamily: 'latoRegular',
+    ),
+  );
+  }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/elements/editProfileItem.dart';
@@ -119,6 +122,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       .then(
                     (value) {
                       context.watch<AssetPickerController>().pickedImage = null;
+                      context
+                          .read<HomefeedController>()
+                          .getAllPost(context: context);
+                      context
+                          .read<ProfileController>()
+                          .getCurrentUserData(context: context);
                     },
                   );
                 },
@@ -154,12 +163,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           mediaBottomSheet(
                             context: context,
                             onCameraTap: () {
-                              // context.read<MutlipartController>().uploadMedia(
-                              //     context: context,
-                              //     filePath: pickedImage!.path,
-                              //     API: APIs.uploadPicForPost);
+                              context.read<AssetPickerController>().pickImage(
+                                    context: context,
+                                    source: ImageSource.camera,
+                                  );
                             },
-                            onGalleryTap: () {},
+                            onGalleryTap: () {
+                              context.read<AssetPickerController>().pickImage(
+                                    context: context,
+                                    source: ImageSource.gallery,
+                                  );
+                            },
                           );
                         },
                         child: CircleAvatar(

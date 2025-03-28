@@ -54,15 +54,12 @@ class AssetPickerController extends ChangeNotifier {
       if (image != null) {
         pickedImage = File(image.path);
         notifyListeners();
-
         log('Picked image path: ${pickedImage?.path}');
-
         if (cropImage) {
           log('crop called');
-          await context.read<ImageEditController>().cropImage(
-                image: pickedImage!,
-                context: context,
-              );
+          await context
+              .read<ImageEditController>()
+              .cropImage(image: pickedImage!, context: context);
         }
       } else {
         if (context.mounted) {
@@ -105,6 +102,7 @@ class AssetPickerController extends ChangeNotifier {
               statusBarColor: Colors.black),
           IOSUiSettings(
             aspectRatioLockEnabled: true,
+            
           )
         ],
       );

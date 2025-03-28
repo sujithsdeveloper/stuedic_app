@@ -100,8 +100,8 @@ class _sheetItems extends StatelessWidget {
       title: Text(
         label,
         style: StringStyle.normalText(
-            isBold: true,
-          ),
+          isBold: true,
+        ),
       ),
     );
   }
@@ -177,10 +177,11 @@ void reportSheet({required BuildContext context}) {
 
 dynamic thankYouSheet({required BuildContext context}) {
   return showModalBottomSheet(
+    backgroundColor: Colors.white,
     isScrollControlled: true,
     context: context,
     builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.4,
+      initialChildSize: 0.45,
       minChildSize: 0.3,
       expand: false,
       builder: (context, scrollController) => Padding(
@@ -198,20 +199,20 @@ dynamic thankYouSheet({required BuildContext context}) {
               style: StringStyle.normalTextBold(size: 20),
             ),
             Text(
-              'We use these reports to show youb less of this kind of contents in future',
+              'We use these reports to show your less of this kind of contents in future',
               softWrap: true,
             ),
             Spacer(),
-            GradientButton(
-              isColored: true,
-              label: 'Done',
-              onTap: () {
-                Navigator.pop(context);
-              },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: GradientButton(
+                isColored: true,
+                label: 'Done',
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            SizedBox(
-              height: 20,
-            )
           ],
         ),
       ),

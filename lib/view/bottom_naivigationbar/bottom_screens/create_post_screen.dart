@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
@@ -10,7 +11,6 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
-import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 
@@ -40,19 +40,23 @@ class _CreatePostScreenState extends State<CreatePostScreen>
     final proRead = context.read<CrudOperationController>();
     final proReadAsset = context.read<AssetPickerController>();
     final proWatchAsset = context.watch<AssetPickerController>();
-    final proWatchApp = context.watch<AppContoller>();
 
     return WillPopScope(
       onWillPop: () async {
         if (proWatchAsset.pickedImage != null) {
-          proWatchAsset.pickedImage = null;
-          proWatchAsset.pickedVideo = null;
+          proReadAsset.clearAsset();
           return true;
         }
 
         return true;
       },
       child: Scaffold(
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () async {
+        //     await proReadAsset.pickImage(
+        //         source: ImageSource.gallery, context: context);
+        //   },
+        // ),
         appBar: AppBar(
           title: Row(
             spacing: 9,
@@ -162,7 +166,22 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                           child: TabBarView(
                             controller: tabController,
                             children: [
-                              PostSection(),
+                              PostSection(
+                                onGalleryTap: () async {
+                                  await context
+                                      .read<AssetPickerController>()
+                                      .pickImage(
+                                          source: ImageSource.gallery,
+                                          context: context);
+                                },
+                                onCameraTap: () async {
+                                  await context
+                                      .read<AssetPickerController>()
+                                      .pickImage(
+                                          source: ImageSource.camera,
+                                          context: context);
+                                },
+                              ),
                               ReelSection(),
                               Center(child: Text("Create a Story")),
                             ],

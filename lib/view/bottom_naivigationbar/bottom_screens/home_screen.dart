@@ -97,40 +97,57 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Post List with Grey Background
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                addAutomaticKeepAlives: true,
-                (context, index) {
-                  final item = items?[index];
-                  final time = AppUtils.timeAgo(
-                      item?.createdAt.toString() ?? DateTime.now().toString());
-                  // log('Home isbookmarked: ${item?.isBookmarked}');
-
-                  return Container(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 8),
-                      child: PostCard(
-                        isBookmarked: item?.isBookmarked ?? false,
-                        likeCount: item?.likescount.toString() ?? '0',
-                        postType: item?.postType ?? '',
-                        isLiked: item?.isLiked ?? false,
-                        commentCount: item?.commentsCount.toString() ?? '0',
-                        index: index,
-                        time: time,
-                        userId: item?.userId ?? '',
-                        mediaUrl: item?.postContentUrl ?? '',
-                        name: item?.username ?? '',
-                        profileUrl: item?.profilePicUrl ?? '',
-                        caption: item?.postDescription ?? '',
-                        postId: item?.postId ?? '',
+            items == null || items.isEmpty
+                ? SliverToBoxAdapter(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('No data found add post now',
+                              style: StringStyle.normalTextBold(
+                                size: 18,
+                              )),
+                        ],
                       ),
                     ),
-                  );
-                },
-                childCount: items?.length ?? 0,
-              ),
-            ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      addAutomaticKeepAlives: true,
+                      (context, index) {
+                        final item = items?[index];
+                        final time = AppUtils.timeAgo(
+                            item?.createdAt.toString() ??
+                                DateTime.now().toString());
+                        // log('Home isbookmarked: ${item?.isBookmarked}');
+
+                        return Container(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                            child: PostCard(
+                              isBookmarked: item?.isBookmarked ?? false,
+                              likeCount: item?.likescount.toString() ?? '0',
+                              postType: item?.postType ?? '',
+                              isLiked: item?.isLiked ?? false,
+                              commentCount:
+                                  item?.commentsCount.toString() ?? '0',
+                              index: index,
+                              time: time,
+                              userId: item?.userId ?? '',
+                              mediaUrl: item?.postContentUrl ?? '',
+                              name: item?.username ?? '',
+                              profileUrl: item?.profilePicUrl ?? '',
+                              caption: item?.postDescription ?? '',
+                              postId: item?.postId ?? '',
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: items?.length ?? 0,
+                    ),
+                  ),
           ],
         ),
       ),
