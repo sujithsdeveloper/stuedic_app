@@ -101,8 +101,7 @@ class _sheetItems extends StatelessWidget {
         label,
         style: StringStyle.normalText(
             isBold: true,
-            color:
-                textColor == null ? ColorConstants.secondaryColor : textColor!),
+          ),
       ),
     );
   }

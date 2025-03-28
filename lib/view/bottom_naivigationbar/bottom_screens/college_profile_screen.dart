@@ -16,8 +16,8 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
+import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
-
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
@@ -51,12 +51,11 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
-
+    bool isDarkTheme = AppUtils.isDarkTheme(context);
     final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         toolbarHeight: 5,
       ),
       body: NestedScrollView(
@@ -64,7 +63,6 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
           return [
             // SliverAppBar with FlexibleSpaceBar
             SliverAppBar(
-              backgroundColor: Colors.white,
               pinned: true,
               floating: true,
               expandedHeight: context.screenHeight,
@@ -152,18 +150,25 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
                       spacing: 8,
                       children: [
                         ProfileActionButton(
-                          iconData: CupertinoIcons.envelope,
+                          iconData: CupertinoIcons.doc_text,
                           onTap: () {},
                         ),
                         GradientButton(
                             outline: user?.isFollowed ?? false ? true : false,
-                            onTap: () {},
+                            onTap: () {
+                              AppRoutes.push(
+                                  context,
+                                  EditProfileScreen(
+                                    bio: user?.bio ?? "",
+                                    number: user?.phone ?? '',
+                                    url: user?.profilePicUrl ?? '',
+                                    username: user?.userName ?? '',
+                                  ));
+                            },
                             height: 48,
                             width: 100,
                             isColored: user?.isFollowed ?? false ? false : true,
-                            label: user?.isFollowed ?? false
-                                ? 'Unfollow'
-                                : 'Follow'),
+                            label: 'Edit Profile'),
                         ProfileActionButton(
                           iconData: Icons.share_outlined,
                         )
@@ -251,10 +256,8 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(kToolbarHeight),
                 child: Container(
-                  color: Colors.white, // Set the background color to white
+                  color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
                   child: TabBar(
-                    labelColor: ColorConstants.secondaryColor,
-                    indicatorColor: ColorConstants.secondaryColor,
                     controller: _tabController,
                     onTap: (value) {
                       if (value == 0) {
@@ -289,26 +292,55 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
           controller: _tabController,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: GridView.builder(
-                itemCount: photoGrid?.length ?? 0,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 9 / 16,
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4),
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xffF5FFBB),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                photoGrid?[index].postContentUrl ?? ''))),
-                  );
-                },
-              ),
-            ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Builder(
+                  builder: (context) {
+                    if (photoGrid == null || photoGrid.isEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Capture some amazing moments with your friends',
+                            style: StringStyle.normalTextBold(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo_outlined,
+                              ),
+                              Text('Create your first post')
+                            ],
+                          )
+                        ],
+                      );
+                    } else {
+                      return GridView.builder(
+                        itemCount: photoGrid?.length ?? 0,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 9 / 16,
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xffF5FFBB),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        photoGrid?[index].postContentUrl ??
+                                            ''))),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
             // Videos Section
             Center(
               child: Text("Videos will be displayed here",

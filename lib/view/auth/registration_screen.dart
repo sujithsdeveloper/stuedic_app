@@ -46,7 +46,10 @@ class _RegistrationScreenState extends State<RegistrationScreen>
       appBar: AppBar(
         title: Text(
           'Register',
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText( 
+            context: 
+            context
+          ),
         ),
         centerTitle: true,
         actions: [
@@ -215,7 +218,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 children: [
                   Text(
                     "Already have an account?",
-                    style: StringStyle.normalText(color: Colors.grey),
+                    style: StringStyle.normalText(),
                   ),
                   GestureDetector(
                     onTap: () {

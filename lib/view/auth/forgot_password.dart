@@ -17,7 +17,7 @@ class ForgotPassword extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Forgot Password',
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText(context: context),
         ),
       ),
       body: Padding(

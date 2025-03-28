@@ -87,7 +87,7 @@ class SettingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Settings",
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText(context: context),
         ),
         centerTitle: true,
       ),

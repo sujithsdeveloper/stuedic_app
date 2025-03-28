@@ -11,4 +11,8 @@ class ColorConstants {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [Color(0xFFF5FF25), Color(0xFFCAF945)]);
+
+  static const Color darkColor = Color(0xff0F0E1D);
+  static const Color darkColor2 = Color(0xff8697AC);
+  static const Color darkSecondaryColor = Color(0xff0F0E1D);
 }

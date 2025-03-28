@@ -20,6 +20,11 @@ class MutlipartController extends ChangeNotifier {
     bool isVideo = false,
   }) async {
     try {
+      if (filePath == null) {
+        log('null file path');
+        errorSnackbar(label: 'File is empty', context: context);
+        return;
+      }
       log('Uploading media...');
       isUploading = true;
       notifyListeners();

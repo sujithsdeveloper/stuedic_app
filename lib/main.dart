@@ -80,12 +80,14 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(
+            create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(
+            create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -96,7 +98,8 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
-          themeMode: ThemeMode.light,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
           debugShowCheckedModeBanner: false,
           home: (widget.token == null || widget.token!.isEmpty)
               ? LoginScreen()

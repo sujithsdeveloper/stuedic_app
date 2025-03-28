@@ -10,7 +10,7 @@ class LanguageScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Language",
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText(context: context),
         ),
       ),
       body: ListTile(

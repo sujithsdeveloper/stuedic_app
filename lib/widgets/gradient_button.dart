@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
 class GradientButton extends StatelessWidget {
@@ -22,7 +23,7 @@ class GradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final prowatch = context.watch<AppContoller>();
     final proRead = context.read<AppContoller>();
-
+    bool isDarkTheme = AppUtils.isDarkTheme(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -40,7 +41,11 @@ class GradientButton extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-                fontWeight: FontWeight.w700, fontSize: 14, fontFamily: 'lato'),
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+                fontFamily: 'lato',
+                color:
+                    isDarkTheme ? Colors.white : ColorConstants.secondaryColor),
           ),
         ),
       ),

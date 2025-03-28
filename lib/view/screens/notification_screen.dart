@@ -26,7 +26,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NotificationController>().getNotification(context: context);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        await context
+            .read<NotificationController>()
+            .getNotification(context: context);
+      },
+    );
   }
 
   @override
@@ -55,6 +61,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   itemBuilder: (context, index) {
                     return ShimmersItems.notificationShimmer();
                   },
+                );
+              } else if (notifications == null || notifications.isEmpty) {
+                return Center(
+                  child: Text('No Notification'),
                 );
               } else {
                 return SingleChildScrollView(

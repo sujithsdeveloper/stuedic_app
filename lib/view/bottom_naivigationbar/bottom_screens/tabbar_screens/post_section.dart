@@ -8,6 +8,8 @@ import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
@@ -24,6 +26,8 @@ class PostSection extends StatelessWidget {
     final multipartObj = context.watch<MutlipartController>();
     final proWatchCrop = context.watch<ImageEditController>();
     final controller = TextEditingController();
+    bool isDarkTheme = AppUtils.isDarkTheme(context);
+
     final formKey = GlobalKey<FormState>();
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -41,7 +45,9 @@ class PostSection extends StatelessWidget {
                   height: 293,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xffF5FFE1),
+                    color: isDarkTheme
+                        ? Color(0xffF5FFE1)
+                        : ColorConstants.darkColor2,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(
@@ -53,7 +59,7 @@ class PostSection extends StatelessWidget {
                                 multipartObj.isUploading) {
                               return loadingIndicator();
                             }
-                            if (proWatchCrop.croppedImage == null) {
+                            if (proWatchAsset.pickedImage == null) {
                               return GradientButton(
                                 label: 'Upload image',
                                 onTap: () {
@@ -67,18 +73,16 @@ class PostSection extends StatelessWidget {
                                             source: ImageSource.camera);
                                       },
                                       onGalleryTap: () async {
-                                        await proReadAsset.pickMedia(
-                                            UplaodMedia: true,
-                                            cropImage: true,
-                                            context: context,
-                                            source: ImageSource.gallery);
+                                        await proReadAsset.pickImage(
+                                            source: ImageSource.gallery,
+                                            context: context);
                                       });
                                 },
                               );
                             } else {
                               return Stack(
                                 children: [
-                                  Image.file(proWatchCrop.croppedImage!),
+                                  Image.file(proWatchAsset.pickedImage!),
                                   Positioned(
                                     top: 5,
                                     right: 5,
@@ -89,10 +93,10 @@ class PostSection extends StatelessWidget {
                                       ),
                                       onPressed: () {
                                         context
-                                            .read<ImageEditController>()
-                                            .croppedImage = null;
+                                            .read<AssetPickerController>()
+                                            .pickedImage = null;
                                         context
-                                            .read<ImageEditController>()
+                                            .read<AssetPickerController>()
                                             .notifyListeners();
                                       },
                                     ),

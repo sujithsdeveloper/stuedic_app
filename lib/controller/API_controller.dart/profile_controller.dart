@@ -39,7 +39,7 @@ class ProfileController extends ChangeNotifier {
         url: Uri.parse(
             '${APIs.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
         onSucces: (p0) {
-          // log(p0.body);
+          log(p0.body);
           userProfile = getUserByUserIdModelFromJson(p0.body);
           userByUserIdIsloading = false;
           notifyListeners();

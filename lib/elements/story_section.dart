@@ -135,7 +135,7 @@ class _StorySectionState extends State<StorySection> {
             itemBuilder: (context, index) {
               final data = users[index];
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
                 child: Column(
                   children: [
                     AnimatedGradientRing(

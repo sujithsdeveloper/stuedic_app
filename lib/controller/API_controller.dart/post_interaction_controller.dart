@@ -6,6 +6,7 @@ import 'package:stuedic_app/APIs/API_call.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/dialogs/unfollowdialog.dart';
 import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/model/getbookamark_model.dart';
@@ -90,6 +91,9 @@ class PostInteractionController extends ChangeNotifier {
       url: Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
+        context
+            .read<ProfileController>()
+            .getUserByUserID(userId: userId, context: context);
         notifyListeners();
       },
       onTokenExpired: () => followUser(userId: userId, context: context),
@@ -104,6 +108,10 @@ class PostInteractionController extends ChangeNotifier {
           '${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
+        context
+            .read<ProfileController>()
+            .getUserByUserID(userId: userId, context: context);
+
         notifyListeners();
       },
       onTokenExpired: () => unfollowUser(userId: userId, context: context),

@@ -11,6 +11,8 @@ import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/screens/media/video_player_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -30,6 +32,7 @@ class _ReelSectionState extends State<ReelSection> {
     final proReadAsset = context.read<AssetPickerController>();
     final proWatchAsset = context.watch<AssetPickerController>();
     final multipartObj = context.watch<MutlipartController>();
+    bool isDarktheme = AppUtils.isDarkTheme(context);
     final key = GlobalKey<FormState>();
 
     return Padding(
@@ -45,7 +48,9 @@ class _ReelSectionState extends State<ReelSection> {
                 height: 418,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5FFE1),
+                  color: isDarktheme
+                      ? const Color(0xffF5FFE1)
+                      : ColorConstants.darkColor2,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Builder(

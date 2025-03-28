@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
@@ -30,62 +31,100 @@ class _SearchScreenState extends State<SearchScreen> {
     final prowatch = context.watch<UserSearchController>();
     final proRead = context.read<UserSearchController>();
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: controller,
-          onChanged: (value) {
-            proRead.searchUser(context: context, keyword: value);
-          },
-          autofocus: true,
-          decoration: InputDecoration(
-              filled: true,
-              hintText: "Search",
-              prefixIcon: Icon(CupertinoIcons.search),
-              fillColor: ColorConstants.greyColor,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(99),
-              )),
+        appBar: AppBar(
+          title: TextField(
+            controller: controller,
+            onChanged: (value) {
+              if (value != null && value.isNotEmpty) {
+                proRead.searchUser(context: context, keyword: value);
+              }
+              if (value == null || value.isEmpty) {
+                proRead.reslust = null;
+                proRead.notifyListeners();
+              }
+            },
+            autofocus: true,
+            decoration: InputDecoration(
+                filled: true,
+                hintText: "Search",
+                prefixIcon: Icon(CupertinoIcons.search),
+                fillColor: ColorConstants.greyColor,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(99),
+                )),
+          ),
         ),
-      ),
-      body: ListView.builder(
-          itemCount: prowatch.reslust?.response?.users?.length ?? 0,
-          itemBuilder: (context, index) {
+        body: Builder(
+          builder: (context) {
             final users = prowatch.reslust?.response!.users;
-            final user = prowatch.reslust?.response!.users?[index];
             if (prowatch.isSearchLoading) {
-              return loadingIndicator();
-            } else if (users?.isEmpty ?? true) {
-              return SizedBox();
-            } else if (users?.isNotEmpty ?? true) {
-              return ListTile(
-                onTap: () {
-                  if (widget.toChat) {
-                    AppRoutes.push(
-                        context,
-                        ChatScreen(
-                            imageUrl: user?.profilePicUrl ?? '',
-                            name: user?.username ?? '',
-                            userId: user?.userId ?? ''));
-                  } else {
-                    AppRoutes.push(
-                        context, UserProfileScreen(userId: user?.userId ?? ''));
-                  }
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return Shimmer.fromColors(
+                    child: ListTile(
+                      leading: CircleAvatar(),
+                      title: Container(
+                        height: 16,
+                        width: double.infinity,
+                        color: Colors.white,
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Container(
+                              height: 14, width: 150, color: Colors.white),
+                          SizedBox(height: 4),
+                          Container(
+                              height: 12, width: 100, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                  );
                 },
-                leading: CircleAvatar(
-                  backgroundImage:
-                      AppUtils.getProfile(url: user?.profilePicUrl ?? null),
-                ),
-                title: Text(
-                  user?.username ?? '',
-                  style: StringStyle.normalTextBold(),
-                ),
-                subtitle: Text(user?.userId ?? ''),
               );
+            } else if (prowatch.reslust?.response?.users == null &&
+                controller.text.isNotEmpty) {
+              return Center(
+                child: Text('No user found'),
+              );
+            } else if (users?.isNotEmpty ?? true) {
+              return ListView.builder(
+                  itemCount: prowatch.reslust?.response?.users?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final user = prowatch.reslust?.response?.users?[index];
+                    return ListTile(
+                      onTap: () {
+                        if (widget.toChat) {
+                          AppRoutes.push(
+                              context,
+                              ChatScreen(
+                                  imageUrl: user?.profilePicUrl ?? '',
+                                  name: user?.username ?? '',
+                                  userId: user?.userId ?? ''));
+                        } else {
+                          AppRoutes.push(context,
+                              UserProfileScreen(userId: user?.userId ?? ''));
+                        }
+                      },
+                      leading: CircleAvatar(
+                        backgroundImage: AppUtils.getProfile(
+                            url: user?.profilePicUrl ?? null),
+                      ),
+                      title: Text(
+                        user?.username ?? '',
+                        style: StringStyle.normalTextBold(),
+                      ),
+                      subtitle: Text(user?.userId ?? ''),
+                    );
+                  });
             } else {
               return SizedBox();
             }
-          }),
-    );
+          },
+        ));
   }
 }

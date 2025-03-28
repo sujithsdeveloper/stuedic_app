@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -16,6 +18,7 @@ import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -44,6 +47,8 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
       context
           .read<ProfileController>()
           .getUseGrid(context: context, userID: widget.userId);
+
+      log('isFollowed: ${context.read<ProfileController>().userProfile?.response?.isFollowed}');
     });
   }
 
@@ -65,8 +70,7 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
             actions: [
               IconButton(
                 onPressed: () {
-                  AppRoutes.push(
-                      context, CollegeUserProfileScreen(userId: '68806004'));
+                  AppRoutes.push(context, NotificationScreen());
                 },
                 icon: Icon(HugeIcons.strokeRoundedNotification01),
               ),
@@ -139,19 +143,30 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
                                       },
                                     ),
                                     GradientButton(
-                                      outline: user?.isFollowed ?? false,
-                                      onTap: () {
-                                        // context
-                                        //     .read<ProfileController>()
-                                        //     .followUser(
-                                        //         context: context,
-                                        //         userId: user?.userId ?? '');
-                                      },
-                                      height: 48,
-                                      width: 120,
-                                      isColored: !(user?.isFollowed ?? false),
-                                      label: 'Follow',
-                                    ),
+                                        outline: user?.isFollowed ?? false,
+                                        onTap: () {
+                                          if (user?.isFollowed ?? false) {
+                                            context
+                                                .read<
+                                                    PostInteractionController>()
+                                                .unfollowUser(
+                                                    userId: user?.userId ?? '',
+                                                    context: context);
+                                          } else {
+                                            context
+                                                .read<
+                                                    PostInteractionController>()
+                                                .followUser(
+                                                    userId: user?.userId ?? '',
+                                                    context: context);
+                                          }
+                                        },
+                                        height: 48,
+                                        width: 120,
+                                        isColored: !(user?.isFollowed ?? false),
+                                        label: user?.isFollowed ?? false
+                                            ? 'Unfollow'
+                                            : 'Follow'),
                                   ],
                                 )
                               ],

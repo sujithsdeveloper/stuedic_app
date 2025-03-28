@@ -61,12 +61,12 @@ class _ShortsScreenState extends State<ShortsScreen> {
                       title: Text(
                         reel?.username ?? 'unknown user',
                         style: StringStyle.normalTextBold(
-                            color: Colors.white, size: 12),
+                            size: 12),
                       ),
                       subtitle: Text(
                         reel?.userId ?? '',
                         style: StringStyle.normalText(
-                            color: Colors.white, size: 10),
+                             size: 10),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -105,7 +105,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                       style:
-                          StringStyle.normalText(color: Colors.white, size: 12),
+                          StringStyle.normalText( size: 12),
                     ),
                   ),
                 ],

@@ -51,7 +51,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         appBar: AppBar(
           title: Text(
             'OTP',
-            style: StringStyle.appBarText(),
+            style: StringStyle.appBarText(context: context),
           ),
           centerTitle: true,
           actions: [

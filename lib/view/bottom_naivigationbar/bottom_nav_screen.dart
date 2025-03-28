@@ -16,7 +16,7 @@ import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_scree
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile_screen_student.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
-import 'package:stuedic_app/view/screens/college_profile_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/college_profile_screen.dart';
 import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
@@ -104,14 +104,11 @@ class _BottomNavScreenState extends State<BottomNavScreen>
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
           showSelectedLabels: false,
           onTap: (value) {
             proRead.chnageBottomNav(index: value, context: context);
           },
           currentIndex: proWatch.currentIndex,
-          selectedItemColor: ColorConstants.secondaryColor,
-          unselectedItemColor: Colors.grey,
           elevation: 3,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,

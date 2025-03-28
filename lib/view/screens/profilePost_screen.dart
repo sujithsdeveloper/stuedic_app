@@ -42,7 +42,7 @@ class _ProfilepostScreenState extends State<ProfilepostScreen> {
       appBar: AppBar(
         title: Text(
           'Posts',
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText(context: context),
         ),
       ),
       // body: PostCard(

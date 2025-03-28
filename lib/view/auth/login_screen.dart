@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen>
       appBar: AppBar(
         title: Text(
           'Login',
-          style: StringStyle.appBarText(),
+          style: StringStyle.appBarText(context: context),
         ),
         centerTitle: true,
         actions: [
@@ -218,8 +218,7 @@ class _LoginScreenState extends State<LoginScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Don't have an account?",
-                style: StringStyle.normalText(color: Colors.grey)),
+            Text("Don't have an account?", style: StringStyle.normalText()),
             GestureDetector(
               onTap: () {
                 AppRoutes.pushReplacement(context, RegistrationScreen());

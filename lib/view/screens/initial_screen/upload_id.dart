@@ -165,7 +165,7 @@ class _IDUploadState extends State<IDUpload> {
                     child: Center(
                       child: Text(
                         'Verify',
-                        style: StringStyle.normalText(color: Colors.white),
+                        style: StringStyle.normalText(),
                       ),
                     ),
                   ),

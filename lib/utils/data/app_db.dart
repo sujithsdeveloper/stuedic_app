@@ -3,7 +3,7 @@ import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_s
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile_screen_student.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts_screen.dart';
-import 'package:stuedic_app/view/screens/college_profile_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/college_profile_screen.dart';
 
 // List<Widget> userScreens = [
 //     HomeScreen(),
@@ -20,4 +20,5 @@ import 'package:stuedic_app/view/screens/college_profile_screen.dart';
 //     CollegeProfileScreen()
 //   ];
 
-late PageController HomePagecontroller;
+// late PageController HomePagecontroller;
+

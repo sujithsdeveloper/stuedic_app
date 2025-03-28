@@ -69,7 +69,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
             children: [
               GradientContainer(height: 23, width: 9, verticalGradient: true),
               const SizedBox(width: 9),
-              Text(StringConstants.appName, style: StringStyle.appBarText()),
+              Text(StringConstants.appName,
+                  style: StringStyle.appBarText(context: context)),
             ],
           ),
         ),
@@ -89,7 +90,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             const SizedBox(height: 20),
                             ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
-                              
                               shrinkWrap: true,
                               itemCount: chatProWatch.usersList.length,
                               itemBuilder: (context, index) {

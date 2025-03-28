@@ -52,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             SliverAppBar(
               floating: true,
-              backgroundColor: Colors.white,
               elevation: 0,
               title: Row(
                 children: [
@@ -60,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 23, width: 9, verticalGradient: true),
                   const SizedBox(width: 9),
                   Text(StringConstants.appName,
-                      style: StringStyle.appBarText()),
+                      style: StringStyle.appBarText(context: context)),
                 ],
               ),
               actions: [
@@ -97,18 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Grey Background Container
-            SliverToBoxAdapter(
-              child: Container(
-                color: Colors.grey[200], // Grey background
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10), // Top Padding
-                  ],
-                ),
-              ),
-            ),
-
             // Post List with Grey Background
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -120,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   // log('Home isbookmarked: ${item?.isBookmarked}');
 
                   return Container(
-                    color: ColorConstants.greyColor,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 8),

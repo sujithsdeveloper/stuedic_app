@@ -20,9 +20,9 @@ dynamic commentBottomSheet(
       isScrollControlled: true,
       builder: (context) => StatefulBuilder(
             builder: (context, setState) => DraggableScrollableSheet(
-              initialChildSize: 0.95,
+              initialChildSize: 1,
               minChildSize: 0.4,
-              maxChildSize: 0.95,
+              maxChildSize: 1,
               builder: (context, scrollController) {
                 // log('postID $postId');
                 return SafeArea(

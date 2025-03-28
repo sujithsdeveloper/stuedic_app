@@ -66,7 +66,7 @@ class _SetupScreenState extends State<SetupScreen> {
           centerTitle: true,
           title: Text(
             'Setup Account',
-            style: StringStyle.appBarText(),
+            style: StringStyle.appBarText(context: context),
           ),
         ),
         body: Column(

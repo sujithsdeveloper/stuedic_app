@@ -53,7 +53,6 @@ class _CreatePostScreenState extends State<CreatePostScreen>
         return true;
       },
       child: Scaffold(
-        backgroundColor: ColorConstants.greyColor,
         appBar: AppBar(
           title: Row(
             spacing: 9,
@@ -63,7 +62,8 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                 width: 9,
                 verticalGradient: true,
               ),
-              Text(StringConstants.appName, style: StringStyle.appBarText()),
+              Text(StringConstants.appName,
+                  style: StringStyle.appBarText(context: context)),
             ],
           ),
           actions: [
@@ -102,7 +102,6 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
@@ -158,7 +157,6 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: TabBarView(
