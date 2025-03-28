@@ -18,6 +18,7 @@ import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
+import 'package:stuedic_app/controller/video/video_trim_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
@@ -37,16 +38,18 @@ Future<void> main() async {
 
   FlutterNativeSplash.preserve(
       widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
-
   String? token = await AppUtils.getToken();
-  runApp(MyApp(
-    token: token,
-  ));
+  ThemeMode themeMode =await AppUtils.getCurrentTheme();
+  runApp( MyApp(
+      token: token,
+      themeMode: themeMode,
+    ),);
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key, this.token});
+  const MyApp({super.key, this.token,  this.themeMode = ThemeMode.light});
   final String? token;
+  final ThemeMode themeMode;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -80,14 +83,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -95,11 +96,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => NotificationController()),
         ChangeNotifierProvider(create: (context) => ImageEditController()),
         ChangeNotifierProvider(create: (context) => DiscoverController()),
+        ChangeNotifierProvider(create: (context) => VideoTrimController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system,
+          themeMode: widget.themeMode,
           debugShowCheckedModeBanner: false,
           home: (widget.token == null || widget.token!.isEmpty)
               ? LoginScreen()

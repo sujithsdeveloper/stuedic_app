@@ -199,4 +199,22 @@ class AppUtils {
   static bool isDarkTheme(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark;
   }
+
+  static Future<void> saveTheme(
+      {required BuildContext context, required String theme}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.Current_Theme, theme);
+  }
+
+  static Future<ThemeMode> getCurrentTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? theme = prefs.getString(StringConstants.Current_Theme);
+    if (theme == 'dark') {
+      return ThemeMode.dark;
+    } else if (theme == 'light') {
+      return ThemeMode.light;
+    } else {
+      return ThemeMode.light;
+    }
+  }
 }

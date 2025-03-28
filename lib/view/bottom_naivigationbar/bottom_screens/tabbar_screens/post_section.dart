@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -7,6 +6,7 @@ import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
+import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
@@ -121,6 +121,8 @@ class PostSection extends StatelessWidget {
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
                         if (proWatchAsset.pickedImage == null) {
+                          errorSnackbar(
+                              label: 'Please upload a image', context: context);
                           return;
                         }
                         await proRead.uploadPost(

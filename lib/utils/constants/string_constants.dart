@@ -16,6 +16,9 @@ class StringConstants {
   static const String comment= 'comment';
   static const currentUserID = 'currentUserID';
   static const String wrong = 'something went wrong';
+  static const String Current_Theme = 'Current_Theme';
+  static const String dark = 'dark';
+  static const String light = 'light';
 
    static   List<String> clubOptions = [
       'NSS',
