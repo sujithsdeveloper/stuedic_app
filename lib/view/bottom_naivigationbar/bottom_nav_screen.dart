@@ -18,6 +18,7 @@ import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts_scr
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/college_profile_screen.dart';
 import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
+import 'package:stuedic_app/view/screens/story_asset_picker_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -152,8 +153,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<AppContoller>();
     List<Widget> pages = [
-      PickMediaScreen(
-        controller: pagecontroller,
+      AssetPickerPage(
+        pageController: pagecontroller,
       ),
       BottomNavScreen(
         controller: pagecontroller,

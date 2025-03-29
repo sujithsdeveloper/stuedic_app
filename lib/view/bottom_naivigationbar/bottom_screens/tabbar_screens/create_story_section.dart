@@ -4,6 +4,7 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
+import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
@@ -11,6 +12,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
+import 'package:stuedic_app/view/screens/story_asset_picker_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
@@ -65,15 +67,7 @@ class CreateStorySection extends StatelessWidget {
                               return GradientButton(
                                 label: 'Upload Media',
                                 onTap: () async {
-                                  mediaBottomSheet(
-                                    context: context,
-                                    onCameraTap: onCameraTap,
-                                    onGalleryTap: onGalleryTap,
-                                  );
-
-                                  // await proReadAsset.pickImage(
-                                  //     source: ImageSource.gallery,
-                                  //     context: context);
+                                  AppRoutes.push(context, AssetPickerPage());
                                 },
                               );
                             } else {

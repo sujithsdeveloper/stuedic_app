@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
@@ -32,22 +32,25 @@ import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
+import 'package:stuedic_app/view/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  FlutterNativeSplash.preserve(
-      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  // FlutterNativeSplash.preserve(
+  //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   String? token = await AppUtils.getToken();
-  ThemeMode themeMode =await AppUtils.getCurrentTheme();
-  runApp( MyApp(
+  ThemeMode themeMode = await AppUtils.getCurrentTheme();
+  runApp(
+    MyApp(
       token: token,
       themeMode: themeMode,
-    ),);
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key, this.token,  this.themeMode = ThemeMode.light});
+  const MyApp({super.key, this.token, this.themeMode = ThemeMode.light});
   final String? token;
   final ThemeMode themeMode;
 
@@ -60,11 +63,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     log(widget.token.toString());
-    Future.delayed(const Duration(seconds: 2)).then(
-      (value) {
-        FlutterNativeSplash.remove();
-      },
-    );
+    // Future.delayed(const Duration(seconds: 2)).then(
+    //   (value) {
+    //     FlutterNativeSplash.remove();
+    //   },
+    // );
   }
 
   @override
@@ -83,12 +86,14 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(
+            create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(
+            create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -103,9 +108,7 @@ class _MyAppState extends State<MyApp> {
           darkTheme: AppTheme.darkTheme,
           themeMode: widget.themeMode,
           debugShowCheckedModeBanner: false,
-          home: (widget.token == null || widget.token!.isEmpty)
-              ? LoginScreen()
-              : HomePage()),
+          home: SplashScreen(token: widget.token!)),
     );
   }
 }

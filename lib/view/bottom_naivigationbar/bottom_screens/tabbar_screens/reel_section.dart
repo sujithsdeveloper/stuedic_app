@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -79,12 +78,7 @@ class _ReelSectionState extends State<ReelSection> {
                           child: GradientButton(
                             label: 'Upload video',
                             onTap: () {
-                              mediaBottomSheet(
-                                isVideo: true,
-                                context: context,
-                                onCameraTap: () async {},
-                                onGalleryTap: () async {},
-                              );
+                             
                             },
                           ),
                         ),

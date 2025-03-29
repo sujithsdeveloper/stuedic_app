@@ -6,19 +6,22 @@ class GradientContainer extends StatelessWidget {
       {super.key,
       required this.height,
       required this.width,
-      this.verticalGradient = false});
+      this.verticalGradient = false, this.decoration, this.child});
   final double height;
   final double width;
   final bool verticalGradient;
+  final BoxDecoration? decoration;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(
+      child: child,
+      decoration:decoration==null? BoxDecoration(
           gradient: verticalGradient
               ? ColorConstants.primaryGradientVertical
-              : ColorConstants.primaryGradientHorizontal),
+              : ColorConstants.primaryGradientHorizontal) :decoration
     );
   }
 }
