@@ -4,9 +4,15 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
+    listTileTheme: ListTileThemeData(
+        iconColor: ColorConstants.secondaryColor,
+        textColor: ColorConstants.secondaryColor),
     scaffoldBackgroundColor: Colors.white,
     primaryColor: Colors.white,
     appBarTheme: AppBarTheme(
+      iconTheme: IconThemeData(color: ColorConstants.secondaryColor),
+      titleTextStyle: TextStyle(color: ColorConstants.secondaryColor),
+      actionsIconTheme: IconThemeData(color: ColorConstants.secondaryColor),
       backgroundColor: Colors.white,
       elevation: 0,
       surfaceTintColor: Colors.white,
@@ -17,7 +23,6 @@ class AppTheme {
         selectedItemColor: ColorConstants.secondaryColor,
         unselectedItemColor: Colors.grey),
     textTheme: lightTextTheme(),
-    
     iconTheme: IconThemeData(color: ColorConstants.secondaryColor),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -27,6 +32,8 @@ class AppTheme {
         ),
       ),
     ),
+    inputDecorationTheme:
+        InputDecorationTheme(fillColor: ColorConstants.greyColor),
     dropdownMenuTheme: DropdownMenuThemeData(
         menuStyle: MenuStyle(
           backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -39,16 +46,22 @@ class AppTheme {
         selectionHandleColor: ColorConstants.secondaryColor),
   );
 
-
   static ThemeData darkTheme = ThemeData(
+    listTileTheme:
+        ListTileThemeData(iconColor: Colors.white, textColor: Colors.white),
     useMaterial3: true,
     scaffoldBackgroundColor: ColorConstants.darkColor,
     primaryColor: ColorConstants.darkColor,
     appBarTheme: AppBarTheme(
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(color: Colors.white),
+      actionsIconTheme: IconThemeData(color: Colors.white),
       backgroundColor: ColorConstants.darkColor,
       elevation: 0,
       scrolledUnderElevation: 0,
     ),
+    inputDecorationTheme:
+        InputDecorationTheme(fillColor: ColorConstants.darkColor2),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.white,
@@ -64,6 +77,8 @@ class AppTheme {
         selectedItemColor: ColorConstants.darkColor2,
         unselectedItemColor: Colors.grey),
     dropdownMenuTheme: DropdownMenuThemeData(
+        inputDecorationTheme:
+            InputDecorationTheme(hintStyle: TextStyle(color: Colors.white)),
         menuStyle: MenuStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.white),
         ),
@@ -79,86 +94,85 @@ class AppTheme {
     ),
   );
 
-
   static TextTheme darkTextTheme() {
     return TextTheme(
-    bodyLarge: TextStyle(
-      color: Colors.white,
-      fontFamily: 'Calistoga',
-    ),
-    bodyMedium: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    bodySmall: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    titleLarge: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    titleMedium: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    titleSmall: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    labelLarge: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    labelMedium: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-    labelSmall: TextStyle(
-      color: Colors.white,
-      fontFamily: 'latoRegular',
-    ),
-  );
+      bodyLarge: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      bodySmall: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      titleLarge: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      titleMedium: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      titleSmall: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      labelLarge: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      labelMedium: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+      labelSmall: TextStyle(
+        color: Colors.white,
+        fontFamily: 'latoRegular',
+      ),
+    );
   }
 
-    static TextTheme lightTextTheme() {
+  static TextTheme lightTextTheme() {
     return TextTheme(
-    bodyLarge: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    bodyMedium: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    bodySmall: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    titleLarge: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    titleMedium: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    titleSmall: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    labelLarge: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    labelMedium: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-    labelSmall: TextStyle(
-      color: ColorConstants.secondaryColor,
-      fontFamily: 'latoRegular',
-    ),
-  );
+      bodyLarge: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      bodyMedium: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      bodySmall: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      titleLarge: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      titleMedium: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      titleSmall: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      labelLarge: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      labelMedium: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+      labelSmall: TextStyle(
+        color: ColorConstants.secondaryColor,
+        fontFamily: 'latoRegular',
+      ),
+    );
   }
 }

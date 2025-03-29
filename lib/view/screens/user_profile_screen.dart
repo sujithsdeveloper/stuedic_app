@@ -63,10 +63,9 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
-            backgroundColor: Colors.white,
             pinned: true,
             floating: true,
-            expandedHeight: context.screenHeight / 2.2,
+            expandedHeight: context.screenHeight * 0.5,
             actions: [
               IconButton(
                 onPressed: () {

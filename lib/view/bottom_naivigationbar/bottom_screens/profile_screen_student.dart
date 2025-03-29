@@ -17,6 +17,7 @@ import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
+import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
 
@@ -28,12 +29,14 @@ class ProfileScreenStudent extends StatefulWidget {
 }
 
 class _ProfileScreenStudentState extends State<ProfileScreenStudent>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
   late TabController _tabController;
+  late bool isDarkTheme;
 
   @override
   void initState() {
     super.initState();
+    checkTheme();
     _tabController = TabController(length: 4, vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -41,15 +44,27 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
       context.read<ProfileController>().getCurrentUserGrid(context: context);
     });
   }
+  @override
+  bool get wantKeepAlive => true;
+  Future<void> checkTheme() async {
+    ThemeMode theme = await AppUtils.getCurrentTheme();
+    if (theme == ThemeMode.light) {
+      isDarkTheme = false;
+    } else {
+      isDarkTheme = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final userDataProviderWatch = context.watch<ProfileController>();
     final postInteractionProviderWatch =
         context.watch<PostInteractionController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
-    final photoGrid =
-        userDataProviderWatch.currentUserProfileGrid?.response?.posts;
+    final photoGrid = userDataProviderWatch
+        .currentUserProfileGrid?.response?.posts?.reversed
+        .toList();
     final bookmarkGrid =
         postInteractionProviderWatch.getBookamark?.response?.bookmarks;
 
@@ -57,7 +72,6 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
-            backgroundColor: Colors.white,
             pinned: true,
             floating: true,
             expandedHeight: context.screenHeight * 0.5,
@@ -116,6 +130,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                   ],
                                 ),
                                 Row(
+                                  spacing: 20,
                                   children: [
                                     ProfileActionButton(
                                       iconData: CupertinoIcons.doc_text,
@@ -173,7 +188,8 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             counts(
-                                count: AppUtils.formatCounts(2000),
+                                count:
+                                    AppUtils.formatCounts(user?.postCount ?? 0),
                                 label: "Posts"),
                             counts(
                                 count: AppUtils.formatCounts(
@@ -184,7 +200,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                                     user?.followersCount ?? 0),
                                 label: "Followers"),
                             counts(
-                                count: AppUtils.formatCounts(20000000),
+                                count: AppUtils.formatCounts(0),
                                 label: "Likes"),
                           ],
                         ),
@@ -197,7 +213,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(kToolbarHeight),
               child: Container(
-                color: Colors.white, // Set the background color to white
+                color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
                 child: TabBar(
                   labelColor: ColorConstants.secondaryColor,
                   indicatorColor: ColorConstants.secondaryColor,
@@ -243,13 +259,22 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4),
                 itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xffF5FFBB),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                photoGrid?[index].postContentUrl ?? ''))),
+                  return GestureDetector(
+                    onTap: () {
+                      AppRoutes.push(
+                          context,
+                          SinglepostScreen(
+                              postID: photoGrid?[index]?.postId ?? '',
+                              userID: user?.userId ?? ''));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xffF5FFBB),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  photoGrid?[index].postContentUrl ?? ''))),
+                    ),
                   );
                 },
               ),
@@ -282,13 +307,23 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                             crossAxisSpacing: 4),
                         itemBuilder: (context, index) {
                           final bookmarkedItem = bookmarkGrid?[index];
-                          return Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xffF5FFBB),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                        bookmarkedItem?.postContentUrl ?? ''))),
+                          return GestureDetector(
+                            onTap: () {
+                              AppRoutes.push(
+                                  context,
+                                  SinglepostScreen(
+                                      postID: bookmarkedItem?.postId ?? '',
+                                      userID: user?.userId ?? ''));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xffF5FFBB),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          bookmarkedItem?.postContentUrl ??
+                                              ''))),
+                            ),
                           );
                         },
                       );

@@ -18,12 +18,17 @@ class DiscoverScreen extends StatefulWidget {
   _DiscoverScreenState createState() => _DiscoverScreenState();
 }
 
-class _DiscoverScreenState extends State<DiscoverScreen> {
+class _DiscoverScreenState extends State<DiscoverScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final proWatch = context.watch<DiscoverController>();
     final proRead = context.read<DiscoverController>();
     final discoverList = proRead.discoverModel?.response;
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text(

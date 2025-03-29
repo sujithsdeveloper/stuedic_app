@@ -191,15 +191,19 @@ dynamic commentBottomSheet(
                               const SizedBox(width: 8),
                               GradientCircleAvathar(
                                 onTap: () async {
-                                  await proReadInteraction.addComment(
-                                      postId: postID,
-                                      comment: commentController.text,
-                                      context: context);
-
-                                  commentController.clear();
-
-                                  // await proReadInteraction.getComment(
-                                  //     context: context, postId: postID);
+                                  await proReadInteraction
+                                      .addComment(
+                                          postId: postID,
+                                          comment: commentController.text,
+                                          context: context)
+                                      .then(
+                                    (value) {
+                                      commentController.clear();
+                                      setState(
+                                        () {},
+                                      );
+                                    },
+                                  );
                                 },
                                 radius: 30,
                                 child: const Icon(

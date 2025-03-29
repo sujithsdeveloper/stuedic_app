@@ -11,6 +11,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
@@ -22,7 +23,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   late String currentUserId;
   @override
   void initState() {
@@ -37,7 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final proReadHomeFeed = context.read<HomefeedController>();
     final proWatchHomeFeed = context.watch<HomefeedController>();
     final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
@@ -59,25 +65,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 23, width: 9, verticalGradient: true),
                   const SizedBox(width: 9),
                   Text(StringConstants.appName,
-                      style: StringStyle.appBarText(context: context)),
+                      style: TextStyle(
+                          fontFamily: 'Calistoga',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700)),
                 ],
               ),
               actions: [
                 IconButton(
-                  icon: Icon(HugeIcons.strokeRoundedNotification01,
-                      color: Colors.black),
+                  icon: Icon(
+                    HugeIcons.strokeRoundedNotification01,
+                  ),
                   onPressed: () {
                     AppRoutes.push(context, NotificationScreen());
                   },
                 ),
                 IconButton(
-                  icon: Icon(HugeIcons.strokeRoundedMessage01,
-                      color: Colors.black),
+                  icon: Icon(
+                    HugeIcons.strokeRoundedMessage01,
+                  ),
                   onPressed: () {
                     // AppRoutes.push(context, ChatListScreen());
                     widget.controller.nextPage(
                         duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInCirc);
+                        curve: Curves.easeIn);
                   },
                 ),
               ],

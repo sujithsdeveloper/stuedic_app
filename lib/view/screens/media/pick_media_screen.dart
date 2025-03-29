@@ -12,38 +12,40 @@ import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:video_player/video_player.dart';
 
 class PickMediaScreen extends StatefulWidget {
-  const PickMediaScreen({super.key, required this.controller});
-  final PageController controller;
+  const PickMediaScreen({super.key, this.controller});
+  final PageController? controller;
   @override
   State<PickMediaScreen> createState() => _PickMediaScreenState();
 }
 
-class _PickMediaScreenState extends State<PickMediaScreen>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _PickMediaScreenState extends State<PickMediaScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<MediaController>().fetchMedia());
+    log('inistate');
+    context.read<MediaController>().fetchMedia();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final proRead = context.read<MediaController>();
     final proWatch = context.watch<MediaController>();
 
     return WillPopScope(
       onWillPop: () async {
         proWatch.selectedMediaList.clear();
-        return await proRead.onPop(widget.controller);
+        return await proRead.onPop(widget.controller!);
       },
       child: Scaffold(
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () async {
+          //     await context.read<MediaController>().fetchMedia();
+          //   },
+          // ),
           appBar: AppBar(
             leading: IconButton(
                 onPressed: () {
-                  widget.controller.nextPage(
+                  widget.controller!.nextPage(
                       duration: Duration(milliseconds: 300),
                       curve: Curves.easeIn);
                 },
@@ -209,46 +211,29 @@ class ImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 300,
-          width: double.infinity,
-          color: Colors.white12,
-          child: proWatch.selectedMedia != null
-              ? FutureBuilder<File?>(
-                  future: proWatch.selectedMedia!.file,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox();
-                    }
-                    if (snapshot.hasData && snapshot.data != null) {
-                      return Image.file(
-                        snapshot.data!,
-                        fit: proWatch.isCover ? BoxFit.cover : BoxFit.contain,
-                      );
-                    } else {
-                      return const Icon(Icons.image_not_supported,
-                          size: 50, color: Colors.grey);
-                    }
-                  },
-                )
-              : const Center(child: Text("No media selected")),
-        ),
-        Positioned(
-          bottom: 5,
-          left: 5,
-          child: GestureDetector(
-            onTap: () {
-              proRead.changeImageFit();
-            },
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(Icons.fit_screen),
-            ),
-          ),
-        )
-      ],
+    return Container(
+      height: 300,
+      width: double.infinity,
+      color: Colors.white12,
+      child: proWatch.selectedMedia != null
+          ? FutureBuilder<File?>(
+              future: proWatch.selectedMedia!.file,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox();
+                }
+                if (snapshot.hasData && snapshot.data != null) {
+                  return Image.file(
+                    snapshot.data!,
+                    fit: BoxFit.contain,
+                  );
+                } else {
+                  return const Icon(Icons.image_not_supported,
+                      size: 50, color: Colors.grey);
+                }
+              },
+            )
+          : const Center(child: Text("No media selected")),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
@@ -78,33 +79,9 @@ class _StorySectionState extends State<StorySection> {
                       right: 3,
                       child: GestureDetector(
                         onTap: () {
-                          // FlutterBetterPicker(
-                          //         // appbarColor: Colors.white,
-                          //         confirmText: 'Continue',
-                          //         textColor: ColorConstants.secondaryColor,
-                          //         title: Text('Add Story'),
-                          //         backgroundDropDownColor:
-                          //             ColorConstants.greyColor,
-                          //         backgroundColor: Colors.white,
-                          //         backBottomColor:
-                          //             ColorConstants.secondaryColor,
-
-                          //         maxCount: 1,
-                          //         requestType: MyRequestType.all)
-                          //     .instagram(context)
-                          //     .then(
-                          //   (value) {
-                          //     setState(() {
-                          //       selectedAssetList = value;
-                          //     });
-                          //   },
-                          // );
-
-                          AppRoutes.push(
-                              context,
-                              PickMediaScreen(
-                                controller: widget.controller,
-                              ));
+                          widget.controller.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn);
                         },
                         child: GradientCircleAvathar(
                           radius: 20,

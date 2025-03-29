@@ -197,7 +197,8 @@ class AppUtils {
   }
 
   static bool isDarkTheme(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context).brightness == Brightness.dark;
+    return theme;
   }
 
   static Future<void> saveTheme(

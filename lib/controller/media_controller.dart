@@ -16,29 +16,25 @@ class MediaController extends ChangeNotifier {
 
   Map<AssetEntity, Uint8List?> mediaThumbnails = {};
   Future<void> fetchMedia() async {
+    log('function called');
     List<AssetPathEntity> fetchedAlbums = await PhotoManager.getAssetPathList();
 
     if (fetchedAlbums.isNotEmpty) {
       albums = fetchedAlbums;
 
-      // Set default album if none is selected
       if (selectedAlbum == null) {
         selectedAlbum = albums.first;
       }
 
       notifyListeners();
+    } else {
+      log('Alubum is empty');
     }
   }
 
-  bool isCover = false;
-  changeImageFit() {
-    isCover = !isCover;
 
-    notifyListeners();
-  }
 
   Future<void> toggleSelection(AssetEntity media, int index) async {
-    isCover = false;
     if (selectedMedia == media) {
     } else {
       selectedMedia = media;

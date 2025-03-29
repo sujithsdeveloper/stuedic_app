@@ -9,6 +9,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/create_story_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
@@ -183,7 +184,22 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                                 },
                               ),
                               ReelSection(),
-                              Center(child: Text("Create a Story")),
+                              CreateStorySection(
+                                  onGalleryTap: () async {
+                                       await context
+                                      .read<AssetPickerController>()
+                                      .pickImage(
+                                        
+                                          source: ImageSource.gallery,
+                                          context: context);
+                                  },
+                                  onCameraTap: () async {
+                                       await context
+                                      .read<AssetPickerController>()
+                                      .pickImage(
+                                          source: ImageSource.camera,
+                                          context: context);
+                                  },)
                             ],
                           ),
                         ),

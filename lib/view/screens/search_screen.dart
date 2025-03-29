@@ -8,6 +8,7 @@ import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
@@ -47,8 +48,10 @@ class _SearchScreenState extends State<SearchScreen> {
             decoration: InputDecoration(
                 filled: true,
                 hintText: "Search",
-                prefixIcon: Icon(CupertinoIcons.search),
-                fillColor: ColorConstants.greyColor,
+                prefixIcon: Icon(
+                  CupertinoIcons.search,
+                  size: 20,
+                ),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(99),
@@ -61,29 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
             if (prowatch.isSearchLoading) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  return Shimmer.fromColors(
-                    child: ListTile(
-                      leading: CircleAvatar(),
-                      title: Container(
-                        height: 16,
-                        width: double.infinity,
-                        color: Colors.white,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 8),
-                          Container(
-                              height: 14, width: 150, color: Colors.white),
-                          SizedBox(height: 4),
-                          Container(
-                              height: 12, width: 100, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                  );
+                  return searchShimmer();
                 },
               );
             } else if (prowatch.reslust?.response?.users == null &&

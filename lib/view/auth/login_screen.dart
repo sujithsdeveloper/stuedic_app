@@ -58,7 +58,6 @@ class _LoginScreenState extends State<LoginScreen>
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.info))
         ],
       ),
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(

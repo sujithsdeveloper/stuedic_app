@@ -62,9 +62,24 @@ class ShimmersItems {
     );
   }
 
-
+  static Shimmer postShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20), // Optional: Smooth edges
+          child: Container(
+            width: double.infinity,
+            height: 450,
+            color: Colors.grey[300], // Fallback color for better visibility
+          ),
+        ),
+      ),
+    );
+  }
 }
-
 
 class UserProfileShimmer extends StatelessWidget {
   const UserProfileShimmer({Key? key}) : super(key: key);
@@ -116,7 +131,8 @@ class UserProfileShimmer extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: List.generate(
                               4,
-                              (index) => shimmerContainer(height: 20, width: 60),
+                              (index) =>
+                                  shimmerContainer(height: 20, width: 60),
                             ),
                           ),
                         ],
@@ -138,7 +154,8 @@ class UserProfileShimmer extends StatelessWidget {
             crossAxisSpacing: 8,
             itemCount: 6,
             itemBuilder: (context, index) {
-              return shimmerContainer(height: (index % 3 == 0) ? 200.0 : 300.0,width: 20);
+              return shimmerContainer(
+                  height: (index % 3 == 0) ? 200.0 : 300.0, width: 20);
             },
           ),
         ),
@@ -169,6 +186,37 @@ class UserProfileShimmer extends StatelessWidget {
         radius: radius,
         backgroundColor: Colors.white,
       ),
+    );
+  }
+}
+
+class searchShimmer extends StatelessWidget {
+  const searchShimmer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      child: ListTile(
+        leading: CircleAvatar(),
+        title: Container(
+          height: 16,
+          width: double.infinity,
+          color: Colors.white,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8),
+            Container(height: 14, width: 150, color: Colors.white),
+            SizedBox(height: 4),
+            Container(height: 12, width: 100, color: Colors.white),
+          ],
+        ),
+      ),
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
     );
   }
 }

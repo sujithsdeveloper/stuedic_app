@@ -46,17 +46,13 @@ class _RegistrationScreenState extends State<RegistrationScreen>
       appBar: AppBar(
         title: Text(
           'Register',
-          style: StringStyle.appBarText( 
-            context: 
-            context
-          ),
+          style: StringStyle.appBarText(context: context),
         ),
         centerTitle: true,
         actions: [
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.info))
         ],
       ),
-      backgroundColor: Colors.white,
       body: Form(
         key: key,
         child: Padding(
@@ -77,7 +73,6 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
-                      color: Color(0xffF6F8F9),
                     ),
                     child: TabBar(
                       isScrollable: false,
@@ -172,7 +167,6 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             email: emailController.text, context: context);
                         await AppUtils.saveCredentials(
                             email: emailController.text,
-                          
                             password: confirmPasswordController.text);
                         AppRoutes.push(
                             context,

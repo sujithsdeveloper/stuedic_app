@@ -16,7 +16,7 @@ class GetSinglepostController extends ChangeNotifier {
     await ApiCall.get(
         url: url,
         onSucces: (p0) {
-          // log(p0.body);
+          log(p0.body);
           log(postId);
           singlePostModel = singlePostModelFromJson(p0.body);
           isLoading = false;
@@ -28,5 +28,10 @@ class GetSinglepostController extends ChangeNotifier {
           notifyListeners();
         },
         context: context);
+  }
+
+  void clearData() {
+    singlePostModel = null;
+    notifyListeners();
   }
 }

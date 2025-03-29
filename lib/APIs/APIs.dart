@@ -4,31 +4,41 @@ class APIs {
 
   //auth
   static Uri onBoardUrl = Uri.parse('${baseUrl}api/v1/User/onBoard');
-  static Uri grantAccessTokenUrl = Uri.parse('${baseUrl}api/v1/User/grantAccessToken');
+  static Uri grantAccessTokenUrl =
+      Uri.parse('${baseUrl}api/v1/User/grantAccessToken');
   static Uri loginUrl = Uri.parse('${baseUrl}api/v1/User/login');
   static Uri forgotPasswordUrl = Uri.parse('${baseUrl}api/v1/User/logoutusern');
 
   //post
   static Uri addPostUrl = Uri.parse('${baseUrl}api/v1/Post/addNewPost');
-  static Uri uploadPicForPost = Uri.parse('${baseUrl}api/v1/Post/UploadPicForPost');
+  static Uri uploadPicForPost =
+      Uri.parse('${baseUrl}api/v1/Post/UploadPicForPost');
   static Uri deletePost = Uri.parse('${baseUrl}api/v1/Post/deletePost');
-  static Uri homeFeedAPI = Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=20');
+  static Uri homeFeedAPI =
+      Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=50');
 
   //reel
-  static Uri reelAPI = Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=20&reelonly=true');
-
+  static Uri reelAPI =
+      Uri.parse('${baseUrl}api/v1/Post/homeFeed?page=1&limit=20&reelonly=true');
 
   //profile
-  static Uri profileGridUrl = Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
-  static Uri uploadProfile = Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');
-  static Uri editProfile= Uri.parse('${baseUrl}api/v1/Profile/editUserDetails');
-  static Uri getAllPostsOfUser = Uri.parse('${baseUrl}api/v1/Post/getAllPostsOfUser?userId=');
-  static Uri getUserDetail = Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');
+  static Uri profileGridUrl =
+      Uri.parse('${baseUrl}api/v1/Profile/getProfileGrid');
+  static Uri uploadProfile =
+      Uri.parse('${baseUrl}api/v1/Profile/uploadProfilePic');
+  static Uri editProfile =
+      Uri.parse('${baseUrl}api/v1/Profile/editUserDetails');
+  static Uri getAllPostsOfUser =
+      Uri.parse('${baseUrl}api/v1/Post/getAllPostsOfUser?userId=');
+  static Uri getUserDetail =
+      Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');
   static Uri logoutUser = Uri.parse('${baseUrl}api/v1/User/logoutuser');
 
   //product
-  static Uri addNewProduct = Uri.parse('${baseUrl}api/v1/Marketplace/addNewProduct');
-  static Uri getAllProducts = Uri.parse('${baseUrl}api/v1/Marketplace/getAllProducts');
+  static Uri addNewProduct =
+      Uri.parse('${baseUrl}api/v1/Marketplace/addNewProduct');
+  static Uri getAllProducts =
+      Uri.parse('${baseUrl}api/v1/Marketplace/getAllProducts');
 
   //story
   static Uri addStory = Uri.parse('${baseUrl}api/v1/story/addNewStory');
@@ -37,8 +47,10 @@ class APIs {
   static Uri searchApi = Uri.parse('${baseUrl}api/v1/Search/searchUser');
 
   //Notification
-  static Uri checkNotifications = Uri.parse('${baseUrl}api/v1/Profile/hasNotifications');
-  static Uri getNotification = Uri.parse('${baseUrl}api/v1/Profile/notifications');
+  static Uri checkNotifications =
+      Uri.parse('${baseUrl}api/v1/Profile/hasNotifications');
+  static Uri getNotification =
+      Uri.parse('${baseUrl}api/v1/Profile/notifications');
 
   //bookmark
   static Uri addBookmark = Uri.parse('${baseUrl}api/v1/Post/addBookmark');
@@ -52,11 +64,9 @@ class APIs {
   static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');
 
 //Discover
-  static Uri discover= Uri.parse('${baseUrl}api/v1/Post/discover');
+  static Uri discover = Uri.parse('${baseUrl}api/v1/Post/discover');
 
   //OTP
   static Uri getOtp = Uri.parse('${baseUrl}api/v1/auth/generateOtp');
   static Uri checkOtp = Uri.parse('${baseUrl}api/v1/auth/verifyOtp');
-
-
 }

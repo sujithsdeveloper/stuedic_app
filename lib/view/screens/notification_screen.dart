@@ -92,6 +92,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               AppRoutes.push(
                                   context,
                                   SinglepostScreen(
+                                    userID: notification?.userId.toString()??'',
                                       postID: notification?.postId.toString() ??
                                           ''));
                             },

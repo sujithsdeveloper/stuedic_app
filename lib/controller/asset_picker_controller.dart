@@ -78,6 +78,7 @@ class AssetPickerController extends ChangeNotifier {
   }
 
   Future<void> pickImage(
+
       {required ImageSource source, required BuildContext context}) async {
     isLoading = true;
     notifyListeners();
@@ -85,7 +86,7 @@ class AssetPickerController extends ChangeNotifier {
     ImagePicker picker = ImagePicker();
     ImageCropper cropper = ImageCropper();
 
-    final image = await picker.pickImage(source: source);
+    final image = await picker.pickImage(source: source,);
     if (image != null) {
       log('Picked image path: ${image.path}');
 

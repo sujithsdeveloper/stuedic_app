@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
 class StringStyle {
   static TextStyle appBarText(
       {double size = 18, required BuildContext context}) {
-    bool isDarktheme = Theme.of(context).brightness == Brightness.dark;
+    bool isDarktheme = AppUtils.isDarkTheme(context);
     return TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -32,8 +33,7 @@ class StringStyle {
           fontWeight: FontWeight.bold);
 
   static TextStyle topHeading({double size = 45}) {
-    return TextStyle(
-        fontSize: size, fontFamily: 'lato', fontWeight: FontWeight.bold);
+    return TextStyle(fontSize: size, fontWeight: FontWeight.bold);
   }
 
   static TextStyle greyText({double size = 10, bool isBold = false}) {

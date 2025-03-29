@@ -71,7 +71,6 @@ class _PostCardState extends State<PostCard>
 
   @override
   Widget build(BuildContext context) {
-    // log('post card isBookmarked: ${widget.isBookmarked}');
     final commentController = TextEditingController();
     final proRead = context.read<AppContoller>();
     final proWatch = context.watch<AppContoller>();
@@ -149,7 +148,7 @@ class _PostCardState extends State<PostCard>
                           imageUrl: widget.mediaUrl,
                           username: widget.name);
                     },
-                    icon: Icon(Icons.more_horiz, color: Colors.black),
+                    icon: Icon(Icons.more_horiz),
                   )
                 ],
               ),
@@ -169,36 +168,44 @@ class _PostCardState extends State<PostCard>
                         child: Stack(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return Image.network(
-                                    widget.mediaUrl,
-                                    fit: BoxFit
-                                        .contain, // Ensures the image fits while maintaining aspect ratio
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return FittedBox(
-                                          fit: BoxFit.contain,
-                                          child: child,
-                                        );
-                                      } else {
-                                        return Shimmer.fromColors(
-                                          child: Container(
-                                            height: 400,
-                                            width: double.infinity,
-                                            color: Colors.white,
-                                          ),
-                                          baseColor: Colors.grey[300]!,
-                                          highlightColor: Colors.grey[100]!,
-                                        );
-                                      }
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
+                                borderRadius: BorderRadius.circular(20),
+                                child: Builder(
+                                  builder: (context) {
+                                    if (widget.mediaUrl == null ||
+                                        widget.mediaUrl.isEmpty) {
+                                      return Container(
+                                        height: 400,
+                                        width: double.infinity,
+                                        color: Colors.grey,
+                                      );
+                                    } else {
+                                      return Image.network(
+                                        widget.mediaUrl,
+                                        fit: BoxFit
+                                            .contain, // Ensures the image fits while maintaining aspect ratio
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return FittedBox(
+                                              fit: BoxFit.contain,
+                                              child: child,
+                                            );
+                                          } else {
+                                            return Shimmer.fromColors(
+                                              child: Container(
+                                                height: 400,
+                                                width: double.infinity,
+                                                color: Colors.white,
+                                              ),
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.grey[100]!,
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  },
+                                )),
                             Positioned(
                               bottom: 0,
                               top: 0,
@@ -326,8 +333,9 @@ class _PostCardState extends State<PostCard>
                     child: Row(
                       spacing: 5,
                       children: [
-                        Icon(HugeIcons.strokeRoundedMessageMultiple01,
-                            color: Colors.black),
+                        Icon(
+                          HugeIcons.strokeRoundedMessageMultiple01,
+                        ),
                         Text(
                           widget.commentCount ?? 'No',
                           style: StringStyle.smallText(isBold: true),
@@ -344,8 +352,9 @@ class _PostCardState extends State<PostCard>
                     onPressed: () {
                       shareBottomSheet(context);
                     },
-                    icon: Icon(HugeIcons.strokeRoundedShare05,
-                        color: Colors.black),
+                    icon: Icon(
+                      HugeIcons.strokeRoundedShare05,
+                    ),
                   ),
                   Consumer<PostInteractionController>(
                     builder: (context, postInteraction, child) {
@@ -354,7 +363,6 @@ class _PostCardState extends State<PostCard>
                           widget.isBookmarked
                               ? CupertinoIcons.bookmark_fill
                               : CupertinoIcons.bookmark,
-                          color: ColorConstants.secondaryColor,
                         ),
                         onPressed: () {
                           // log('isbookmarked: ${widget.isBookmarked}');

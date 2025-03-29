@@ -14,7 +14,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
-import 'package:stuedic_app/view/screens/media/video_player_screen.dart';
+import 'package:stuedic_app/view/screens/media/trim_video_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 

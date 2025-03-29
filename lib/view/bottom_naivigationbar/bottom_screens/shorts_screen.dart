@@ -16,7 +16,7 @@ class ShortsScreen extends StatefulWidget {
   State<ShortsScreen> createState() => _ShortsScreenState();
 }
 
-class _ShortsScreenState extends State<ShortsScreen> {
+class _ShortsScreenState extends State<ShortsScreen>with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -24,9 +24,11 @@ class _ShortsScreenState extends State<ShortsScreen> {
     context.read<VideoTypeController>().onLongPressEnd();
     context.read<VideoTypeController>().notifyListeners();
   }
-
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final proWatch = context.watch<ShortsController>();
     final proRead = context.read<ShortsController>();
     final reels = proWatch.getShortsModel?.response;

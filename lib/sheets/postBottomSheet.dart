@@ -42,9 +42,32 @@ dynamic postBottomSheet(
                 visible: isRightUser,
                 child: _sheetItems(
                   onTap: () {
-                    context
-                        .read<CrudOperationController>()
-                        .deletePost(context: context, postId: postId);
+                    showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: Text('Do you want to delete your post?'),
+                        content: Text('This action cannot be undone.'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<CrudOperationController>()
+                                  .deletePost(context: context, postId: postId);
+                            },
+                          )
+                        ],
+                      ),
+                    );
                   },
                   iconData: CupertinoIcons.delete,
                   label: 'Delete Post',

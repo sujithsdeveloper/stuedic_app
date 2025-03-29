@@ -51,7 +51,7 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
-    bool isDarkTheme = AppUtils.isDarkTheme(context);
+    // bool isDarkTheme = AppUtils.isDarkTheme(context);
     final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
 
     return Scaffold(
@@ -256,7 +256,7 @@ class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(kToolbarHeight),
                 child: Container(
-                  color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
+                  // color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
                   child: TabBar(
                     controller: _tabController,
                     onTap: (value) {
