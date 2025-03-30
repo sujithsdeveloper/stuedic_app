@@ -110,7 +110,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       activeFillColor: Colors.transparent,
                       inactiveFillColor: Colors.transparent,
                       selectedFillColor: Colors.transparent,
-                      inactiveColor: Colors.white,
+                      inactiveColor: Colors.green,
                       selectedColor: ColorConstants.primaryColor2,
                     ),
                     animationDuration: const Duration(milliseconds: 200),

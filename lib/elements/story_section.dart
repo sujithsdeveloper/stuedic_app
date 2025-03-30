@@ -207,6 +207,7 @@ class _AnimatedGradientRingState extends State<AnimatedGradientRing>
               onTap: widget.onTap,
               child: CircleAvatar(
                   radius: 30,
+                  backgroundColor: ColorConstants.greyColor,
                   backgroundImage: AppUtils.getProfile(url: widget.profileUrl)),
             ),
           ),

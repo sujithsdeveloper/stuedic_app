@@ -8,7 +8,9 @@ class APIs {
       Uri.parse('${baseUrl}api/v1/User/grantAccessToken');
   static Uri loginUrl = Uri.parse('${baseUrl}api/v1/User/login');
   static Uri forgotPasswordUrl = Uri.parse('${baseUrl}api/v1/User/logoutusern');
-
+  //College
+  static Uri getCollegeList = Uri.parse('${baseUrl}api/v1/Collage/list');
+  
   //post
   static Uri addPostUrl = Uri.parse('${baseUrl}api/v1/Post/addNewPost');
   static Uri uploadPicForPost =

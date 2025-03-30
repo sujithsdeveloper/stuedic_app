@@ -162,20 +162,27 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 SizedBox(height: 20),
                 GradientButton(
                     onTap: () async {
-                      if (key.currentState!.validate()) {
-                        context.read<OtpController>().getOTP(
-                            email: emailController.text, context: context);
-                        await AppUtils.saveCredentials(
+                      // if (key.currentState!.validate()) {
+                      //   context.read<OtpController>().getOTP(
+                      //       email: emailController.text, context: context);
+                      //   await AppUtils.saveCredentials(
+                      //       email: emailController.text,
+                      //       password: confirmPasswordController.text);
+                      //   AppRoutes.push(
+                      //       context,
+                      //       OtpVerificationScreen(
+                      //         number: phoneNumberController.text,
+                      //         email: emailController.text,
+                      //         isMail: phoneNumberController.text.isEmpty,
+                      //       ));
+                      // }
+                      AppRoutes.push(
+                          context,
+                          OtpVerificationScreen(
+                            number: phoneNumberController.text,
                             email: emailController.text,
-                            password: confirmPasswordController.text);
-                        AppRoutes.push(
-                            context,
-                            OtpVerificationScreen(
-                              number: phoneNumberController.text,
-                              email: emailController.text,
-                              isMail: phoneNumberController.text.isEmpty,
-                            ));
-                      }
+                            isMail: phoneNumberController.text.isEmpty,
+                          ));
                     },
                     width: double.infinity,
                     label: 'Create Account'),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
@@ -24,6 +26,9 @@ class _CollegeRegistrationState extends State<CollegeRegistration> {
   final nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final prowatch = context.watch<CollegeController>();
+    final items = prowatch.getCollegeListModel?.response!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Form(
@@ -44,17 +49,25 @@ class _CollegeRegistrationState extends State<CollegeRegistration> {
                 ),
                 title: 'Full Name',
               ),
-
               FormItem(
                   title: 'Institution Name',
                   child: DropdownWidget(
                       hint: 'Institution Name',
                       onChanged: (value) {},
-                      items: [])),
+                      items: List.generate(
+                        items?.length ?? 0,
+                        (index) {
+                          return DropdownMenuItem(
+                              child: Text(items?[index].collageName ?? ''),
+                              value: items?[index].collageName);
+                        },
+                      ))),
               FormItem(
                   title: 'Department Name',
                   child: DropdownWidget(
-                      hint: 'Dept Name', onChanged: (value) {}, items: [])),
+                      hint: 'Select Department',
+                      onChanged: (value) {},
+                      items: [])),
 
               /// Continue Button
               GradientButton(
@@ -62,14 +75,12 @@ class _CollegeRegistrationState extends State<CollegeRegistration> {
                 label: 'Continue',
                 onTap: () async {
                   if (key.currentState!.validate()) {
-                         await AppUtils.saveForm(
-                              userName: nameController.text,
-                              collegeName: 'Providence college of engineering',
-                              deptName: 'Department of computer science');
-                  widget.nextPage();
-
+                    await AppUtils.saveForm(
+                        userName: nameController.text,
+                        collegeName: 'Providence college of engineering',
+                        deptName: 'Department of computer science');
+                    widget.nextPage();
                   }
-
                 },
               ),
             ],

@@ -18,6 +18,10 @@ class DropdownWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      dropdownColor: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       validator: validator, // Pass validator directly
       decoration: InputDecoration(
         hintText: hint,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
@@ -13,6 +14,7 @@ import 'package:stuedic_app/controller/API_controller.dart/notification_controll
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/story_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
@@ -102,6 +104,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ImageEditController()),
         ChangeNotifierProvider(create: (context) => DiscoverController()),
         ChangeNotifierProvider(create: (context) => VideoTrimController()),
+        ChangeNotifierProvider(create: (context) => CollegeController()),
+        ChangeNotifierProvider(create: (context) => StoryController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

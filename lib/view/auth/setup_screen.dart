@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
@@ -37,6 +38,9 @@ class _SetupScreenState extends State<SetupScreen> {
         pageIndex = pageController.page!.round();
       });
     });
+
+
+    context.read<CollegeController>().getCollege(context: context);
   }
 
   void nextPage() {

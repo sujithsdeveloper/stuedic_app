@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
 import 'package:stuedic_app/controller/app_contoller.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
