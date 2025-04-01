@@ -1,17 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:video_trimmer/video_trimmer.dart';
 
 class VideoTrimController extends ChangeNotifier {
-  final Trimmer trimmer = Trimmer();
   double videoStartValue = 0.0;
   double videoEndValue = 0.0;
   bool isPlaying = false;
   String? videoOutputPath;
 
   void loadVideo({required File file}) async {
-    await trimmer.loadVideo(videoFile: file);
+    // await trimmer.loadVideo(videoFile: file);
     notifyListeners();
   }
 
@@ -31,14 +29,14 @@ class VideoTrimController extends ChangeNotifier {
   }
 
   Future<void> trimVideo() async {
-    final outputPath = await trimmer.saveTrimmedVideo(
-      startValue: videoStartValue,
-      endValue: videoEndValue,
-      storageDir: StorageDir.temporaryDirectory,
-      onSave: (outputPath) {
-        videoOutputPath = outputPath;
-        notifyListeners();
-      },
-    );
+    // final outputPath = await trimmer.saveTrimmedVideo(
+    //   startValue: videoStartValue,
+    //   endValue: videoEndValue,
+    //   storageDir: StorageDir.temporaryDirectory,
+    //   onSave: (outputPath) {
+    //     videoOutputPath = outputPath;
+    //     notifyListeners();
+    //   },
+    // );
   }
 }
