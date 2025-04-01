@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/players/asset_video_player.dart';
+import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -74,7 +76,21 @@ class _ReelSectionState extends State<ReelSection> {
                           child: GradientButton(
                             label: 'Upload video',
                             onTap: () {
-                             
+                              mediaBottomSheet(
+                                context: context,
+                                onCameraTap: () {
+                                  proReadAsset.pickMedia(
+                                      context: context,
+                                      source: ImageSource.camera,
+                                      isVideo: true);
+                                },
+                                onGalleryTap: () {
+                                  proReadAsset.pickMedia(
+                                      context: context,
+                                      source: ImageSource.gallery,
+                                      isVideo: true);
+                                },
+                              );
                             },
                           ),
                         ),

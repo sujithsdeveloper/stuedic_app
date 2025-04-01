@@ -10,6 +10,7 @@ class StoryController extends ChangeNotifier {
   Future<void> addStory(
       {required BuildContext context,
       required String url,
+      PageController? pageController,
       required String caption}) async {
     final data = {"contentURL": url, "caption": caption};
     isStoryUploading = true;
@@ -22,7 +23,13 @@ class StoryController extends ChangeNotifier {
           notifyListeners();
           log(p0.body);
           customSnackbar(label: 'Story added', context: context);
-          Navigator.pop(context);
+          // Navigator.pop(context);
+          // if (pageController == null) {
+          //   Navigator.pop(context);
+          // } else {
+          //   pageController.nextPage(
+          //       duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+          // }
         },
         onTokenExpired: () {
           isStoryUploading = false;

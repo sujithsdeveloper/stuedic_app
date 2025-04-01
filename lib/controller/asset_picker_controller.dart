@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
+import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
+import 'package:stuedic_app/view/screens/media/trim_video_screen.dart';
 
 class AssetPickerController extends ChangeNotifier {
   File? pickedImage;
@@ -27,20 +29,21 @@ class AssetPickerController extends ChangeNotifier {
       notifyListeners();
 
       if (video != null) {
-        pickedVideo = File(video.path);
-        notifyListeners();
+        // pickedVideo = File(video.path);
+        // notifyListeners();
 
-        log('Picked video path ${pickedVideo.toString()}');
+        // log('Picked video path ${pickedVideo.toString()}');
 
-        if (context.mounted && UplaodMedia) {
-          await Provider.of<MutlipartController>(context, listen: false)
-              .uploadMedia(
-            context: context,
-            isVideo: true,
-            filePath: video.path,
-            API: APIs.uploadVideo,
-          );
-        }
+        // if (context.mounted && UplaodMedia) {
+        //   await Provider.of<MutlipartController>(context, listen: false)
+        //       .uploadMedia(
+        //     context: context,
+        //     isVideo: true,
+        //     filePath: video.path,
+        //     API: APIs.uploadVideo,
+        //   );
+        // }
+        AppRoutes.push(context, TrimVideoScreen(file: File(video.path)));
       } else {
         if (context.mounted) {
           errorSnackbar(label: 'No video selected', context: context);
@@ -78,7 +81,6 @@ class AssetPickerController extends ChangeNotifier {
   }
 
   Future<void> pickImage(
-
       {required ImageSource source, required BuildContext context}) async {
     isLoading = true;
     notifyListeners();
@@ -86,7 +88,9 @@ class AssetPickerController extends ChangeNotifier {
     ImagePicker picker = ImagePicker();
     ImageCropper cropper = ImageCropper();
 
-    final image = await picker.pickImage(source: source,);
+    final image = await picker.pickImage(
+      source: source,
+    );
     if (image != null) {
       log('Picked image path: ${image.path}');
 
@@ -103,7 +107,6 @@ class AssetPickerController extends ChangeNotifier {
               statusBarColor: Colors.black),
           IOSUiSettings(
             aspectRatioLockEnabled: true,
-            
           )
         ],
       );
