@@ -9,7 +9,7 @@ import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
-import 'package:stuedic_app/view/screens/media/trim_video_screen.dart';
+import 'package:stuedic_app/view/screens/media/upload_video_player.dart';
 
 class AssetPickerController extends ChangeNotifier {
   File? pickedImage;
@@ -43,7 +43,13 @@ class AssetPickerController extends ChangeNotifier {
         //     API: APIs.uploadVideo,
         //   );
         // }
-        AppRoutes.push(context, TrimVideoScreen(file: File(video.path)));
+
+        context.read<MutlipartController>().uploadMedia(
+            context: context,
+            filePath: video.path,
+            API: APIs.uploadVideo,
+            isVideo: true);
+        AppRoutes.push(context, upload_video_player(file: File(video.path)));
       } else {
         if (context.mounted) {
           errorSnackbar(label: 'No video selected', context: context);

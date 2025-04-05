@@ -9,7 +9,9 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/college_profile_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
+import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -87,8 +89,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                   name: user?.username ?? '',
                                   userId: user?.userId ?? ''));
                         } else {
-                          AppRoutes.push(context,
-                              UserProfileScreen(userId: user?.userId ?? ''));
+                          if (user?.isCollege ?? false) {
+                            AppRoutes.push(
+                                context,
+                                CollegeUserProfileScreen(
+                                    userId: user?.userId ?? ''));
+                          } else {
+                            AppRoutes.push(context,
+                                UserProfileScreen(userId: user?.userId ?? ''));
+                          }
                         }
                       },
                       leading: CircleAvatar(

@@ -8,15 +8,19 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
+import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class SinglepostScreen extends StatefulWidget {
   const SinglepostScreen(
@@ -73,9 +77,15 @@ class _SinglepostScreenState extends State<SinglepostScreen>
     final proReadInteraction = context.read<PostInteractionController>();
     final comments =
         proWatchInteraction.getComments?.comments?.reversed.toList() ?? [];
+    final prowatch = context.watch<VideoTypeController>();
+
     return WillPopScope(
       onWillPop: () async {
         proWatchInteraction.getComments = null;
+        if (prowatch.controller.value.isPlaying) {
+          prowatch.controller.pause();
+          return true;
+        }
         return true;
       },
       child: Scaffold(
@@ -164,27 +174,32 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                               borderRadius: BorderRadius.circular(20),
                               child: LayoutBuilder(
                                 builder: (context, constraints) {
-                                  return Image.network(
-                                    post?.postContentUrl ?? '',
-                                    width: constraints.maxWidth,
-                                    fit: BoxFit.fitWidth,
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      } else {
-                                        return Shimmer.fromColors(
-                                          child: Container(
-                                            height: 400,
-                                            width: double.infinity,
-                                            color: Colors.white,
-                                          ),
-                                          baseColor: Colors.grey[300]!,
-                                          highlightColor: Colors.grey[100]!,
-                                        );
-                                      }
-                                    },
-                                  );
+                                  if (post!.postType == StringConstants.reel) {
+                                    return NetworkVideoPlayer(
+                                        url: post.postContentUrl ?? '');
+                                  } else {
+                                    return Image.network(
+                                      post.postContentUrl ?? '',
+                                      width: constraints.maxWidth,
+                                      fit: BoxFit.fitWidth,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return Shimmer.fromColors(
+                                            child: Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              color: Colors.white,
+                                            ),
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.grey[100]!,
+                                          );
+                                        }
+                                      },
+                                    );
+                                  }
                                 },
                               )),
                         )),

@@ -3,7 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';

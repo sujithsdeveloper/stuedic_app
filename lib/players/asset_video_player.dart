@@ -22,7 +22,7 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
       ..initialize().then(
         (value) {
           if (widget.inistatePlay) {
-            controller.play();
+            // controller.play();
           }
           setState(() {});
         },
@@ -42,7 +42,7 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
     return GestureDetector(
       onTap: () {
         // log(pickedVideoRatio.toString());
-        proRead.togglePlayPause();
+        proRead.togglePlayPause(controller);
       },
       child: Stack(
         alignment: Alignment.center,
@@ -63,7 +63,7 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
             ),
           ),
           Visibility(
-            visible: !proWacth.isMuted,
+            visible: !controller.value.isPlaying,
             child: Center(
               child: Opacity(
                 opacity: 0.7,
@@ -77,7 +77,8 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
                 ),
               ),
             ),
-          )
+          ),
+        
         ],
       ),
     );

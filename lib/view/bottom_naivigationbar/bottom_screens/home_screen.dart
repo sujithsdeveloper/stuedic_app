@@ -100,9 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
                 height: 110,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: StorySection(
-                    controller: widget.controller,
-                  ),
+                  child: StorySection(),
                 ),
               ),
             ),

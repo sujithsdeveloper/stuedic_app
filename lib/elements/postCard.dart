@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -206,19 +206,7 @@ class _PostCardState extends State<PostCard>
                                     }
                                   },
                                 )),
-                            Positioned(
-                              bottom: 0,
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              child: Visibility(
-                                  visible: proWatch.isLikeVisible,
-                                  child: Column(
-                                    children: [
-                                      Lottie.asset(LottieAnimations.like)
-                                    ],
-                                  )),
-                            )
+                     
                           ],
                         ),
                       );

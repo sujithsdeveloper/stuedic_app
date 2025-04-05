@@ -52,22 +52,26 @@ class User {
     String? username;
     String? userId;
     String? profilePicUrl;
+    bool? isCollege;
 
     User({
         this.username,
         this.userId,
         this.profilePicUrl,
+        this.isCollege,
     });
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         username: json["Username"],
         userId: json["UserID"],
         profilePicUrl: json["ProfilePicURL"],
+        isCollege: json["IsCollege"],
     );
 
     Map<String, dynamic> toJson() => {
         "Username": username,
         "UserID": userId,
         "ProfilePicURL": profilePicUrl,
+        "IsCollege": isCollege,
     };
 }

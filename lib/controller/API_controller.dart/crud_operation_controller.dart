@@ -8,13 +8,14 @@ import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class CrudOperationController extends ChangeNotifier {
   Future<void> uploadPost(
       {required String mediaUrl,
       required String caption,
       String visibility = 'Public',
-      String postType = 'pic',
+      String postType = StringConstants.pic,
       required BuildContext context}) async {
     Map<String, dynamic> data = {
       "postContentURL": mediaUrl,

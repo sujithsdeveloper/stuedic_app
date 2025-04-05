@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -162,27 +162,27 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 SizedBox(height: 20),
                 GradientButton(
                     onTap: () async {
-                      // if (key.currentState!.validate()) {
-                      //   context.read<OtpController>().getOTP(
-                      //       email: emailController.text, context: context);
-                      //   await AppUtils.saveCredentials(
-                      //       email: emailController.text,
-                      //       password: confirmPasswordController.text);
-                      //   AppRoutes.push(
-                      //       context,
-                      //       OtpVerificationScreen(
-                      //         number: phoneNumberController.text,
-                      //         email: emailController.text,
-                      //         isMail: phoneNumberController.text.isEmpty,
-                      //       ));
-                      // }
-                      AppRoutes.push(
-                          context,
-                          OtpVerificationScreen(
-                            number: phoneNumberController.text,
+                      if (key.currentState!.validate()) {
+                        context.read<OtpController>().getOTP(
+                            email: emailController.text, context: context);
+                        await AppUtils.saveCredentials(
                             email: emailController.text,
-                            isMail: phoneNumberController.text.isEmpty,
-                          ));
+                            password: confirmPasswordController.text);
+                        AppRoutes.push(
+                            context,
+                            OtpVerificationScreen(
+                              number: phoneNumberController.text,
+                              email: emailController.text,
+                              isMail: phoneNumberController.text.isEmpty,
+                            ));
+                      }
+                      // AppRoutes.push(
+                      //     context,
+                      //     OtpVerificationScreen(
+                      //       number: phoneNumberController.text,
+                      //       email: emailController.text,
+                      //       isMail: phoneNumberController.text.isEmpty,
+                      //     ));
                     },
                     width: double.infinity,
                     label: 'Create Account'),

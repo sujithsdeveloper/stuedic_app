@@ -45,14 +45,14 @@ class AppContoller extends ChangeNotifier {
   void chnageBottomNav({required int index, required BuildContext context}) {
     currentIndex = index;
     if (currentIndex != 2) {
-      // Provider.of<VideoTypeController>(context, listen: false)
-      //     .controller
-      //     .pause();
+      Provider.of<VideoTypeController>(context, listen: false)
+          .controller
+          .pause();
     }
     if (currentIndex == 2) {
-      // Provider.of<VideoTypeController>(context, listen: false)
-      //     .controller
-      //     .play();
+      Provider.of<VideoTypeController>(context, listen: false)
+          .controller
+          .play();
     }
     notifyListeners();
   }
@@ -112,18 +112,6 @@ class AppContoller extends ChangeNotifier {
 
       AppRoutes.push(context, StoryViewScreen(name: name));
     });
-  }
-
-  bool isLikeVisible = false;
-  void toggleLikeVisible() {
-    isLikeVisible = true;
-    notifyListeners();
-    Future.delayed(Duration(seconds: 1)).then(
-      (value) {
-        isLikeVisible = false;
-        notifyListeners();
-      },
-    );
   }
 
   final formKey = GlobalKey<FormState>();

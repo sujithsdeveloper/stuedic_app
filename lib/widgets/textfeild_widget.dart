@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 
 class TextfieldWidget extends StatelessWidget {

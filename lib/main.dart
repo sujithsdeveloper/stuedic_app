@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
@@ -14,12 +13,14 @@ import 'package:stuedic_app/controller/API_controller.dart/notification_controll
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
-import 'package:stuedic_app/controller/API_controller.dart/story_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/controller/app/dropdown_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
+import 'package:stuedic_app/controller/story/story_controller.dart';
+import 'package:stuedic_app/controller/story/story_picker_controller.dart';
 import 'package:stuedic_app/controller/video/video_trim_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -106,10 +107,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => VideoTrimController()),
         ChangeNotifierProvider(create: (context) => CollegeController()),
         ChangeNotifierProvider(create: (context) => StoryController()),
+        ChangeNotifierProvider(create: (context) => DropdownController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
+          
           themeMode: widget.themeMode,
           debugShowCheckedModeBanner: false,
           home: SplashScreen(token: widget.token!)),

@@ -69,15 +69,22 @@ class _FinishSetupState extends State<FinishSetup> {
             isColored: true,
             label: 'Finish Setup',
             onTap: () {
-              context.read<AuthController>().createAccount(
-                  context: context,
-                  email: email,
-                  userName: userName,
-                  collegeName: collegeName,
-                  phoneNumber: '',
-                  collegeIDUrl: '',
-                  password: password,
-                  role: role);
+              context
+                  .read<AuthController>()
+                  .createAccount(
+                      context: context,
+                      email: email,
+                      userName: userName,
+                      collegeName: collegeName,
+                      phoneNumber: '',
+                      collegeIDUrl: '',
+                      password: password,
+                      role: role)
+                  .then(
+                (value) {
+                  AppUtils.deleteCredentials();
+                },
+              );
             },
           ),
         ],

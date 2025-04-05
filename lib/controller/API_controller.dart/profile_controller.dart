@@ -76,7 +76,7 @@ class ProfileController extends ChangeNotifier {
     await ApiCall.get(
       url: url,
       onSucces: (p0) {
-        log(p0.body);
+        // log(p0.body);
         userGridModel = userGridModelFromJson(p0.body);
         notifyListeners();
       },

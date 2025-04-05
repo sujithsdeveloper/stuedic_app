@@ -11,6 +11,7 @@ import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
@@ -130,7 +131,7 @@ class _ReelSectionState extends State<ReelSection> {
                       context
                           .read<CrudOperationController>()
                           .uploadPost(
-                              postType: 'reel',
+                              postType: StringConstants.reel,
                               mediaUrl: multipartObj.videoUrl!,
                               caption: controller.text,
                               context: context)

@@ -23,7 +23,7 @@ dynamic postBottomSheet(
     isScrollControlled: false,
     context: context,
     builder: (context) {
-      log("Is right user: $isRightUser");
+      // log("Is right user: $isRightUser");
       return Container(
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(20)),

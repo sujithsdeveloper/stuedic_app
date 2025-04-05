@@ -27,10 +27,10 @@ class CollegeProfileScreen extends StatefulWidget {
   const CollegeProfileScreen({super.key});
 
   @override
-  State<CollegeProfileScreen> createState() => _CollegeUserProfileScreenState();
+  State<CollegeProfileScreen> createState() => CollegeProfileScreenState();
 }
 
-class _CollegeUserProfileScreenState extends State<CollegeProfileScreen>
+class CollegeProfileScreenState extends State<CollegeProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   @override

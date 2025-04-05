@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
@@ -29,6 +29,7 @@ class FormFill extends StatefulWidget {
 
 class _FormFillState extends State<FormFill> {
   final nameController = TextEditingController();
+  final ageController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final ConfirmpasswordController = TextEditingController();
@@ -78,7 +79,7 @@ class _FormFillState extends State<FormFill> {
                       title: "Age",
                       child: TextfieldWidget(
                           borderColor: ColorConstants.greyColor,
-                          controller: nameController,
+                          controller: ageController,
                           hint: 'Age',
                           maxLength: 2,
                           keyboardType: TextInputType.number,

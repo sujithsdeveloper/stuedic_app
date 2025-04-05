@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/controller/asset_picker_controller.dart';
+import 'package:stuedic_app/controller/story/story_controller.dart';
+import 'package:stuedic_app/controller/story/story_picker_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
@@ -43,6 +46,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
         final profileController = context.read<ProfileController>();
         final discoverController = context.read<DiscoverController>();
+        final storyController = context.read<StoryController>();
         // isCollege =
         //     profileControllerWatch.userCurrentDetails?.response!.isStudent! ??
         //         false;
@@ -50,6 +54,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         profileController.getCurrentUserData(context: context);
         profileController.getCurrentUserGrid(context: context);
         discoverController.getDiscoverData(context);
+        storyController.getStories(context);
       },
     );
   }
@@ -144,7 +149,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     pagecontroller = PageController(
-      initialPage: 1,
+      initialPage: 0,
     );
     context.read<HomefeedController>().getAllPost(context: context);
   }
@@ -153,9 +158,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<AppContoller>();
     List<Widget> pages = [
-      AssetPickerPage(
-        pageController: pagecontroller,
-      ),
+      // AssetPickerPage(
+      //   pageController: pagecontroller,
+      // ),
       BottomNavScreen(
         controller: pagecontroller,
       ),
@@ -164,6 +169,12 @@ class _HomePageState extends State<HomePage> {
       )
     ];
     return PageView(
+      onPageChanged: (value) {
+        if (value == 0) {
+          context.watch<StoryPickerController>().selectedAssets = [];
+          context.read<StoryPickerController>().notifyListeners();
+        }
+      },
       physics:
           proWatch.currentIndex == 0 ? null : NeverScrollableScrollPhysics(),
       controller: pagecontroller,

@@ -1,18 +1,15 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/app_contoller.dart';
+import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/view/screens/media/pick_media_screen.dart';
+import 'package:stuedic_app/view/screens/story_asset_picker_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class StorySection extends StatefulWidget {
-  const StorySection({super.key, required this.controller});
-  final PageController controller;
+  const StorySection({super.key});
   @override
   State<StorySection> createState() => _StorySectionState();
 }
@@ -79,9 +76,7 @@ class _StorySectionState extends State<StorySection> {
                       right: 3,
                       child: GestureDetector(
                         onTap: () {
-                          widget.controller.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn);
+                          AppRoutes.push(context, AssetPickerPage());
                         },
                         child: GradientCircleAvathar(
                           radius: 20,

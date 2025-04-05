@@ -15,6 +15,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
@@ -29,14 +30,13 @@ class ProfileScreenStudent extends StatefulWidget {
 }
 
 class _ProfileScreenStudentState extends State<ProfileScreenStudent>
-    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
-  late bool isDarkTheme;
 
   @override
   void initState() {
     super.initState();
-    checkTheme();
+    // checkTheme();
     _tabController = TabController(length: 4, vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -44,16 +44,17 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
       context.read<ProfileController>().getCurrentUserGrid(context: context);
     });
   }
+
   @override
   bool get wantKeepAlive => true;
-  Future<void> checkTheme() async {
-    ThemeMode theme = await AppUtils.getCurrentTheme();
-    if (theme == ThemeMode.light) {
-      isDarkTheme = false;
-    } else {
-      isDarkTheme = true;
-    }
-  }
+  // Future<void> checkTheme() async {
+  //   ThemeMode theme = await AppUtils.getCurrentTheme();
+  //   if (theme == ThemeMode.light) {
+  //     isDarkTheme = false;
+  //   } else {
+  //     isDarkTheme = true;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +79,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             actions: [
               IconButton(
                 onPressed: () {
-                  AppRoutes.push(
-                      context, CollegeUserProfileScreen(userId: '68806004'));
+                  AppRoutes.push(context, NotificationScreen());
                 },
                 icon: Icon(HugeIcons.strokeRoundedNotification01),
               ),
@@ -213,7 +213,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(kToolbarHeight),
               child: Container(
-                color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
+                color: Colors.white,
                 child: TabBar(
                   labelColor: ColorConstants.secondaryColor,
                   indicatorColor: ColorConstants.secondaryColor,

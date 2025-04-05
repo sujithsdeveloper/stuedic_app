@@ -44,6 +44,7 @@ class APIs {
 
   //story
   static Uri addStory = Uri.parse('${baseUrl}api/v1/story/addNewStory');
+  static Uri getStory = Uri.parse('${baseUrl}api/v1/story/listStories');
 
   //search
   static Uri searchApi = Uri.parse('${baseUrl}api/v1/Search/searchUser');

@@ -19,7 +19,17 @@ class VideoTypeController extends ChangeNotifier {
 
   void initialiseNetworkVideo(
       {required String url, bool inistatePlay = false}) {
-    controller = VideoPlayerController.network(url)..initialize();
+    controller = VideoPlayerController.network(url)
+      ..initialize().then((_) {
+        if (controller.value.isInitialized) {
+          notifyListeners(); // Notify UI after initialization
+        }
+      });
+    controller.addListener(() {
+      if (controller.value.isInitialized) {
+        notifyListeners(); // Notify UI on state changes
+      }
+    });
     if (inistatePlay) {
       controller.play();
       controller.setLooping(true);
@@ -32,7 +42,7 @@ class VideoTypeController extends ChangeNotifier {
     if (isGestureControll) {
       toggleMuteUnmute();
     } else {
-      togglePlayPause();
+      togglePlayPause(controller);
     }
   }
 
@@ -60,8 +70,8 @@ class VideoTypeController extends ChangeNotifier {
   }
 
   bool isPlaying = false;
-  void togglePlayPause() {
-    if (isPlaying) {
+  void togglePlayPause(VideoPlayerController controller) {
+    if (controller.value.isPlaying) {
       controller.pause();
       isPlaying = false;
       notifyListeners();

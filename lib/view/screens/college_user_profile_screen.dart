@@ -1,13 +1,25 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
+import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/data/dummyDB.dart';
+import 'package:stuedic_app/view/screens/college/college_departments.dart';
+import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
@@ -17,11 +29,10 @@ class CollegeUserProfileScreen extends StatefulWidget {
   const CollegeUserProfileScreen({super.key, required this.userId});
   final String userId;
   @override
-  State<CollegeUserProfileScreen> createState() =>
-      _CollegeUserProfileScreenState();
+  State<CollegeUserProfileScreen> createState() => CollegeProfileScreenState();
 }
 
-class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
+class CollegeProfileScreenState extends State<CollegeUserProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   @override
@@ -33,24 +44,25 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
         context
             .read<ProfileController>()
             .getUserByUserID(context: context, userId: widget.userId);
+        log('isFollowed: ${context.read<ProfileController>().userProfile?.response?.isFollowed}');
       },
     );
     context
         .read<ProfileController>()
         .getUseGrid(context: context, userID: widget.userId);
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userProfile?.response;
-    final grids = userDataProviderWatch.userGridModel?.response?.posts;
+    // bool isDarkTheme = AppUtils.isDarkTheme(context);
+    final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         toolbarHeight: 5,
       ),
       body: NestedScrollView(
@@ -58,10 +70,9 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
           return [
             // SliverAppBar with FlexibleSpaceBar
             SliverAppBar(
-              backgroundColor: Colors.white,
               pinned: true,
               floating: true,
-              expandedHeight: 450,
+              expandedHeight: context.screenHeight,
               actions: [
                 IconButton(
                     onPressed: () {},
@@ -146,18 +157,51 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
                       spacing: 8,
                       children: [
                         ProfileActionButton(
-                          iconData: CupertinoIcons.envelope,
+                          iconData: CupertinoIcons.doc_text,
                           onTap: () {},
                         ),
                         GradientButton(
-                            outline: user?.isFollowed ?? false ? true : false,
-                            onTap: () {},
-                            height: 48,
-                            width: 100,
-                            isColored: user?.isFollowed ?? false ? false : true,
-                            label: user?.isFollowed ?? false
-                                ? 'Unfollow'
-                                : 'Follow'),
+                          outline: user?.isFollowed ?? false ? true : false,
+                          onTap: () {
+                            if (user?.isFollowed ?? false) {
+                              context
+                                  .read<PostInteractionController>()
+                                  .unfollowUser(
+                                      context: context,
+                                      userId: user?.userId ?? '');
+                              Future.delayed(Duration(milliseconds: 300)).then(
+                                (value) {
+                                  context
+                                      .read<ProfileController>()
+                                      .getUserByUserID(
+                                          context: context,
+                                          userId: widget.userId);
+                                },
+                              );
+                            } else {
+                              context
+                                  .read<PostInteractionController>()
+                                  .followUser(
+                                      context: context,
+                                      userId: user?.userId ?? '');
+                              Future.delayed(Duration(milliseconds: 300)).then(
+                                (value) {
+                                  context
+                                      .read<ProfileController>()
+                                      .getUserByUserID(
+                                          context: context,
+                                          userId: widget.userId);
+                                },
+                              );
+                            }
+                          },
+                          height: 48,
+                          width: 100,
+                          isColored: user?.isFollowed ?? false ? false : true,
+                          label: user?.isFollowed ?? false
+                              ? 'Following'
+                              : 'Follow',
+                        ),
                         ProfileActionButton(
                           iconData: Icons.share_outlined,
                         )
@@ -184,21 +228,56 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   counts(
-                                      count: AppUtils.formatCounts(2000),
-                                      label: "Posts"),
-                                  counts(
                                       count: AppUtils.formatCounts(
-                                          user?.followingCount ?? 0),
-                                      label: "Following"),
+                                          user?.collageStrength ?? 0),
+                                      label: "Students"),
                                   counts(
+                                      count: AppUtils.formatCounts(0),
+                                      label: "Staffs"),
+                                  counts(
+                                      onTap: () {
+                                        AppRoutes.push(
+                                            context, CollegeDepartments());
+                                      },
                                       count: AppUtils.formatCounts(
-                                          user?.followersCount ?? 0),
-                                      label: "Followers"),
+                                          user?.allDepartments?.length ?? 0),
+                                      label: "Departments"),
                                   counts(
-                                      count: AppUtils.formatCounts(20000000),
-                                      label: "Likes"),
+                                      count: AppUtils.formatCounts(0),
+                                      label: "Clubs"),
                                 ],
                               )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Details',
+                                  style: StringStyle.normalTextBold(size: 16),
+                                ),
+                              ),
+                              DetailsItem(
+                                  title: 'Address',
+                                  subtitle: lorum,
+                                  iconData: CupertinoIcons.location),
+                              DetailsItem(
+                                  title: 'Email',
+                                  subtitle: user?.email ?? 'Not Provided',
+                                  iconData: CupertinoIcons.envelope),
+                              DetailsItem(
+                                  title: 'Phone Number',
+                                  subtitle: user?.phone ?? 'Not Provided',
+                                  iconData: HugeIcons.strokeRoundedCall),
+                              DetailsItem(
+                                  title: 'Affiliation',
+                                  subtitle: "Dummy University",
+                                  iconData: Icons.school_outlined),
                             ],
                           ),
                         ],
@@ -207,76 +286,108 @@ class _CollegeUserProfileScreenState extends State<CollegeUserProfileScreen>
                   ],
                 ),
               ),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Container(
+                  color: Colors.white,
+                  child: TabBar(
+                    controller: _tabController,
+                    onTap: (value) {
+                      if (value == 0) {
+                        context
+                            .read<ProfileController>()
+                            .getCurrentUserGrid(context: context);
+                      }
+                      if (value == 1) {
+                        // context
+                        //     .read<ProfileController>()
+                        //     .getCurrentUserVideos(context: context);
+                      }
+                      if (value == 2) {
+                        context
+                            .read<PostInteractionController>()
+                            .getBookmark(context: context);
+                      }
+                    },
+                    tabs: const [
+                      Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                    ],
+                  ),
+                ),
+              ),
             ),
-
-            // TabBar
-            // SliverPersistentHeader(
-            //   pinned: true,
-            //   delegate: TabBarDelegate(
-            //     TabBar(
-            //       labelColor: ColorConstants.secondaryColor,
-            //       indicatorColor: ColorConstants.secondaryColor,
-            //       splashFactory: NoSplash.splashFactory,
-            //       controller: _tabController,
-            //       tabs: const [
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedImage01)),
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedGrid)),
-            //         Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ];
         },
         body: TabBarView(
           controller: _tabController,
           children: [
-            // Tab 1: Grid view
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MasonryGridView.builder(
-                gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                itemCount: grids?.length ?? 0,
-                itemBuilder: (context, index) {
-                  if (userDataProviderWatch.userGridModel?.response == null) {
-                    return const Center(
-                      child: Text('No posts available'),
-                    );
-                  }
-
-                  final containerHeight = (index % 3 == 0) ? 200.0 : 300.0;
-
-                  return GestureDetector(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                grids?[index].postContentUrl ?? ''),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Builder(
+                  builder: (context) {
+                    if (photoGrid == null || photoGrid.isEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Capture some amazing moments with your friends',
+                            style: StringStyle.normalTextBold(),
                           ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo_outlined,
+                              ),
+                              Text('Create your first post')
+                            ],
+                          )
+                        ],
+                      );
+                    } else {
+                      return GridView.builder(
+                        itemCount: photoGrid?.length ?? 0,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 9 / 16,
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xffF5FFBB),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        photoGrid?[index].postContentUrl ??
+                                            ''))),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
+            // Videos Section
+            Center(
+              child: Text("Videos will be displayed here",
+                  style: TextStyle(fontSize: 16)),
             ),
 
-            // Tab 2: Videos
-            const Center(
-              child: Text('Videos Tab Content'),
+            // Shopping Items
+            Center(
+              child: Text("saved items will be displayed here",
+                  style: TextStyle(fontSize: 16)),
             ),
-            // Tab 3: Photos
-            const Center(
-              child: Text('Photos Tab Content'),
+            Center(
+              child: Text("Shopping items will be displayed here",
+                  style: TextStyle(fontSize: 16)),
             ),
           ],
         ),

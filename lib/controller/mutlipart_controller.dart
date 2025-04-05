@@ -72,7 +72,7 @@ class MutlipartController extends ChangeNotifier {
         isUploading = false;
         notifyListeners();
         var errorResponse = await http.Response.fromStream(streamedResponse);
-        log(errorResponse.body);
+        log("Multipart Error ${errorResponse.body}");
       }
     } catch (e) {
       isUploading = false;
