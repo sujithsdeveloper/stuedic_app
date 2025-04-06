@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,7 +83,9 @@ class AppUtils {
     if (url == null || url.isEmpty) {
       return AssetImage(ImageConstants.avathar);
     } else {
-      return NetworkImage(url);
+      return CachedNetworkImageProvider(
+        url,
+      );
     }
   }
 

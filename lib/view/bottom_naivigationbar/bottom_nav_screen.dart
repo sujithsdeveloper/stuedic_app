@@ -92,9 +92,10 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         return true;
       },
       child: Scaffold(
-        body: isCollege
-            ? CollegeuserScreens[proWatch.currentIndex]
-            : userScreens[proWatch.currentIndex],
+        body: IndexedStack(
+          index: proWatch.currentIndex,
+          children: isCollege ? CollegeuserScreens : userScreens,
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 10),

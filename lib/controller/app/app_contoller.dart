@@ -43,19 +43,20 @@ class AppContoller extends ChangeNotifier {
   }
 
   void chnageBottomNav({required int index, required BuildContext context}) {
+    if (currentIndex == index) return; // Prevent redundant state changes
     currentIndex = index;
     notifyListeners();
-    if (currentIndex != 2) {
-      Provider.of<VideoTypeController>(context, listen: false)
-          .networkVideoController!
-          .pause();
+
+    final videoController =
+        Provider.of<VideoTypeController>(context, listen: false)
+            .networkVideoController;
+    if (videoController != null && videoController.value.isInitialized) {
+      if (currentIndex != 2) {
+        videoController.pause();
+      } else {
+        videoController.play();
+      }
     }
-    if (currentIndex == 2) {
-      Provider.of<VideoTypeController>(context, listen: false)
-          .networkVideoController!
-          .play();
-    }
-    notifyListeners();
   }
 
   void toggleCheckBox({required bool value}) {

@@ -21,6 +21,7 @@ import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard(
@@ -57,21 +58,26 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController animationController;
-  late Animation<int> scaleAnimation;
+
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 90),
-        lowerBound: 1,
-        upperBound: 1.5);
+      vsync: this,
+      duration: Duration(milliseconds: 90),
+      lowerBound: 1,
+      upperBound: 1.5,
+    );
   }
 
   @override
+  bool get wantKeepAlive => true; // Retain widget state
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Ensure state retention
     final commentController = TextEditingController();
     final proRead = context.read<AppContoller>();
     final proWatch = context.watch<AppContoller>();
@@ -160,78 +166,63 @@ class _PostCardState extends State<PostCard>
                 // proRead.toggleLikeVisible();
               },
               child: ClipRRect(
-                // borderRadius: BorderRadius.circular(10),
-                child: Center(child: Builder(
-                  builder: (context) {
-                    if (widget.postType == StringConstants.pic) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
+                child: Center(
+                  child: Builder(
+                    builder: (context) {
+                      if (widget.postType == StringConstants.pic) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
-                                child: Builder(
-                                  builder: (context) {
-                                    if (widget.mediaUrl == null ||
-                                        widget.mediaUrl.isEmpty) {
-                                      return Container(
-                                        height: 400,
-                                        width: double.infinity,
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.mediaUrl,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.grey[100]!,
+                                    child: Container(
+                                      height: 400,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
                                         color: Colors.grey,
-                                      );
-                                    } else {
-                                      return Image.network(
-                                        widget.mediaUrl,
-                                        fit: BoxFit
-                                            .contain, // Ensures the image fits while maintaining aspect ratio
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return FittedBox(
-                                              fit: BoxFit.contain,
-                                              child: child,
-                                            );
-                                          } else {
-                                            return Shimmer.fromColors(
-                                              child: Container(
-                                                height: 400,
-                                                width: double.infinity,
-                                                color: Colors.white,
-                                              ),
-                                              baseColor: Colors.grey[300]!,
-                                              highlightColor: Colors.grey[100]!,
-                                            );
-                                          }
-                                        },
-                                      );
-                                    }
-                                  },
-                                )),
-                     
-                          ],
-                        ),
-                      );
-                    }
-                    if (widget.postType == StringConstants.reel) {
-                      return ChangeNotifierProvider(
-                        create: (_) => VideoTypeController(),
-                        child: NetworkVideoPlayer(
-                          url: widget.mediaUrl,
-                          inistatePlay: false,
-                        ),
-                      );
-                    } else {
-                      return Container(
-                        height: 50,
-                        width: 50,
-                        color: Colors.grey,
-                        child: Center(
-                          child: Text('Invalid media type'),
-                        ),
-                      );
-                    }
-                  },
-                )),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  useOldImageOnUrlChange:
+                                      true, // Prevent reloading
+                                  cacheKey: widget.mediaUrl, // Ensure caching
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      if (widget.postType == StringConstants.reel) {
+                        return ChangeNotifierProvider(
+                          create: (_) => VideoTypeController(),
+                          child: NetworkVideoPlayer(
+                            url: widget.mediaUrl,
+                            inistatePlay: false,
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 50,
+                          width: 50,
+                          color: Colors.grey,
+                          child: Center(
+                            child: Text('Invalid media type'),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 12),
@@ -271,8 +262,7 @@ class _PostCardState extends State<PostCard>
                           animation: animationController,
                           builder: (context, child) {
                             return Transform.scale(
-                              scale: animationController
-                                  .value, // Fixed missing scale value
+                              scale: animationController.value,
                               child: Icon(
                                 widget.isLiked
                                     ? Icons.favorite
@@ -319,8 +309,6 @@ class _PostCardState extends State<PostCard>
                           comments: comments,
                           context: context,
                           commentController: commentController);
-                      // proReadInteraction.getComment(
-                      //     postId: widget.postId, context: context);
                     },
                     child: Row(
                       spacing: 5,
@@ -357,7 +345,6 @@ class _PostCardState extends State<PostCard>
                               : CupertinoIcons.bookmark,
                         ),
                         onPressed: () {
-                          // log('isbookmarked: ${widget.isBookmarked}');
                           proReadInteraction.toggleBookmark(
                               isBookmarked: widget.isBookmarked,
                               postId: widget.postId,
