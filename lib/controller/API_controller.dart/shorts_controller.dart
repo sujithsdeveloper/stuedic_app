@@ -7,20 +7,27 @@ class ShortsController extends ChangeNotifier {
   bool isInitialised = false;
   bool isBuffering = true;
   GetShortsModel? getShortsModel;
+
   Future<void> getReels({required BuildContext context}) async {
-    await ApiCall.get(
-        url: APIs.reelAPI,
-        onSucces: (p0) {
-          // log(p0.body);
-          getShortsModel = getShortsModelFromJson(p0.body);
-          notifyListeners();
-        },
-        onTokenExpired: () {
-          getReels(context: context);
-        },
-        context: context);
+    try {
+      isBuffering = true;
+      notifyListeners();
+      await ApiCall.get(
+          url: APIs.reelAPI,
+          onSucces: (p0) {
+            getShortsModel = getShortsModelFromJson(p0.body);
+            isBuffering = false;
+            isInitialised = true;
+            notifyListeners();
+          },
+          onTokenExpired: () {
+            getReels(context: context);
+          },
+          context: context);
+    } catch (e) {
+      isBuffering = false;
+      notifyListeners();
+      debugPrint('Error fetching reels: $e'); // Log the error
+    }
   }
-
-
-
 }

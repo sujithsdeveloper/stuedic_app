@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (widget.token == null || widget.token.isEmpty) {
           AppRoutes.pushAndRemoveUntil(context, LoginScreen());
         } else {
-          AppRoutes.pushAndRemoveUntil(context, HomePage());
+          AppRoutes.pushAndRemoveUntil(context, BottomNavScreen());
         }
       },
     );

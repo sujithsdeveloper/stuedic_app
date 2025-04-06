@@ -8,6 +8,8 @@ class ChatController extends ChangeNotifier {
   late WebSocketChannel channel;
   List<String> messages = [];
   bool isConnected = false;
+  int _retryCount = 0; // Track the number of retries
+  final int _maxRetries = 5; // Maximum number of retries
 
   void initSocket({required String userId}) {
     try {
@@ -16,29 +18,49 @@ class ChatController extends ChangeNotifier {
       );
 
       isConnected = true;
+      _retryCount = 0; // Reset retry count on successful connection
       notifyListeners();
 
       channel.stream.listen(
         (message) {
           log("Received message: $message");
-          messages.add(message);
-          notifyListeners();
+          messages.insert(0, message); // Add new messages to the top
+          notifyListeners(); // Notify UI to update
         },
         onError: (error) {
-          log("WebSocket Error: $error");
+          log("WebSocket Error: ${error.toString()}");
           isConnected = false;
           notifyListeners();
+          _retryConnection(userId); // Retry connection on error
         },
         onDone: () {
           log("WebSocket Closed");
           isConnected = false;
           notifyListeners();
+          _retryConnection(userId); // Retry connection when closed
         },
       );
     } catch (e) {
-      log("Error connecting to WebSocket: $e");
+      log("Error connecting to WebSocket: ${e.toString()}");
       isConnected = false;
       notifyListeners();
+      _retryConnection(userId); // Retry connection on exception
+    }
+  }
+
+  void _retryConnection(String userId) {
+    if (_retryCount < _maxRetries) {
+      final delay =
+          Duration(seconds: 5 * (_retryCount + 1)); // Exponential backoff
+      _retryCount++;
+      log("Retrying WebSocket connection in ${delay.inSeconds} seconds... (Attempt $_retryCount of $_maxRetries)");
+      Future.delayed(delay, () {
+        if (!isConnected) {
+          initSocket(userId: userId);
+        }
+      });
+    } else {
+      log("Max retry attempts reached. WebSocket connection failed.");
     }
   }
 

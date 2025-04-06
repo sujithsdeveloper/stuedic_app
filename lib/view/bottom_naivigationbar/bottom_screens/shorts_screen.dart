@@ -38,9 +38,33 @@ class _ShortsScreenState extends State<ShortsScreen>
         duration: Duration(milliseconds: 90),
         lowerBound: 1,
         upperBound: 1.5);
-    context.read<ShortsController>().getReels(context: context);
-    context.read<VideoTypeController>().onLongPressEnd();
-    context.read<VideoTypeController>().notifyListeners();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final url = context
+              .read<ShortsController>()
+              .getShortsModel
+              ?.response?[0]
+              .postContentUrl
+              .toString() ??
+          '';
+      context.read<ShortsController>().getReels(context: context);
+      context.read<VideoTypeController>().onLongPressEnd();
+      context.read<VideoTypeController>().initialiseNetworkVideo(url: url);
+      context.read<VideoTypeController>().notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose the animation controller
+    animationController.dispose();
+    // Dispose the video controller if initialized
+    final videoController =
+        context.read<VideoTypeController>().networkVideoController;
+    if (videoController != null) {
+      videoController.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -58,9 +82,12 @@ class _ShortsScreenState extends State<ShortsScreen>
         scrollDirection: Axis.vertical,
         itemCount: reels?.length ?? 0,
         onPageChanged: (value) {
-          Provider.of<VideoTypeController>(context, listen: false)
-              .controller
-              .play();
+          final videoController =
+              Provider.of<VideoTypeController>(context, listen: false)
+                  .networkVideoController;
+          if (videoController != null && videoController.value.isInitialized) {
+            videoController.play();
+          }
         },
         itemBuilder: (context, index) {
           final reel = reels?[index];

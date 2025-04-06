@@ -82,8 +82,8 @@ class _SinglepostScreenState extends State<SinglepostScreen>
     return WillPopScope(
       onWillPop: () async {
         proWatchInteraction.getComments = null;
-        if (prowatch.controller.value.isPlaying) {
-          prowatch.controller.pause();
+        if (prowatch.networkVideoController!.value.isPlaying) {
+          prowatch.networkVideoController!.pause();
           return true;
         }
         return true;

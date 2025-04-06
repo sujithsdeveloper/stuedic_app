@@ -16,7 +16,7 @@ import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
-import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/college/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';

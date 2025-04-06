@@ -5,13 +5,14 @@ import 'package:video_player/video_player.dart';
 class VideoTypeController extends ChangeNotifier {
   double pickedVideoRatio = 9 / 18;
 
-  late VideoPlayerController controller;
+  VideoPlayerController? networkVideoController;
+  VideoPlayerController? assetVideoController;
 
   void initialiseAssetVideo({required File file}) {
-    controller = VideoPlayerController.file(file)
+    assetVideoController = VideoPlayerController.file(file)
       ..initialize().then(
         (value) {
-          pickedVideoRatio = controller.value.size.aspectRatio;
+          pickedVideoRatio = assetVideoController!.value.size.aspectRatio;
           notifyListeners();
         },
       );
@@ -19,20 +20,10 @@ class VideoTypeController extends ChangeNotifier {
 
   void initialiseNetworkVideo(
       {required String url, bool inistatePlay = false}) {
-    controller = VideoPlayerController.network(url)
-      ..initialize().then((_) {
-        if (controller.value.isInitialized) {
-          notifyListeners(); // Notify UI after initialization
-        }
-      });
-    controller.addListener(() {
-      if (controller.value.isInitialized) {
-        notifyListeners(); // Notify UI on state changes
-      }
-    });
+    networkVideoController = VideoPlayerController.network(url)..initialize();
     if (inistatePlay) {
-      controller.play();
-      controller.setLooping(true);
+      networkVideoController!.play();
+      networkVideoController!.setLooping(true);
     }
   }
 
@@ -47,23 +38,23 @@ class VideoTypeController extends ChangeNotifier {
   }
 
   void onLongPress() {
-    controller.pause();
+    networkVideoController!.pause();
     notifyListeners();
   }
 
   void onLongPressEnd() {
-    controller.play();
+    networkVideoController!.play();
     notifyListeners();
   }
 
   bool isMuted = false;
   void toggleMuteUnmute() {
     if (isMuted) {
-      controller.setVolume(1);
+      networkVideoController!.setVolume(1);
       isMuted = false;
       notifyListeners();
     } else {
-      controller.setVolume(0);
+      networkVideoController!.setVolume(0);
       isMuted = true;
       notifyListeners();
     }

@@ -11,7 +11,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmers_items.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/college_profile_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
-import 'package:stuedic_app/view/screens/college_user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/college/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {

@@ -52,7 +52,8 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userCurrentDetails?.response;
     // bool isDarkTheme = AppUtils.isDarkTheme(context);
-    final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
+    final photoGrid =
+        userDataProviderWatch.currentUserProfileGrid?.response?.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -256,6 +257,7 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(kToolbarHeight),
                 child: Container(
+                  color: Colors.white,
                   // color: isDarkTheme ? ColorConstants.darkColor : Colors.white,
                   child: TabBar(
                     controller: _tabController,

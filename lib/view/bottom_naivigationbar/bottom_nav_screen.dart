@@ -25,8 +25,9 @@ import 'package:stuedic_app/view/screens/story_asset_picker_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key, required this.controller});
-  final PageController controller;
+  const BottomNavScreen({
+    super.key,
+  });
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -68,14 +69,14 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
 
     List<Widget> userScreens = [
-      HomeScreen(controller: widget.controller),
+      HomePage(),
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
       ProfileScreenStudent()
     ];
     List<Widget> CollegeuserScreens = [
-      HomeScreen(controller: widget.controller),
+      HomePage(),
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
@@ -97,16 +98,15 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 10),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              GradientCircleAvathar(
-                onTap: () {
-                  AppRoutes.push(context, CreatePostScreen());
-                },
-                child: Icon(Icons.add),
-              ),
-            ],
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 35,
+            child: GradientCircleAvathar(
+              onTap: () {
+                AppRoutes.push(context, CreatePostScreen());
+              },
+              child: Icon(Icons.add),
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -144,13 +144,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late PageController pagecontroller;
+  PageController? pagecontroller;
   @override
   void initState() {
     super.initState();
     pagecontroller = PageController(
       initialPage: 0,
     );
+    setState(() {});
     context.read<HomefeedController>().getAllPost(context: context);
   }
 
@@ -161,11 +162,9 @@ class _HomePageState extends State<HomePage> {
       // AssetPickerPage(
       //   pageController: pagecontroller,
       // ),
-      BottomNavScreen(
-        controller: pagecontroller,
-      ),
+      HomeScreen(controller: pagecontroller!),
       ChatListScreen(
-        controller: pagecontroller,
+        controller: pagecontroller!,
       )
     ];
     return PageView(

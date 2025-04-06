@@ -9,6 +9,7 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
+import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
@@ -212,9 +213,12 @@ class _PostCardState extends State<PostCard>
                       );
                     }
                     if (widget.postType == StringConstants.reel) {
-                      return NetworkVideoPlayer(
-                        url: widget.mediaUrl,
-                        inistatePlay: false,
+                      return ChangeNotifierProvider(
+                        create: (_) => VideoTypeController(),
+                        child: NetworkVideoPlayer(
+                          url: widget.mediaUrl,
+                          inistatePlay: false,
+                        ),
                       );
                     } else {
                       return Container(

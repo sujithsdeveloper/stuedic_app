@@ -30,7 +30,7 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
     videoController = Provider.of<VideoTypeController>(context, listen: false);
     videoController.initialiseNetworkVideo(
         url: widget.url, inistatePlay: widget.inistatePlay);
-    videoController.controller.addListener(() {
+    videoController.networkVideoController!.addListener(() {
       if (mounted) {
         setState(() {}); // Update UI only if the widget is still mounted
       }
@@ -46,9 +46,10 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
       key: Key(widget.url), // Unique key for each video
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.8) {
-          proRead.controller.play(); // Play when more than 50% visible
+          proRead.networkVideoController!
+              .play(); // Play when more than 50% visible
         } else {
-          proRead.controller.pause();
+          proRead.networkVideoController!.pause();
           // Pause when less than 50% visible
         }
       },
@@ -81,17 +82,18 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: SizedBox(
-                    width: proWatch.controller.value.size.width,
-                    height: proWatch.controller.value.size.height,
+                    width: proWatch.networkVideoController!.value.size.width,
+                    height: proWatch.networkVideoController!.value.size.height,
                     child: AspectRatio(
-                        aspectRatio: proWatch.controller.value.aspectRatio,
-                        child: VideoPlayer(proWatch.controller)),
+                        aspectRatio:
+                            proWatch.networkVideoController!.value.aspectRatio,
+                        child: VideoPlayer(proWatch.networkVideoController!)),
                   ),
                 ),
               ),
             ),
             Visibility(
-              visible: !proWatch.controller.value.isPlaying,
+              visible: !proWatch.networkVideoController!.value.isPlaying,
               child: Center(
                 child: Opacity(
                   opacity: 0.7,
@@ -114,9 +116,10 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
 
   @override
   void dispose() {
-    if (videoController.controller.value.isInitialized) {
-      videoController.controller.removeListener(() {}); // Remove listener
-      videoController.controller.dispose(); // Dispose controller
+    if (videoController.networkVideoController!.value.isInitialized) {
+      videoController.networkVideoController!
+          .removeListener(() {}); // Remove listener
+      videoController.networkVideoController!.dispose(); // Dispose controller
     }
     super.dispose();
   }
