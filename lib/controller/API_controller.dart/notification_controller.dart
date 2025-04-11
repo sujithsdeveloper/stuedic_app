@@ -14,7 +14,7 @@ class NotificationController extends ChangeNotifier {
     await ApiCall.get(
         url: APIs.getNotification,
         onSucces: (p0) {
-          log(p0.body);
+          // log(p0.body);
           getNotificationModel = getNotificationFromJson(p0.body);
           isLoading = false;
           notifyListeners();

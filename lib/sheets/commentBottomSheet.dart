@@ -83,11 +83,6 @@ dynamic commentBottomSheet(
                         Expanded(child: Builder(
                           builder: (context) {
                             if (comments.isEmpty) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (comments.isEmpty) {
                               return Center(
                                 child: Column(
                                   spacing: 20,

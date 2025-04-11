@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/media_controller.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/utils/functions/shimmers_items.dart';
+import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:video_player/video_player.dart';
 
 class PickMediaScreen extends StatefulWidget {

@@ -92,22 +92,22 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
                 ),
               ),
             ),
-            Visibility(
-              visible: !proWatch.networkVideoController!.value.isPlaying,
-              child: Center(
-                child: Opacity(
-                  opacity: 0.7,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: ColorConstants.secondaryColor,
-                    child: Icon(
-                      proWatch.isMuted ? Icons.pause : Icons.play_arrow,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
+            // Visibility(
+            //   visible: !proWatch.networkVideoController!.value.isPlaying,
+            //   child: Center(
+            //     child: Opacity(
+            //       opacity: 0.7,
+            //       child: CircleAvatar(
+            //         radius: 25,
+            //         backgroundColor: ColorConstants.secondaryColor,
+            //         child: Icon(
+            //           proWatch.isMuted ? Icons.pause : Icons.play_arrow,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

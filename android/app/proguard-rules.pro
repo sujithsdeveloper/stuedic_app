@@ -7,3 +7,5 @@
 -keep class com.google.mlkit.vision.text.chinese.** { *; }
 
 -keep class com.arthenica.** { *; }
+
+-keep class **.zego.** { *; }

@@ -8,7 +8,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/utils/functions/shimmers_items.dart';
+import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 import 'package:stuedic_app/widgets/custom_list_tile.dart';

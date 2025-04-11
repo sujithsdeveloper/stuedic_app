@@ -7,6 +7,8 @@ import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:stuedic_app/view/screens/connection_failed_screen.dart';
 
 class ApiCall {
   static Future<void> post(
@@ -16,6 +18,8 @@ class ApiCall {
       required Function(http.Response) onSucces,
       required Function() onTokenExpired,
       required BuildContext context}) async {
+    if (await AppUtils.checkConnectivity(context)) return;
+
     String? token = await AppUtils.getToken();
 
     try {
@@ -34,7 +38,7 @@ class ApiCall {
       }
     } catch (e) {
       log(e.toString());
-      errorSnackbar(label: e.toString(), context: context);
+      errorSnackbar(label: StringConstants.wrong, context: context);
 
       throw Exception("API Call Failed: $e");
     }
@@ -46,6 +50,8 @@ class ApiCall {
     required Function() onTokenExpired,
     required BuildContext context,
   }) async {
+    if (await AppUtils.checkConnectivity(context)) return;
+
     String? token = await AppUtils.getToken();
 
     try {
@@ -64,7 +70,7 @@ class ApiCall {
       }
     } catch (e) {
       log(e.toString());
-      errorSnackbar(label: e.toString(), context: context);
+      errorSnackbar(label: StringConstants.wrong, context: context);
 
       throw Exception("API Call Failed: $e");
     }
@@ -77,6 +83,8 @@ class ApiCall {
     required Function() onTokenExpired,
     required BuildContext context,
   }) async {
+    if (await AppUtils.checkConnectivity(context)) return;
+
     String? token = await AppUtils.getToken();
 
     try {
@@ -97,7 +105,7 @@ class ApiCall {
       }
     } catch (e) {
       log(e.toString());
-      errorSnackbar(label: e.toString(), context: context);
+      errorSnackbar(label: StringConstants.wrong, context: context);
 
       throw Exception("API Call Failed: $e");
     }

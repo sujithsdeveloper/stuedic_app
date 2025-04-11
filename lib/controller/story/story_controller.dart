@@ -7,12 +7,12 @@ import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/get_story_model.dart';
 
 class StoryController extends ChangeNotifier {
-  GetStoriesModel? getstorymodel;
+  HomeStoriesModel? getstorymodel;
   Future<void> getStories(BuildContext context) async {
     await ApiCall.get(
-        url: APIs.getStory,
+        url: APIs.getStoryList,
         onSucces: (p0) {
-          getstorymodel = getStoriesModelFromJson(p0.body);
+          getstorymodel = homeStoriesModelFromJson(p0.body);
           notifyListeners();
         },
         onTokenExpired: () async {
@@ -53,4 +53,6 @@ class StoryController extends ChangeNotifier {
     isStoryUploading = false;
     notifyListeners();
   }
+
+
 }

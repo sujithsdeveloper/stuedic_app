@@ -98,8 +98,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 }
 
                                 final user = chatProWatch.usersList[index];
+                                final time = AppUtils.timeAgo(
+                                    user?.timestamp.toString() ??
+                                        DateTime.now().toString());
 
                                 return ListTile(
+                                  onLongPress: () {},
                                   minTileHeight: 60,
                                   onTap: () {
                                     AppRoutes.push(
@@ -127,13 +131,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                   ),
                                   subtitle: Text(
                                     user.lastMessage.toString(),
-                                    style: const TextStyle(
-                                        color: Color(0xff2097d5)),
+                                    style: TextStyle(
+                                        color: ColorConstants.secondaryColor,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   trailing: Text(
-                                    DateFormatter.formatDate(
-                                      user.timestamp ?? DateTime.now(),
-                                    ),
+                                    time,
                                     style: const TextStyle(color: Colors.grey),
                                   ),
                                 );

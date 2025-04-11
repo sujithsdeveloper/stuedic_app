@@ -17,6 +17,7 @@ import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
+import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -157,8 +158,16 @@ class CollegeProfileScreenState extends State<CollegeUserProfileScreen>
                       spacing: 8,
                       children: [
                         ProfileActionButton(
-                          iconData: CupertinoIcons.doc_text,
-                          onTap: () {},
+                          iconData: CupertinoIcons.envelope,
+                          onTap: () {
+                            AppRoutes.push(
+                                context,
+                                ChatScreen(
+                                    name: user?.userName ??
+                                        'Username not available',
+                                    imageUrl: user?.profilePicUrl ?? '',
+                                    userId: user!.userId.toString()));
+                          },
                         ),
                         GradientButton(
                           outline: user?.isFollowed ?? false ? true : false,

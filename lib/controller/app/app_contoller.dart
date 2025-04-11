@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/dialogs/desgination_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -43,19 +44,26 @@ class AppContoller extends ChangeNotifier {
   }
 
   void chnageBottomNav({required int index, required BuildContext context}) {
-    if (currentIndex == index) return; // Prevent redundant state changes
-    currentIndex = index;
-    notifyListeners();
-
     final videoController =
         Provider.of<VideoTypeController>(context, listen: false)
             .networkVideoController;
+
+    if (currentIndex == index) return; // Prevent redundant state changes
+    currentIndex = index;
+
+    notifyListeners();
+
     if (videoController != null && videoController.value.isInitialized) {
       if (currentIndex != 2) {
         videoController.pause();
       } else {
         videoController.play();
       }
+    }
+    if (currentIndex == 0) {
+      final proWatchHomepage =
+          Provider.of<HomePageController>(context, listen: false);
+      proWatchHomepage.pageController?.jumpToPage(0);
     }
   }
 
@@ -101,6 +109,7 @@ class AppContoller extends ChangeNotifier {
   void onStoryTap({
     required BuildContext context,
     required int index,
+    required String url,
     required String name,
   }) {
     isClickedStoryLoading = true;
@@ -112,7 +121,13 @@ class AppContoller extends ChangeNotifier {
       tappedStoryIndex = null;
       notifyListeners();
 
-      AppRoutes.push(context, StoryViewScreen(name: name));
+      AppRoutes.push(
+          context,
+          StoryViewScreen(
+            name: name,
+            profileUrl: url,
+            Profileindex: index,
+          ));
     });
   }
 

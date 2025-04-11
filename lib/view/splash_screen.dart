@@ -22,11 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
         if (widget.token == null || widget.token.isEmpty) {
           AppRoutes.pushAndRemoveUntil(context, LoginScreen());
         } else {
-          AppRoutes.pushAndRemoveUntil(context, BottomNavScreen());
+          AppRoutes.pushAndRemoveUntil(context, BottomNavScreen(isfirstTime: true,));
         }
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

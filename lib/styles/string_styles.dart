@@ -24,11 +24,11 @@ class StringStyle {
           fontSize: size,
           fontWeight: isBold ? FontWeight.bold : null);
 
-  static TextStyle normalTextBold({
-    double? size,
-  }) =>
+  static TextStyle normalTextBold(
+          {double? size, Color? color, bool isCallistga = false}) =>
       TextStyle(
-          fontFamily: 'latoRegular',
+          fontFamily: isCallistga ? 'Calistoga' : 'latoRegular',
+          color: color,
           fontSize: size == null ? null : size,
           fontWeight: FontWeight.bold);
 

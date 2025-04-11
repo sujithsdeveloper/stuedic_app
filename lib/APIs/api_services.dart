@@ -10,4 +10,9 @@ class ApiServices {
       "Content-Type": "application/json",
     };
   }
+  static Map<String, String> getHeadersWithOnlyToken(String token) {
+    return {
+    'Authorization': 'Bearer $token'
+    };
+  }
 }

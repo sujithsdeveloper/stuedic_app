@@ -40,14 +40,23 @@ class AuthController extends ChangeNotifier {
             accessToken: loginModelResponse.token ?? '',
             refreshToken: loginModelResponse.refreshToken ?? '');
 
-        AppRoutes.pushAndRemoveUntil(context, HomePage());
+        isLoginLoading = false;
+        notifyListeners();
+        AppRoutes.pushAndRemoveUntil(
+            context, BottomNavScreen(isfirstTime: true));
 
         log(response.body);
       } else if (response.body.contains(ApiResponse.userNotFound)) {
+        isLoginLoading = false;
+        notifyListeners();
         errorSnackbar(label: 'User Not Found', context: context);
       } else if (response.body.contains(ApiResponse.invalidPassword)) {
+        isLoginLoading = false;
+        notifyListeners();
         errorSnackbar(label: 'Invalid Password', context: context);
       } else {
+        isLoginLoading = false;
+        notifyListeners();
         log(response.statusCode.toString());
       }
 
@@ -116,7 +125,11 @@ class AuthController extends ChangeNotifier {
         await AppUtils.saveToken(
             accessToken: registrationModel?.token ?? '',
             refreshToken: registrationModel?.refreshToken ?? '');
-        AppRoutes.pushAndRemoveUntil(context, HomePage());
+        AppRoutes.pushAndRemoveUntil(
+            context,
+            BottomNavScreen(
+              isfirstTime: true,
+            ));
       } else if (response.statusCode == 401) {
         await refreshAccessToken(context: context);
         createAccount(

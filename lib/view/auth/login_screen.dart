@@ -7,6 +7,7 @@ import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart'
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
@@ -173,9 +174,7 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
                 SizedBox(height: 20),
                 proWatchAuth.isLoginLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
+                    ? loadingIndicator()
                     : GradientButton(
                         onTap: () {
                           if (key.currentState!.validate()) {

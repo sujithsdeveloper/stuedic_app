@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final getStoriesModel = getStoriesModelFromJson(jsonString);
+//     final homeStoriesModel = homeStoriesModelFromJson(jsonString);
 
 import 'dart:convert';
 
-GetStoriesModel getStoriesModelFromJson(String str) => GetStoriesModel.fromJson(json.decode(str));
+HomeStoriesModel homeStoriesModelFromJson(String str) => HomeStoriesModel.fromJson(json.decode(str));
 
-String getStoriesModelToJson(GetStoriesModel data) => json.encode(data.toJson());
+String homeStoriesModelToJson(HomeStoriesModel data) => json.encode(data.toJson());
 
-class GetStoriesModel {
+class HomeStoriesModel {
     int? respCode;
     String? message;
     Response? response;
 
-    GetStoriesModel({
+    HomeStoriesModel({
         this.respCode,
         this.message,
         this.response,
     });
 
-    factory GetStoriesModel.fromJson(Map<String, dynamic> json) => GetStoriesModel(
+    factory HomeStoriesModel.fromJson(Map<String, dynamic> json) => HomeStoriesModel(
         respCode: json["respCode"],
         message: json["message"],
         response: json["response"] == null ? null : Response.fromJson(json["response"]),
@@ -50,23 +50,31 @@ class Response {
 
 class GroupedStory {
     int? authorId;
+    String? authorName;
+    String? profilePicUrl;
     List<Story>? stories;
     bool? isCurrentUser;
 
     GroupedStory({
         this.authorId,
+        this.authorName,
+        this.profilePicUrl,
         this.stories,
         this.isCurrentUser,
     });
 
     factory GroupedStory.fromJson(Map<String, dynamic> json) => GroupedStory(
         authorId: json["authorId"],
+        authorName: json["authorName"],
+        profilePicUrl: json["profilePicURL"],
         stories: json["stories"] == null ? [] : List<Story>.from(json["stories"]!.map((x) => Story.fromJson(x))),
         isCurrentUser: json["isCurrentUser"],
     );
 
     Map<String, dynamic> toJson() => {
         "authorId": authorId,
+        "authorName": authorName,
+        "profilePicURL": profilePicUrl,
         "stories": stories == null ? [] : List<dynamic>.from(stories!.map((x) => x.toJson())),
         "isCurrentUser": isCurrentUser,
     };

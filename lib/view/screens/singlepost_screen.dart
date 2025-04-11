@@ -17,16 +17,19 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/utils/functions/shimmers_items.dart';
+import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class SinglepostScreen extends StatefulWidget {
   const SinglepostScreen(
-      {super.key, required this.postID, required this.userID});
+      {super.key,
+      required this.postID,
+      required this.userID,
+      this.isCurrentUser = false});
   final String postID;
   final String userID;
+  final bool isCurrentUser;
   @override
   State<SinglepostScreen> createState() => _SinglepostScreenState();
 }
@@ -97,8 +100,12 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 padding: EdgeInsets.only(left: 9),
                 child: GestureDetector(
                   onTap: () {
-                    AppRoutes.push(
-                        context, UserProfileScreen(userId: widget.userID));
+                    if (widget.isCurrentUser) {
+                      Navigator.pop(context);
+                    } else {
+                      AppRoutes.push(
+                          context, UserProfileScreen(userId: widget.userID));
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),

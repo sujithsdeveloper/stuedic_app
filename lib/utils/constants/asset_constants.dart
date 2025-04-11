@@ -9,6 +9,7 @@ class LottieAnimations {
   static const String like = 'assets/animations/like.json';
   static const String bottomLike = 'assets/animations/bottomLike.json';
   static const String tick = 'assets/animations/tick.json';
+  static const String loading = 'assets/animations/stuedic_loading_animation.json';
 }
 
 class SVGConstants {

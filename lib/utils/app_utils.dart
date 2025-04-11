@@ -2,12 +2,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/view/screens/connection_failed_screen.dart';
 
 class AppUtils {
   static Future<String> getToken({bool isRefreshToken = false}) async {
@@ -220,5 +223,14 @@ class AppUtils {
     } else {
       return ThemeMode.light;
     }
+  }
+
+  static Future<bool> checkConnectivity(BuildContext context) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      AppRoutes.pushReplacement(context, ConnectionFailedScreen());
+      return true;
+    }
+    return false;
   }
 }

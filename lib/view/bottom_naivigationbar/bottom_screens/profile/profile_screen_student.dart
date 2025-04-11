@@ -6,14 +6,12 @@ import 'package:stuedic_app/controller/API_controller.dart/post_interaction_cont
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
-import 'package:stuedic_app/model/getbookamark_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
-import 'package:stuedic_app/view/screens/college/college_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -264,6 +262,7 @@ class _ProfileScreenStudentState extends State<ProfileScreenStudent>
                       AppRoutes.push(
                           context,
                           SinglepostScreen(
+                              isCurrentUser: true,
                               postID: photoGrid?[index]?.postId ?? '',
                               userID: user?.userId ?? ''));
                     },

@@ -15,6 +15,7 @@ import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
+import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
 import 'package:stuedic_app/widgets/stuedic_point_container.dart';
@@ -50,6 +51,10 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
     // bool isDarkTheme = AppUtils.isDarkTheme(context);
     final photoGrid =
         userDataProviderWatch.currentUserProfileGrid?.response?.posts;
+    final postInteractionProviderWatch =
+        context.watch<PostInteractionController>();
+    final bookmarkGrid =
+        postInteractionProviderWatch.getBookamark?.response?.bookmarks;
 
     return Scaffold(
       appBar: AppBar(
@@ -346,6 +351,50 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
             ),
 
             // Shopping Items
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Builder(
+                  builder: (context) {
+                    if (bookmarkGrid == null) {
+                      return Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [Text('No Items')],
+                        ),
+                      );
+                    } else {
+                      return GridView.builder(
+                        itemCount: bookmarkGrid?.length ?? 0,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 9 / 16,
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4),
+                        itemBuilder: (context, index) {
+                          final bookmarkedItem = bookmarkGrid?[index];
+                          return GestureDetector(
+                            onTap: () {
+                              AppRoutes.push(
+                                  context,
+                                  SinglepostScreen(
+                                      postID: bookmarkedItem?.postId ?? '',
+                                      userID: user?.userId ?? ''));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xffF5FFBB),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          bookmarkedItem?.postContentUrl ??
+                                              ''))),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
             Center(
               child: Text("Shopping items will be displayed here",
                   style: TextStyle(fontSize: 16)),

@@ -1,82 +1,126 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
+import 'package:stuedic_app/APIs/websocket_service.dart';
+import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/model/chat_history_model.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:web_socket_channel/io.dart';
+import '../../APIs/API_call.dart';
 
 class ChatController extends ChangeNotifier {
-  late WebSocketChannel channel;
-  List<String> messages = [];
-  bool isConnected = false;
-  int _retryCount = 0; // Track the number of retries
-  final int _maxRetries = 5; // Maximum number of retries
+  IOWebSocketChannel? socket;
+  List<ChatHistoryModel> chatHistoryList = [];
+  ScrollController scrollController = ScrollController();
+  bool isHistoryLoading = false;
+  Future<void> getChatHistory(
+      {required String userId, required BuildContext context}) async {
+    isHistoryLoading = true;
+    notifyListeners();
 
-  void initSocket({required String userId}) {
+    await ApiCall.get(
+        url: Uri.parse('${APIs.baseUrl}api/v1/chat/history?toUser=$userId'),
+        onSucces: (p0) {
+          chatHistoryList = chatHistoryModelFromJson(p0.body);
+          isHistoryLoading = false;
+          notifyListeners();
+          scrollToBottom();
+        },
+        onTokenExpired: () {
+          isHistoryLoading = false;
+          notifyListeners();
+          getChatHistory(userId: userId, context: context);
+        },
+        context: context);
+    isHistoryLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> connectToUser({
+    required String userId,
+  }) async {
     try {
-      channel = WebSocketChannel.connect(
-        Uri.parse('${APIs.socketBaseUrl}api/v1/chat?toUser=$userId'),
+      final token = await AppUtils.getToken();
+      final headers = WebsocketService.getHeader(token!);
+      socket = await WebsocketService.getSocket(
+        url: "wss://api.stuedic.com/api/v1/chat?toUser=$userId",
+        headers: headers,
       );
-
-      isConnected = true;
-      _retryCount = 0; // Reset retry count on successful connection
-      notifyListeners();
-
-      channel.stream.listen(
-        (message) {
-          log("Received message: $message");
-          messages.insert(0, message); // Add new messages to the top
-          notifyListeners(); // Notify UI to update
-        },
-        onError: (error) {
-          log("WebSocket Error: ${error.toString()}");
-          isConnected = false;
-          notifyListeners();
-          _retryConnection(userId); // Retry connection on error
-        },
-        onDone: () {
-          log("WebSocket Closed");
-          isConnected = false;
-          notifyListeners();
-          _retryConnection(userId); // Retry connection when closed
-        },
-      );
+      log('Connected to user: $userId');
+      listenToMessages(userId: userId);
     } catch (e) {
-      log("Error connecting to WebSocket: ${e.toString()}");
-      isConnected = false;
+      log('Error connecting to user: $e');
+    }
+  }
+
+  void reconnectSocket({required String userId}) {
+    if (socket == null || socket!.closeCode != null) {
+      log('Reconnecting to socket...');
+      connectToUser(userId: userId);
+    }
+  }
+
+  void listenToMessages({required String userId}) {
+    socket!.stream.listen(
+      (data) {
+        log('Received message: $data');
+        final message = ChatHistoryModel.fromJson(jsonDecode(data));
+        chatHistoryList.add(message);
+
+        notifyListeners();
+        scrollToBottom();
+      },
+      onDone: () {
+        log('Socket connection closed. Attempting to reconnect...');
+        reconnectSocket(userId: userId);
+      },
+      onError: (error) {
+        log('Socket error: $error. Attempting to reconnect...');
+        reconnectSocket(userId: userId);
+      },
+    );
+  }
+
+  Future<void> sendMessage(String message, BuildContext context) async {
+    if (message.trim().isEmpty) {
+      // errorSnackbar(label: "Enter a Proper message", context: context);
+    } else {
+      log("===> Sending message");
+      socket!.sink.add(message.trim());
+      int? currentUserId = int.tryParse(await AppUtils.getUserId());
+      chatHistoryList.add(
+        ChatHistoryModel(
+          content: message.trim(),
+          timestamp: DateTime.now(),
+          fromUserId: currentUserId,
+          toUserId: 51484207,
+          currentUser: currentUserId,
+          read: true,
+        ),
+      );
+      // scrollToBottom();
       notifyListeners();
-      _retryConnection(userId); // Retry connection on exception
     }
   }
 
-  void _retryConnection(String userId) {
-    if (_retryCount < _maxRetries) {
-      final delay =
-          Duration(seconds: 5 * (_retryCount + 1)); // Exponential backoff
-      _retryCount++;
-      log("Retrying WebSocket connection in ${delay.inSeconds} seconds... (Attempt $_retryCount of $_maxRetries)");
-      Future.delayed(delay, () {
-        if (!isConnected) {
-          initSocket(userId: userId);
-        }
-      });
-    } else {
-      log("Max retry attempts reached. WebSocket connection failed.");
-    }
-  }
-
-  void sendMessage(String message) {
-    if (isConnected) {
-      log("Sending message: $message");
-      channel.sink.add(message);
-    } else {
-      log("WebSocket not connected. Cannot send message.");
-    }
-  }
-
-  @override
   void dispose() {
-    log("Closing WebSocket connection...");
-    channel.sink.close(status.goingAway);
+    socket?.sink.close();
+    log('Connection Clossed');
+    socket = null;
     super.dispose();
   }
+
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(
+          scrollController.position.maxScrollExtent,
+        );
+      }
+    });
+  }
 }
+
+// wss://echo.websocket.org

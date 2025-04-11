@@ -42,7 +42,7 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
     return GestureDetector(
       onTap: () {
         // log(pickedVideoRatio.toString());
-        proRead.togglePlayPause(controller);
+        // proRead.togglePlayPause(controller);
       },
       child: Stack(
         alignment: Alignment.center,
@@ -78,7 +78,6 @@ class _AssetVideoPlayerState extends State<AssetVideoPlayer> {
               ),
             ),
           ),
-        
         ],
       ),
     );

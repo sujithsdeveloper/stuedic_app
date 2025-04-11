@@ -33,7 +33,8 @@ class VideoTypeController extends ChangeNotifier {
     if (isGestureControll) {
       toggleMuteUnmute();
     } else {
-      togglePlayPause(controller);
+      togglePlayPause(controller)
+      ;
     }
   }
 
@@ -72,4 +73,5 @@ class VideoTypeController extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
 }
