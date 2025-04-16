@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
@@ -138,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   commentCount:
                                       item.commentsCount.toString() ?? '0',
                                   index: index,
+                                  
                                   time: time,
                                   userId: item.userId ?? '',
                                   mediaUrl: item.postContentUrl ?? '',

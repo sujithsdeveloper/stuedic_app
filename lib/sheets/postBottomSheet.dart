@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -18,6 +19,7 @@ dynamic postBottomSheet(
     required String imageUrl,
     required String postId,
     required bool isRightUser,
+    required bool isSaved,
     required String username}) {
   return showModalBottomSheet(
     isScrollControlled: false,
@@ -34,9 +36,31 @@ dynamic postBottomSheet(
           child: Column(
             children: [
               _sheetItems(
-                onTap: () {},
-                iconData: CupertinoIcons.bookmark,
-                label: 'Save Post',
+                onTap: () {
+                  if (isSaved) {
+                    context
+                        .read<PostInteractionController>()
+                        .deleteBookmark(postId: postId, context: context)
+                        .then(
+                      (value) {
+                        Navigator.pop(context);
+                      },
+                    );
+                  } else {
+                    context
+                        .read<PostInteractionController>()
+                        .bookmarkPost(postId: postId, context: context)
+                        .then(
+                      (value) {
+                        Navigator.pop(context);
+                      },
+                    );
+                  }
+                },
+                iconData: isSaved
+                    ? Icons.bookmark_remove_rounded
+                    : CupertinoIcons.bookmark,
+                label: isSaved ? 'Unsave Post' : 'Save Post',
               ),
               Visibility(
                 visible: isRightUser,

@@ -154,6 +154,7 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                                     IDtoCheck: widget.userID);
 
                             postBottomSheet(
+                                isSaved: post?.isBookmarked ?? false,
                                 postId: widget.postID,
                                 isRightUser: isRightUser,
                                 context: context,

@@ -91,7 +91,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       child: Scaffold(
         body: IndexedStack(
           index: proWatch.currentIndex,
-          children: CollegeuserScreens,
+          children: isCollege ? CollegeuserScreens : userScreens,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(

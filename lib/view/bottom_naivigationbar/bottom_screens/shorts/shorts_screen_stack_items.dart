@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
@@ -43,12 +42,11 @@ class TopBar extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
           onTap: () {
-            AppRoutes.push(context,
-                UserProfileScreen(userId: reel?.userId ?? ''));
+            AppRoutes.push(
+                context, UserProfileScreen(userId: reel?.userId ?? ''));
           },
           child: CircleAvatar(
-            backgroundImage:
-                AppUtils.getProfile(url: reel?.profilePicUrl),
+            backgroundImage: AppUtils.getProfile(url: reel?.profilePicUrl),
           )),
       title: Text(
         reel?.username ?? 'unknown user',
@@ -68,58 +66,44 @@ class TopBar extends StatelessWidget {
               if (reel?.isFollowed ?? false) {
                 context
                     .read<PostInteractionController>()
-                    .unfollowUser(
-                        userId: reel?.userId ?? '',
-                        context: context);
-                context
-                    .read<ShortsController>()
-                    .getReels(context: context);
+                    .unfollowUser(userId: reel?.userId ?? '', context: context);
+                context.read<ShortsController>().getReels(context: context);
               } else {
                 context
                     .read<PostInteractionController>()
-                    .followUser(
-                        userId: reel?.userId ?? '',
-                        context: context);
-                context
-                    .read<ShortsController>()
-                    .getReels(context: context);
+                    .followUser(userId: reel?.userId ?? '', context: context);
+                context.read<ShortsController>().getReels(context: context);
               }
             },
             child: Container(
               height: 28,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: Text(
-                    reel?.isFollowed ?? false
-                        ? 'unfollow'
-                        : 'Follow',
+                child: Text(reel?.isFollowed ?? false ? 'unfollow' : 'Follow',
                     style: TextStyle(color: Colors.white)),
               ),
             ),
           ),
           IconButton(
             onPressed: () async {
-              bool isRightUser =
-                  await AppUtils.checkUserIdForCurrentUser(
-                      IDtoCheck: reel?.userId ?? '');
-              postBottomSheet(
-                  context: context,
-                  imageUrl: '',
-                  postId: reel?.postId ?? ' ',
-                  isRightUser: isRightUser,
-                  username: reel?.username ?? '');
+              bool isRightUser = await AppUtils.checkUserIdForCurrentUser(
+                  IDtoCheck: reel?.userId ?? '');
+              // postBottomSheet(
+              //   isSaved: reel?.is ?? false,
+              //     context: context,
+              //     imageUrl: '',
+              //     postId: reel?.postId ?? ' ',
+              //     isRightUser: isRightUser,
+              //     username: reel?.username ?? '');
             },
-            icon: const Icon(Icons.more_horiz,
-                color: Colors.white),
+            icon: const Icon(Icons.more_horiz, color: Colors.white),
           ),
         ],
       ),
     );
   }
 }
-

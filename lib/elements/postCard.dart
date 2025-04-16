@@ -42,6 +42,7 @@ class PostCard extends StatefulWidget {
   final String name;
   final int index;
   final bool isLiked;
+  // final bool isCollege;
   final String postId;
   final String likeCount;
   final String commentCount;
@@ -146,6 +147,7 @@ class _PostCardState extends State<PostCard>
                               IDtoCheck: widget.userId);
 
                       postBottomSheet(
+                        isSaved: widget.isBookmarked,
                           postId: widget.postId,
                           isRightUser: isRightUser,
                           context: context,

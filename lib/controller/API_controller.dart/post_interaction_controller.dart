@@ -10,6 +10,7 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/dialogs/unfollowdialog.dart';
 import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/model/getbookamark_model.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 
 class PostInteractionController extends ChangeNotifier {
   Set<int> followers = {};
@@ -128,6 +129,7 @@ class PostInteractionController extends ChangeNotifier {
       onSucces: (p0) {
         Logger().f(p0.body);
         context.read<HomefeedController>().getAllPost(context: context);
+        AppUtils.showToast(msg: 'Post Saved');
         notifyListeners();
       },
       onTokenExpired: () => bookmarkPost(postId: postId, context: context),
@@ -145,6 +147,8 @@ class PostInteractionController extends ChangeNotifier {
       onSucces: (p0) {
         Logger().f(p0.body);
         context.read<HomefeedController>().getAllPost(context: context);
+        AppUtils.showToast(msg: 'Post UnSaved');
+
         notifyListeners();
       },
       onTokenExpired: () => deleteBookmark(postId: postId, context: context),

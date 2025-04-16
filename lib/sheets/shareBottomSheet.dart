@@ -6,14 +6,16 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
-Future<dynamic> shareBottomSheet(BuildContext context,) {
+Future<dynamic> shareBottomSheet(
+  BuildContext context,
+) {
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.7, 
-      minChildSize: 0.4, 
+      initialChildSize: 0.7,
+      minChildSize: 0.4,
       builder: (context, scrollController) => SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -78,25 +80,11 @@ Future<dynamic> shareBottomSheet(BuildContext context,) {
                       ),
                     ),
                     ShareItems(
-                        icon: Icon(
-                          CupertinoIcons.link,
-                        ),
-                        text: 'Copy Link'),
+                        icon: Icon(CupertinoIcons.link), text: 'Copy Link'),
                     ShareItems(
-                        icon: Brand(
-                          Brands.instagram,
-                        ),
-                        text: 'Instagram'),
-                    ShareItems(
-                        icon: Brand(
-                          Brands.whatsapp,
-                        ),
-                        text: 'Whatsapp'),
-                    ShareItems(
-                        icon: Brand(
-                          Brands.facebook,
-                        ),
-                        text: 'Facebook'),
+                        icon: Brand(Brands.instagram), text: 'Instagram'),
+                    ShareItems(icon: Brand(Brands.whatsapp), text: 'Whatsapp'),
+                    ShareItems(icon: Brand(Brands.facebook), text: 'Facebook'),
                     ShareItems(
                         icon: Icon(CupertinoIcons.chat_bubble), text: 'SMS'),
                   ],
@@ -135,7 +123,6 @@ Future<dynamic> shareBottomSheet(BuildContext context,) {
                       backgroundImage: NetworkImage(''),
                     ),
                     title: Text(
-                      
                       '',
                       style: StringStyle.normalTextBold(),
                     ),
