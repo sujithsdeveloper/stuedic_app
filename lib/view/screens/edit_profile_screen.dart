@@ -164,12 +164,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             context: context,
                             onCameraTap: () {
                               context.read<AssetPickerController>().pickImage(
-                                    context: context,
-                                    source: ImageSource.camera,
-                                  );
+                                  context: context,
+                                  source: ImageSource.camera,
+                                  squreCrop: true);
                             },
                             onGalleryTap: () {
                               context.read<AssetPickerController>().pickImage(
+                                    squreCrop: true,
                                     context: context,
                                     source: ImageSource.gallery,
                                   );

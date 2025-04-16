@@ -9,7 +9,6 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
-import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
@@ -51,7 +50,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       feedController.getAllPost(context: context);
       storyController.getStories(context);
     });
-  }}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +91,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       child: Scaffold(
         body: IndexedStack(
           index: proWatch.currentIndex,
-          children: isCollege ? CollegeuserScreens : userScreens,
+          children: CollegeuserScreens,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
@@ -111,7 +110,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           onTap: (value) {
-            // if(value==0){}
             proRead.chnageBottomNav(index: value, context: context);
           },
           currentIndex: proWatch.currentIndex,

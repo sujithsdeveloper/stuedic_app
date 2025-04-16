@@ -22,7 +22,6 @@ import 'package:stuedic_app/controller/connectivity_check_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
-import 'package:stuedic_app/controller/story/story_picker_controller.dart';
 import 'package:stuedic_app/controller/video/video_trim_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -35,8 +34,6 @@ import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
 import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/view/auth/login_screen.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
 import 'package:stuedic_app/view/splash_screen.dart';
 
 Future<void> main() async {
@@ -91,14 +88,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),

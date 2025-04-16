@@ -4,8 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
+  emoji_picker_flutter
   file_selector_linux
   flutter_volume_controller
+  url_launcher_linux
   zego_express_engine
 )
 

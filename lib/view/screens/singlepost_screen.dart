@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -365,7 +365,17 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 child: TextField(
                   controller: commentController,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(CupertinoIcons.smiley),
+                    prefixIcon: IconButton(
+                      onPressed: () {
+                        EmojiPicker(
+                          onEmojiSelected: (category, emoji) {
+                            commentController.text += emoji.emoji;
+                          },
+                          config: Config(),
+                        );
+                      },
+                      icon: Icon(CupertinoIcons.smiley),
+                    ),
                     hintText: 'Write a comment...',
                     filled: true,
                     fillColor: const Color(0xffF6F8F9),

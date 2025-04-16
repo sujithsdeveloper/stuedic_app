@@ -6,7 +6,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
-Future<dynamic> shareBottomSheet(BuildContext context) {
+Future<dynamic> shareBottomSheet(BuildContext context,) {
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,

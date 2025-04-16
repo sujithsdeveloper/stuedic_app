@@ -33,26 +33,26 @@ class _StorySectionState extends State<StorySection> {
           (homeStories == null || homeStories.isEmpty)
               ? Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: ColorConstants.primaryColor,
-                            radius: 34,
-                            child: CircleAvatar(
-                              radius: 32,
-                              backgroundImage:
-                                  AppUtils.getProfile(url: profileUrl ?? ''),
+                  child: GestureDetector(
+                    onTap: () {
+                      AppRoutes.push(context, AssetPickerPage());
+                    },
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: ColorConstants.primaryColor,
+                              radius: 34,
+                              child: CircleAvatar(
+                                radius: 32,
+                                backgroundImage:
+                                    AppUtils.getProfile(url: profileUrl ?? ''),
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 3,
-                            right: 3,
-                            child: GestureDetector(
-                              onTap: () {
-                                AppRoutes.push(context, AssetPickerPage());
-                              },
+                            Positioned(
+                              bottom: 3,
+                              right: 3,
                               child: GradientCircleAvathar(
                                 radius: 20,
                                 child: Icon(
@@ -61,18 +61,18 @@ class _StorySectionState extends State<StorySection> {
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Your Story',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 10),
-                      ),
-                    ],
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Your Story',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 10),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               : ListView.builder(

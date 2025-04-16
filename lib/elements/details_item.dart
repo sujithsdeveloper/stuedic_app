@@ -8,10 +8,11 @@ class DetailsItem extends StatelessWidget {
       {super.key,
       required this.title,
       required this.subtitle,
-      required this.iconData});
+      required this.iconData,  this.onIconTap});
   final String title;
   final String subtitle;
   final IconData iconData;
+  final Function()? onIconTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -27,7 +28,7 @@ class DetailsItem extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      trailing: Icon(iconData),
+      trailing: IconButton(onPressed: onIconTap, icon: Icon(iconData),)
     );
   }
 }

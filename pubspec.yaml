@@ -65,6 +65,8 @@ dependencies:
   cached_network_image: ^3.4.1
   cached_video_player_plus: ^3.0.3
   zego_uikit_prebuilt_call: ^4.16.27
+  emoji_picker_flutter: ^4.3.0
+  easy_url_launcher: ^0.0.7
 
 
 

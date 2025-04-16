@@ -5,10 +5,12 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   connectivity_plus
+  emoji_picker_flutter
   file_selector_windows
   flutter_inappwebview_windows
   flutter_volume_controller
   permission_handler_windows
+  url_launcher_windows
   zego_express_engine
   zego_zim
 )

@@ -87,7 +87,9 @@ class AssetPickerController extends ChangeNotifier {
   }
 
   Future<void> pickImage(
-      {required ImageSource source, required BuildContext context}) async {
+      {required ImageSource source,
+      required BuildContext context,
+      bool squreCrop = false}) async {
     isLoading = true;
     notifyListeners();
 
@@ -102,7 +104,9 @@ class AssetPickerController extends ChangeNotifier {
 
       CroppedFile? croppedFile = await cropper.cropImage(
         sourcePath: image.path,
-        aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 4),
+        aspectRatio: squreCrop
+            ? CropAspectRatio(ratioX: 1, ratioY: 1)
+            : const CropAspectRatio(ratioX: 3, ratioY: 4),
         uiSettings: [
           AndroidUiSettings(
               hideBottomControls: true,

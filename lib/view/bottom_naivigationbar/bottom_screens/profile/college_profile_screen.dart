@@ -1,3 +1,4 @@
+import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -8,12 +9,15 @@ import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/view/screens/club_screen.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
+import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -70,7 +74,9 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
               expandedHeight: context.screenHeight,
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppRoutes.push(context, NotificationScreen());
+                    },
                     icon: Icon(HugeIcons.strokeRoundedNotification01)),
                 IconButton(
                     onPressed: () {
@@ -172,6 +178,9 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                             isColored: user?.isFollowed ?? false ? false : true,
                             label: 'Edit Profile'),
                         ProfileActionButton(
+                          onTap: () {
+                            shareBottomSheet(context);
+                          },
                           iconData: Icons.share_outlined,
                         )
                       ],
@@ -179,12 +188,12 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                     SizedBox(
                       height: 9,
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: StuedicPointContainer(
-                        point: '0',
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: StuedicPointContainer(
+                    //     point: '0',
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
@@ -212,6 +221,9 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                                           user?.allDepartments?.length ?? 0),
                                       label: "Departments"),
                                   counts(
+                                      onTap: () {
+                                        AppRoutes.push(context, ClubScreen());
+                                      },
                                       count: AppUtils.formatCounts(0),
                                       label: "Clubs"),
                                 ],
@@ -236,10 +248,30 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                                   subtitle: lorum,
                                   iconData: CupertinoIcons.location),
                               DetailsItem(
+                                  onIconTap: () {
+                                    if (user?.email != null) {
+                                      EasyLauncher.email(
+                                          email: user?.email ?? '');
+                                    } else {
+                                      AppUtils.showToast(
+                                        msg: 'Email not provided',
+                                      );
+                                    }
+                                  },
                                   title: 'Email',
                                   subtitle: user?.email ?? 'Not Provided',
                                   iconData: CupertinoIcons.envelope),
                               DetailsItem(
+                                  onIconTap: () {
+                                    if (user?.email != null) {
+                                      EasyLauncher.call(
+                                          number: user?.phone ?? '');
+                                    } else {
+                                      AppUtils.showToast(
+                                        msg: 'Phone number not provided',
+                                      );
+                                    }
+                                  },
                                   title: 'Phone Number',
                                   subtitle: user?.phone ?? 'Not Provided',
                                   iconData: HugeIcons.strokeRoundedCall),

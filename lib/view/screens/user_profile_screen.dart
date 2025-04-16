@@ -29,6 +29,11 @@ class UserProfileScreen extends StatefulWidget {
   final String userId;
   @override
   State<UserProfileScreen> createState() => _ProfileScreenStudentState();
+  @override
+  StatefulElement createElement() {
+    // TODO: implement createElement
+    return super.createElement();
+  }
 }
 
 class _ProfileScreenStudentState extends State<UserProfileScreen>
@@ -57,7 +62,7 @@ class _ProfileScreenStudentState extends State<UserProfileScreen>
     final userDataProviderWatch = context.watch<ProfileController>();
 
     final user = userDataProviderWatch.userProfile?.response;
-    final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
+    final photoGrid = userDataProviderWatch.userGridModel?.response?.posts?.reversed.toList();
 
     return Scaffold(
       body: NestedScrollView(
