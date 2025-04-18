@@ -226,7 +226,7 @@ class PostInteractionController extends ChangeNotifier {
         getComments = getCommentsModelFromJson(p0.body);
         isCommentLoading = false;
         notifyListeners();
-        log(p0.body);
+        // log(p0.body);
       },
       onTokenExpired: () {
         getComment(context: context, postId: postId);

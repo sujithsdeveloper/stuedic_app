@@ -11,6 +11,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/view/screens/settings/account/account_settings.dart';
 import 'package:stuedic_app/view/screens/settings/language_screen.dart';
 import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 
@@ -25,7 +26,9 @@ class SettingScreen extends StatelessWidget {
       {
         'label': 'Account',
         'icon': CupertinoIcons.person_circle,
-        'onTap': () {},
+        'onTap': () {
+          AppRoutes.push(context, AccountSettings());
+        },
       },
       {
         'label': 'Theme',

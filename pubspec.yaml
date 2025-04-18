@@ -128,6 +128,9 @@ flutter:
     - family: Calistoga
       fonts:
         - asset: assets/fonts/Calistoga-Regular.ttf
+    - family: Chewy
+      fonts:
+        - asset: assets/fonts/Chewy-Regular.ttf
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf

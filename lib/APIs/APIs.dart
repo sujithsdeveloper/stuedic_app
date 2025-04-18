@@ -35,6 +35,7 @@ class APIs {
   static Uri getUserDetail =
       Uri.parse('${baseUrl}api/v1/Profile/getUserDetails');
   static Uri logoutUser = Uri.parse('${baseUrl}api/v1/User/logoutuser');
+  static Uri changePassword = Uri.parse('${baseUrl}api/v1/User/changePassword');
 
   //product
   static Uri addNewProduct =

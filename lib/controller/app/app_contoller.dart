@@ -26,6 +26,17 @@ class AppContoller extends ChangeNotifier {
     isButtonColored = false;
     changeMaxLine = false;
     singleFieldColored = false;
+    isObscure = true;
+    checkBoxCheked = false;
+    isEmailSelected = true;
+    isButtonColored = false;
+    singleFieldColored = false;
+    currentIndex = 0;
+    pageIndex = 0;
+    email = "";
+    phoneNumber = "";
+    password = "";
+    confrimPassword = "";
 
     notifyListeners();
   }

@@ -9,6 +9,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/date_formater.dart';
@@ -38,6 +39,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     final chatProWatch = context.watch<ChatListScreenController>();
+    final chatList = chatProWatch.usersList;
     final chatProRead = context.read<ChatListScreenController>();
 
     debugPrint("User list length: ${chatProWatch.usersList.length}");
@@ -84,69 +86,91 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: chatProWatch.usersList.length,
-                              itemBuilder: (context, index) {
-                                if (index >= chatProWatch.usersList.length) {
-                                  return const SizedBox();
-                                }
+                      child: Builder(builder: (context) {
+                        if (chatList == null || chatList.isEmpty) {
+                          return Column(
+                            children: [
+                              Image.asset(
+                                ImageConstants.no_message_list_found,
+                                height: 189,
+                                width: 189,
+                              ),
+                              Text(
+                                'No Messages',
+                                style: StringStyle.normalTextBold(),
+                              )
+                            ],
+                          );
+                        } else {
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 20),
+                                ListView.separated(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: chatProWatch.usersList.length,
+                                  itemBuilder: (context, index) {
+                                    if (index >=
+                                        chatProWatch.usersList.length) {
+                                      return const SizedBox();
+                                    }
 
-                                final user = chatProWatch.usersList[index];
-                                final time = AppUtils.timeAgo(
-                                    user?.timestamp.toString() ??
-                                        DateTime.now().toString());
+                                    final user = chatProWatch.usersList[index];
+                                    final time = AppUtils.timeAgo(
+                                        user?.timestamp.toString() ??
+                                            DateTime.now().toString());
 
-                                return ListTile(
-                                  onLongPress: () {},
-                                  minTileHeight: 60,
-                                  onTap: () {
-                                    AppRoutes.push(
-                                      context,
-                                      ChangeNotifierProvider(
-                                        create: (context) => ChatController(),
-                                        child: ChatScreen(
-                                          name: user.username.toString(),
-                                          userId: user.userId.toString(),
-                                          imageUrl:
-                                              user.profilePicUrl.toString(),
-                                        ),
+                                    return ListTile(
+                                      onLongPress: () {},
+                                      minTileHeight: 60,
+                                      onTap: () {
+                                        AppRoutes.push(
+                                          context,
+                                          ChangeNotifierProvider(
+                                            create: (context) =>
+                                                ChatController(),
+                                            child: ChatScreen(
+                                              name: user.username.toString(),
+                                              userId: user.userId.toString(),
+                                              imageUrl:
+                                                  user.profilePicUrl.toString(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage: AppUtils.getProfile(
+                                            url: user.profilePicUrl),
+                                      ),
+                                      title: Text(
+                                        user.username ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: Text(
+                                        user.lastMessage.toString(),
+                                        style: TextStyle(
+                                            color:
+                                                ColorConstants.secondaryColor,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      trailing: Text(
+                                        time,
+                                        style:
+                                            const TextStyle(color: Colors.grey),
                                       ),
                                     );
                                   },
-                                  leading: CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: AppUtils.getProfile(
-                                        url: user.profilePicUrl),
-                                  ),
-                                  title: Text(
-                                    user.username ?? '',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
-                                    user.lastMessage.toString(),
-                                    style: TextStyle(
-                                        color: ColorConstants.secondaryColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  trailing: Text(
-                                    time,
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 9),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 9),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          );
+                        }
+                      }),
                     ),
                   ),
       ),

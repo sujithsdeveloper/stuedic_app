@@ -153,12 +153,13 @@ class AuthController extends ChangeNotifier {
 
   Future<void> forgotPassword(
       {required String email, required BuildContext context}) async {
-    Map data = {"userIdentifier": "email@sdhjsd.com"};
+    Map data = {"userIdentifier": email};
 
     await ApiCall.post(
         url: APIs.forgotPasswordUrl,
         body: data,
         onSucces: (p0) {
+          log('Forgot Password Response: ${p0.body}');
           customSnackbar(
               label: 'Check your mail to reset your password',
               context: context);

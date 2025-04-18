@@ -73,16 +73,23 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
               floating: true,
               expandedHeight: context.screenHeight,
               actions: [
-                IconButton(
-                    onPressed: () {
+                GestureDetector(
+                    onTap: () {
                       AppRoutes.push(context, NotificationScreen());
                     },
-                    icon: Icon(HugeIcons.strokeRoundedNotification01)),
-                IconButton(
-                    onPressed: () {
-                      AppRoutes.push(context, SettingScreen());
+                    child: Icon(HugeIcons.strokeRoundedNotification01)),
+                SizedBox(width: 10),
+                GestureDetector(
+                    onTap: () {
+                      shareBottomSheet(context);
                     },
-                    icon: Icon(Icons.more_horiz))
+                    child: Icon(Icons.share_outlined)),
+                SizedBox(width: 10),
+                GestureDetector(
+                    onTap: () {
+                      AppRoutes.push(context, SettingScreen()); 
+                    },
+                    child: Icon(Icons.more_horiz))
               ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
@@ -157,10 +164,10 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 8,
                       children: [
-                        ProfileActionButton(
-                          iconData: CupertinoIcons.doc_text,
-                          onTap: () {},
-                        ),
+                        // ProfileActionButton(
+                        //   iconData: CupertinoIcons.doc_text,
+                        //   onTap: () {},
+                        // ),
                         GradientButton(
                             outline: user?.isFollowed ?? false ? true : false,
                             onTap: () {
@@ -177,12 +184,12 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
                             width: 100,
                             isColored: user?.isFollowed ?? false ? false : true,
                             label: 'Edit Profile'),
-                        ProfileActionButton(
-                          onTap: () {
-                            shareBottomSheet(context);
-                          },
-                          iconData: Icons.share_outlined,
-                        )
+                        // ProfileActionButton(
+                        //   onTap: () {
+                        //     shareBottomSheet(context);
+                        //   },
+                        //   iconData: Icons.share_outlined,
+                        // )
                       ],
                     ),
                     SizedBox(

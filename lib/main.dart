@@ -16,6 +16,7 @@ import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dar
 import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/app/dropdown_controller.dart';
+import 'package:stuedic_app/controller/app/scrolling_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/connectivity_check_controller.dart';
@@ -88,12 +89,14 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(
+            create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(
+            create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -108,6 +111,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => HomePageController()),
+        ChangeNotifierProvider(create: (context) => ScrollingController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

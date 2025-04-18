@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen>
                         children: [
                           TextfieldWidget(
                             onChanged: (p0) {
-                              proRead.email = p0!;
+                              prowatch.email = p0!;
                               proRead.changeButtonColor();
                             },
                             validator: (p0) => emailValidator(p0),
@@ -124,6 +124,10 @@ class _LoginScreenState extends State<LoginScreen>
                             controller: emailController,
                           ),
                           TextfieldWidget(
+                            onChanged: (p0) {
+                              prowatch.password = p0!;
+                              proRead.changeButtonColor();
+                            },
                             validator: (p0) {
                               if (p0 == null || p0.isEmpty) {
                                 return "Password is required";
@@ -137,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                       TextfieldWidget(
                         onChanged: (p0) {
-                          proRead.phoneNumber = p0!;
+                          prowatch.phoneNumber = p0!;
                           proRead.changeButtonColor();
                         },
                         validator: (p0) => phoneNumberValidator(p0),

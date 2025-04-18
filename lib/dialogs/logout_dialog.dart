@@ -25,8 +25,7 @@ Future<dynamic> logoutDialog(BuildContext context, AuthController proReadAuth) {
         CupertinoDialogAction(
             onPressed: () {
               proReadAuth.logoutUser(context: context);
-              Provider.of<AppContoller>(context, listen: false).currentIndex =
-                  0;
+              Provider.of<AppContoller>(context, listen: false).clearState();
             },
             child: Text(
               "Ok",

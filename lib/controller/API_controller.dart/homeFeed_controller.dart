@@ -31,14 +31,12 @@ class HomefeedController extends ChangeNotifier {
 
   bool showShimmer = false;
 
-  void changeShimmer(){
-showShimmer=true;
+  void changeShimmer() {
+    showShimmer = true;
     notifyListeners();
-        Future.delayed(const Duration(seconds: 2), () {
-        
-          showShimmer = false;
-          notifyListeners();
-        
-      });
+    Future.delayed(const Duration(seconds: 2), () {
+      showShimmer = false;
+      notifyListeners();
+    });
   }
 }

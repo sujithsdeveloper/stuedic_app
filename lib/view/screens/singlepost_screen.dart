@@ -79,7 +79,7 @@ class _SinglepostScreenState extends State<SinglepostScreen>
     final proWatchInteraction = context.watch<PostInteractionController>();
     final proReadInteraction = context.read<PostInteractionController>();
     final comments =
-        proWatchInteraction.getComments?.comments?.reversed.toList() ?? [];
+        proWatchInteraction.getComments?.comments?.reversed.toList();
     final prowatch = context.watch<VideoTypeController>();
 
     return WillPopScope(
@@ -287,12 +287,22 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                       icon: Icon(HugeIcons.strokeRoundedShare05,
                           color: Colors.black),
                     ),
-                    IconButton(
-                      icon: Icon(
-                        CupertinoIcons.bookmark,
-                        color: ColorConstants.secondaryColor,
-                      ),
-                      onPressed: () {},
+                    Consumer<PostInteractionController>(
+                      builder: (context, postInteraction, child) {
+                        return IconButton(
+                          icon: Icon(
+                            post?.isBookmarked ?? false
+                                ? CupertinoIcons.bookmark_fill
+                                : CupertinoIcons.bookmark,
+                          ),
+                          onPressed: () {
+                            proReadInteraction.toggleBookmark(
+                                isBookmarked: post?.isBookmarked ?? false,
+                                postId: post?.postId ?? '',
+                                context: context);
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -302,9 +312,9 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: comments.length,
+                  itemCount: comments?.length ?? 0,
                   itemBuilder: (context, index) {
-                    final data = comments[index];
+                    final data = comments?[index];
                     final time = AppUtils.timeAgo(
                         data?.createdAt ?? DateTime.now().toString());
 
@@ -325,12 +335,12 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data.username ?? 'Unknown',
+                                  data?.username ?? 'Unknown',
                                   style: StringStyle.normalTextBold(),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  data.content ?? '',
+                                  data?.content ?? '',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,

@@ -84,6 +84,7 @@ class _ShortsScreenState extends State<ShortsScreen>
                   NetworkVideoPlayer(
                     // isGestureControll: true,
                     inistatePlay: false,
+
                     url: reel?.postContentUrl.toString() ?? '',
                   ),
                   Positioned(

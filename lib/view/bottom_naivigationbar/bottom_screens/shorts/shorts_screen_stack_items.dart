@@ -3,36 +3,28 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/screens/user_profile_screen.dart';
 import 'package:stuedic_app/model/get_shorts_model.dart';
 
 class BottomCaption extends StatelessWidget {
-  const BottomCaption({
-    super.key,
-    required this.reel,
-  });
-
+  const BottomCaption({super.key, required this.reel});
   final Response? reel;
-
   @override
   Widget build(BuildContext context) {
-    return Text(
-      reel?.postDescription ?? '',
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      softWrap: true,
-      style: StringStyle.normalText(size: 12),
-    );
+    return Text(reel?.postDescription ?? '',
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        softWrap: true,
+        style: StringStyle.normalText(size: 12));
   }
 }
 
 class TopBar extends StatelessWidget {
   const TopBar({
     super.key,
-    required this.reel,
+    required this.reel
   });
 
   final Response? reel;
