@@ -53,6 +53,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              widget.controller.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn);
+            },
+            icon: Builder(
+              builder: (context) {
+                if (Platform.isIOS) {
+                  return Icon(
+                    CupertinoIcons.back,
+                  );
+                } else {
+                  return Icon(
+                    Icons.arrow_back,
+                  );
+                }
+              },
+            ),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 9),

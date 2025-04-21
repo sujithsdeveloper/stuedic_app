@@ -87,7 +87,7 @@ class AppUtils {
       return AssetImage(ImageConstants.avathar);
     } else {
       return CachedNetworkImageProvider(
-        url,
+        url
       );
     }
   }

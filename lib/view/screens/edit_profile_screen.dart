@@ -117,7 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           name: usernameController.text,
                           bio: bioController.text,
                           number: numberController.text,
-                          url: url!,
+                          url: url ?? '',
                           context: context)
                       .then(
                     (value) {

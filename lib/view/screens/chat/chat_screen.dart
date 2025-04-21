@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
@@ -33,19 +35,18 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      log('UserId: ${widget.userId}');
+      final currentUserId = await AppUtils.getUserId();
+      log('Current UserId: $currentUserId');
       final chatController = context.read<ChatController>();
       chatController.getChatHistory(userId: widget.userId, context: context);
       chatController.connectToUser(userId: widget.userId);
-
-      // Reconnect socket when the screen is opened
-      chatController.reconnectSocket(userId: widget.userId);
     });
   }
 
   @override
   void dispose() {
-    context.read<ChatController>().dispose();
     controller.dispose();
     super.dispose();
   }
@@ -249,7 +250,12 @@ class BottomTextField extends StatelessWidget {
             onPressed: () {
               context
                   .read<ChatController>()
-                  .sendMessage(controller.text, context);
+                  .sendMessage(controller.text, context)
+                  .then(
+                (value) {
+                  controller.clear();
+                },
+              );
             },
             icon: const Icon(
               HugeIcons.strokeRoundedNavigation03,

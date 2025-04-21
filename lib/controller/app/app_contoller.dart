@@ -59,22 +59,21 @@ class AppContoller extends ChangeNotifier {
         Provider.of<VideoTypeController>(context, listen: false)
             .networkVideoController;
 
-    if (currentIndex == index) return; // Prevent redundant state changes
+    if (currentIndex == index) return;
     currentIndex = index;
 
     notifyListeners();
-
+    if (currentIndex == 0) {
+      final proWatchHomepage =
+          Provider.of<HomePageController>(context, listen: false);
+      proWatchHomepage.pageController?.jumpToPage(0);
+    }
     if (videoController != null && videoController.value.isInitialized) {
       if (currentIndex != 2) {
         videoController.pause();
       } else {
         videoController.play();
       }
-    }
-    if (currentIndex == 0) {
-      final proWatchHomepage =
-          Provider.of<HomePageController>(context, listen: false);
-      proWatchHomepage.pageController?.jumpToPage(0);
     }
   }
 
