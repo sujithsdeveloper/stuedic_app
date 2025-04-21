@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
+import 'package:stuedic_app/menu/custom_popup_menu.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -61,61 +64,115 @@ class _ChatScreenState extends State<ChatScreen> {
       onWillPop: () async {
         final chatListController =
             Provider.of<ChatListScreenController>(context, listen: false);
-        chatListController.getUsersList(context);
-        return true;
+        if (chatProWatch.isSelectionMode) {
+          chatProWatch.clearSelection();
+          return false;
+        } else {
+          chatListController.getUsersList(context);
+          chatProRead.clearSelection();
+          return true;
+        }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: GestureDetector(
-            onTap: () {
-              AppRoutes.push(context, UserProfileScreen(userId: widget.userId));
-            },
-            child: Row(
-              children: [
-                CircleAvatar(
-                    backgroundImage: AppUtils.getProfile(url: widget.imageUrl)),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    widget.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    softWrap: true,
-                    style: StringStyle.normalTextBold(size: 18),
+        backgroundColor: Color(0xffF0F0F3),
+        appBar: chatProWatch.isSelectionMode
+            ? AppBar(
+                title: Text(
+                  '${chatProWatch.selectedMessageIds.length} selected',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(CupertinoIcons.delete),
+                    onPressed: () {
+                      messageDeleteAlertDialog(
+                        context: context,
+                        onDelete: () {
+                          chatProRead.deleteMessgaes();
+                        },
+                      );
+                      // chatProWatch.clearSelection();
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      chatProWatch.clearSelection();
+                    },
+                  ),
+                ],
+              )
+            : AppBar(
+                title: GestureDetector(
+                  onTap: () {
+                    AppRoutes.push(
+                        context, UserProfileScreen(userId: widget.userId));
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                          backgroundImage:
+                              AppUtils.getProfile(url: widget.imageUrl)),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Text(
+                          widget.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: true,
+                          style: StringStyle.normalTextBold(size: 18),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  AppRoutes.push(
-                      context,
-                      CallPage(
-                        callID: '345678',
-                        userId: widget.userId,
-                        username: widget.name,
-                      ));
-                },
-                icon: const Icon(HugeIcons.strokeRoundedVideo01)),
-            IconButton(
-                onPressed: () {
-                  AppRoutes.push(
-                      context,
-                      CallPage(
-                        callID: '345678',
-                        isvoice: true,
-                        userId: widget.userId,
-                        username: widget.name,
-                      ));
-                },
-                icon: const Icon(HugeIcons.strokeRoundedCall)),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(HugeIcons.strokeRoundedMoreVerticalCircle01)),
-          ],
-        ),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        AppRoutes.push(
+                            context,
+                            CallPage(
+                              callID: '345678',
+                              userId: widget.userId,
+                              username: widget.name,
+                            ));
+                      },
+                      icon: const Icon(HugeIcons.strokeRoundedVideo01)),
+                  IconButton(
+                      onPressed: () {
+                        AppRoutes.push(
+                            context,
+                            CallPage(
+                              callID: '345678',
+                              isvoice: true,
+                              userId: widget.userId,
+                              username: widget.name,
+                            ));
+                      },
+                      icon: const Icon(HugeIcons.strokeRoundedCall)),
+                  CustomPopupMenu(items: [
+                    PopupMenuItem(
+                        onTap: () {
+                          AppRoutes.push(
+                              context,
+                              UserProfileScreen(
+                                userId: widget.userId,
+                              ));
+                        },
+                        child: Text('View Profile')),
+                    PopupMenuItem(
+                        onTap: () {
+                          messageDeleteAlertDialog(
+                            context: context,
+                            onDelete: () {
+                              chatProRead.deleteMessgaes();
+                            },
+                          );
+                        },
+                        child: Text('Clear Chat')),
+                  ])
+                ],
+              ),
         body: Builder(
           builder: (context) {
             if (chatProWatch.isHistoryLoading) {
@@ -134,58 +191,67 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, index) {
                   final userId = AppUtils.getUserId();
                   final chatData = chatProWatch.chatHistoryList[index];
-                  return Align(
-                    // alignment: chatData.currentUser == chatData.fromUserId
-                    //     ? Alignment.centerLeft
-                    //     : Alignment.centerRight,
+                  bool isCurrentUser =
+                      chatData.currentUser == chatData.fromUserId;
+                  final isSelected =
+                      chatProWatch.selectedMessageIds.contains(chatData.id!);
 
-                    alignment: chatData.currentUser == chatData.fromUserId
+                  return Align(
+                    alignment: isCurrentUser
                         ? Alignment.centerRight
                         : Alignment.centerLeft,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.8,
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft:
-                                chatData.currentUser == chatData.fromUserId
-                                    ? Radius.circular(20)
-                                    : Radius.circular(0),
-                            topLeft: Radius.circular(20),
-                            bottomRight:
-                                chatData.currentUser == chatData.fromUserId
-                                    ? Radius.circular(0)
-                                    : Radius.circular(20),
-                            topRight: Radius.circular(20),
+                    child: GestureDetector(
+                      onLongPress: () {
+                        chatProRead.toggleSelection(chatData.id!);
+                      },
+                      onTap: () {
+                        if (chatProWatch.isSelectionMode) {
+                          chatProRead.toggleSelection(chatData.id!);
+                        } else {}
+                      },
+                      child: IntrinsicWidth(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth:
+                                0, // Let IntrinsicWidth handle min width based on text
+                            maxWidth: MediaQuery.of(context).size.width * 0.8,
                           ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Chat message
-                            Text(
-                              chatData.content.toString(),
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.white),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: isCurrentUser
+                                    ? isSelected
+                                        ? Colors.grey.shade500
+                                        : Colors.white
+                                    : isSelected
+                                        ? Colors.grey.shade500
+                                        : Color(0xffC2FFC7),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Chat message
+                                Text(
+                                  chatData.content.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                                const SizedBox(height: 5),
+                                // Time text aligned to the right
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    DateFormatter.dateformat_hh_mm_a(
+                                        chatData.timestamp ?? DateTime.now()),
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 5),
-                            // Time text aligned to the right
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                DateFormatter.dateformat_hh_mm_a_dd_mm_yy(
-                                    chatData.timestamp ?? DateTime.now()),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),

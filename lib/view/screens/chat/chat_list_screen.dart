@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -51,51 +52,79 @@ class _ChatListScreenState extends State<ChatListScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              widget.controller.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn);
-            },
-            icon: Builder(
-              builder: (context) {
-                if (Platform.isIOS) {
-                  return Icon(
-                    CupertinoIcons.back,
-                  );
-                } else {
-                  return Icon(
-                    Icons.arrow_back,
-                  );
-                }
-              },
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 9),
-              child: CircleAvatar(
-                backgroundColor: ColorConstants.greyColor,
-                child: IconButton(
+        appBar: chatProWatch.isSelectionMode
+            ? AppBar(
+                title: Text(
+                  '${chatProWatch.selectedMessageIds.length} selected',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(CupertinoIcons.delete),
+                    onPressed: () {
+                      messageDeleteAlertDialog(
+                        context: context,
+                        onDelete: () {
+                          chatProRead.deleteMessgaes();
+                        },
+                      );
+                      // chatProWatch.clearSelection();
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      chatProWatch.clearSelection();
+                    },
+                  ),
+                ],
+              )
+            : AppBar(
+                centerTitle: true,
+                leading: IconButton(
                   onPressed: () {
-                    AppRoutes.push(context, const SearchScreen());
+                    widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn);
                   },
-                  icon: const Icon(CupertinoIcons.search),
+                  icon: Builder(
+                    builder: (context) {
+                      if (Platform.isIOS) {
+                        return Icon(
+                          CupertinoIcons.back,
+                        );
+                      } else {
+                        return Icon(
+                          Icons.arrow_back,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                actions: [
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 9),
+                  //   child: CircleAvatar(
+                  //     backgroundColor: ColorConstants.greyColor,
+                  //     child: IconButton(
+                  //       onPressed: () {
+                  //         AppRoutes.push(context, const SearchScreen());
+                  //       },
+                  //       icon: const Icon(CupertinoIcons.search),
+                  //     ),
+                  //   ),
+                  // )
+                ],
+                title: Row(
+                  children: [
+                    GradientContainer(
+                        height: 23, width: 9, verticalGradient: true),
+                    const SizedBox(width: 9),
+                    Text(StringConstants.appName,
+                        style: StringStyle.appBarText(context: context)),
+                  ],
                 ),
               ),
-            )
-          ],
-          title: Row(
-            children: [
-              GradientContainer(height: 23, width: 9, verticalGradient: true),
-              const SizedBox(width: 9),
-              Text(StringConstants.appName,
-                  style: StringStyle.appBarText(context: context)),
-            ],
-          ),
-        ),
         body: chatProWatch.isLoading
             ? loadingIndicator()
             : chatProWatch.usersList.isEmpty
@@ -104,94 +133,143 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     onRefresh: () async {
                       chatProRead.getUsersList(context);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Builder(builder: (context) {
-                        if (chatList == null || chatList.isEmpty) {
-                          return Column(
-                            children: [
-                              Image.asset(
-                                ImageConstants.no_message_list_found,
-                                height: 189,
-                                width: 189,
-                              ),
-                              Text(
-                                'No Messages',
-                                style: StringStyle.normalTextBold(),
-                              )
-                            ],
-                          );
-                        } else {
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 20),
-                                ListView.separated(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: chatProWatch.usersList.length,
-                                  itemBuilder: (context, index) {
-                                    if (index >=
-                                        chatProWatch.usersList.length) {
-                                      return const SizedBox();
-                                    }
-
-                                    final user = chatProWatch.usersList[index];
-                                    final time = AppUtils.timeAgo(
-                                        user?.timestamp.toString() ??
-                                            DateTime.now().toString());
-
-                                    return ListTile(
-                                      onLongPress: () {},
-                                      minTileHeight: 60,
-                                      onTap: () {
-                                        AppRoutes.push(
-                                          context,
-                                          ChangeNotifierProvider(
-                                            create: (context) =>
-                                                ChatController(),
-                                            child: ChatScreen(
-                                              name: user.username.toString(),
-                                              userId: user.userId.toString(),
-                                              imageUrl:
-                                                  user.profilePicUrl.toString(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      leading: CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage: AppUtils.getProfile(
-                                            url: user.profilePicUrl),
-                                      ),
-                                      title: Text(
-                                        user.username ?? '',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      subtitle: Text(
-                                        user.lastMessage.toString(),
-                                        style: TextStyle(
-                                            color:
-                                                ColorConstants.secondaryColor,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      trailing: Text(
-                                        time,
-                                        style:
-                                            const TextStyle(color: Colors.grey),
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(height: 9),
-                                ),
-                              ],
+                    child: Builder(builder: (context) {
+                      if (chatList == null || chatList.isEmpty) {
+                        return Column(
+                          children: [
+                            Image.asset(
+                              ImageConstants.no_message_list_found,
+                              height: 189,
+                              width: 189,
                             ),
-                          );
-                        }
-                      }),
-                    ),
+                            Text(
+                              'No Messages',
+                              style: StringStyle.normalTextBold(),
+                            )
+                          ],
+                        );
+                      } else {
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    AppRoutes.push(
+                                        context,
+                                        SearchScreen(
+                                          toChat: true,
+                                        ));
+                                  },
+                                  child: Material(
+                                    elevation: 3,
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 20),
+                                      height: 50,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Icon(CupertinoIcons.search),
+                                          SizedBox(width: 10),
+                                          Text('Search...',
+                                              style:
+                                                  StringStyle.normalTextBold()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              ListView.separated(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: chatProWatch.usersList.length,
+                                itemBuilder: (context, index) {
+                                  if (index >= chatProWatch.usersList.length) {
+                                    return const SizedBox();
+                                  }
+
+                                  final user = chatProWatch.usersList[index];
+                                  final time = AppUtils.timeAgo(
+                                      user?.timestamp.toString() ??
+                                          DateTime.now().toString());
+                                  final isSelected = chatProWatch
+                                      .selectedMessageIds
+                                      .contains(user.userId.toString()!);
+
+                                  return GestureDetector(
+                                    onLongPress: () {
+                                      chatProRead.toggleSelection(
+                                          user.userId.toString()!);
+                                    },
+                                    onTap: () {
+                                      if (chatProWatch.isSelectionMode) {
+                                        chatProRead.toggleSelection(
+                                            user.userId.toString()!);
+                                      } else {
+                                        chatProRead.clearSelection();
+                                        AppRoutes.push(
+                                            context,
+                                            ChatScreen(
+                                              userId: user.userId.toString(),
+                                              name: user.username ?? '',
+                                              imageUrl:
+                                                  user.profilePicUrl ?? '',
+                                            ));
+                                      }
+                                    },
+                                    child: Material(
+                                      color: isSelected
+                                          ? Colors.grey.shade500
+                                          : Colors.transparent,
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: ListTile(
+                                          minTileHeight: 60,
+                                          leading: CircleAvatar(
+                                              radius: 25,
+                                              backgroundImage:
+                                                  AppUtils.getProfile(
+                                                      url: user.profilePicUrl)),
+                                          title: Text(
+                                            user.username ?? '',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          subtitle: Text(
+                                            user.lastMessage.toString(),
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .secondaryColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          trailing: Text(time,
+                                              style: const TextStyle(
+                                                  color: Colors.grey)),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 9),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }),
                   ),
       ),
     );

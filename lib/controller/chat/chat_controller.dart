@@ -98,31 +98,30 @@ class ChatController extends ChangeNotifier {
   }
 
   Future<void> sendMessage(String message, BuildContext context) async {
-    if (message.trim().isEmpty) {
+    if (message.isNotEmpty) {
       // errorSnackbar(label: "Enter a Proper message", context: context);
-      return;
+      if (socket == null || socket!.closeCode != null) {
+        log("Socket not connected. Attempting to reconnect before sending.");
+        // Optionally, you can trigger reconnect here
+        // reconnectSocket(userId: ...);
+        return;
+      }
+      log("===> Sending message");
+      socket!.sink.add(message.trim());
+      int? currentUserId = int.tryParse(await AppUtils.getUserId());
+      chatHistoryList.add(
+        ChatHistoryModel(
+          content: message.trim(),
+          timestamp: DateTime.now(),
+          fromUserId: currentUserId,
+          toUserId: 51484207,
+          currentUser: currentUserId,
+          read: true,
+        ),
+      );
+      scrollToBottom(isScrollVisible: true);
+      notifyListeners();
     }
-    if (socket == null || socket!.closeCode != null) {
-      log("Socket not connected. Attempting to reconnect before sending.");
-      // Optionally, you can trigger reconnect here
-      // reconnectSocket(userId: ...);
-      return;
-    }
-    log("===> Sending message");
-    socket!.sink.add(message.trim());
-    int? currentUserId = int.tryParse(await AppUtils.getUserId());
-    chatHistoryList.add(
-      ChatHistoryModel(
-        content: message.trim(),
-        timestamp: DateTime.now(),
-        fromUserId: currentUserId,
-        toUserId: 51484207,
-        currentUser: currentUserId,
-        read: true,
-      ),
-    );
-    scrollToBottom(isScrollVisible: true);
-    notifyListeners();
   }
 
   @override
@@ -144,31 +143,43 @@ class ChatController extends ChangeNotifier {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeIn,
           );
-          // Ensure scroll reaches the bottom after possible layout changes
-          Future.delayed(const Duration(milliseconds: 100), () {
-            if (scrollController.hasClients) {
-              scrollController.animateTo(
-                scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeIn,
-              );
-            }
-          });
         } else {
           if (scrollController.position.pixels != maxScroll) {
             scrollController.jumpTo(maxScroll);
-            // Ensure jump after layout
-            // Future.delayed(const Duration(milliseconds: 100), () {
-            //   if (scrollController.hasClients) {
-            //     scrollController
-            //         .jumpTo(scrollController.position.maxScrollExtent);
-            //   }
-            // });
           }
         }
       }
     });
   }
+
+
+ final Set<String> _selectedMessageIds = {};
+  bool _selectionMode = false;
+
+  bool get isSelectionMode => _selectionMode;
+  Set<String> get selectedMessageIds => _selectedMessageIds;
+
+  void toggleSelection(String messageId) {
+    if (_selectedMessageIds.contains(messageId)) {
+      _selectedMessageIds.remove(messageId);
+    } else {
+      _selectedMessageIds.add(messageId);
+    }
+
+    _selectionMode = _selectedMessageIds.isNotEmpty;
+    notifyListeners();
+  }
+
+void deleteMessgaes(){}
+  void clearSelection() {
+    _selectedMessageIds.clear();
+    _selectionMode = false;
+    notifyListeners();
+  }
+
+
+
+
 }
 
 // wss://echo.websocket.org

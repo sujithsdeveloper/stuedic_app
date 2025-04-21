@@ -34,4 +34,32 @@ class ChatListScreenController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+ final Set<String> _selectedUsersIds = {};
+  bool _selectionMode = false;
+
+  bool get isSelectionMode => _selectionMode;
+  Set<String> get selectedMessageIds => _selectedUsersIds;
+
+  void toggleSelection(String messageId) {
+    if (_selectedUsersIds.contains(messageId)) {
+      _selectedUsersIds.remove(messageId);
+    } else {
+      _selectedUsersIds.add(messageId);
+    }
+
+    _selectionMode = _selectedUsersIds.isNotEmpty;
+    notifyListeners();
+  }
+
+void deleteMessgaes(){}
+  void clearSelection() {
+    _selectedUsersIds.clear();
+    _selectionMode = false;
+    notifyListeners();
+  }
+
+
+
 }
