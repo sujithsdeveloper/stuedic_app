@@ -35,8 +35,7 @@ class ChatListScreenController extends ChangeNotifier {
     }
   }
 
-
- final Set<String> _selectedUsersIds = {};
+  final Set<String> _selectedUsersIds = {};
   bool _selectionMode = false;
 
   bool get isSelectionMode => _selectionMode;
@@ -53,13 +52,10 @@ class ChatListScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
-void deleteMessgaes(){}
+  void deleteMessgaes() {}
   void clearSelection() {
     _selectedUsersIds.clear();
     _selectionMode = false;
     notifyListeners();
   }
-
-
-
 }

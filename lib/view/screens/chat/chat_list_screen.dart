@@ -31,9 +31,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   void initState() {
     log('ChatListScreen initState called');
-    final chatProRead =
-        Provider.of<ChatListScreenController>(context, listen: false);
-    chatProRead.getUsersList(context);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final chatProRead =
+            Provider.of<ChatListScreenController>(context, listen: false);
+        chatProRead.getUsersList(context);
+        // chatProRead.listenToMessage();
+      },
+    );
     super.initState();
   }
 

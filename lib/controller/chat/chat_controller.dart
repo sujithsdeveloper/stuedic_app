@@ -70,7 +70,7 @@ class ChatController extends ChangeNotifier {
   }
 
   void listenToMessages({required String userId}) {
-    log('listenToMessages called with userId: $userId');
+    // log('listenToMessages called with userId: $userId');
     // Cancel previous subscription if any
     _socketSubscription?.cancel();
     if (socket == null) {
@@ -97,7 +97,8 @@ class ChatController extends ChangeNotifier {
     );
   }
 
-  Future<void> sendMessage(String message, BuildContext context) async {
+  Future<void> sendMessage(String message, BuildContext context,
+      {required int toUserId}) async {
     if (message.isNotEmpty) {
       // errorSnackbar(label: "Enter a Proper message", context: context);
       if (socket == null || socket!.closeCode != null) {
@@ -111,10 +112,14 @@ class ChatController extends ChangeNotifier {
       int? currentUserId = int.tryParse(await AppUtils.getUserId());
       chatHistoryList.add(
         ChatHistoryModel(
+          id: DateTime.fromMillisecondsSinceEpoch(
+                  DateTime.now().millisecondsSinceEpoch)
+              .microsecondsSinceEpoch
+              .toString(),
           content: message.trim(),
           timestamp: DateTime.now(),
           fromUserId: currentUserId,
-          toUserId: 51484207,
+          toUserId: toUserId,
           currentUser: currentUserId,
           read: true,
         ),
@@ -152,8 +157,7 @@ class ChatController extends ChangeNotifier {
     });
   }
 
-
- final Set<String> _selectedMessageIds = {};
+  final Set<String> _selectedMessageIds = {};
   bool _selectionMode = false;
 
   bool get isSelectionMode => _selectionMode;
@@ -170,16 +174,12 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-void deleteMessgaes(){}
+  void deleteMessgaes() {}
   void clearSelection() {
     _selectedMessageIds.clear();
     _selectionMode = false;
     notifyListeners();
   }
-
-
-
-
 }
 
 // wss://echo.websocket.org

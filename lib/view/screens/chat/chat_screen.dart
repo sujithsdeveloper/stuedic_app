@@ -261,22 +261,26 @@ class _ChatScreenState extends State<ChatScreen> {
             }
           },
         ),
-        bottomNavigationBar:
-            BottomTextField(controller: controller, isDarkTheme: isDarkTheme),
+        bottomNavigationBar: BottomTextField(
+          controller: controller,
+          isDarkTheme: isDarkTheme,
+          toUserID: int.parse(widget.userId),
+        ),
       ),
     );
   }
 }
 
 class BottomTextField extends StatelessWidget {
-  const BottomTextField({
-    super.key,
-    required this.controller,
-    required this.isDarkTheme,
-  });
+  const BottomTextField(
+      {super.key,
+      required this.controller,
+      required this.isDarkTheme,
+      required this.toUserID});
 
   final TextEditingController controller;
   final bool isDarkTheme;
+  final int toUserID;
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +320,7 @@ class BottomTextField extends StatelessWidget {
             onPressed: () {
               context
                   .read<ChatController>()
-                  .sendMessage(controller.text, context)
+                  .sendMessage(controller.text, context, toUserId: toUserID)
                   .then(
                 (value) {
                   controller.clear();

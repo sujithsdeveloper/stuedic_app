@@ -20,6 +20,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
+import 'package:stuedic_app/view/screens/club_screen.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -257,6 +258,9 @@ class CollegeProfileScreenState extends State<CollegeUserProfileScreen>
                                           user?.allDepartments?.length ?? 0),
                                       label: "Departments"),
                                   counts(
+                                      onTap: () {
+                                        AppRoutes.push(context, ClubScreen());
+                                      },
                                       count: AppUtils.formatCounts(0),
                                       label: "Clubs"),
                                 ],

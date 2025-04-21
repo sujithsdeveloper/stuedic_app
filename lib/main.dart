@@ -36,31 +36,31 @@ import 'package:stuedic_app/controller/API_controller.dart/post_interaction_cont
 import 'package:stuedic_app/controller/scanImage_controller.dart';
 import 'package:stuedic_app/controller/storage_controller.dart';
 import 'package:stuedic_app/controller/video_edit_controller.dart';
+import 'package:stuedic_app/firebase_options.dart';
 import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // FlutterNativeSplash.preserve(
   //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   //   await Firebase.initializeApp();
 
-  // FlutterError.onError = (errorDetails) {
-  //     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  //   };
-  //     PlatformDispatcher.instance.onError = (error, stack) {
-  //     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //     return true;
-  //   };
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   String? token = await AppUtils.getToken();
   ThemeMode themeMode = await AppUtils.getCurrentTheme();
   runApp(
-    MyApp(
-      token: token,
-      themeMode: themeMode,
-    ),
+    MyApp(token: token, themeMode: themeMode),
   );
 }
 
