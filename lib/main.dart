@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
@@ -40,16 +41,20 @@ import 'package:stuedic_app/controller/video_edit_controller.dart';
 import 'package:stuedic_app/firebase_options.dart';
 import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/view/splash_screen.dart';
+import 'package:stuedic_app/view/auth/login_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // FlutterNativeSplash.preserve(
-  //     widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
-  //   await Firebase.initializeApp();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(
+    widgetsBinding: widgetsBinding,
+  );
+  await Firebase.initializeApp();
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -79,11 +84,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     log(widget.token.toString());
-    // Future.delayed(const Duration(seconds: 2)).then(
-    //   (value) {
-    //     FlutterNativeSplash.remove();
-    //   },
-    // );
+    Future.delayed(const Duration(seconds: 2)).then(
+      (value) {
+        FlutterNativeSplash.remove();
+      },
+    );
   }
 
   @override
@@ -132,7 +137,9 @@ class _MyAppState extends State<MyApp> {
           darkTheme: AppTheme.darkTheme,
           themeMode: widget.themeMode,
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(token: widget.token!)),
+          home: (widget.token == null || widget.token == 'null')
+              ? LoginScreen()
+              : BottomNavScreen(isfirstTime: true)),
     );
   }
 }

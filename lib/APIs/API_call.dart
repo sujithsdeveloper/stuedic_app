@@ -7,8 +7,7 @@ import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:stuedic_app/view/screens/connection_failed_screen.dart';
+
 
 class ApiCall {
   static Future<void> post(

@@ -319,44 +319,50 @@ class _SinglepostScreenState extends State<SinglepostScreen>
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundImage: AppUtils.getProfile(
-                              url: data?.profilePicUrl ?? '',
+                      child: GestureDetector(
+                        onTap: () {
+                          AppRoutes.push(context,
+                              UserProfile(userId: data?.userId ?? 'Unknown'));
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundImage: AppUtils.getProfile(
+                                url: data?.profilePicUrl ?? '',
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data?.username ?? 'Unknown',
-                                  style: StringStyle.normalTextBold(),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  data?.content ?? '',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "$time ago",
-                                      style: StringStyle.greyText(),
-                                    ),
-                                  ],
-                                )
-                              ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data?.username ?? 'Unknown',
+                                    style: StringStyle.normalTextBold(),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    data?.content ?? '',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "$time ago",
+                                        style: StringStyle.greyText(),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                        ],
+                            const SizedBox(width: 16),
+                          ],
+                        ),
                       ),
                     );
                   },
