@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/college_profile_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
-import 'package:stuedic_app/view/screens/college/college_user_profile_screen.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, this.toChat = false});
@@ -89,15 +84,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   name: user?.username ?? '',
                                   userId: user?.userId ?? ''));
                         } else {
-                          if (user?.isCollege ?? false) {
-                            AppRoutes.push(
-                                context,
-                                CollegeUserProfileScreen(
-                                    userId: user?.userId ?? ''));
-                          } else {
-                            AppRoutes.push(context,
-                                UserProfileScreen(userId: user?.userId ?? ''));
-                          }
+                          AppRoutes.push(
+                              context, UserProfile(userId: user?.userId ?? ''));
                         }
                       },
                       leading: CircleAvatar(

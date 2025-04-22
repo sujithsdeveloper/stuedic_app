@@ -5,7 +5,7 @@ import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dar
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:stuedic_app/model/get_shorts_model.dart';
 
 class BottomCaption extends StatelessWidget {
@@ -35,7 +35,7 @@ class TopBar extends StatelessWidget {
       leading: GestureDetector(
           onTap: () {
             AppRoutes.push(
-                context, UserProfileScreen(userId: reel?.userId ?? ''));
+                context, UserProfile(userId: reel?.userId ?? ''));
           },
           child: CircleAvatar(
             backgroundImage: AppUtils.getProfile(url: reel?.profilePicUrl),

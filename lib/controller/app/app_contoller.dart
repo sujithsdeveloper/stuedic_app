@@ -54,7 +54,7 @@ class AppContoller extends ChangeNotifier {
     } else {}
   }
 
-  void chnageBottomNav({required int index, required BuildContext context}) {
+  void changeBottomNav({required int index, required BuildContext context}) {
     final videoController =
         Provider.of<VideoTypeController>(context, listen: false)
             .networkVideoController;

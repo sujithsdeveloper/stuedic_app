@@ -14,7 +14,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/profile_screen_student.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/current_user_profile_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts/shorts_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/college_profile_screen.dart';
@@ -60,6 +60,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
+    String userId=profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     List<Widget> userScreens = [
       HomePage(
@@ -68,12 +69,10 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
-      ProfileScreenStudent()
+      ProfileScreen(userId: userId,)
     ];
     List<Widget> CollegeuserScreens = [
-      HomePage(
-        isfirstTime: widget.isfirstTime,
-      ),
+      HomePage(isfirstTime: widget.isfirstTime),
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
@@ -83,7 +82,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     return WillPopScope(
       onWillPop: () async {
         if (proWatch.currentIndex != 0) {
-          proRead.chnageBottomNav(index: 0, context: context);
+          proRead.changeBottomNav(index: 0, context: context);
           return false;
         }
         return true;
@@ -110,7 +109,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           onTap: (value) {
-            proRead.chnageBottomNav(index: value, context: context);
+            proRead.changeBottomNav(index: value, context: context);
           },
           currentIndex: proWatch.currentIndex,
           elevation: 3,
@@ -137,7 +136,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.isfirstTime});
   final bool isfirstTime;
-
   @override
   State<HomePage> createState() => _HomePageState();
 }

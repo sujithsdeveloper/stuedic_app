@@ -10,7 +10,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:stuedic_app/widgets/custom_list_tile.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
@@ -101,7 +101,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               onTap: () {
                                 AppRoutes.push(
                                     context,
-                                    UserProfileScreen(
+                                    UserProfile(
                                         userId: notification?.fromUserId
                                                 .toString() ??
                                             ''));
@@ -111,7 +111,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               onTap: () {
                                 AppRoutes.push(
                                     context,
-                                    UserProfileScreen(
+                                    UserProfile(
                                         userId: notification?.fromUserId
                                                 .toString() ??
                                             ''));

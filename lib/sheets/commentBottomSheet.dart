@@ -8,7 +8,7 @@ import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 dynamic commentBottomSheet(
@@ -120,7 +120,7 @@ dynamic commentBottomSheet(
                                             onTap: () {
                                               AppRoutes.push(
                                                   context,
-                                                  UserProfileScreen(
+                                                  UserProfile(
                                                       userId:
                                                           data.userId ?? ''));
                                             },
@@ -142,7 +142,7 @@ dynamic commentBottomSheet(
                                                   onTap: () {
                                                     AppRoutes.push(
                                                         context,
-                                                        UserProfileScreen(
+                                                        UserProfile(
                                                             userId:
                                                                 data.userId ??
                                                                     ''));

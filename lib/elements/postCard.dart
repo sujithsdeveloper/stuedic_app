@@ -17,7 +17,7 @@ import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatefulWidget {
@@ -97,7 +97,7 @@ class _PostCardState extends State<PostCard>
                   GestureDetector(
                     onTap: () {
                       AppRoutes.push(
-                          context, UserProfileScreen(userId: widget.userId));
+                          context, UserProfile(userId: widget.userId));
                     },
                     child: Row(
                       children: [
@@ -147,7 +147,7 @@ class _PostCardState extends State<PostCard>
                               IDtoCheck: widget.userId);
 
                       postBottomSheet(
-                        isSaved: widget.isBookmarked,
+                          isSaved: widget.isBookmarked,
                           postId: widget.postId,
                           isRightUser: isRightUser,
                           context: context,

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/controller/chat/listen_to_chatList.dart';
 import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
@@ -13,7 +13,6 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/utils/functions/date_formater.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/search_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
@@ -35,8 +34,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
       (timeStamp) {
         final chatProRead =
             Provider.of<ChatListScreenController>(context, listen: false);
+        final provider = Provider.of<ListenToChatlist>(context, listen: false);
         chatProRead.getUsersList(context);
-        // chatProRead.listenToMessage();
+        provider.listenToUserChatList();
       },
     );
     super.initState();
@@ -173,7 +173,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     elevation: 3,
                                     borderRadius: BorderRadius.circular(20),
                                     child: Container(
-                                      margin: EdgeInsets.only(left: 20),
+                                      padding: EdgeInsets.only(left: 20),
                                       height: 50,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
@@ -259,9 +259,29 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                     .secondaryColor,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          trailing: Text(time,
-                                              style: const TextStyle(
-                                                  color: Colors.grey)),
+                                          trailing: Column(
+                                            children: [
+                                              Text(time,
+                                                  style: const TextStyle(
+                                                      color: Colors.grey)),
+                                              Container(
+                                                height: 22,
+                                                width: 20,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff40C4FF),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                child: Center(
+                                                  child: Text(
+                                                    '5',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

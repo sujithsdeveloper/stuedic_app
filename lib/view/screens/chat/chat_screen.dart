@@ -15,7 +15,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/date_formater.dart';
 import 'package:stuedic_app/view/screens/chat/call_page.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(
@@ -106,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 title: GestureDetector(
                   onTap: () {
                     AppRoutes.push(
-                        context, UserProfileScreen(userId: widget.userId));
+                        context, UserProfile(userId: widget.userId));
                   },
                   child: Row(
                     children: [
@@ -155,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         onTap: () {
                           AppRoutes.push(
                               context,
-                              UserProfileScreen(
+                              UserProfile(
                                 userId: widget.userId,
                               ));
                         },

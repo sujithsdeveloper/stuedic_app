@@ -15,10 +15,9 @@ import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
-import 'package:stuedic_app/view/screens/user_profile_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class SinglepostScreen extends StatefulWidget {
@@ -104,7 +103,7 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                       Navigator.pop(context);
                     } else {
                       AppRoutes.push(
-                          context, UserProfileScreen(userId: widget.userID));
+                          context, UserProfile(userId: widget.userID));
                     }
                   },
                   child: Padding(

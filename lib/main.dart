@@ -22,6 +22,7 @@ import 'package:stuedic_app/controller/app/dropdown_controller.dart';
 import 'package:stuedic_app/controller/app/scrolling_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/controller/chat/listen_to_chatList.dart';
 import 'package:stuedic_app/controller/connectivity_check_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/home_page_controller.dart';
@@ -123,6 +124,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => HomePageController()),
+        ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
       ],
       child: MaterialApp(
