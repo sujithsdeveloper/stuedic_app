@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ScrollingController extends ChangeNotifier {
-  int pageCount = 1;
-  bool isDataLoading = false;
+  bool gridViewScrollEnabled = false;
 
-  void listenToScroll(
-      {required ScrollController scrollController,
-      required Function() onScrollEnd}) {
+  void controllerScroll({required ScrollController scrollController}) {
     scrollController.addListener(() {
-      if (isDataLoading) return;
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        isDataLoading = true;
-        pageCount += 1;
+      // Customize this value according to SliverAppBar height
+      if (scrollController.offset >= 250 && !gridViewScrollEnabled) {
+        gridViewScrollEnabled = true;
         notifyListeners();
-        onScrollEnd();
+      } else if (scrollController.offset < 250 && gridViewScrollEnabled) {
+        gridViewScrollEnabled = false;
+        notifyListeners();
       }
     });
-  }
-
-  void resetPageCount() {
-    pageCount = 1;
-    notifyListeners();
   }
 }

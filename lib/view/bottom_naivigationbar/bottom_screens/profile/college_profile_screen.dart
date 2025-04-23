@@ -67,7 +67,6 @@ class CollegeProfileScreenState extends State<CollegeProfileScreen>
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            // SliverAppBar with FlexibleSpaceBar
           
           ];
         },

@@ -107,14 +107,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -126,8 +124,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CollegeController()),
         ChangeNotifierProvider(create: (context) => StoryController()),
         ChangeNotifierProvider(create: (context) => DropdownController()),
-        ChangeNotifierProvider(
-            create: (context) => ConnectivityCheckController()),
+        ChangeNotifierProvider(create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => HomePageController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),

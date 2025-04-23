@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
-import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
-import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/create_story_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
-import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -71,26 +67,6 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                   style: StringStyle.appBarText(context: context)),
             ],
           ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                HugeIcons.strokeRoundedNotification01,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                AppRoutes.push(context, NotificationScreen());
-              },
-            ),
-            IconButton(
-              icon: Icon(
-                HugeIcons.strokeRoundedMessage01,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                // AppRoutes.push(context, ChatListScreen());
-              },
-            ),
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -185,21 +161,21 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                               ),
                               ReelSection(),
                               CreateStorySection(
-                                  onGalleryTap: () async {
-                                       await context
+                                onGalleryTap: () async {
+                                  await context
                                       .read<AssetPickerController>()
                                       .pickImage(
-                                        
                                           source: ImageSource.gallery,
                                           context: context);
-                                  },
-                                  onCameraTap: () async {
-                                       await context
+                                },
+                                onCameraTap: () async {
+                                  await context
                                       .read<AssetPickerController>()
                                       .pickImage(
                                           source: ImageSource.camera,
                                           context: context);
-                                  },)
+                                },
+                              )
                             ],
                           ),
                         ),
