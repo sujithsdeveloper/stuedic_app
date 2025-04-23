@@ -38,7 +38,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       final token = await AppUtils.getToken();
       log(token);
 
-      final appContoller = context.read<AppContoller>();
+      // final appContoller = context.read<AppContoller>();
       final profileController = context.read<ProfileController>();
       final discoverController = context.read<DiscoverController>();
       final storyController = context.read<StoryController>();
@@ -60,7 +60,8 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
-    String userId=profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
+    String userId =
+        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     List<Widget> userScreens = [
       HomePage(
@@ -69,7 +70,9 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
-      ProfileScreen(userId: userId,)
+      ProfileScreen(
+        userId: userId,
+      )
     ];
     List<Widget> CollegeuserScreens = [
       HomePage(isfirstTime: widget.isfirstTime),
@@ -151,7 +154,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final proWatch = context.watch<AppContoller>();
+    // final proWatch = context.watch<AppContoller>();
     final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
       // AssetPickerPage(
