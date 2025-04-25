@@ -11,8 +11,8 @@ class NotificationController extends ChangeNotifier {
   Future<void> getNotification({required BuildContext context}) async {
     isLoading = true;
     notifyListeners();
-    await ApiCall.get(
-        url: APIs.getNotification,
+    await ApiMethods.get(
+        url: ApiUrls.getNotification,
         onSucces: (p0) {
           // log(p0.body);
           getNotificationModel = getNotificationFromJson(p0.body);

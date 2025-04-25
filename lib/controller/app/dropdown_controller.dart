@@ -7,23 +7,22 @@ class DropdownController extends ChangeNotifier {
   String? selectedCollegeId;
   String? selectedCollegeName; // Add this to store the college name
 
-  void onChanged({
-    required String collegeId, 
-    required String collegeName, 
-    required BuildContext context
-  }) {
+  void onChanged(
+      {required String collegeId,
+      required String collegeName,
+      required BuildContext context}) {
     selectedCollegeId = collegeId;
     selectedCollegeName = collegeName; // Store college name
 
-    var url = Uri.parse('${APIs.baseUrl}api/v1/Collage/departments/$selectedCollegeId');
-    ApiCall.get(
-      url: url,
-      onSucces: (p0) {
-        log(p0.body);
-      },
-      onTokenExpired: () {},
-      context: context
-    );
+    var url = Uri.parse(
+        '${ApiUrls.baseUrl}api/v1/Collage/departments/$selectedCollegeId');
+    ApiMethods.get(
+        url: url,
+        onSucces: (p0) {
+          log(p0.body);
+        },
+        onTokenExpired: () {},
+        context: context);
     notifyListeners();
   }
 }

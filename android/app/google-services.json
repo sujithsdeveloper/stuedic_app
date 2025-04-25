@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1003609456046:android:50e2389ce2765b605a9c3f",
+        "mobilesdk_app_id": "1:1003609456046:android:2acb768ec3efcaf15a9c3f",
         "android_client_info": {
-          "package_name": "com.example.stuedic"
+          "package_name": "com.stuedic.social"
         }
       },
       "oauth_client": [],

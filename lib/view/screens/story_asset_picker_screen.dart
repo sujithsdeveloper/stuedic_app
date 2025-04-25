@@ -63,7 +63,7 @@ class AssetPickerPage extends StatelessWidget {
                               context.read<MutlipartController>().uploadMedia(
                                   context: context,
                                   filePath: file.path,
-                                  API: APIs.uploadPicForPost);
+                                  API: ApiUrls.uploadPicForPost);
                               storyPicker.uploadMedia(context, proWatch);
 
                               return Column(
@@ -87,7 +87,7 @@ class AssetPickerPage extends StatelessWidget {
                                   context: context,
                                   filePath: file.path,
                                   isVideo: true,
-                                  API: APIs.uploadPicForPost);
+                                  API: ApiUrls.uploadPicForPost);
 
                               storyPicker.uploadMedia(context, proWatch);
                               return Column(

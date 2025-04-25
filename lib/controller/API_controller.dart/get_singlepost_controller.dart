@@ -12,8 +12,8 @@ class GetSinglepostController extends ChangeNotifier {
       {required BuildContext context, required String postId}) async {
     isLoading = true;
     notifyListeners();
-    var url = Uri.parse('${APIs.baseUrl}api/v1/Post/getSinglePost/$postId');
-    await ApiCall.get(
+    var url = Uri.parse('${ApiUrls.baseUrl}api/v1/Post/getSinglePost/$postId');
+    await ApiMethods.get(
         url: url,
         onSucces: (p0) {
           // log(p0.body);

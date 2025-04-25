@@ -6,7 +6,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/auth/setup_screens/desigination_selection.dart';
 import 'package:stuedic_app/view/auth/setup_screens/finish_setup.dart';
-import 'package:stuedic_app/view/auth/setup_screens/form_fill.dart';
+import 'package:stuedic_app/view/auth/setup_screens/public_user_form_fill.dart';
 import 'package:stuedic_app/view/screens/initial_screen/club_selection.dart';
 import 'package:stuedic_app/view/screens/initial_screen/upload_id.dart';
 
@@ -39,12 +39,11 @@ class _SetupScreenState extends State<SetupScreen> {
       });
     });
 
-
     context.read<CollegeController>().getCollege(context: context);
   }
 
   void nextPage() {
-    if (pageIndex < 2) {
+    if (pageIndex < 3) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
@@ -54,6 +53,11 @@ class _SetupScreenState extends State<SetupScreen> {
   Widget build(BuildContext context) {
     final prowatch = context.watch<AppContoller>();
     final proRead = context.read<AppContoller>();
+
+    // List<Widget> pages=[
+    //   DesignationSelection(prowatch: prowatch, proRead: proRead, nextPage: nextPage),
+
+    // ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -79,7 +83,7 @@ class _SetupScreenState extends State<SetupScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: List.generate(
-                  3,
+                  4,
                   (index) => Expanded(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
@@ -102,7 +106,7 @@ class _SetupScreenState extends State<SetupScreen> {
               child: PageView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 controller: pageController,
-                itemCount: 3,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   switch (index) {
                     case 0:
@@ -111,11 +115,14 @@ class _SetupScreenState extends State<SetupScreen> {
                           proRead: proRead,
                           nextPage: nextPage);
                     case 1:
-                      return FormFill(
+                      return PublicUserFormFill(
                           prowatch: prowatch,
                           proRead: proRead,
                           nextPage: nextPage);
                     case 2:
+                      return IDUpload(nextPage: nextPage);
+
+                    case 3:
                       return FinishSetup();
 
                     default:

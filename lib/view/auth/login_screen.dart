@@ -5,6 +5,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/elements/agreement_text.dart';
 import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
@@ -13,6 +14,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/auth/forgot_password.dart';
 import 'package:stuedic_app/view/auth/registration_screen.dart';
+import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
@@ -194,21 +196,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                 SizedBox(height: 24),
 
-                Center(
-                  child: Text.rich(
-                    textAlign: TextAlign.center,
-                    TextSpan(
-                      text: "By continuing, you agree to Stuedic's",
-                      style: StringStyle.normalText(),
-                      children: [
-                        TextSpan(
-                          text: ' Terms of Service and Privacy Policy',
-                          style: StringStyle.normalTextBold(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                AgreementText(),
                 SizedBox(height: 13),
               ],
             ),

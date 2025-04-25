@@ -17,8 +17,8 @@ import 'package:stuedic_app/utils/refreshTocken.dart';
 class ProfileController extends ChangeNotifier {
   UserCurrentDetailsModel? userCurrentDetails;
   Future<void> getCurrentUserData({required BuildContext context}) async {
-    await ApiCall.get(
-      url: APIs.getUserDetail,
+    await ApiMethods.get(
+      url: ApiUrls.getUserDetail,
       context: context,
       onSucces: (res) async {
         log("Current user response ${res.body}");
@@ -40,9 +40,9 @@ class ProfileController extends ChangeNotifier {
       {required String userId, required BuildContext context}) async {
     userByUserIdIsloading = true;
     notifyListeners();
-    await ApiCall.get(
+    await ApiMethods.get(
         url: Uri.parse(
-            '${APIs.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
+            '${ApiUrls.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
         onSucces: (p0) {
           log(p0.body);
           userProfile = getUserByUserIdModelFromJson(p0.body);
@@ -60,8 +60,8 @@ class ProfileController extends ChangeNotifier {
 
   UserProfileGrid? currentUserProfileGrid;
   Future<void> getCurrentUserGrid({required BuildContext context}) async {
-    await ApiCall.get(
-        url: APIs.profileGridUrl,
+    await ApiMethods.get(
+        url: ApiUrls.profileGridUrl,
         onSucces: (p0) {
           // log(p0.body);
           currentUserProfileGrid = userProfileGridFromJson(p0.body);
@@ -78,7 +78,7 @@ class ProfileController extends ChangeNotifier {
       {required BuildContext context, required String userID}) async {
     var url = Uri.parse(
         'https://api.stuedic.com/api/v1/Profile/getProfileGrid?userId=$userID');
-    await ApiCall.get(
+    await ApiMethods.get(
       url: url,
       onSucces: (p0) {
         // log(p0.body);
@@ -95,8 +95,8 @@ class ProfileController extends ChangeNotifier {
   SinglePostModel? singlePostModel;
   Future<void> getSinglePost(
       {required BuildContext context, required String postId}) async {
-    var url = Uri.parse('${APIs.baseUrl}api/v1/Post/getSinglePost/$postId');
-    await ApiCall.get(
+    var url = Uri.parse('${ApiUrls.baseUrl}api/v1/Post/getSinglePost/$postId');
+    await ApiMethods.get(
         url: url,
         onSucces: (p0) {
           // log(p0.body);
@@ -118,7 +118,7 @@ class ProfileController extends ChangeNotifier {
     notifyListeners();
     Map data = {"oldPassword": oldPassword, "password": newPassword};
     var token = await AppUtils.getToken();
-    var response = await http.post(APIs.changePassword,
+    var response = await http.post(ApiUrls.changePassword,
         body: jsonEncode(data),
         headers: ApiServices.getHeadersWithToken(token));
 

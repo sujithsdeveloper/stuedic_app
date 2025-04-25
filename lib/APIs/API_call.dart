@@ -8,8 +8,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/refreshTocken.dart';
 
-
-class ApiCall {
+class ApiMethods {
   static Future<void> post(
       {required Uri url,
       String snackbarText = StringConstants.wrong,

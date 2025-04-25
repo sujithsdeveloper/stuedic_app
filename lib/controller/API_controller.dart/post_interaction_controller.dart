@@ -36,8 +36,8 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.get(
-      url: Uri.parse('${APIs.baseUrl}api/v1/Post/likePost?postid=$postId'),
+    await ApiMethods.get(
+      url: Uri.parse('${ApiUrls.baseUrl}api/v1/Post/likePost?postid=$postId'),
       onSucces: (p0) {
         Logger().f(p0.body);
         notifyListeners();
@@ -51,8 +51,8 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.get(
-      url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
+    await ApiMethods.get(
+      url: Uri.parse('${ApiUrls.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
       onSucces: (p0) {
         Logger().f(p0.body);
         notifyListeners();
@@ -87,8 +87,9 @@ class PostInteractionController extends ChangeNotifier {
 
   void followUser(
       {required String userId, required BuildContext context}) async {
-    await ApiCall.get(
-      url: Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId'),
+    await ApiMethods.get(
+      url: Uri.parse(
+          '${ApiUrls.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
         context
@@ -103,9 +104,9 @@ class PostInteractionController extends ChangeNotifier {
 
   void unfollowUser(
       {required String userId, required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: Uri.parse(
-          '${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
+          '${ApiUrls.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
         context
@@ -123,8 +124,8 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.post(
-      url: APIs.addBookmark,
+    await ApiMethods.post(
+      url: ApiUrls.addBookmark,
       body: {'postid': postId},
       onSucces: (p0) {
         Logger().f(p0.body);
@@ -141,8 +142,8 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.post(
-      url: APIs.deleteBookmark,
+    await ApiMethods.post(
+      url: ApiUrls.deleteBookmark,
       body: {'postid': postId},
       onSucces: (p0) {
         Logger().f(p0.body);
@@ -159,8 +160,8 @@ class PostInteractionController extends ChangeNotifier {
   Future<void> getBookmark({
     required BuildContext context,
   }) async {
-    await ApiCall.get(
-      url: APIs.getBookmark,
+    await ApiMethods.get(
+      url: ApiUrls.getBookmark,
       onSucces: (p0) {
         // Logger().f(p0.body);
         // log(p0.body);
@@ -193,9 +194,10 @@ class PostInteractionController extends ChangeNotifier {
     Map body = {
       "content": comment,
     };
-    var url = Uri.parse('${APIs.baseUrl}api/v1/Post/addcomment?postid=$postId');
+    var url =
+        Uri.parse('${ApiUrls.baseUrl}api/v1/Post/addcomment?postid=$postId');
     if (comment.isNotEmpty) {
-      await ApiCall.post(
+      await ApiMethods.post(
         url: url,
         body: body,
         onSucces: (p0) async {
@@ -219,8 +221,9 @@ class PostInteractionController extends ChangeNotifier {
     notifyListeners();
     log("Controller postID $postId");
 
-    var url = Uri.parse('${APIs.baseUrl}api/v1/Post/comments?postid=$postId');
-    await ApiCall.get(
+    var url =
+        Uri.parse('${ApiUrls.baseUrl}api/v1/Post/comments?postid=$postId');
+    await ApiMethods.get(
       url: url,
       onSucces: (p0) {
         getComments = getCommentsModelFromJson(p0.body);

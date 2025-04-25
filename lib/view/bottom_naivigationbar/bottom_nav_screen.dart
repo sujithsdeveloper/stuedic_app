@@ -44,11 +44,15 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       final storyController = context.read<StoryController>();
       final feedController = context.read<HomefeedController>();
       // appContoller.chnageBottomNav(index: 0, context: context);
-      profileController.getCurrentUserData(context: context);
-      profileController.getCurrentUserGrid(context: context);
-      discoverController.getDiscoverData(context);
-      feedController.getAllPost(context: context);
-      storyController.getStories(context);
+      WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          profileController.getCurrentUserData(context: context);
+          profileController.getCurrentUserGrid(context: context);
+          discoverController.getDiscoverData(context);
+          feedController.getAllPost(context: context);
+          storyController.getStories(context);
+        },
+      );
     });
   }
 
@@ -60,7 +64,8 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
-    String userId=profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
+    String userId =
+        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     List<Widget> userScreens = [
       HomePage(
@@ -69,7 +74,9 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       DiscoverScreen(),
       Container(),
       ShortsScreen(),
-      ProfileScreen(userId: userId,)
+      ProfileScreen(
+        userId: userId,
+      )
     ];
     List<Widget> CollegeuserScreens = [
       HomePage(isfirstTime: widget.isfirstTime),
@@ -144,14 +151,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<HomePageController>().HomePageControl();
-    // setState(() {});
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        context.read<HomePageController>().HomePageControl();
+      },
+    ); // setState(() {});
     // context.read<HomefeedController>().getAllPost(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final proWatch = context.watch<AppContoller>();
+    // final proWatch = context.watch<AppContoller>();
     final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
       // AssetPickerPage(

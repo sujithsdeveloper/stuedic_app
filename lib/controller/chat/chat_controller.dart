@@ -22,8 +22,8 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
     // var token = await AppUtils.getToken();
     log('to userid=$userId');
-    await ApiCall.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/history?toUser=$userId'),
+    await ApiMethods.get(
+        url: Uri.parse('${ApiUrls.baseUrl}api/v1/chat/history?toUser=$userId'),
         onSucces: (response) {
           chatHistoryList = chatHistoryModelFromJson(response.body);
           isHistoryLoading = false;
@@ -179,6 +179,25 @@ class ChatController extends ChangeNotifier {
     _selectedMessageIds.clear();
     _selectionMode = false;
     notifyListeners();
+  }
+
+  Future<void> clearChat(
+      {required BuildContext context,
+      required String currentUserId,
+      required String toUserId}) async {
+    final data = {
+      "userIDs": [currentUserId, toUserId]
+    };
+
+    await ApiMethods.post(
+        url: ApiUrls.clearChat,
+        body: data,
+        onSucces: (p0) {
+          chatHistoryList.clear();
+          notifyListeners();
+        },
+        onTokenExpired: () {},
+        context: context);
   }
 }
 

@@ -25,8 +25,8 @@ class CrudOperationController extends ChangeNotifier {
       "postColor": "red"
     };
 
-    await ApiCall.post(
-        url: APIs.addPostUrl,
+    await ApiMethods.post(
+        url: ApiUrls.addPostUrl,
         body: data,
         onSucces: (p0) {
           Logger().f(p0.body);
@@ -48,9 +48,9 @@ class CrudOperationController extends ChangeNotifier {
     required String postId,
   }) async {
     final data = {"postID": postId};
-    await ApiCall.delete(
+    await ApiMethods.delete(
         body: data,
-        url: APIs.deletePost,
+        url: ApiUrls.deletePost,
         onSucces: (p0) {
           log(p0.body);
           Navigator.pop(context);

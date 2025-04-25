@@ -11,8 +11,8 @@ class HomefeedController extends ChangeNotifier {
   Future<void> getAllPost({required BuildContext context}) async {
     isHomeFeedLoading = true;
     notifyListeners();
-    await ApiCall.get(
-        url: APIs.homeFeedAPI,
+    await ApiMethods.get(
+        url: ApiUrls.homeFeedAPI,
         onSucces: (p0) {
           homeFeed = homeFeedFromJson(p0.body);
           isHomeFeedLoading = false;

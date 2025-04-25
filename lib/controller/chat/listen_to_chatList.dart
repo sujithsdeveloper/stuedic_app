@@ -9,7 +9,7 @@ class ListenToChatlist extends ChangeNotifier {
   Future<void> listenToUserChatList() async {
     log('Listening to chat list...');
     var token = await AppUtils.getToken();
-    var url = '${APIs.baseUrl}api/v1/chat/sse?token=$token';
+    var url = '${ApiUrls.baseUrl}api/v1/chat/sse?token=$token';
 
     log('--SUBSCRIBING TO SSE--');
     SSEClient.subscribeToSSE(method: SSERequestType.GET, url: url, header: {

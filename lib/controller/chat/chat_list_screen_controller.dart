@@ -13,8 +13,8 @@ class ChatListScreenController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await ApiCall.get(
-        url: APIs.chatList,
+      await ApiMethods.get(
+        url: ApiUrls.chatList,
         onSucces: (response) {
           // log(response.body);
           usersList = chatListUsersModelFromJson(response.body);
@@ -41,11 +41,11 @@ class ChatListScreenController extends ChangeNotifier {
   bool get isSelectionMode => _selectionMode;
   Set<String> get selectedMessageIds => _selectedUsersIds;
 
-  void toggleSelection(String messageId) {
-    if (_selectedUsersIds.contains(messageId)) {
-      _selectedUsersIds.remove(messageId);
+  void toggleSelection(String userId) {
+    if (_selectedUsersIds.contains(userId)) {
+      _selectedUsersIds.remove(userId);
     } else {
-      _selectedUsersIds.add(messageId);
+      _selectedUsersIds.add(userId);
     }
 
     _selectionMode = _selectedUsersIds.isNotEmpty;
@@ -57,5 +57,21 @@ class ChatListScreenController extends ChangeNotifier {
     _selectedUsersIds.clear();
     _selectionMode = false;
     notifyListeners();
+  }
+
+  Future<void> deleteChats({
+    required BuildContext context,
+  }) async {
+    final data = {"userIDs": selectedMessageIds.toList()};
+
+    ApiMethods.post(
+        url: ApiUrls.clearChat,
+        body: data,
+        onSucces: (p0) {
+          notifyListeners();
+          log(p0.body);
+        },
+        onTokenExpired: () {},
+        context: context);
   }
 }

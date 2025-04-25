@@ -52,9 +52,15 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        widget.controller.previousPage(
-            duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-        return false;
+        if (chatProWatch.isSelectionMode) {
+          chatProWatch.clearSelection();
+          return false;
+        } else {
+          widget.controller.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn);
+          return false;
+        }
       },
       child: Scaffold(
         appBar: chatProWatch.isSelectionMode
@@ -69,8 +75,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     onPressed: () {
                       messageDeleteAlertDialog(
                         context: context,
-                        onDelete: () {
-                          chatProRead.deleteMessgaes();
+                        onDelete: () async {
+                          await chatProRead.deleteChats(context: context);
                         },
                       );
                       // chatProWatch.clearSelection();
@@ -207,7 +213,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                                   final user = chatProWatch.usersList[index];
                                   final time = AppUtils.timeAgo(
-                                      user?.timestamp.toString() ??
+                                      user.timestamp.toString() ??
                                           DateTime.now().toString());
                                   final isSelected = chatProWatch
                                       .selectedMessageIds

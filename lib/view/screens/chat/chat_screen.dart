@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/dialogs/call_alert_dialog.dart';
 import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
 import 'package:stuedic_app/menu/custom_popup_menu.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -105,8 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
             : AppBar(
                 title: GestureDetector(
                   onTap: () {
-                    AppRoutes.push(
-                        context, UserProfile(userId: widget.userId));
+                    AppRoutes.push(context, UserProfile(userId: widget.userId));
                   },
                   child: Row(
                     children: [
@@ -129,25 +129,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 actions: [
                   IconButton(
                       onPressed: () {
-                        AppRoutes.push(
-                            context,
-                            CallPage(
-                              callID: '345678',
-                              userId: widget.userId,
-                              username: widget.name,
-                            ));
+                        callAlertDialog(
+                            callID: '123456',
+                            isVoice: false,
+                            userId: widget.userId,
+                            userName: widget.name,
+                            context: context);
                       },
                       icon: const Icon(HugeIcons.strokeRoundedVideo01)),
                   IconButton(
                       onPressed: () {
-                        AppRoutes.push(
-                            context,
-                            CallPage(
-                              callID: '345678',
-                              isvoice: true,
-                              userId: widget.userId,
-                              username: widget.name,
-                            ));
+                        callAlertDialog(
+                            context: context,
+                            isVoice: true,
+                            userId: widget.userId,
+                            callID: '123456',
+                            userName: widget.name);
                       },
                       icon: const Icon(HugeIcons.strokeRoundedCall)),
                   CustomPopupMenu(items: [
@@ -164,8 +161,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         onTap: () {
                           messageDeleteAlertDialog(
                             context: context,
-                            onDelete: () {
-                              chatProRead.deleteMessgaes();
+                            onDelete: () async {
+                              final currentUserId = await AppUtils.getUserId();
+                              chatProRead.clearChat(
+                                  context: context,
+                                  currentUserId: currentUserId,
+                                  toUserId: widget.userId);
                             },
                           );
                         },
@@ -207,7 +208,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () {
                         if (chatProWatch.isSelectionMode) {
                           chatProRead.toggleSelection(chatData.id!);
-                        } else {}
+                        }
                       },
                       child: IntrinsicWidth(
                         child: ConstrainedBox(

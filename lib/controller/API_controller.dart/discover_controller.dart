@@ -6,8 +6,8 @@ import 'package:stuedic_app/model/disover_model.dart';
 class DiscoverController extends ChangeNotifier {
   DiscoverModel? discoverModel;
   Future<void> getDiscoverData(BuildContext context) async {
-    await ApiCall.get(
-        url: APIs.discover,
+    await ApiMethods.get(
+        url: ApiUrls.discover,
         onSucces: (p0) {
           discoverModel = discoverModelFromJson(p0.body);
           notifyListeners();

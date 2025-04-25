@@ -12,8 +12,8 @@ class ShortsController extends ChangeNotifier {
     try {
       isBuffering = true;
       notifyListeners();
-      await ApiCall.get(
-          url: APIs.reelAPI,
+      await ApiMethods.get(
+          url: ApiUrls.reelAPI,
           onSucces: (p0) {
             getShortsModel = getShortsModelFromJson(p0.body);
             isBuffering = false;
