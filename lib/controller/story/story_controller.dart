@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/get_story_model.dart';
@@ -13,6 +13,7 @@ class StoryController extends ChangeNotifier {
         url: ApiUrls.getStoryList,
         onSucces: (p0) {
           getstorymodel = homeStoriesModelFromJson(p0.body);
+          log(getstorymodel?.response.toString() ?? '');
           notifyListeners();
         },
         onTokenExpired: () async {
@@ -36,6 +37,9 @@ class StoryController extends ChangeNotifier {
         body: data,
         onSucces: (p0) {
           isStoryUploading = false;
+          Future.delayed(const Duration(seconds: 1), () {
+            getStories(context);
+          });
           notifyListeners();
           log(p0.body);
           Navigator.pop(context);

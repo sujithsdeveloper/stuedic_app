@@ -64,6 +64,7 @@ class ApiUrls {
   //chat
   static Uri chatList = Uri.parse('${baseUrl}api/v1/chat/screen');
   static Uri clearChat = Uri.parse('${baseUrl}api/v1/chat/clear');
+  static Uri deleteMessages = Uri.parse('${baseUrl}api/v1/chat/deleteMessages');
 
   //Upload video
   static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');

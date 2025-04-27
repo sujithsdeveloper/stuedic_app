@@ -87,6 +87,36 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                           color: ColorConstants.secondaryColor,
                           borderRadius: BorderRadius.circular(100)),
                       dividerColor: Colors.transparent,
+                      onTap: (value) {
+                        if (value == 1) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return WillPopScope(
+                                onWillPop: () async {
+                                  _tabController.animateTo(0);
+                                  return true;
+                                },
+                                child: CupertinoAlertDialog(
+                                  title: Text('Warning'),
+                                  content: Text(
+                                      'registration using Phone number is not available for beta users.'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        _tabController.animateTo(
+                                            _tabController.previousIndex);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                       tabs: [
                         Tab(
                           text: "Email",

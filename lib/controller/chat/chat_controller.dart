@@ -7,7 +7,7 @@ import 'package:stuedic_app/APIs/websocket_service.dart';
 import 'package:stuedic_app/model/chat_history_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:web_socket_channel/io.dart';
-import '../../APIs/API_call.dart';
+import '../../APIs/API_Methods.dart';
 
 class ChatController extends ChangeNotifier {
   IOWebSocketChannel? socket;
@@ -164,6 +164,7 @@ class ChatController extends ChangeNotifier {
   Set<String> get selectedMessageIds => _selectedMessageIds;
 
   void toggleSelection(String messageId) {
+    log("Toggling selection for message ID: $_selectedMessageIds");
     if (_selectedMessageIds.contains(messageId)) {
       _selectedMessageIds.remove(messageId);
     } else {
@@ -174,7 +175,27 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessgaes() {}
+  Future<void> deleteMessgaes(BuildContext context) async {
+    log("Deleting messagesId: $selectedMessageIds");
+    // log("Deleting messages: $messageIdList");
+    if (selectedMessageIds.isEmpty) {
+      log("No messages selected for deletion.");
+      return;
+    }
+    final data = {"messageIDs": _selectedMessageIds.toList()};
+    await ApiMethods.post(
+        body: data,
+        url: ApiUrls.deleteMessages,
+        onSucces: (p0) {
+          log("Deleted messages successfully");
+          chatHistoryList.removeWhere(
+              (message) => _selectedMessageIds.contains(message.id.toString()));
+          clearSelection();
+        },
+        onTokenExpired: () {},
+        context: context);
+  }
+
   void clearSelection() {
     _selectedMessageIds.clear();
     _selectionMode = false;
@@ -182,17 +203,18 @@ class ChatController extends ChangeNotifier {
   }
 
   Future<void> clearChat(
-      {required BuildContext context,
-      required String currentUserId,
-      required String toUserId}) async {
+      {required BuildContext context, required int toUserId}) async {
     final data = {
-      "userIDs": [currentUserId, toUserId]
+      "userIDs": [toUserId]
     };
 
     await ApiMethods.post(
         url: ApiUrls.clearChat,
         body: data,
         onSucces: (p0) {
+          clearSelection();
+          socket?.sink.close();
+          socket = null;
           chatHistoryList.clear();
           notifyListeners();
         },

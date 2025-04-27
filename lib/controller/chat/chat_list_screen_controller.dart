@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:provider/provider.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/chat_list_users_model.dart.dart';
 
@@ -52,7 +53,9 @@ class ChatListScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessgaes() {}
+
+
+
   void clearSelection() {
     _selectedUsersIds.clear();
     _selectionMode = false;
@@ -62,12 +65,20 @@ class ChatListScreenController extends ChangeNotifier {
   Future<void> deleteChats({
     required BuildContext context,
   }) async {
-    final data = {"userIDs": selectedMessageIds.toList()};
+    final selectedIdList = selectedMessageIds
+        .map((id) => int.tryParse(id))
+        .where((id) => id != null)
+        .cast<int>()
+        .toList();
+    final data = {"userIDs": selectedIdList};
+    log(data.toString());
 
     ApiMethods.post(
         url: ApiUrls.clearChat,
         body: data,
         onSucces: (p0) {
+          clearSelection();
+          context.read<ChatListScreenController>().getUsersList(context);
           notifyListeners();
           log(p0.body);
         },

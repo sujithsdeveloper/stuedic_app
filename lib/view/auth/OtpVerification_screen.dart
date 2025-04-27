@@ -147,7 +147,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Continue Button or Loading Indicator
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: otpControllerWatch.isLoading
@@ -157,15 +156,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         label: 'Continue',
                         isColored: proWatch.singleFieldColored,
                         onTap: () {
-                          // if (_formKey.currentState!.validate()) {
-                          //   if (_controller.text.length > 5) {
-                          //     context.read<OtpController>().checkOtp(
-                          //         context: context,
-                          //         email: widget.email,
-                          //         otpController: _controller);
-                          //   }
-                          // }
-                          AppRoutes.push(context, const SetupScreen());
+                          if (_formKey.currentState!.validate()) {
+                            if (_controller.text.length > 5) {
+                              context.read<OtpController>().checkOtp(
+                                  context: context,
+                                  email: widget.email,
+                                  otpController: _controller);
+                            }
+                          }
+                          // AppRoutes.push(context, const SetupScreen());
                         }),
               ),
             ],

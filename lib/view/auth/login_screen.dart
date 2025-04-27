@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/elements/agreement_text.dart';
-import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -14,7 +11,6 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
 import 'package:stuedic_app/view/auth/forgot_password.dart';
 import 'package:stuedic_app/view/auth/registration_screen.dart';
-import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
@@ -93,6 +89,37 @@ class _LoginScreenState extends State<LoginScreen>
                           color: ColorConstants.secondaryColor,
                           borderRadius: BorderRadius.circular(100)),
                       dividerColor: Colors.transparent,
+                      onTap: (value) {
+                        if (value == 1) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return WillPopScope(
+                                onWillPop: () async {
+                                  _tabController.animateTo(0);
+                                  return true;
+                                },
+                                child: CupertinoAlertDialog(
+                                  title: Text('Warning'),
+                                  content: Text(
+                                      'Phone number login is not available for beta users.'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        _tabController.animateTo(
+                                            _tabController.previousIndex);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                       tabs: [
                         Tab(
                           text: "Email",

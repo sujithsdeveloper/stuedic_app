@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';

@@ -89,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       messageDeleteAlertDialog(
                         context: context,
                         onDelete: () {
-                          chatProRead.deleteMessgaes();
+                          chatProRead.deleteMessgaes(context);
                         },
                       );
                       // chatProWatch.clearSelection();
@@ -162,11 +162,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           messageDeleteAlertDialog(
                             context: context,
                             onDelete: () async {
-                              final currentUserId = await AppUtils.getUserId();
                               chatProRead.clearChat(
                                   context: context,
-                                  currentUserId: currentUserId,
-                                  toUserId: widget.userId);
+                                  toUserId: int.parse(widget.userId));
                             },
                           );
                         },

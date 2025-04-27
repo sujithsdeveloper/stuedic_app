@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/API_response.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';

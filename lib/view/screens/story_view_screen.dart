@@ -68,11 +68,13 @@ class StoryViewScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      Image.network(
-                        story?.contentUrl ?? "",
-                        fit: BoxFit.cover,
-                        height: 300,
-                        width: double.infinity,
+                      Expanded(
+                        child: Image.network(
+                          story?.contentUrl ?? "",
+                          fit: BoxFit.cover,
+                          height: 300,
+                          width: double.infinity,
+                        ),
                       ),
                     ],
                   );
