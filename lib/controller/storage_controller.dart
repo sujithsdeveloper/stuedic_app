@@ -9,7 +9,6 @@ class StorageController extends ChangeNotifier {
     required String username,
   }) async {
     try {
-      log('fun called');
 
       // Request permission
       // if (await _requestPermission()) {

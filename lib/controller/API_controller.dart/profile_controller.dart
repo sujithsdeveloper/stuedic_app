@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/currentuser_grid_model.dart';
@@ -17,7 +17,7 @@ import 'package:stuedic_app/utils/refreshTocken.dart';
 class ProfileController extends ChangeNotifier {
   UserCurrentDetailsModel? userCurrentDetails;
   Future<void> getCurrentUserData({required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: APIs.getUserDetail,
       context: context,
       onSucces: (res) async {
@@ -40,7 +40,7 @@ class ProfileController extends ChangeNotifier {
       {required String userId, required BuildContext context}) async {
     userByUserIdIsloading = true;
     notifyListeners();
-    await ApiCall.get(
+    await ApiMethods.get(
         url: Uri.parse(
             '${APIs.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
         onSucces: (p0) {
@@ -60,7 +60,7 @@ class ProfileController extends ChangeNotifier {
 
   UserProfileGrid? currentUserProfileGrid;
   Future<void> getCurrentUserGrid({required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
         url: APIs.profileGridUrl,
         onSucces: (p0) {
           // log(p0.body);
@@ -78,7 +78,7 @@ class ProfileController extends ChangeNotifier {
       {required BuildContext context, required String userID}) async {
     var url = Uri.parse(
         'https://api.stuedic.com/api/v1/Profile/getProfileGrid?userId=$userID');
-    await ApiCall.get(
+    await ApiMethods.get(
       url: url,
       onSucces: (p0) {
         // log(p0.body);
@@ -96,7 +96,7 @@ class ProfileController extends ChangeNotifier {
   Future<void> getSinglePost(
       {required BuildContext context, required String postId}) async {
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/getSinglePost/$postId');
-    await ApiCall.get(
+    await ApiMethods.get(
         url: url,
         onSucces: (p0) {
           // log(p0.body);

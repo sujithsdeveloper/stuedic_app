@@ -17,9 +17,14 @@ class _ConnectionFailedScreenState extends State<ConnectionFailedScreen> {
     super.initState();
     _connectivity = Connectivity();
     _connectivityStream = _connectivity.onConnectivityChanged;
+    //listen to connectivity changes
     _connectivityStream.listen((List<ConnectivityResult> result) {
       if (result != ConnectivityResult.none) {
-        // AppRoutes.pushReplacement(context, BottomNavScreen());
+        AppRoutes.pushReplacement(
+            context,
+            BottomNavScreen(
+              showShimmer: true,
+            ));
       }
     });
   }

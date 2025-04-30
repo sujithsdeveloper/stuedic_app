@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
+import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
 import 'package:stuedic_app/menu/custom_popup_menu.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -85,11 +87,29 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                     icon: Icon(CupertinoIcons.delete),
                     onPressed: () {
-                      messageDeleteAlertDialog(
-                        context: context,
-                        onDelete: () {
-                          chatProRead.deleteMessgaes();
-                        },
+                      customDialog(
+                        context,
+                        titile: "Delete Messages",
+                        subtitle:
+                            "Are you sure you want to delete the selected message(s)? This action cannot be undone.",
+                        actions: [
+                          CupertinoDialogAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "Cancel",
+                              )),
+                          CupertinoDialogAction(
+                              onPressed: () {
+                                chatProRead.deleteMessage(context);
+                                // Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "Delete",
+                                style: TextStyle(color: Colors.red),
+                              ))
+                        ],
                       );
                       // chatProWatch.clearSelection();
                     },
@@ -105,8 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
             : AppBar(
                 title: GestureDetector(
                   onTap: () {
-                    AppRoutes.push(
-                        context, UserProfile(userId: widget.userId));
+                    AppRoutes.push(context, UserProfile(userId: widget.userId));
                   },
                   child: Row(
                     children: [
@@ -162,11 +181,29 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Text('View Profile')),
                     PopupMenuItem(
                         onTap: () {
-                          messageDeleteAlertDialog(
-                            context: context,
-                            onDelete: () {
-                              chatProRead.deleteMessgaes();
-                            },
+                          customDialog(
+                            context,
+                            titile: "Delete Messages",
+                            subtitle:
+                                "Are you sure you want to delete the selected message(s)? This action cannot be undone.",
+                            actions: [
+                              CupertinoDialogAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "Cancel",
+                                  )),
+                              CupertinoDialogAction(
+                                  onPressed: () {
+                                    chatProRead.deleteMessage(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.red),
+                                  ))
+                            ],
                           );
                         },
                         child: Text('Clear Chat')),
@@ -202,6 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         : Alignment.centerLeft,
                     child: GestureDetector(
                       onLongPress: () {
+                        HapticFeedback.selectionClick();
                         chatProRead.toggleSelection(chatData.id!);
                       },
                       onTap: () {

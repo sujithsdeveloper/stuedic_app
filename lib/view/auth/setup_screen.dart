@@ -7,8 +7,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/view/auth/setup_screens/desigination_selection.dart';
 import 'package:stuedic_app/view/auth/setup_screens/finish_setup.dart';
 import 'package:stuedic_app/view/auth/setup_screens/form_fill.dart';
-import 'package:stuedic_app/view/screens/initial_screen/club_selection.dart';
-import 'package:stuedic_app/view/screens/initial_screen/upload_id.dart';
+
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});

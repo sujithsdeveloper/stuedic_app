@@ -5,7 +5,6 @@ class ScrollingController extends ChangeNotifier {
 
   void controllerScroll({required ScrollController scrollController}) {
     scrollController.addListener(() {
-      // Customize this value according to SliverAppBar height
       if (scrollController.offset >= 250 && !gridViewScrollEnabled) {
         gridViewScrollEnabled = true;
         notifyListeners();

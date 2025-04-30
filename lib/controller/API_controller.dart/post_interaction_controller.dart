@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
@@ -22,10 +22,7 @@ class PostInteractionController extends ChangeNotifier {
     required BuildContext context,
   }) async {
     if (isLiked) {
-      await unLikePost(
-        postId: postId,
-        context: context,
-      );
+      await unLikePost(postId: postId, context: context);
     } else {
       await likePost(postId: postId, context: context);
     }
@@ -36,7 +33,7 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Post/likePost?postid=$postId'),
       onSucces: (p0) {
         Logger().f(p0.body);
@@ -51,7 +48,7 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
       onSucces: (p0) {
         Logger().f(p0.body);
@@ -87,7 +84,7 @@ class PostInteractionController extends ChangeNotifier {
 
   void followUser(
       {required String userId, required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: Uri.parse('${APIs.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0.body);
@@ -103,7 +100,7 @@ class PostInteractionController extends ChangeNotifier {
 
   void unfollowUser(
       {required String userId, required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: Uri.parse(
           '${APIs.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
@@ -123,7 +120,7 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.post(
+    await ApiMethods.post(
       url: APIs.addBookmark,
       body: {'postid': postId},
       onSucces: (p0) {
@@ -141,7 +138,7 @@ class PostInteractionController extends ChangeNotifier {
     required String postId,
     required BuildContext context,
   }) async {
-    await ApiCall.post(
+    await ApiMethods.post(
       url: APIs.deleteBookmark,
       body: {'postid': postId},
       onSucces: (p0) {
@@ -159,7 +156,7 @@ class PostInteractionController extends ChangeNotifier {
   Future<void> getBookmark({
     required BuildContext context,
   }) async {
-    await ApiCall.get(
+    await ApiMethods.get(
       url: APIs.getBookmark,
       onSucces: (p0) {
         // Logger().f(p0.body);
@@ -195,7 +192,7 @@ class PostInteractionController extends ChangeNotifier {
     };
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/addcomment?postid=$postId');
     if (comment.isNotEmpty) {
-      await ApiCall.post(
+      await ApiMethods.post(
         url: url,
         body: body,
         onSucces: (p0) async {
@@ -220,7 +217,7 @@ class PostInteractionController extends ChangeNotifier {
     log("Controller postID $postId");
 
     var url = Uri.parse('${APIs.baseUrl}api/v1/Post/comments?postid=$postId');
-    await ApiCall.get(
+    await ApiMethods.get(
       url: url,
       onSucces: (p0) {
         getComments = getCommentsModelFromJson(p0.body);

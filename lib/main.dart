@@ -45,12 +45,12 @@ import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized();
+
   FlutterNativeSplash.preserve(
     widgetsBinding: widgetsBinding,
   );
@@ -134,9 +134,9 @@ class _MyAppState extends State<MyApp> {
           darkTheme: AppTheme.darkTheme,
           themeMode: widget.themeMode,
           debugShowCheckedModeBanner: false,
-          home: (widget.token == null || widget.token == 'null')
+          home: (widget.token == null || widget.token!.isEmpty)
               ? LoginScreen()
-              : BottomNavScreen(isfirstTime: true)),
+              : BottomNavScreen(showShimmer: true)),
     );
   }
 }

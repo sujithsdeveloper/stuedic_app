@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
-import 'package:stuedic_app/dialogs/desgination_dialog.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';

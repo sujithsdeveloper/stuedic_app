@@ -3,7 +3,10 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 
 class VideoGrid extends StatelessWidget {
-  const VideoGrid({super.key, required this.scrollController, required this.gridViewScrollEnabled});
+  const VideoGrid(
+      {super.key,
+      required this.scrollController,
+      required this.gridViewScrollEnabled});
   final ScrollController scrollController;
 // final List<>
   final bool gridViewScrollEnabled;
@@ -17,8 +20,11 @@ class VideoGrid extends StatelessWidget {
         physics: gridViewScrollEnabled
             ? const AlwaysScrollableScrollPhysics()
             : const NeverScrollableScrollPhysics(),
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 9 / 16,
+            crossAxisCount: 3,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 5),
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {

@@ -1,7 +1,6 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/home_feed_model.dart';
 
@@ -11,7 +10,7 @@ class HomefeedController extends ChangeNotifier {
   Future<void> getAllPost({required BuildContext context}) async {
     isHomeFeedLoading = true;
     notifyListeners();
-    await ApiCall.get(
+    await ApiMethods.get(
         url: APIs.homeFeedAPI,
         onSucces: (p0) {
           homeFeed = homeFeedFromJson(p0.body);

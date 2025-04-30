@@ -1,7 +1,6 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/getNotification_model.dart';
 
@@ -11,7 +10,7 @@ class NotificationController extends ChangeNotifier {
   Future<void> getNotification({required BuildContext context}) async {
     isLoading = true;
     notifyListeners();
-    await ApiCall.get(
+    await ApiMethods.get(
         url: APIs.getNotification,
         onSucces: (p0) {
           // log(p0.body);

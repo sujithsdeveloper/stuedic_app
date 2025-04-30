@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/searcheduser_model.dart';
 
@@ -14,7 +14,7 @@ class UserSearchController extends ChangeNotifier {
     notifyListeners();
     Map<String, dynamic> data = {"searchTerm": keyword};
 
-    await ApiCall.post(
+    await ApiMethods.post(
         url: APIs.searchApi,
         body: data,
         onSucces: (p0) {

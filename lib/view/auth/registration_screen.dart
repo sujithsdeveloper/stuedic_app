@@ -4,6 +4,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -75,6 +76,26 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: TabBar(
+                            onTap: (value) {
+                        if (value == 1) {
+                          customDialog(context, onPop: () {
+                            _tabController.animateTo(0);
+                            return true;
+                          },
+                              titile: 'Not Available Now',
+                              subtitle:
+                                  'Login using phone number is not available yet',
+                              actions: [
+                                CupertinoDialogAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _tabController.animateTo(0);
+                                  },
+                                  child: Text("OK"),
+                                )
+                              ]);
+                        }
+                      },
                       isScrollable: false,
                       labelStyle: StringStyle.normalText(),
                       indicatorSize: TabBarIndicatorSize.tab,

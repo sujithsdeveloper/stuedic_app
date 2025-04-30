@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
-import 'package:stuedic_app/APIs/API_response.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
+import 'package:stuedic_app/APIs/API_response_constants.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/auth/login_response_model.dart';
@@ -43,14 +42,14 @@ class AuthController extends ChangeNotifier {
         isLoginLoading = false;
         notifyListeners();
         AppRoutes.pushAndRemoveUntil(
-            context, BottomNavScreen(isfirstTime: true));
+            context, BottomNavScreen(showShimmer: true));
 
         log(response.body);
-      } else if (response.body.contains(ApiResponse.userNotFound)) {
+      } else if (response.body.contains(ApiResponseConstants.userNotFound)) {
         isLoginLoading = false;
         notifyListeners();
         errorSnackbar(label: 'User Not Found', context: context);
-      } else if (response.body.contains(ApiResponse.invalidPassword)) {
+      } else if (response.body.contains(ApiResponseConstants.invalidPassword)) {
         isLoginLoading = false;
         notifyListeners();
         errorSnackbar(label: 'Invalid Password', context: context);
@@ -128,7 +127,7 @@ class AuthController extends ChangeNotifier {
         AppRoutes.pushAndRemoveUntil(
             context,
             BottomNavScreen(
-              isfirstTime: true,
+              showShimmer: true,
             ));
       } else if (response.statusCode == 401) {
         await refreshAccessToken(context: context);
@@ -141,7 +140,8 @@ class AuthController extends ChangeNotifier {
             collegeIDUrl: collegeIDUrl,
             password: password,
             role: role);
-      } else if (response.body.contains(ApiResponse.userAlreadyExist)) {
+      } else if (response.body
+          .contains(ApiResponseConstants.userAlreadyExist)) {
         errorSnackbar(
             label: 'User with this email already exists', context: context);
       }
@@ -155,7 +155,7 @@ class AuthController extends ChangeNotifier {
       {required String email, required BuildContext context}) async {
     Map data = {"userIdentifier": email};
 
-    await ApiCall.post(
+    await ApiMethods.post(
         url: APIs.forgotPasswordUrl,
         body: data,
         onSucces: (p0) {

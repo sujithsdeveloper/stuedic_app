@@ -2,10 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/chat/listen_to_chatList.dart';
-import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
+import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -52,6 +53,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     return WillPopScope(
       onWillPop: () async {
+        if (chatProWatch.isSelectionMode) {
+          chatProWatch.clearSelection();
+          return false;
+        }
         widget.controller.previousPage(
             duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
         return false;
@@ -67,13 +72,29 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   IconButton(
                     icon: Icon(CupertinoIcons.delete),
                     onPressed: () {
-                      messageDeleteAlertDialog(
-                        context: context,
-                        onDelete: () {
-                          chatProRead.deleteMessgaes();
-                        },
-                      );
                       // chatProWatch.clearSelection();
+                      customDialog(context,
+                          titile: 'Delete User',
+                          subtitle:
+                              'Are you sure you want to delete the selected message(s)? This action cannot be undone.',
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () {
+                                chatProRead.deleteUsers(context);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ]);
                     },
                   ),
                   IconButton(
@@ -215,6 +236,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                                   return GestureDetector(
                                     onLongPress: () {
+                                      HapticFeedback.selectionClick();
                                       chatProRead.toggleSelection(
                                           user.userId.toString()!);
                                     },

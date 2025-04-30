@@ -14,15 +14,15 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/current_college_profile_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/current_user_profile_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts/shorts_screen.dart';
 import 'package:stuedic_app/view/screens/chat/chat_list_screen.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/college_profile_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key, required this.isfirstTime});
-  final bool isfirstTime;
+  const BottomNavScreen({super.key, required this.showShimmer});
+  final bool showShimmer;
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
 }
@@ -32,18 +32,17 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   @override
   void initState() {
     super.initState();
+    //check the internet connection
     AppUtils.checkConnectivity(context);
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final token = await AppUtils.getToken();
       log(token);
 
-      // final appContoller = context.read<AppContoller>();
       final profileController = context.read<ProfileController>();
       final discoverController = context.read<DiscoverController>();
       final storyController = context.read<StoryController>();
       final feedController = context.read<HomefeedController>();
-      // appContoller.chnageBottomNav(index: 0, context: context);
+
       profileController.getCurrentUserData(context: context);
       profileController.getCurrentUserGrid(context: context);
       discoverController.getDiscoverData(context);
@@ -54,33 +53,26 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userScreens = [
+      HomePage(isfirstTime: widget.showShimmer),
+      DiscoverScreen(),
+      Container(),
+      ShortsScreen(),
+      CurrentUserStudentProfileScreen()
+    ];
+    final CollegeuserScreens = [
+      HomePage(isfirstTime: widget.showShimmer),
+      DiscoverScreen(),
+      Container(),
+      ShortsScreen(),
+      CurrenUserCollegeProfileScreen()
+    ];
     final proWatch = context.watch<AppContoller>();
     final proRead = context.read<AppContoller>();
     final profileControllerWatch = context.watch<ProfileController>();
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
-    String userId =
-        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
-
-    List<Widget> userScreens = [
-      HomePage(
-        isfirstTime: widget.isfirstTime,
-      ),
-      DiscoverScreen(),
-      Container(),
-      ShortsScreen(),
-      ProfileScreen(
-        userId: userId,
-      )
-    ];
-    List<Widget> CollegeuserScreens = [
-      HomePage(isfirstTime: widget.isfirstTime),
-      DiscoverScreen(),
-      Container(),
-      ShortsScreen(),
-      CollegeProfileScreen()
-    ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -91,10 +83,11 @@ class _BottomNavScreenState extends State<BottomNavScreen>
         return true;
       },
       child: Scaffold(
+        //by using indexedstack.....we can keep the state of the page when switching between them
         body: IndexedStack(
-          index: proWatch.currentIndex,
-          children: isCollege ? CollegeuserScreens : userScreens,
-        ),
+            index: proWatch.currentIndex,
+            //there are two screen screens for profile(student user and college user)
+            children: isCollege ? CollegeuserScreens : userScreens),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Transform.translate(
           offset: const Offset(0, 10),
@@ -148,18 +141,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<HomePageController>().HomePageControl();
-    // setState(() {});
-    // context.read<HomefeedController>().getAllPost(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
-    // final proWatch = context.watch<AppContoller>();
     final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
-      // AssetPickerPage(
-      //   pageController: pagecontroller,
-      // ),
       HomeScreen(
         controller: proWatchHomepage.pageController!,
         isfirstTime: widget.isfirstTime,
@@ -169,12 +156,6 @@ class _HomePageState extends State<HomePage> {
       )
     ];
     return PageView(
-      // onPageChanged: (value) {
-      //   if (value == 0) {
-      //     // context.watch<StoryPickerController>().selectedAssets = [];
-      //     // context.read<StoryPickerController>().notifyListeners();
-      //   }
-      // },
       controller: proWatchHomepage.pageController!,
       restorationId: 'home_page_view',
       children: pages,

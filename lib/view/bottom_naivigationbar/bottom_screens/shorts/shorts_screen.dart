@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
@@ -35,8 +36,8 @@ class _ShortsScreenState extends State<ShortsScreen>
               .postContentUrl
               .toString() ??
           '';
+
       context.read<ShortsController>().getReels(context: context);
-      context.read<VideoTypeController>().onLongPressEnd();
       context.read<VideoTypeController>().initialiseNetworkVideo(url: url);
       context.read<VideoTypeController>().notifyListeners();
     });
@@ -62,18 +63,11 @@ class _ShortsScreenState extends State<ShortsScreen>
     final reels = proWatch.getShortsModel?.response;
 
     return Scaffold(
-      body: PageView.builder(
+      body: PreloadPageView.builder(
         scrollDirection: Axis.vertical,
+        preloadPagesCount: 3,
         itemCount: reels?.length ?? 0,
-        restorationId: 'pageView',
-        onPageChanged: (value) {
-          final videoController =
-              Provider.of<VideoTypeController>(context, listen: false);
-          videoController.networkVideoController?.pause();
-          final newUrl = reels?[value].postContentUrl.toString() ?? '';
-          videoController.initialiseNetworkVideo(
-              url: newUrl, inistatePlay: true);
-        },
+        pageSnapping: true,
         itemBuilder: (context, index) {
           final reel = reels?[index];
 

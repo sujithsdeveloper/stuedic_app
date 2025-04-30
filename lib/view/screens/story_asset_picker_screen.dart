@@ -10,112 +10,96 @@ import 'package:video_player/video_player.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class AssetPickerPage extends StatelessWidget {
-  final PageController? pageController;
   final bool isPost;
-  const AssetPickerPage({super.key, this.pageController, this.isPost = false});
+  const AssetPickerPage({super.key, this.isPost = false});
 
   @override
   Widget build(BuildContext context) {
     final controller = TextEditingController();
     return ChangeNotifierProvider(
-      create: (_) => StoryPickerController()
-        ..pickAssets(context, pageController: pageController),
+      create: (_) => StoryPickerController()..pickAssets(context),
       child: Consumer<StoryPickerController>(
         builder: (context, storyPicker, child) {
           final proWatch =
               Provider.of<MutlipartController>(context, listen: false);
-          return WillPopScope(
-            onWillPop: () async {
-              if (pageController == null) {
-                return true;
-              } else {
-                pageController?.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
-                return false;
-              }
-            },
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text(
-                  "Add Story",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => storyPicker.uploadMedia(context, proWatch),
-                    child: const Icon(Icons.arrow_forward),
-                  )
-                ],
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                "Add Story",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
-              body: storyPicker.selectedAssets.isEmpty
-                  ? const Center(child: Text("No media selected"))
-                  : SingleChildScrollView(
-                      child: FutureBuilder<File?>(
-                        future: storyPicker.selectedAssets.first.file,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.hasData) {
-                            final file = snapshot.data!;
-                            if (storyPicker.selectedAssets.first.type ==
-                                AssetType.image) {
-                              context.read<MutlipartController>().uploadMedia(
-                                  context: context,
-                                  filePath: file.path,
-                                  API: APIs.uploadPicForPost);
-                              storyPicker.uploadMedia(context, proWatch);
-
-                              return Column(
-                                spacing: 20,
-                                children: [
-                                  Image.file(file, fit: BoxFit.cover),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: TextfieldWidget(
-                                      hint: 'Caption',
-                                      maxLength: 300,
-                                      controller: controller,
-                                    ),
-                                  ),
-                                  SizedBox(height: 20)
-                                ],
-                              );
-                            } else {
-                              context.read<MutlipartController>().uploadMedia(
-                                  context: context,
-                                  filePath: file.path,
-                                  isVideo: true,
-                                  API: APIs.uploadPicForPost);
-
-                              storyPicker.uploadMedia(context, proWatch);
-                              return Column(
-                                spacing: 20,
-                                children: [
-                                  VideoPlayerWidget(file: file),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: TextfieldWidget(
-                                      hint: 'Caption',
-                                      maxLength: 300,
-                                      controller: controller,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  )
-                                ],
-                              );
-                            }
-                          }
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        },
-                      ),
-                    ),
+              actions: [
+                TextButton(
+                  onPressed: () => storyPicker.uploadMedia(context, proWatch),
+                  child: const Icon(Icons.arrow_forward),
+                )
+              ],
             ),
+            body: storyPicker.selectedAssets.isEmpty
+                ? const Center(child: Text("No media selected"))
+                : SingleChildScrollView(
+                    child: FutureBuilder<File?>(
+                      future: storyPicker.selectedAssets.first.file,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          final file = snapshot.data!;
+                          if (storyPicker.selectedAssets.first.type ==
+                              AssetType.image) {
+                            context.read<MutlipartController>().uploadMedia(
+                                context: context,
+                                filePath: file.path,
+                                API: APIs.uploadPicForPost);
+                            storyPicker.uploadMedia(context, proWatch);
+
+                            return Column(
+                              spacing: 20,
+                              children: [
+                                Image.file(file, fit: BoxFit.cover),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextfieldWidget(
+                                    hint: 'Caption',
+                                    maxLength: 300,
+                                    controller: controller,
+                                  ),
+                                ),
+                                SizedBox(height: 20)
+                              ],
+                            );
+                          } else {
+                            context.read<MutlipartController>().uploadMedia(
+                                context: context,
+                                filePath: file.path,
+                                isVideo: true,
+                                API: APIs.uploadPicForPost);
+
+                            storyPicker.uploadMedia(context, proWatch);
+                            return Column(
+                              spacing: 20,
+                              children: [
+                                VideoPlayerWidget(file: file),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextfieldWidget(
+                                    hint: 'Caption',
+                                    maxLength: 300,
+                                    controller: controller,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                )
+                              ],
+                            );
+                          }
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    ),
+                  ),
           );
         },
       ),

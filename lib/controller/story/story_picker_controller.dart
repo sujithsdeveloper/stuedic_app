@@ -11,7 +11,7 @@ class StoryPickerController extends ChangeNotifier {
   final TextEditingController controller = TextEditingController();
 
   Future<void> pickAssets(BuildContext context,
-      {PageController? pageController}) async {
+      ) async {
     final List<AssetEntity>? result = await AssetPicker.pickAssets(
       context,
       pickerConfig: AssetPickerConfig(
@@ -22,15 +22,10 @@ class StoryPickerController extends ChangeNotifier {
     );
 
     if (result == null || result.isEmpty) {
-      if (pageController == null) {
         if (context.mounted) Navigator.pop(context);
-      } else {
-        pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    } else {
+
+    }
+     else {
       selectedAssets = result;
       notifyListeners();
     }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_story_presenter/flutter_story_presenter.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:video_player/video_player.dart';
 
 class StoryViewScreen extends StatelessWidget {
   const StoryViewScreen(
@@ -68,11 +66,11 @@ class StoryViewScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      Image.network(
-                        story?.contentUrl ?? "",
-                        fit: BoxFit.cover,
-                        height: 300,
-                        width: double.infinity,
+                      Expanded(
+                        child: Image.network(
+                          story?.contentUrl ?? "",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ],
                   );

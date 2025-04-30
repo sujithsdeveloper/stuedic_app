@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
-import 'package:stuedic_app/dialogs/desgination_dialog.dart';
+import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/view/screens/story_view_screen.dart';
 
@@ -174,7 +173,21 @@ class AppContoller extends ChangeNotifier {
     } else if (selectedUserType == 'School/University') {
       collegeStaff = true;
       log('School/University selected');
-      DesiginationDialog(context);
+      customDialog(context,
+          titile: 'School/University',
+          subtitle:
+              'University/ School Registrations are requested to be done through Desktop page of the application.',
+          actions: [
+            CupertinoDialogAction(
+              child: Text(
+                'Dissmiss',
+              ),
+              textStyle: TextStyle(color: Color(0xff007AFF)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ]);
     } else if (selectedUserType == 'Teacher/University professor') {
       collegeStaff = true;
       log('Teacher/University professor selected');

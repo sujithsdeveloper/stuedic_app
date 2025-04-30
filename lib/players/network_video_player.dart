@@ -45,7 +45,7 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
     return VisibilityDetector(
       key: Key(widget.url), // Unique key for each video
       onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction > 0.8) {
+        if (visibilityInfo.visibleFraction > 0.5) {
           proRead.networkVideoController!
               .play(); // Play when more than 50% visible
         } else {

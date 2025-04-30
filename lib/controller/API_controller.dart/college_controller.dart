@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/model/get_college_list.dart';
 
 class CollegeController extends ChangeNotifier {
   GetCollegeListModel? getCollegeListModel;
   Future<void> getCollege({required BuildContext context}) async {
-    await ApiCall.get(
+    await ApiMethods.get(
         url: APIs.getCollegeList,
         onSucces: (p0) {
           getCollegeListModel = getCollegeListModelFromJson(p0.body);
@@ -18,6 +18,5 @@ class CollegeController extends ChangeNotifier {
         context: context);
   }
 
-
-  void getDepartments(){}
+  void getDepartments() {}
 }

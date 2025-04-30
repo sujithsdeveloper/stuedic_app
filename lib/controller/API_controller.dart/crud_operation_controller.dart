@@ -1,9 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
@@ -11,6 +10,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class CrudOperationController extends ChangeNotifier {
+  
   Future<void> uploadPost(
       {required String mediaUrl,
       required String caption,
@@ -25,7 +25,7 @@ class CrudOperationController extends ChangeNotifier {
       "postColor": "red"
     };
 
-    await ApiCall.post(
+    await ApiMethods.post(
         url: APIs.addPostUrl,
         body: data,
         onSucces: (p0) {
@@ -48,7 +48,7 @@ class CrudOperationController extends ChangeNotifier {
     required String postId,
   }) async {
     final data = {"postID": postId};
-    await ApiCall.delete(
+    await ApiMethods.delete(
         body: data,
         url: APIs.deletePost,
         onSucces: (p0) {
@@ -63,7 +63,5 @@ class CrudOperationController extends ChangeNotifier {
         context: context);
   }
 
-  void commentPost() {}
-  void followUser() {}
-  void sharePost() {}
+  
 }
