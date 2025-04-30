@@ -33,12 +33,13 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    if (widget.isfirstTime) {
+   
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+       if (widget.isfirstTime) {
       final proReadHomeFeed = context.read<HomefeedController>();
       proReadHomeFeed.changeShimmer();
     }
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final currentUserId = await AppUtils.getUserId();
       log('Current userid= $currentUserId');
     });

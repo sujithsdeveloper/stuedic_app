@@ -129,34 +129,26 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.isfirstTime});
   final bool isfirstTime;
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<HomePageController>().HomePageControl();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final proWatchHomepage = context.watch<HomePageController>();
+    PageController pageController = PageController(
+      initialPage: 0,
+      keepPage: false,
+    );
     List<Widget> pages = [
       HomeScreen(
-        controller: proWatchHomepage.pageController!,
-        isfirstTime: widget.isfirstTime,
+        controller: pageController,
+        isfirstTime: isfirstTime,
       ),
       ChatListScreen(
-        controller: proWatchHomepage.pageController!,
+        controller: pageController,
       )
     ];
     return PageView(
-      controller: proWatchHomepage.pageController!,
+      controller: pageController,
       restorationId: 'home_page_view',
       children: pages,
     );
