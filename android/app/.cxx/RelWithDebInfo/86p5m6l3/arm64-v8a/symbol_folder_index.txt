@@ -1,0 +1,1 @@
+C:\work-project\stuedic_app\build\app\intermediates\cxx\RelWithDebInfo\86p5m6l3\obj\arm64-v8a
