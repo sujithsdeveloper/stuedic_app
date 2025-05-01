@@ -19,6 +19,7 @@ import 'package:stuedic_app/view/screens/search_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
 
+
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key, required this.controller});
   final PageController controller;
@@ -185,10 +186,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 child: GestureDetector(
                                   onTap: () {
                                     AppRoutes.push(
-                                        context,
-                                        SearchScreen(
-                                          toChat: true,
-                                        ));
+                                        context, SearchScreen(toChat: true));
                                   },
                                   child: Material(
                                     elevation: 3,

@@ -7,7 +7,6 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
-import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -32,7 +31,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   @override
   void initState() {
     super.initState();
-    //check the internet connection
     AppUtils.checkConnectivity(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final token = await AppUtils.getToken();

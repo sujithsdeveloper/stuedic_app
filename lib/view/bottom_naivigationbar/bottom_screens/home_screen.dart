@@ -11,7 +11,6 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/homeShimmer.dart';
-import 'package:stuedic_app/view/error_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
