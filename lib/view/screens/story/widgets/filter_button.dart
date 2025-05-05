@@ -69,7 +69,8 @@ Widget FilterButtons(BuildContext context,
               Text(
                 filter.name,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 16,
+                  fontFamily: 'Callisto',
                   color: Colors.white,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),

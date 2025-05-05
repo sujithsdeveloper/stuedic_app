@@ -6,14 +6,17 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/controller/story/story_edit_controller.dart';
+import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/model/app/overlay_text.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/shortcuts/app_shortcuts.dart';
 import 'package:stuedic_app/view/screens/story/widgets/filter_button.dart';
 import 'package:video_player/video_player.dart';
@@ -45,7 +48,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
 
   final double deleteIconSize = 60;
   final double deleteIconEnlarge = 80;
-  final double deleteIconPadding = 170;
+  final double deleteIconPadding = 0;
 
   @override
   void initState() {
@@ -212,7 +215,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                 child: mediaWidget,
               ),
               Positioned(
-                bottom: 120,
+                bottom: 0,
                 left: 0,
                 right: 0,
                 child: Column(
@@ -224,6 +227,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+///////////Filter section///////////////////////////////////////////////////////////Filter section///////////////////////////////////////////////////////////
                             FilterButtons(context,
                                 textEditingController: widget.textController),
                             // ElevatedButton.icon(
@@ -253,7 +257,27 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
               children: [
                 AppShortcuts.getPlatformDependentPop(
                   onPop: () {
-                    Navigator.pop(context);
+                    customDialog(context,
+                        titile: 'Discard Changes?',
+                        subtitle:
+                            'Are you sure you want to discard your changes?',
+                        actions: [
+                          CupertinoDialogAction(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                          CupertinoDialogAction(
+                              child: const Text('Discard'),
+                              onPressed: () {
+                                proWatch.overlays.clear();
+                                proWatch.selectedFilter = "none";
+                                proWatch.isTextFieldVisible = false;
+                                proWatch.isFilterVisible = false;
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              })
+                        ]);
                   },
                 ),
                 RotatedBox(
@@ -288,29 +312,32 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
             ),
           ),
         ),
+//////////////Delete icon section///////////////////////////////////////////////////////////Delete icon section///////////////////////////////////////////////////////////
         // Delete icon overlay
         if (draggingOverlayIndex != null)
           Positioned(
-            bottom: deleteIconPadding,
+            bottom: 20,
             left: 0,
             right: 0,
             child: Center(
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 120),
-                width: isNearDelete ? deleteIconEnlarge : deleteIconSize,
-                height: isNearDelete ? deleteIconEnlarge : deleteIconSize,
-                decoration: BoxDecoration(
-                  color: isNearDelete
-                      ? Colors.red.withOpacity(0.9)
-                      : Colors.black.withOpacity(0.7),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                  size: isNearDelete ? 40 : 32,
-                ),
-              ),
+                  duration: const Duration(milliseconds: 120),
+                  width: isNearDelete ? deleteIconEnlarge : deleteIconSize,
+                  height: isNearDelete ? deleteIconEnlarge : deleteIconSize,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    // color: Colors.grey.withOpacity(0.3),
+                    // color: isNearDelete
+                    //     ? Colors.red.withOpacity(0.3)
+                    //     : Colors.black.withOpacity(0.7),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                      child: Icon(
+                    CupertinoIcons.delete,
+                    color: Colors.white,
+                    size: isNearDelete ? 40 : null,
+                  ))),
             ),
           ),
       ],
