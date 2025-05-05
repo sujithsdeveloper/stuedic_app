@@ -161,7 +161,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                               context.read<OtpController>().checkOtp(
                                   context: context,
                                   email: widget.email,
-                                  otpController: _controller);
+                                  otp: _controller.text);
                             }
                           }
                           // AppRoutes.push(context, const SetupScreen());

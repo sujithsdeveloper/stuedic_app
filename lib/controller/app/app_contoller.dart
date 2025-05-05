@@ -5,7 +5,7 @@ import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/view/screens/story_view_screen.dart';
+import 'package:stuedic_app/view/screens/story/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
   bool isObscure = true;

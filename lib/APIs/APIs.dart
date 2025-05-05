@@ -75,4 +75,5 @@ class ApiUrls {
   //OTP
   static Uri getOtp = Uri.parse('${baseUrl}api/v1/auth/generateOtp');
   static Uri checkOtp = Uri.parse('${baseUrl}api/v1/auth/verifyOtp');
+
 }

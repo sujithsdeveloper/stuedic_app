@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/model/get_story_model.dart';
@@ -8,8 +8,8 @@ import 'package:stuedic_app/model/get_story_model.dart';
 class StoryController extends ChangeNotifier {
   HomeStoriesModel? getstorymodel;
   Future<void> getStories(BuildContext context) async {
-    await ApiCall.get(
-        url: APIs.getStoryList,
+    await ApiMethods.get(
+        url: ApiUrls.getStoryList,
         onSucces: (p0) {
           getstorymodel = homeStoriesModelFromJson(p0.body);
           log(getstorymodel?.response.toString() ?? '');
@@ -31,8 +31,8 @@ class StoryController extends ChangeNotifier {
     notifyListeners();
 
     final data = {"contentURL": url, "caption": caption};
-    await ApiCall.post(
-        url: APIs.addStory,
+    await ApiMethods.post(
+        url: ApiUrls.addStory,
         body: data,
         onSucces: (p0) {
           isStoryUploading = false;

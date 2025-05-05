@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +5,6 @@ import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/controller/scanImage_controller.dart';
 import 'package:stuedic_app/sheets/media_bottom_sheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
-import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/view/auth/setup_screens/student_staff_registration.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
@@ -51,7 +49,7 @@ class _IDUploadState extends State<IDUpload> {
                     title: 'Student ID Number',
                     child: TextfieldWidget(
                       onChanged: (p0) {
-                        proReadML.verifyText(
+                        proReadML.toggleverifyTextColor(
                             text: p0!, file: proWatch.pickedImage);
                       },
                       validator: (p0) {
@@ -157,23 +155,8 @@ class _IDUploadState extends State<IDUpload> {
                       : GestureDetector(
                           onTap: () {
                             if (key.currentState!.validate()) {
-                              String extractedText =
-                                  proWatchML.extractedText ?? "";
-                              String inputText = controller.text.trim();
-
-                              // if (inputText.isNotEmpty) {
-                              //   if (extractedText.contains(inputText)) {
-                              //     // log('Success: Text found!');
-                              //     log('Success: id: $extractedText');
-                              //   } else {
-                              //     log('extracted text: $extractedText');
-                              //     errorSnackbar(
-                              //         label: 'Given ID and ID Number Doesn\'t match',
-                              //         context: context);
-                              //   }
-                              // }
                               proReadML.scanImage(
-                                context: context,
+                                  context: context,
                                   image: proWatch.pickedImage,
                                   idNumber: controller.text.trim());
                             }

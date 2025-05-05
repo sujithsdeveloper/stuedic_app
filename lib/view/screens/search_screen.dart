@@ -5,6 +5,7 @@ import 'package:stuedic_app/controller/API_controller.dart/search_controller.dar
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
@@ -16,8 +17,16 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen>
+    with SingleTickerProviderStateMixin {
+  TabController? tabController;
   final controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 4, vsync: this);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -54,55 +63,79 @@ class _SearchScreenState extends State<SearchScreen> {
                   borderRadius: BorderRadius.circular(99),
                 )),
           ),
+          bottom: controller.text.isEmpty
+              ? null
+              : TabBar(
+                  splashFactory: NoSplash.splashFactory,
+                  dividerColor: Colors.transparent,
+                  indicatorColor: ColorConstants.secondaryColor,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  controller: tabController,
+                  tabAlignment: TabAlignment.fill,
+                  labelStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: ColorConstants.secondaryColor),
+                  tabs: [
+                      Tab(text: "Top"),
+                      Tab(text: "Colleges"),
+                      Tab(text: "Students"),
+                      Tab(text: "Marketplace"),
+                    ]),
         ),
-        body: Builder(
-          builder: (context) {
-            final users = prowatch.reslust?.response!.users;
-            if (prowatch.isSearchLoading) {
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  return searchShimmer();
-                },
-              );
-            } else if (prowatch.reslust?.response?.users == null &&
-                controller.text.isNotEmpty) {
-              return Center(
-                child: Text('No user found'),
-              );
-            } else if (users?.isNotEmpty ?? true) {
-              return ListView.builder(
-                  itemCount: prowatch.reslust?.response?.users?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final user = prowatch.reslust?.response?.users?[index];
-                    return ListTile(
-                      onTap: () {
-                        if (widget.toChat) {
-                          AppRoutes.push(
-                              context,
-                              ChatScreen(
-                                  imageUrl: user?.profilePicUrl ?? '',
-                                  name: user?.username ?? '',
-                                  userId: user?.userId ?? ''));
-                        } else {
-                          AppRoutes.push(
-                              context, UserProfile(userId: user?.userId ?? ''));
-                        }
-                      },
-                      leading: CircleAvatar(
-                        backgroundImage: AppUtils.getProfile(
-                            url: user?.profilePicUrl ?? null),
-                      ),
-                      title: Text(
-                        user?.username ?? '',
-                        style: StringStyle.normalTextBold(),
-                      ),
-                      subtitle: Text(user?.userId ?? ''),
-                    );
-                  });
-            } else {
-              return SizedBox();
-            }
-          },
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            Builder(
+              builder: (context) {
+                final users = prowatch.reslust?.response!.users;
+                if (prowatch.isSearchLoading) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      return searchShimmer();
+                    },
+                  );
+                } else if (prowatch.reslust?.response?.users == null &&
+                    controller.text.isNotEmpty) {
+                  return Center(
+                    child: Text('No user found'),
+                  );
+                } else if (users?.isNotEmpty ?? true) {
+                  return ListView.builder(
+                      itemCount: prowatch.reslust?.response?.users?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final user = prowatch.reslust?.response?.users?[index];
+                        return ListTile(
+                          onTap: () {
+                            if (widget.toChat) {
+                              AppRoutes.push(
+                                  context,
+                                  ChatScreen(
+                                      imageUrl: user?.profilePicUrl ?? '',
+                                      name: user?.username ?? '',
+                                      userId: user?.userId ?? ''));
+                            } else {
+                              AppRoutes.push(context,
+                                  UserProfile(userId: user?.userId ?? ''));
+                            }
+                          },
+                          leading: CircleAvatar(
+                            backgroundImage: AppUtils.getProfile(
+                                url: user?.profilePicUrl ?? null),
+                          ),
+                          title: Text(
+                            user?.username ?? '',
+                            style: StringStyle.normalTextBold(),
+                          ),
+                          subtitle: Text(user?.userId ?? ''),
+                        );
+                      });
+                } else {
+                  return SizedBox();
+                }
+              },
+            ),
+          ],
         ));
   }
 }

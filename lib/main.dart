@@ -28,6 +28,7 @@ import 'package:stuedic_app/controller/connectivity_check_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
+import 'package:stuedic_app/controller/story/story_edit_controller.dart';
 import 'package:stuedic_app/controller/video/video_trim_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -51,9 +52,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterNativeSplash.preserve(
-    widgetsBinding: widgetsBinding,
-  );
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
 
   FlutterError.onError = (errorDetails) {
@@ -107,14 +106,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -126,11 +123,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CollegeController()),
         ChangeNotifierProvider(create: (context) => StoryController()),
         ChangeNotifierProvider(create: (context) => DropdownController()),
-        ChangeNotifierProvider(
-            create: (context) => ConnectivityCheckController()),
+        ChangeNotifierProvider(create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => HomePageController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
+        ChangeNotifierProvider(create: (context) => StoryEditController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

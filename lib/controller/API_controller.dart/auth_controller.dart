@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stuedic_app/APIs/API_call.dart';
-import 'package:stuedic_app/APIs/API_response.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
+import 'package:stuedic_app/APIs/API_response_constants.dart';
+
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/auth/login_response_model.dart';
@@ -156,8 +157,8 @@ class AuthController extends ChangeNotifier {
       {required String email, required BuildContext context}) async {
     Map data = {"userIdentifier": email};
 
-    await ApiCall.post(
-        url: APIs.forgotPasswordUrl,
+    await ApiMethods.post(
+        url: ApiUrls.forgotPasswordUrl,
         body: data,
         onSucces: (p0) {
           log('Forgot Password Response: ${p0.body}');

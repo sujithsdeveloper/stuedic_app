@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
-import 'package:stuedic_app/model/chat_list_users_model.dart.dart';
+import 'package:stuedic_app/model/chat/chat_list_users_model.dart.dart';
 
 class ChatListScreenController extends ChangeNotifier {
   List<ChatListUsersModel> usersList = [];
@@ -40,7 +40,7 @@ class ChatListScreenController extends ChangeNotifier {
   bool _selectionMode = false;
 
   bool get isSelectionMode => _selectionMode;
-  Set<String> get selectedMessageIds => _selectedUsersIds;
+  Set<String> get selectedUserIds => _selectedUsersIds;
 
   void toggleSelection(String userId) {
     if (_selectedUsersIds.contains(userId)) {
@@ -53,7 +53,33 @@ class ChatListScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessgaes() {}
+  Future<void> deleteUsers(BuildContext context) async {
+    final selectedIdList = selectedUserIds
+        .map((id) => int.tryParse(id))
+        .where((id) => id != null)
+        .cast<int>()
+        .toList();
+    final data = {"userIDs": selectedIdList};
+    await ApiMethods.post(
+      url: ApiUrls.clearChat,
+      body: data,
+      onSucces: (response) {
+        log(response.body);
+        usersList.removeAt(usersList
+            .indexWhere((user) => user.userId == selectedIdList.first));
+        clearSelection();
+        notifyListeners();
+        context.read<ChatListScreenController>().getUsersList(context);
+        getUsersList(context);
+      },
+      onTokenExpired: () async {
+        log('Token expired, retrying...');
+        await getUsersList(context);
+      },
+      context: context,
+    );
+  }
+
   void clearSelection() {
     _selectedUsersIds.clear();
     _selectionMode = false;
@@ -63,7 +89,7 @@ class ChatListScreenController extends ChangeNotifier {
   Future<void> deleteChats({
     required BuildContext context,
   }) async {
-    final selectedIdList = selectedMessageIds
+    final selectedIdList = selectedUserIds
         .map((id) => int.tryParse(id))
         .where((id) => id != null)
         .cast<int>()

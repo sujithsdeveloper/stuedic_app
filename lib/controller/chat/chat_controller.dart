@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/websocket_service.dart';
-import 'package:stuedic_app/model/chat_history_model.dart';
+import 'package:stuedic_app/model/chat/chat_history_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:web_socket_channel/io.dart';
-import '../../APIs/API_Methods.dart';
 
 class ChatController extends ChangeNotifier {
   IOWebSocketChannel? socket;
@@ -22,8 +22,8 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
     // var token = await AppUtils.getToken();
     log('to userid=$userId');
-    await ApiCall.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/history?toUser=$userId'),
+    await ApiMethods.get(
+        url: Uri.parse('${ApiUrls.baseUrl}api/v1/chat/history?toUser=$userId'),
         onSucces: (response) {
           chatHistoryList = chatHistoryModelFromJson(response.body);
           isHistoryLoading = false;
@@ -175,7 +175,29 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessgaes() {}
+  Future<void> deleteMessgaes(BuildContext context) async {
+    if (_selectedMessageIds.isEmpty) {
+      return;
+    }
+    final data = {
+      "messageIDs": _selectedMessageIds.toList(),
+    };
+    await ApiMethods.post(
+        body: data,
+        url: ApiUrls.deleteMessages,
+        onSucces: (p0) {
+          chatHistoryList.removeWhere(
+              (message) => _selectedMessageIds.contains(message.id.toString()));
+          notifyListeners();
+          AppUtils.showToast(msg: "Messages deleted successfully");
+          clearSelection();
+        },
+        onTokenExpired: () {
+          deleteMessgaes(context);
+        },
+        context: context);
+  }
+
   void clearSelection() {
     _selectedMessageIds.clear();
     _selectionMode = false;

@@ -77,11 +77,11 @@ class _CurrentUserStudentProfileScreenState
     final gridViewScrollEnabled =
         context.watch<ScrollingController>().gridViewScrollEnabled;
 
-    // bool isCollege =
-    //     userDataProviderWatch.userCurrentDetails?.response?.isCollege ?? false;
-    // bool isCurrentUser =
-    //     userDataProviderWatch.userCurrentDetails?.response?.isCurrentUser ??
-    //         false;
+    bool isCollege =
+        userDataProviderWatch.userCurrentDetails?.response?.isCollege ?? false;
+    bool isCurrentUser =
+        userDataProviderWatch.userCurrentDetails?.response?.isCurrentUser ??
+            false;
 
     return Scaffold(
         body: CustomScrollView(
@@ -666,7 +666,7 @@ class _CurrentUserStudentProfileScreenState
                 style: TextStyle(fontSize: 16)),
           ),
         ],
-      ),
-    ));
+      ),)
+    ]));
   }
 }

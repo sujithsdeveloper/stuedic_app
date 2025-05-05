@@ -6,6 +6,7 @@ import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/data/app_db.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 
 class ClubSelection extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ClubSelectionState extends State<ClubSelection> {
                   widget.proRead.changeChip(selected);
                 },
                 choiceItems: C2Choice.listFrom<String, String>(
-                  source: StringConstants.clubOptions,
+                  source: AppDb.clubOptions,
                   value: (index, item) => item,
                   label: (index, item) => item,
                 ),

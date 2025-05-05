@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
-import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -10,7 +9,7 @@ class NetworkVideoPlayer extends StatefulWidget {
     super.key,
     required this.url,
     this.inistatePlay = true,
-    this.isGestureControll = false,
+    this.isGestureControll = false
   });
 
   final String url;
@@ -32,7 +31,8 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
         url: widget.url, inistatePlay: widget.inistatePlay);
     videoController.networkVideoController!.addListener(() {
       if (mounted) {
-        setState(() {}); // Update UI only if the widget is still mounted
+        setState(() {
+        }); 
       }
     });
   }
@@ -47,10 +47,9 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.5) {
           proRead.networkVideoController!
-              .play(); // Play when more than 50% visible
+              .play(); 
         } else {
           proRead.networkVideoController!.pause();
-          // Pause when less than 50% visible
         }
       },
       child: GestureDetector(

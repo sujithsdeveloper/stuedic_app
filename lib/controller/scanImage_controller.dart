@@ -59,7 +59,7 @@ class ScanimageController extends ChangeNotifier {
     }
   }
 
-  Future<void> verifyText({required String text, File? file}) async {
+  Future<void> toggleverifyTextColor({required String text, File? file}) async {
     isContinue = false;
     notifyListeners();
     if (file != null && text.isNotEmpty) {

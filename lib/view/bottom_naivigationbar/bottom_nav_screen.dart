@@ -7,6 +7,7 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -71,24 +72,8 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
-    String userId=profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
-
-    List<Widget> userScreens = [
-      HomePage(
-        isfirstTime: widget.isfirstTime,
-      ),
-      DiscoverScreen(),
-      Container(),
-      ShortsScreen(),
-      ProfileScreen(userId: userId,)
-    ];
-    List<Widget> CollegeuserScreens = [
-      HomePage(isfirstTime: widget.isfirstTime),
-      DiscoverScreen(),
-      Container(),
-      ShortsScreen(),
-      CollegeProfileScreen()
-    ];
+    String userId =
+        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     return WillPopScope(
       onWillPop: () async {
@@ -145,7 +130,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.isfirstTime});
   final bool isfirstTime;
   @override
@@ -157,8 +142,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<HomePageController>().HomePageControl();
-    // setState(() {});
-    // context.read<HomefeedController>().getAllPost(context: context);
   }
 
   @override
@@ -167,15 +150,15 @@ class _HomePageState extends State<HomePage> {
     final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
       HomeScreen(
-        controller: pageController,
-        isfirstTime: isfirstTime,
+        controller: proWatchHomepage.pageController!,
+        isfirstTime: widget.isfirstTime,
       ),
       ChatListScreen(
-        controller: pageController,
+        controller: proWatchHomepage.pageController!,
       )
     ];
     return PageView(
-      controller: pageController,
+      controller: proWatchHomepage.pageController!,
       restorationId: 'home_page_view',
       children: pages,
     );

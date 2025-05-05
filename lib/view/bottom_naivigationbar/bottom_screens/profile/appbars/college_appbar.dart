@@ -31,12 +31,10 @@ class CollegeProfileAppbar extends StatelessWidget {
     super.key,
     required this.user,
     required this.isCurrentUser,
-    required this.widget,
   });
 
   final Response? user;
   final bool isCurrentUser;
-  final ProfileScreen widget;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +178,7 @@ class CollegeProfileAppbar extends StatelessWidget {
                                       .getUserByUserID(
                                           context: context,
                                           userId:
-                                              widget.userId ?? '');
+                                              '');
                                 },
                               );
                             } else {
@@ -198,7 +196,7 @@ class CollegeProfileAppbar extends StatelessWidget {
                                       .getUserByUserID(
                                           context: context,
                                           userId:
-                                              widget.userId ?? '');
+                                               '');
                                 },
                               );
                             }
