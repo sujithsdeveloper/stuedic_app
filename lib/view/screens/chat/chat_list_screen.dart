@@ -54,10 +54,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (chatProWatch.isSelectionMode) {
-          chatProWatch.clearSelection();
-          return false;
-        }
         widget.controller.previousPage(
             duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
         return false;
@@ -73,6 +69,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   IconButton(
                     icon: Icon(CupertinoIcons.delete),
                     onPressed: () {
+                      messageDeleteAlertDialog(
+                        context: context,
+                        onDelete: () {
+                          chatProRead.deleteMessgaes();
+                        },
+                      );
                       // chatProWatch.clearSelection();
                       customDialog(context,
                           titile: 'Delete User',
@@ -226,7 +228,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
                                   final user = chatProWatch.usersList[index];
                                   final time = AppUtils.timeAgo(
-                                      user?.timestamp.toString() ??
+                                      user.timestamp.toString() ??
                                           DateTime.now().toString());
                                   final isSelected = chatProWatch
                                       .selectedMessageIds

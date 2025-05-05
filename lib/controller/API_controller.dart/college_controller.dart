@@ -7,7 +7,7 @@ class CollegeController extends ChangeNotifier {
   GetCollegeListModel? getCollegeListModel;
   Future<void> getCollege({required BuildContext context}) async {
     await ApiMethods.get(
-        url: APIs.getCollegeList,
+        url: ApiUrls.getCollegeList,
         onSucces: (p0) {
           getCollegeListModel = getCollegeListModelFromJson(p0.body);
           notifyListeners();

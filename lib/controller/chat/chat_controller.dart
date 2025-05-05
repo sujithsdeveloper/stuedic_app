@@ -22,7 +22,7 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
     // var token = await AppUtils.getToken();
     log('to userid=$userId');
-    await ApiMethods.get(
+    await ApiCall.get(
         url: Uri.parse('${APIs.baseUrl}api/v1/chat/history?toUser=$userId'),
         onSucces: (response) {
           chatHistoryList = chatHistoryModelFromJson(response.body);
@@ -164,6 +164,7 @@ class ChatController extends ChangeNotifier {
   Set<String> get selectedMessageIds => _selectedMessageIds;
 
   void toggleSelection(String messageId) {
+    log("Toggling selection for message ID: $_selectedMessageIds");
     if (_selectedMessageIds.contains(messageId)) {
       _selectedMessageIds.remove(messageId);
     } else {
@@ -174,33 +175,31 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessage(BuildContext context) {
-    if (_selectedMessageIds.isNotEmpty) {
-      log('Deleting messages: $_selectedMessageIds');
-      final dataList = _selectedMessageIds.toList();
-      log('Selected message IDs: $dataList');
-      final data = {"messageIDs": dataList};
-      ApiMethods.post(
-        body: data,
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/deleteMessages'),
-        onSucces: (p0) {
-          chatHistoryList.removeWhere(
-              (message) => _selectedMessageIds.contains(message.id));
-          _selectedMessageIds.clear();
-          Navigator.pop(context);
-          _selectionMode = false;
-          notifyListeners();
-        },
-        onTokenExpired: () {},
-        context: context,
-      );
-    }
-  }
-
+  void deleteMessgaes() {}
   void clearSelection() {
     _selectedMessageIds.clear();
     _selectionMode = false;
     notifyListeners();
+  }
+
+  Future<void> clearChat(
+      {required BuildContext context, required int toUserId}) async {
+    final data = {
+      "userIDs": [toUserId]
+    };
+
+    await ApiMethods.post(
+        url: ApiUrls.clearChat,
+        body: data,
+        onSucces: (p0) {
+          clearSelection();
+          socket?.sink.close();
+          socket = null;
+          chatHistoryList.clear();
+          notifyListeners();
+        },
+        onTokenExpired: () {},
+        context: context);
   }
 }
 

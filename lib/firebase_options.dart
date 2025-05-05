@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDC5VoWekY_inc76yKjqH-iFeDuQJAMrZM',
-    appId: '1:1003609456046:android:50e2389ce2765b605a9c3f',
+    appId: '1:1003609456046:android:2acb768ec3efcaf15a9c3f',
     messagingSenderId: '1003609456046',
     projectId: 'stuedic-3d3a7',
     storageBucket: 'stuedic-3d3a7.firebasestorage.app',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBPE_mNhwtKQQ2TimPcODboNIz1pjWZ2Rw',
-    appId: '1:1003609456046:ios:7eedb778198760d65a9c3f',
+    appId: '1:1003609456046:ios:20fde371711b92405a9c3f',
     messagingSenderId: '1003609456046',
     projectId: 'stuedic-3d3a7',
     storageBucket: 'stuedic-3d3a7.firebasestorage.app',
-    iosBundleId: 'com.example.stuedicApp',
+    iosBundleId: 'com.stuedic.social',
   );
+
 }

@@ -7,12 +7,12 @@ import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
-import 'package:stuedic_app/view/auth/setup_screens/college_registration.dart';
+import 'package:stuedic_app/view/auth/setup_screens/student_staff_registration.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-class FormFill extends StatefulWidget {
-  const FormFill({
+class PublicUserFormFill extends StatefulWidget {
+  const PublicUserFormFill({
     super.key,
     required this.prowatch,
     required this.proRead,
@@ -24,10 +24,10 @@ class FormFill extends StatefulWidget {
   final Function() nextPage;
 
   @override
-  State<FormFill> createState() => _FormFillState();
+  State<PublicUserFormFill> createState() => _PublicUserFormFillState();
 }
 
-class _FormFillState extends State<FormFill> {
+class _PublicUserFormFillState extends State<PublicUserFormFill> {
   final nameController = TextEditingController();
   final ageController = TextEditingController();
   final emailController = TextEditingController();
@@ -47,7 +47,7 @@ class _FormFillState extends State<FormFill> {
     return Builder(
       builder: (context) {
         if (widget.prowatch.collegeStaff || widget.prowatch.student) {
-          return CollegeRegistration(
+          return StudentStaffRegistration(
             nextPage: widget.nextPage,
           );
         }

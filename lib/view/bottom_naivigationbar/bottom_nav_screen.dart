@@ -40,7 +40,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       final discoverController = context.read<DiscoverController>();
       final storyController = context.read<StoryController>();
       final feedController = context.read<HomefeedController>();
-
+      // appContoller.chnageBottomNav(index: 0, context: context);
       profileController.getCurrentUserData(context: context);
       profileController.getCurrentUserGrid(context: context);
       discoverController.getDiscoverData(context);
@@ -71,6 +71,24 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
+    String userId=profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
+
+    List<Widget> userScreens = [
+      HomePage(
+        isfirstTime: widget.isfirstTime,
+      ),
+      DiscoverScreen(),
+      Container(),
+      ShortsScreen(),
+      ProfileScreen(userId: userId,)
+    ];
+    List<Widget> CollegeuserScreens = [
+      HomePage(isfirstTime: widget.isfirstTime),
+      DiscoverScreen(),
+      Container(),
+      ShortsScreen(),
+      CollegeProfileScreen()
+    ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -131,11 +149,22 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.isfirstTime});
   final bool isfirstTime;
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<HomePageController>().HomePageControl();
+    // setState(() {});
+    // context.read<HomefeedController>().getAllPost(context: context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    PageController pageController = PageController(
-      initialPage: 0,
-      keepPage: false,
-    );
+    final proWatch = context.watch<AppContoller>();
+    final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
       HomeScreen(
         controller: pageController,

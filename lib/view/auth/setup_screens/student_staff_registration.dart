@@ -10,8 +10,8 @@ import 'package:stuedic_app/widgets/dropdown_widget.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-class CollegeRegistration extends StatefulWidget {
-  const CollegeRegistration({
+class StudentStaffRegistration extends StatefulWidget {
+  const StudentStaffRegistration({
     super.key,
     required this.nextPage,
   });
@@ -19,10 +19,11 @@ class CollegeRegistration extends StatefulWidget {
   final Function() nextPage;
 
   @override
-  State<CollegeRegistration> createState() => _CollegeRegistrationState();
+  State<StudentStaffRegistration> createState() =>
+      _StudentStaffRegistrationState();
 }
 
-class _CollegeRegistrationState extends State<CollegeRegistration> {
+class _StudentStaffRegistrationState extends State<StudentStaffRegistration> {
   final key = GlobalKey<FormState>();
   final nameController = TextEditingController();
   @override
@@ -33,7 +34,7 @@ class _CollegeRegistrationState extends State<CollegeRegistration> {
     final dropRead = context.read<DropdownController>();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Form(
         key: key,
         child: SingleChildScrollView(
@@ -71,7 +72,13 @@ class _CollegeRegistrationState extends State<CollegeRegistration> {
                           items.length,
                           (index) {
                             return DropdownMenuItem(
-                              child: Text(items[index].collageName ?? ''),
+                              child: Text(
+                                items[index].collageName ?? '',
+                                softWrap: true,
+                                overflow: TextOverflow
+                                    .ellipsis, // Prevent text overflow
+                                maxLines: 1,
+                              ),
                               value: items[index].collageId,
                             );
                           },

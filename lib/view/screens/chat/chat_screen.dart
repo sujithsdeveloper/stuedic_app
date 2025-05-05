@@ -7,7 +7,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/chat/chat_controller.dart';
 import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
-import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/dialogs/message_delete_alert_dialog.dart';
 import 'package:stuedic_app/menu/custom_popup_menu.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
@@ -87,29 +86,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                     icon: Icon(CupertinoIcons.delete),
                     onPressed: () {
-                      customDialog(
-                        context,
-                        titile: "Delete Messages",
-                        subtitle:
-                            "Are you sure you want to delete the selected message(s)? This action cannot be undone.",
-                        actions: [
-                          CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "Cancel",
-                              )),
-                          CupertinoDialogAction(
-                              onPressed: () {
-                                chatProRead.deleteMessage(context);
-                                // Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "Delete",
-                                style: TextStyle(color: Colors.red),
-                              ))
-                        ],
+                      messageDeleteAlertDialog(
+                        context: context,
+                        onDelete: () {
+                          chatProRead.deleteMessgaes();
+                        },
                       );
                       // chatProWatch.clearSelection();
                     },
@@ -148,25 +129,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 actions: [
                   IconButton(
                       onPressed: () {
-                        AppRoutes.push(
-                            context,
-                            CallPage(
-                              callID: '345678',
-                              userId: widget.userId,
-                              username: widget.name,
-                            ));
+                        callAlertDialog(
+                            callID: '123456',
+                            isVoice: false,
+                            userId: widget.userId,
+                            userName: widget.name,
+                            context: context);
                       },
                       icon: const Icon(HugeIcons.strokeRoundedVideo01)),
                   IconButton(
                       onPressed: () {
-                        AppRoutes.push(
-                            context,
-                            CallPage(
-                              callID: '345678',
-                              isvoice: true,
-                              userId: widget.userId,
-                              username: widget.name,
-                            ));
+                        callAlertDialog(
+                            context: context,
+                            isVoice: true,
+                            userId: widget.userId,
+                            callID: '123456',
+                            userName: widget.name);
                       },
                       icon: const Icon(HugeIcons.strokeRoundedCall)),
                   CustomPopupMenu(items: [
@@ -181,29 +159,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Text('View Profile')),
                     PopupMenuItem(
                         onTap: () {
-                          customDialog(
-                            context,
-                            titile: "Delete Messages",
-                            subtitle:
-                                "Are you sure you want to delete the selected message(s)? This action cannot be undone.",
-                            actions: [
-                              CupertinoDialogAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    "Cancel",
-                                  )),
-                              CupertinoDialogAction(
-                                  onPressed: () {
-                                    chatProRead.deleteMessage(context);
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.red),
-                                  ))
-                            ],
+                          messageDeleteAlertDialog(
+                            context: context,
+                            onDelete: () {
+                              chatProRead.deleteMessgaes();
+                            },
                           );
                         },
                         child: Text('Clear Chat')),
@@ -245,7 +205,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () {
                         if (chatProWatch.isSelectionMode) {
                           chatProRead.toggleSelection(chatData.id!);
-                        } else {}
+                        }
                       },
                       child: IntrinsicWidth(
                         child: ConstrainedBox(
