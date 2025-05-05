@@ -64,33 +64,7 @@ class _AssetPickerPageState extends State<AssetPickerPage> {
             child: SafeArea(
               child: Scaffold(
                 backgroundColor: Colors.transparent,
-                // appBar: AppBar(
-                //   leading: Builder(builder: (context) {
-                //     if (Platform.isIOS) {
-                //       return const Icon(
-                //         Icons.arrow_back_ios_new,
-                //         color: Colors.white,
-                //       );
-                //     } else {
-                //       return const Icon(
-                //         Icons.arrow_back,
-                //         color: Colors.white,
-                //       );
-                //     }
-                //   }),
-                //   toolbarHeight: 25,
-                //   backgroundColor: Colors.black,
-                //   title: const Text(
-                //     "Add Story",
-                //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                //   ),
-                //   actions: [
-                //     TextButton(
-                //       onPressed: () => storyPicker.uploadMedia(context, proWatch),
-                //       child: const Icon(Icons.arrow_forward),
-                //     )
-                //   ],
-                // ),
+    
                 body: storyPicker.selectedAssets.isEmpty
                     ? const Center(child: Text("No media selected"))
                     : _loadedFile != null

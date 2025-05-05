@@ -19,6 +19,8 @@ class MutlipartController extends ChangeNotifier {
     required Uri API,
     bool isVideo = false,
   }) async {
+    AppUtils.showToast(msg: 'Uploading media...');
+    log('Uploading media...');
     try {
       if (filePath == null) {
         log('null file path');

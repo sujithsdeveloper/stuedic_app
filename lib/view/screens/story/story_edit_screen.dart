@@ -18,6 +18,7 @@ import 'package:stuedic_app/model/app/overlay_text.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/shortcuts/app_shortcuts.dart';
+import 'package:stuedic_app/view/screens/story/video_edit_section.dart';
 import 'package:stuedic_app/view/screens/story/widgets/filter_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -107,8 +108,6 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                               width: containerWidth,
                               height: containerHeight,
                               child: InteractiveViewer(
-                                transformationController:
-                                    transformationController,
                                 minScale: 1.0,
                                 maxScale: 4.0,
                                 alignment: Alignment.center,
@@ -289,7 +288,38 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                             .toggleTextFieldVisibility(widget.textController);
                       } else if (proWatch.isFilterVisible) {
                         proRead.toggleFilterVisibility();
+                      } else // ...inside your share button onPressed...
+                      if (widget.assetType == AssetType.video) {
+                        log('asset type is video');
+                        String? path = await exportEditedVideo(
+                          videoPath: widget.file.path,
+                          overlays: proWatch.overlays,
+                          zoom: transformationController.value
+                              .getMaxScaleOnAxis(), // or your zoom value
+                          colorFilter: proWatch.colorFilter,
+                        );
+                        if (path != null) {
+                          log('Edited video saved at: $path');
+                          context.read<MutlipartController>().uploadMedia(
+                                isVideo: true,
+                                context: context,
+                                filePath: path,
+                                API: ApiUrls.uploadVideo,
+                              );
+                        }
                       } else {
+                        log('asset type is image');
+                        String? path = await captureEditedImage();
+                        if (path != null) {
+                          log('Edited image saved at: $path');
+                          context.read<MutlipartController>().uploadMedia(
+                                context: context,
+                                filePath: path,
+                                API: ApiUrls.uploadPicForPost,
+                              );
+                        }
+                      }
+                      {
                         String? path = await captureEditedImage();
                         if (path != null) {
                           // Use the path for sharing
@@ -521,9 +551,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     return _controller.value.isInitialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
+        ? Center(
+            child: InteractiveViewer(
+              minScale: 1.0,
+              maxScale: 4.0,
+              child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              ),
+            ),
           )
         : const Center(child: CircularProgressIndicator());
   }
