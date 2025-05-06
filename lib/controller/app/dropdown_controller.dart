@@ -14,15 +14,21 @@ class DropdownController extends ChangeNotifier {
     selectedCollegeId = collegeId;
     selectedCollegeName = collegeName; // Store college name
 
-    var url = Uri.parse(
-        '${APIs.baseUrl}api/v1/Collage/departments/$selectedCollegeId');
+    var url = Uri.parse('${ApiUrls.baseUrl}api/v1/Collage/departments/$selectedCollegeId');
     ApiMethods.get(
-        url: url,
-        onSucces: (p0) {
-          log(p0.body);
-        },
-        onTokenExpired: () {},
-        context: context);
+      url: url,
+      onSucces: (p0) {
+        log(p0.body);
+      },
+      onTokenExpired: () {
+        onChanged(
+          collegeId: collegeId,
+          collegeName: collegeName,
+          context: context
+        );
+      },
+      context: context
+    );
     notifyListeners();
   }
 }

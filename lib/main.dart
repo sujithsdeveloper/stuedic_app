@@ -26,9 +26,8 @@ import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/chat/listen_to_chatList.dart';
 import 'package:stuedic_app/controller/connectivity_check_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
-import 'package:stuedic_app/controller/home_page_controller.dart';
-import 'package:stuedic_app/controller/like_controller/like_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
+import 'package:stuedic_app/controller/story/story_edit_controller.dart';
 import 'package:stuedic_app/controller/video/video_trim_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
@@ -52,9 +51,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterNativeSplash.preserve(
-    widgetsBinding: widgetsBinding,
-  );
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
 
   FlutterError.onError = (errorDetails) {
@@ -84,7 +81,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    log(widget.token.toString());
+    log('token ${widget.token.toString()}');
     Future.delayed(const Duration(seconds: 2)).then(
       (value) {
         FlutterNativeSplash.remove();
@@ -129,10 +126,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => DropdownController()),
         ChangeNotifierProvider(
             create: (context) => ConnectivityCheckController()),
-        ChangeNotifierProvider(create: (context) => HomePageController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
-        ChangeNotifierProvider(create: (context) => LikeController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,

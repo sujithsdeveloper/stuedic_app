@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
-import 'package:stuedic_app/model/chat_list_users_model.dart.dart';
+import 'package:stuedic_app/model/chat/chat_list_users_model.dart.dart';
 
 class ChatListScreenController extends ChangeNotifier {
   List<ChatListUsersModel> usersList = [];
@@ -15,7 +15,7 @@ class ChatListScreenController extends ChangeNotifier {
 
     try {
       await ApiMethods.get(
-        url: APIs.chatList,
+        url: ApiUrls.chatList,
         onSucces: (response) {
           // log(response.body);
           usersList = chatListUsersModelFromJson(response.body);
@@ -40,44 +40,73 @@ class ChatListScreenController extends ChangeNotifier {
   bool _selectionMode = false;
 
   bool get isSelectionMode => _selectionMode;
-  Set<String> get selectedMessageIds => _selectedUsersIds;
+  Set<String> get selectedUserIds => _selectedUsersIds;
 
-  void toggleSelection(String messageId) {
-    if (_selectedUsersIds.contains(messageId)) {
-      _selectedUsersIds.remove(messageId);
+  void toggleSelection(String userId) {
+    if (_selectedUsersIds.contains(userId)) {
+      _selectedUsersIds.remove(userId);
     } else {
-      _selectedUsersIds.add(messageId);
+      _selectedUsersIds.add(userId);
     }
 
     _selectionMode = _selectedUsersIds.isNotEmpty;
     notifyListeners();
   }
 
-  void deleteUsers(BuildContext context) {
-    if (_selectedUsersIds.isEmpty) return;
-    final userList = _selectedUsersIds
-        .map(
-          (e) => int.tryParse(e),
-        )
+  Future<void> deleteUsers(BuildContext context) async {
+    final selectedIdList = selectedUserIds
+        .map((id) => int.tryParse(id))
+        .where((id) => id != null)
+        .cast<int>()
         .toList();
-    final data = {"userIDs": userList};
-
-    ApiMethods.post(
-        body: data,
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/clear'),
-        onSucces: (p0) {
-          getUsersList(context);
-          clearSelection();
-        },
-        onTokenExpired: () {},
-        context: context);
-
-    notifyListeners();
+    final data = {"userIDs": selectedIdList};
+    await ApiMethods.post(
+      url: ApiUrls.clearChat,
+      body: data,
+      onSucces: (response) {
+        log(response.body);
+        usersList.removeAt(usersList
+            .indexWhere((user) => user.userId == selectedIdList.first));
+        clearSelection();
+        notifyListeners();
+        context.read<ChatListScreenController>().getUsersList(context);
+        getUsersList(context);
+      },
+      onTokenExpired: () async {
+        log('Token expired, retrying...');
+        await getUsersList(context);
+      },
+      context: context,
+    );
   }
 
   void clearSelection() {
     _selectedUsersIds.clear();
     _selectionMode = false;
     notifyListeners();
+  }
+
+  Future<void> deleteChats({
+    required BuildContext context,
+  }) async {
+    final selectedIdList = selectedUserIds
+        .map((id) => int.tryParse(id))
+        .where((id) => id != null)
+        .cast<int>()
+        .toList();
+    final data = {"userIDs": selectedIdList};
+    log(data.toString());
+
+    ApiMethods.post(
+        url: ApiUrls.clearChat,
+        body: data,
+        onSucces: (p0) {
+          clearSelection();
+          context.read<ChatListScreenController>().getUsersList(context);
+          notifyListeners();
+          log(p0.body);
+        },
+        onTokenExpired: () {},
+        context: context);
   }
 }

@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
-import 'package:stuedic_app/view/screens/story_view_screen.dart';
+import 'package:stuedic_app/view/screens/story/story_view_screen.dart';
 
 class AppContoller extends ChangeNotifier {
   bool isObscure = true;
@@ -58,15 +57,12 @@ class AppContoller extends ChangeNotifier {
         Provider.of<VideoTypeController>(context, listen: false)
             .networkVideoController;
 
+
     if (currentIndex == index) return;
     currentIndex = index;
 
     notifyListeners();
-    if (currentIndex == 0) {
-      final proWatchHomepage =
-          Provider.of<HomePageController>(context, listen: false);
-      proWatchHomepage.pageController?.jumpToPage(0);
-    }
+  
     if (videoController != null && videoController.value.isInitialized) {
       if (currentIndex != 2) {
         videoController.pause();

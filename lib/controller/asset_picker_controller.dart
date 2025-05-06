@@ -47,7 +47,7 @@ class AssetPickerController extends ChangeNotifier {
         context.read<MutlipartController>().uploadMedia(
             context: context,
             filePath: video.path,
-            API: APIs.uploadVideo,
+            API: ApiUrls.uploadVideo,
             isVideo: true);
         AppRoutes.push(context, upload_video_player(file: File(video.path)));
       } else {
@@ -100,8 +100,8 @@ class AssetPickerController extends ChangeNotifier {
       source: source,
     );
     if (image != null) {
+      
       log('Picked image path: ${image.path}');
-
       CroppedFile? croppedFile = await cropper.cropImage(
         sourcePath: image.path,
         aspectRatio: squreCrop
@@ -131,7 +131,7 @@ class AssetPickerController extends ChangeNotifier {
             .uploadMedia(
                 context: context,
                 filePath: croppedFile.path,
-                API: APIs.uploadPicForPost,
+                API: ApiUrls.uploadPicForPost,
                 isVideo: false)
             .then(
           (value) {

@@ -10,7 +10,7 @@ class HomefeedController extends ChangeNotifier {
     isHomeFeedLoading = true;
     notifyListeners();
     await ApiMethods.get(
-        url: APIs.homeFeedAPI,
+        url: ApiUrls.homeFeedAPI,
         onSucces: (p0) {
           homeFeed = homeFeedFromJson(p0.body);
           isHomeFeedLoading = false;

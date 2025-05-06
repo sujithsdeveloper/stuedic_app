@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +9,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 
 Future<void> refreshAccessToken({required BuildContext context}) async {
   String? token = await AppUtils.getToken(isRefreshToken: true);
-  var response = await http.get(APIs.grantAccessTokenUrl, headers: {
+  var response = await http.get(ApiUrls.grantAccessTokenUrl, headers: {
     'Content-Type': 'application/json',
     "Authorization": "Bearer $token"
   });
@@ -19,10 +18,9 @@ Future<void> refreshAccessToken({required BuildContext context}) async {
     if (response.statusCode == 200) {
       final resModel = refreshTokenModelFromJson(response.body);
       // prefs.setString('', resModel.token??'');
-      final prefs = await SharedPreferences.getInstance();  
+      final prefs = await SharedPreferences.getInstance();
       prefs.setString('token', resModel.token ?? '');
       prefs.setString('refreshToken', resModel.refreshToken ?? '');
-    
     }
   } catch (e) {
     errorSnackbar(label: e.toString(), context: context);

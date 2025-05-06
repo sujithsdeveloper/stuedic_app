@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
+import 'package:stuedic_app/elements/agreement_text.dart';
 import 'package:stuedic_app/elements/social_media_container.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -107,6 +108,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                           color: ColorConstants.secondaryColor,
                           borderRadius: BorderRadius.circular(100)),
                       dividerColor: Colors.transparent,
+      
                       tabs: [
                         Tab(
                           text: "Email",
@@ -201,7 +203,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                       //     context,
                       //     OtpVerificationScreen(
                       //       number: phoneNumberController.text,
-                      //       email: emailController.text,
+                      //       email: 'sujithdev@gmail.com',
                       //       isMail: phoneNumberController.text.isEmpty,
                       //     ));
                     },
@@ -211,19 +213,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 SizedBox(
                   height: 24,
                 ),
-                Center(
-                  child: Text.rich(
-                    textAlign: TextAlign.center,
-                    TextSpan(
-                        text: "By continuing, you agree to Stuedic's",
-                        style: StringStyle.normalText(),
-                        children: [
-                          TextSpan(
-                              text: 'Terms of Service and Privacy Policy',
-                              style: StringStyle.normalTextBold())
-                        ]),
-                  ),
-                ),
+                AgreementText(),
                 SizedBox(height: 13),
               ],
             ),

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
@@ -10,9 +9,10 @@ class StoryController extends ChangeNotifier {
   HomeStoriesModel? getstorymodel;
   Future<void> getStories(BuildContext context) async {
     await ApiMethods.get(
-        url: APIs.getStoryList,
+        url: ApiUrls.getStoryList,
         onSucces: (p0) {
           getstorymodel = homeStoriesModelFromJson(p0.body);
+          log(getstorymodel?.response.toString() ?? '');
           notifyListeners();
         },
         onTokenExpired: () async {
@@ -32,10 +32,13 @@ class StoryController extends ChangeNotifier {
 
     final data = {"contentURL": url, "caption": caption};
     await ApiMethods.post(
-        url: APIs.addStory,
+        url: ApiUrls.addStory,
         body: data,
         onSucces: (p0) {
           isStoryUploading = false;
+          Future.delayed(const Duration(seconds: 1), () {
+            getStories(context);
+          });
           notifyListeners();
           Future.delayed(
             Duration(seconds: 2),

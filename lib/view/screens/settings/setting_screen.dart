@@ -11,6 +11,7 @@ import 'package:stuedic_app/styles/string_styles.dart';
 
 import 'package:stuedic_app/view/screens/settings/account/account_settings.dart';
 import 'package:stuedic_app/view/screens/settings/language_screen.dart';
+import 'package:stuedic_app/view/screens/settings/report_problem.dart';
 import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -50,7 +51,9 @@ class SettingScreen extends StatelessWidget {
       {
         'label': 'Report a problem',
         'icon': HugeIcons.strokeRoundedFlag01,
-        'onTap': () {},
+        'onTap': () {
+          AppRoutes.push(context, ReportProblemScreen());
+        },
       },
       {
         'label': 'About Studeic',
@@ -73,27 +76,30 @@ class SettingScreen extends StatelessWidget {
         'label': 'Logout',
         'icon': HugeIcons.strokeRoundedLogout03,
         'onTap': () {
-          customDialog(context, 
-          titile: "You're leaving",
-          subtitle: "Are you sure to want logout?",
-          actions:  [
-        CupertinoDialogAction(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Cancel",
-            )),
-        CupertinoDialogAction(
-            onPressed: () {
-              proReadAuth.logoutUser(context: context);
-              Provider.of<AppContoller>(context, listen: false).clearState();
-            },
-            child: Text(
-              "Ok",
-              style: TextStyle(color: Colors.red),
-            ))
-      ],);
+          customDialog(
+            context,
+            titile: "You're leaving",
+            subtitle: "Are you sure to want logout?",
+            actions: [
+              CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                  )),
+              CupertinoDialogAction(
+                  onPressed: () {
+                    proReadAuth.logoutUser(context: context);
+                    Provider.of<AppContoller>(context, listen: false)
+                        .clearState();
+                  },
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(color: Colors.red),
+                  ))
+            ],
+          );
         },
       },
     ];

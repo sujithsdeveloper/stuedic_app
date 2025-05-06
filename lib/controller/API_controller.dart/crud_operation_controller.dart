@@ -26,7 +26,7 @@ class CrudOperationController extends ChangeNotifier {
     };
 
     await ApiMethods.post(
-        url: APIs.addPostUrl,
+        url: ApiUrls.addPostUrl,
         body: data,
         onSucces: (p0) {
           Logger().f(p0.body);
@@ -50,7 +50,7 @@ class CrudOperationController extends ChangeNotifier {
     final data = {"postID": postId};
     await ApiMethods.delete(
         body: data,
-        url: APIs.deletePost,
+        url: ApiUrls.deletePost,
         onSucces: (p0) {
           log(p0.body);
           Navigator.pop(context);

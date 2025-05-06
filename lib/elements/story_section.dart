@@ -7,7 +7,7 @@ import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
-import 'package:stuedic_app/view/screens/story_asset_picker_screen.dart';
+import 'package:stuedic_app/view/screens/story/story_asset_picker_screen.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class StorySection extends StatefulWidget {

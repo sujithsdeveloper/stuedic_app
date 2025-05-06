@@ -99,7 +99,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                         isScrollable: true,
                         indicator: BoxDecoration(
                           color: ColorConstants.primaryColor2,
-                          borderRadius: BorderRadius.circular(99),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         controller: tabController,
                         labelColor: Colors.black,
@@ -107,29 +107,65 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                         dividerHeight: 0,
                         tabs: [
                           Tab(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                'Post',
-                                style: StringStyle.normalTextBold(),
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: Text(
+                                    'Post',
+                                    style: StringStyle.normalTextBold(),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                           Tab(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                'Reel',
-                                style: StringStyle.normalTextBold(),
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Center(
+                                  child: Text(
+                                    'Reel',
+                                    style: StringStyle.normalTextBold(),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                           Tab(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                'Story',
-                                style: StringStyle.normalTextBold(),
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Center(
+                                  child: Text(
+                                    'Story',
+                                    style: StringStyle.normalTextBold(),
+                                  ),
+                                ),
                               ),
                             ),
                           ),

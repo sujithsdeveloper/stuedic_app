@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
-import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
-import 'package:stuedic_app/elements/social_media_container.dart';
+import 'package:stuedic_app/elements/agreement_text.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -16,6 +13,7 @@ import 'package:stuedic_app/view/auth/forgot_password.dart';
 import 'package:stuedic_app/view/auth/registration_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -94,23 +92,34 @@ class _LoginScreenState extends State<LoginScreen>
                       dividerColor: Colors.transparent,
                       onTap: (value) {
                         if (value == 1) {
-                          customDialog(context,
-                          onPop: () {
-                            _tabController.animateTo(0);
-                            return true;
-                          },
-                              titile: 'Not Available Now',
-                              subtitle:
-                                  'Login using phone number is not available yet',
-                              actions: [
-                                CupertinoDialogAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _tabController.animateTo(0);
-                                  },
-                                  child: Text("OK"),
-                                )
-                              ]);
+
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return WillPopScope(
+                                onWillPop: () async {
+                                  _tabController.animateTo(0);
+                                  return true;
+                                },
+                                child: CupertinoAlertDialog(
+                                  title: Text('Warning'),
+                                  content: Text(
+                                      'Phone number login is not available for beta users.'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        _tabController.animateTo(
+                                            _tabController.previousIndex);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         }
                       },
                       tabs: [
@@ -216,21 +225,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                 SizedBox(height: 24),
 
-                Center(
-                  child: Text.rich(
-                    textAlign: TextAlign.center,
-                    TextSpan(
-                      text: "By continuing, you agree to Stuedic's",
-                      style: StringStyle.normalText(),
-                      children: [
-                        TextSpan(
-                          text: ' Terms of Service and Privacy Policy',
-                          style: StringStyle.normalTextBold(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                AgreementText(),
                 SizedBox(height: 13),
               ],
             ),

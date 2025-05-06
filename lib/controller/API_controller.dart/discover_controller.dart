@@ -7,7 +7,7 @@ class DiscoverController extends ChangeNotifier {
   DiscoverModel? discoverModel;
   Future<void> getDiscoverData(BuildContext context) async {
     await ApiMethods.get(
-        url: APIs.discover,
+        url: ApiUrls.discover,
         onSucces: (p0) {
           discoverModel = discoverModelFromJson(p0.body);
           notifyListeners();

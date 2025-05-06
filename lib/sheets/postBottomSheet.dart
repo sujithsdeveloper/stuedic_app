@@ -100,7 +100,7 @@ dynamic postBottomSheet(
               _sheetItems(
                 onTap: () {
                   Navigator.pop(context);
-                  reportSheet(context: context);
+                  postReportSheet(context: context);
                 },
                 iconData: HugeIcons.strokeRoundedFlag02,
                 label: 'Report',
@@ -151,7 +151,7 @@ class _sheetItems extends StatelessWidget {
 
 
 
-void reportSheet({required BuildContext context}) {
+void postReportSheet({required BuildContext context}) {
   List<String> reportOptions = [
     "I just don't like it",
     "Bullying or unwanted contact",

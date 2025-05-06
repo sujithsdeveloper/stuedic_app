@@ -1,2 +1,0 @@
-E:/Freelance/stuedic_app/android/app/.cxx/RelWithDebInfo/5y2k36rw/x86_64/CMakeFiles/edit_cache.dir
-E:/Freelance/stuedic_app/android/app/.cxx/RelWithDebInfo/5y2k36rw/x86_64/CMakeFiles/rebuild_cache.dir

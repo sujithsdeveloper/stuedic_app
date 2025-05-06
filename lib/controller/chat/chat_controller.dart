@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/websocket_service.dart';
-import 'package:stuedic_app/model/chat_history_model.dart';
+import 'package:stuedic_app/model/chat/chat_history_model.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:web_socket_channel/io.dart';
-import '../../APIs/API_Methods.dart';
 
 class ChatController extends ChangeNotifier {
   IOWebSocketChannel? socket;
@@ -23,7 +23,7 @@ class ChatController extends ChangeNotifier {
     // var token = await AppUtils.getToken();
     log('to userid=$userId');
     await ApiMethods.get(
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/history?toUser=$userId'),
+        url: Uri.parse('${ApiUrls.baseUrl}api/v1/chat/history?toUser=$userId'),
         onSucces: (response) {
           chatHistoryList = chatHistoryModelFromJson(response.body);
           isHistoryLoading = false;
@@ -164,6 +164,7 @@ class ChatController extends ChangeNotifier {
   Set<String> get selectedMessageIds => _selectedMessageIds;
 
   void toggleSelection(String messageId) {
+    log("Toggling selection for message ID: $_selectedMessageIds");
     if (_selectedMessageIds.contains(messageId)) {
       _selectedMessageIds.remove(messageId);
     } else {
@@ -174,33 +175,53 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteMessage(BuildContext context) {
-    if (_selectedMessageIds.isNotEmpty) {
-      log('Deleting messages: $_selectedMessageIds');
-      final dataList = _selectedMessageIds.toList();
-      log('Selected message IDs: $dataList');
-      final data = {"messageIDs": dataList};
-      ApiMethods.post(
+  Future<void> deleteMessgaes(BuildContext context) async {
+    if (_selectedMessageIds.isEmpty) {
+      return;
+    }
+    final data = {
+      "messageIDs": _selectedMessageIds.toList(),
+    };
+    await ApiMethods.post(
         body: data,
-        url: Uri.parse('${APIs.baseUrl}api/v1/chat/deleteMessages'),
+        url: ApiUrls.deleteMessages,
         onSucces: (p0) {
           chatHistoryList.removeWhere(
-              (message) => _selectedMessageIds.contains(message.id));
-          _selectedMessageIds.clear();
-          Navigator.pop(context);
-          _selectionMode = false;
+              (message) => _selectedMessageIds.contains(message.id.toString()));
           notifyListeners();
+          AppUtils.showToast(msg: "Messages deleted successfully");
+          clearSelection();
         },
-        onTokenExpired: () {},
-        context: context,
-      );
-    }
+        onTokenExpired: () {
+          deleteMessgaes(context);
+        },
+        context: context);
   }
 
   void clearSelection() {
     _selectedMessageIds.clear();
     _selectionMode = false;
     notifyListeners();
+  }
+
+  Future<void> clearChat(
+      {required BuildContext context, required int toUserId}) async {
+    final data = {
+      "userIDs": [toUserId]
+    };
+
+    await ApiMethods.post(
+        url: ApiUrls.clearChat,
+        body: data,
+        onSucces: (p0) {
+          clearSelection();
+          socket?.sink.close();
+          socket = null;
+          chatHistoryList.clear();
+          notifyListeners();
+        },
+        onTokenExpired: () {},
+        context: context);
   }
 }
 

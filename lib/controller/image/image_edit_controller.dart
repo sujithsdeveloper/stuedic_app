@@ -10,12 +10,15 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 class ImageEditController extends ChangeNotifier {
   File? croppedImage;
   Future<void> cropImage(
-      {required File image, required BuildContext context, CropAspectRatio? ratio}) async {
+      {required File image,
+      required BuildContext context,
+      CropAspectRatio? ratio}) async {
     log(image.path);
 
     final CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image.path,
-      aspectRatio:ratio==null? CropAspectRatio(ratioX: 3, ratioY: 4):ratio,
+      aspectRatio:
+          ratio == null ? CropAspectRatio(ratioX: 3, ratioY: 4) : ratio,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',
@@ -43,7 +46,7 @@ class ImageEditController extends ChangeNotifier {
         await context.read<MutlipartController>().uploadMedia(
               context: context,
               filePath: croppedFile.path,
-              API: APIs.uploadPicForPost,
+              API: ApiUrls.uploadPicForPost,
             );
       }
     }

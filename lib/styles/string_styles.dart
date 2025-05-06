@@ -18,8 +18,9 @@ class StringStyle {
       fontWeight: isBold ? FontWeight.w700 : null,
       fontFamily: 'latoRegular');
 
-  static TextStyle normalText({double size = 16, bool isBold = false}) =>
+  static TextStyle normalText({double size = 16, bool isBold = false,Color?color}) =>
       TextStyle(
+color: color,
           fontFamily: 'latoRegular',
           fontSize: size,
           fontWeight: isBold ? FontWeight.bold : null);

@@ -7,7 +7,6 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
-import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -32,7 +31,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   @override
   void initState() {
     super.initState();
-    //check the internet connection
     AppUtils.checkConnectivity(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final token = await AppUtils.getToken();
@@ -42,7 +40,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       final discoverController = context.read<DiscoverController>();
       final storyController = context.read<StoryController>();
       final feedController = context.read<HomefeedController>();
-
+      // appContoller.chnageBottomNav(index: 0, context: context);
       profileController.getCurrentUserData(context: context);
       profileController.getCurrentUserGrid(context: context);
       discoverController.getDiscoverData(context);
@@ -73,6 +71,8 @@ class _BottomNavScreenState extends State<BottomNavScreen>
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
+    String userId =
+        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     return WillPopScope(
       onWillPop: () async {
@@ -129,19 +129,30 @@ class _BottomNavScreenState extends State<BottomNavScreen>
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.isfirstTime});
   final bool isfirstTime;
   @override
-  Widget build(BuildContext context) {
-    PageController pageController = PageController(
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late PageController pageController;
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(
       initialPage: 0,
       keepPage: false,
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     List<Widget> pages = [
       HomeScreen(
         controller: pageController,
-        isfirstTime: isfirstTime,
+        isfirstTime: widget.isfirstTime,
       ),
       ChatListScreen(
         controller: pageController,

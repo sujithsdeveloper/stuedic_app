@@ -65,11 +65,13 @@ class _ShortsScreenState extends State<ShortsScreen>
     final reels = proWatch.getShortsModel?.response;
 
     return Scaffold(
-      body: PreloadPageView.builder(
+      body: PageView.builder(
         scrollDirection: Axis.vertical,
-        preloadPagesCount: 3,
         itemCount: reels?.length ?? 0,
         pageSnapping: true,
+        onPageChanged: (value) {
+          
+        },
         itemBuilder: (context, index) {
           final reel = reels?[index];
 

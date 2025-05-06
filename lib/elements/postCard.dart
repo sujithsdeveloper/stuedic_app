@@ -87,10 +87,10 @@ class _PostCardState extends State<PostCard>
   Widget build(BuildContext context) {
     super.build(context); // Ensure state retention
     final commentController = TextEditingController();
-    final proRead = context.read<AppContoller>();
-    final proWatch = context.watch<AppContoller>();
-    final proWatchApi = context.watch<CrudOperationController>();
-    final proReadApi = context.read<CrudOperationController>();
+    // final proRead = context.read<AppContoller>();
+    // final proWatch = context.watch<AppContoller>();
+    // final proWatchApi = context.watch<CrudOperationController>();
+    // final proReadApi = context.read<CrudOperationController>();
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Container(

@@ -1,3 +1,4 @@
+import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -5,17 +6,22 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/scrolling_controller.dart';
+import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/bookmarked_grid.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/image_grid.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/video_grid.dart';
+import 'package:stuedic_app/view/screens/club_screen.dart';
+import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -375,11 +381,11 @@ class _CurrentUserStudentProfileScreenState
     final gridViewScrollEnabled =
         context.watch<ScrollingController>().gridViewScrollEnabled;
 
-    // bool isCollege =
-    //     userDataProviderWatch.userCurrentDetails?.response?.isCollege ?? false;
-    // bool isCurrentUser =
-    //     userDataProviderWatch.userCurrentDetails?.response?.isCurrentUser ??
-    //         false;
+    bool isCollege =
+        userDataProviderWatch.userCurrentDetails?.response?.isCollege ?? false;
+    bool isCurrentUser =
+        userDataProviderWatch.userCurrentDetails?.response?.isCurrentUser ??
+            false;
 
     return Scaffold(
         body: CustomScrollView(
@@ -572,22 +578,20 @@ class _CurrentUserStudentProfileScreenState
                 gridViewScrollEnabled: gridViewScrollEnabled,
               ),
 
-              // Bookmarked Items
-              BookmarkedGrid(
-                  gridViewScrollEnabled: gridViewScrollEnabled,
-                  bookmarkGrid: bookmarkGrid,
-                  userId: user?.userId ?? ''),
+          // Bookmarked Items
+          BookmarkedGrid(
+              gridViewScrollEnabled: gridViewScrollEnabled,
+              bookmarkGrid: bookmarkGrid,
+              userId: user?.userId ?? ''),
 
-              // Shopping Items
-              Center(
-                child: Text("Shopping items will be displayed here",
-                    style: TextStyle(fontSize: 16)),
-              ),
-            ],
+          // Shopping Items
+          Center(
+            child: Text("Shopping items will be displayed here",
+                style: TextStyle(fontSize: 16)),
           ),
-        )
-      ],
-    ));
+        ],
+      ),)
+    ]));
   }
 }
 */

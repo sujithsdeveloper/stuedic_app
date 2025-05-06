@@ -15,7 +15,7 @@ class UserSearchController extends ChangeNotifier {
     Map<String, dynamic> data = {"searchTerm": keyword};
 
     await ApiMethods.post(
-        url: APIs.searchApi,
+        url: ApiUrls.searchApi,
         body: data,
         onSucces: (p0) {
           log(p0.body);

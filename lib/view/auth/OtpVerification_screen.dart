@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/functions/validators.dart';
@@ -30,6 +31,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   void dispose() {
+    // Do not use context here! See Flutter docs.
     _controller.dispose(); // Properly disposing the controller
     super.dispose();
   }
@@ -38,6 +40,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<AppContoller>();
     final proRead = context.read<AppContoller>();
+    final otpControllerWatch = context.watch<OtpController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -109,12 +112,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   appContext: context,
                   onChanged: (value) {
                     proRead.changeSingleFeildButtonColor(value: value);
-                    if (_controller.text.length > 5) {
-                      context.read<OtpController>().checkOtp(
-                          context: context,
-                          email: widget.email,
-                          otp: _controller.text);
-                    }
                   },
                   // onCompleted: (value) {
                   //   proRead.changeSingleFeildButtonColor(value: value);
@@ -135,7 +132,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                     InkWell(
                       splashFactory: NoSplash.splashFactory,
-                      onTap: () {
+                      onTap: () async {
                         context
                             .read<OtpController>()
                             .getOTP(email: widget.email, context: context);
@@ -150,24 +147,25 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Continue Button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: GradientButton(
-                    width: double.infinity,
-                    label: 'Continue',
-                    isColored: proWatch.singleFieldColored,
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (_controller.text.length > 5) {
-                          context.read<OtpController>().checkOtp(
-                              context: context,
-                              email: widget.email,
-                              otp: _controller.text);
-                        }
-                      }
-                      // AppRoutes.push(context, const SetupScreen());
-                    }),
+                child: otpControllerWatch.isLoading
+                    ? loadingIndicator()
+                    : GradientButton(
+                        width: double.infinity,
+                        label: 'Continue',
+                        isColored: proWatch.singleFieldColored,
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (_controller.text.length > 5) {
+                              context.read<OtpController>().checkOtp(
+                                  context: context,
+                                  email: widget.email,
+                                  otp: _controller.text);
+                            }
+                          }
+                          // AppRoutes.push(context, const SetupScreen());
+                        }),
               ),
             ],
           ),

@@ -1,4 +1,4 @@
-class APIs {
+class ApiUrls {
   static Uri baseUrl = Uri.parse('https://api.stuedic.com/');
   static Uri socketBaseUrl = Uri.parse('ws://api.stuedic.com/');
 
@@ -63,6 +63,8 @@ class APIs {
 
   //chat
   static Uri chatList = Uri.parse('${baseUrl}api/v1/chat/screen');
+  static Uri clearChat = Uri.parse('${baseUrl}api/v1/chat/clear');
+  static Uri deleteMessages = Uri.parse('${baseUrl}api/v1/chat/deleteMessages');
 
   //Upload video
   static Uri uploadVideo = Uri.parse('${baseUrl}api/v1/Post/uploadVideo');
@@ -73,4 +75,5 @@ class APIs {
   //OTP
   static Uri getOtp = Uri.parse('${baseUrl}api/v1/auth/generateOtp');
   static Uri checkOtp = Uri.parse('${baseUrl}api/v1/auth/verifyOtp');
+
 }

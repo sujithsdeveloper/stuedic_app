@@ -12,9 +12,10 @@ class ShortsController extends ChangeNotifier {
 
   Future<void> getReels({required BuildContext context}) async {
     try {
-    
+      isBuffering = true;
+      notifyListeners();
       await ApiMethods.get(
-          url: APIs.reelAPI,
+          url: ApiUrls.reelAPI,
           onSucces: (p0) {
             getShortsModel = getShortsModelFromJson(p0.body);
             isBuffering = false;

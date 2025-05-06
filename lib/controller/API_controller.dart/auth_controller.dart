@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/API_response_constants.dart';
+
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
 import 'package:stuedic_app/model/auth/login_response_model.dart';
@@ -29,7 +31,7 @@ class AuthController extends ChangeNotifier {
     try {
       isLoginLoading = true;
       notifyListeners();
-      var response = await http.post(APIs.loginUrl,
+      var response = await http.post(ApiUrls.loginUrl,
           body: jsonEncode(loginDetails), headers: ApiServices.getHeaders());
 
       if (response.statusCode == 200) {
@@ -73,7 +75,7 @@ class AuthController extends ChangeNotifier {
     Map data = {"refresh_token": refreshToken};
 
     try {
-      var response = await http.post(APIs.logoutUser,
+      var response = await http.post(ApiUrls.logoutUser,
           headers: ApiServices.getHeadersWithToken(refreshToken),
           body: jsonEncode(data));
 
@@ -115,7 +117,7 @@ class AuthController extends ChangeNotifier {
     };
 
     try {
-      var response = await http.post(APIs.onBoardUrl,
+      var response = await http.post(ApiUrls.onBoardUrl,
           body: jsonEncode(data), headers: ApiServices.getHeaders());
 
       if (response.statusCode == 200) {
@@ -156,7 +158,7 @@ class AuthController extends ChangeNotifier {
     Map data = {"userIdentifier": email};
 
     await ApiMethods.post(
-        url: APIs.forgotPasswordUrl,
+        url: ApiUrls.forgotPasswordUrl,
         body: data,
         onSucces: (p0) {
           log('Forgot Password Response: ${p0.body}');

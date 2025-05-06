@@ -14,7 +14,7 @@ class UploadProfileImageController extends ChangeNotifier {
       {required BuildContext context, required File Image}) async {
     String? token = await AppUtils.getToken();
     try {
-      var request = http.MultipartRequest('POST', APIs.uploadProfile);
+      var request = http.MultipartRequest('POST', ApiUrls.uploadProfile);
       request.files.add(await http.MultipartFile.fromPath('file', Image.path));
 
       request.headers['Authorization'] = 'Bearer $token';
