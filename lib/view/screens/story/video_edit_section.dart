@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:ffmpeg_kit_flutter_new/ffmpeg_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stuedic_app/model/app/overlay_text.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -35,7 +34,7 @@ Future<String?> exportEditedVideo({
     // Compose ffmpeg command
     final cmd = "-i \"$videoPath\" -vf \"$filter\" -codec:a copy \"$outputPath\"";
 
-    await FFmpegKit.execute(cmd);
+    // await FFmpegKit.execute(cmd);
 
     if (File(outputPath).existsSync()) {
       return outputPath;

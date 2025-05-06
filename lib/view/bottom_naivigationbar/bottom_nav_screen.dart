@@ -7,7 +7,6 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
-import 'package:stuedic_app/controller/home_page_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -138,27 +137,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late PageController pageController;
   @override
   void initState() {
     super.initState();
-    context.read<HomePageController>().HomePageControl();
+    pageController = PageController(
+      initialPage: 0,
+      keepPage: false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final proWatch = context.watch<AppContoller>();
-    final proWatchHomepage = context.watch<HomePageController>();
     List<Widget> pages = [
       HomeScreen(
-        controller: proWatchHomepage.pageController!,
+        controller: pageController,
         isfirstTime: widget.isfirstTime,
       ),
       ChatListScreen(
-        controller: proWatchHomepage.pageController!,
+        controller: pageController,
       )
     ];
     return PageView(
-      controller: proWatchHomepage.pageController!,
+      controller: pageController,
       restorationId: 'home_page_view',
       children: pages,
     );
