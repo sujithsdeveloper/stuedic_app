@@ -70,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen>
                 controller: scrollController,
                 cacheExtent: context.screenHeight,
                 slivers: [
+                  //
                   SliverAppBar(
                     floating: true,
                     elevation: 0,
