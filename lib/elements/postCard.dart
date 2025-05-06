@@ -58,15 +58,25 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController animationController;
+  late Animation<double> scaleAnimation;
 
   @override
   void initState() {
     super.initState();
+    final interaction = context.read<PostInteractionController>();
+    interaction.isLiked = widget.isLiked;
+    interaction.countLike = int.parse(widget.likeCount);
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 90),
-      lowerBound: 1,
-      upperBound: 1.5,
+      duration: Duration(milliseconds: 250),
+    );
+
+    scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeOutBack,
+        reverseCurve: Curves.easeIn,
+      ),
     );
   }
 
@@ -161,8 +171,21 @@ class _PostCardState extends State<PostCard>
             ),
             SizedBox(height: 10),
             GestureDetector(
-              onDoubleTap: () {
+              onDoubleTap: () async {
                 // proRead.toggleLikeVisible();
+                await animationController.forward();
+                await animationController.reverse();
+                final interaction = context.read<PostInteractionController>();
+
+                interaction.likebool(
+                  likebool: interaction.isLiked ?? widget.isLiked,
+                  likeCount:
+                      interaction.countLike ?? int.parse(widget.likeCount),
+                  postId: widget.postId,
+                  context: context,
+                );
+
+                context.read<HomefeedController>().getAllPost(context: context);
               },
               child: ClipRRect(
                 child: Center(
@@ -236,38 +259,76 @@ class _PostCardState extends State<PostCard>
                 children: [
                   Consumer<PostInteractionController>(
                     builder: (context, postInteraction, child) {
+                      // postInteraction.isLiked = widget.isLiked;
+                      // postInteraction.countLike = int.parse(widget.likeCount);
                       return GestureDetector(
-                        onTap: () {
-                          postInteraction.toggleLike(
-                            isLiked: widget.isLiked,
+                        onTap: () async {
+                          // // postInteraction.toggleLike(
+                          // //   isLiked: widget.isLiked,
+                          // //   postId: widget.postId,
+                          // //   context: context,
+                          // // );
+                          // log(widget.isLiked.toString(),
+                          //     name: 'like bool from api');
+                          // log(widget.likeCount.toString(),
+                          //     name: 'like count from api');
+                          // // log(postInteraction.isLiked.toString(),
+                          // //     name: 'like bool before function call');
+                          // // log(postInteraction.countLike.toString(),
+                          // //     name: 'like count before function call');
+
+                          // postInteraction.likebool(
+                          //     likebool: widget.isLiked,
+                          //     likeCount: int.parse(widget.likeCount),
+                          //     postId: widget.postId,
+                          //     context: context);
+
+                          // log(postInteraction.isLiked.toString(),
+                          //     name: 'like bool after function call');
+                          // log(postInteraction.countLike.toString(),
+                          //     name: 'like count after function call');
+
+                          // animationController.forward().then(
+                          //   (_) {
+                          //     animationController.reverse();
+                          //   },
+                          // );
+                          // Future.delayed(Duration(milliseconds: 50)).then(
+                          //   (value) {
+                          //     context
+                          //         .read<HomefeedController>()
+                          //         .getAllPost(context: context);
+                          //   },
+                          // );
+
+                          await animationController.forward();
+                          await animationController.reverse();
+
+                          postInteraction.likebool(
+                            likebool: postInteraction.isLiked ?? widget.isLiked,
+                            likeCount: postInteraction.countLike ??
+                                int.parse(widget.likeCount),
                             postId: widget.postId,
                             context: context,
                           );
 
-                          animationController.forward().then(
-                            (_) {
-                              animationController.reverse();
-                            },
-                          );
-                          Future.delayed(Duration(milliseconds: 50)).then(
-                            (value) {
-                              context
-                                  .read<HomefeedController>()
-                                  .getAllPost(context: context);
-                            },
-                          );
+                          context
+                              .read<HomefeedController>()
+                              .getAllPost(context: context);
                         },
                         child: AnimatedBuilder(
-                          animation: animationController,
+                          animation: scaleAnimation,
                           builder: (context, child) {
                             return Transform.scale(
-                              scale: animationController.value,
+                              scale: scaleAnimation.value,
                               child: Icon(
-                                widget.isLiked
+                                postInteraction.isLiked == true
                                     ? Icons.favorite
                                     : Icons.favorite_border_outlined,
-                                color: widget.isLiked ? Colors.red : null,
-                                size: 25,
+                                color: postInteraction.isLiked == true
+                                    ? Colors.red
+                                    : null,
+                                size: 28,
                               ),
                             );
                           },
@@ -282,7 +343,7 @@ class _PostCardState extends State<PostCard>
                         width: 5,
                       ),
                       Text(
-                        widget.likeCount,
+                        proReadInteraction.countLike.toString(),
                         style: StringStyle.smallText(isBold: true),
                       ),
                       Text(

@@ -67,7 +67,7 @@ class ApiMethods {
         customSnackbar(label: StringConstants.wrong, context: context);
       }
     } catch (e) {
-      log(e.toString());
+      log(e.toString(), name: 'like api error');
       errorSnackbar(label: StringConstants.wrong, context: context);
 
       throw Exception("API Call Failed: $e");

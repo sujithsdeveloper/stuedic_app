@@ -26,6 +26,310 @@ import 'package:stuedic_app/widgets/profile_action_button.dart';
 class CurrentUserStudentProfileScreen extends StatefulWidget {
   const CurrentUserStudentProfileScreen({super.key, this.userId});
   final String? userId;
+
+  @override
+  State<CurrentUserStudentProfileScreen> createState() =>
+      _CurrentUserStudentProfileScreenState();
+}
+
+class _CurrentUserStudentProfileScreenState
+    extends State<CurrentUserStudentProfileScreen>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  final ScrollController scrollController = ScrollController();
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<ProfileController>();
+      provider.getCurrentUserData(context: context);
+      provider.getCurrentUserGrid(context: context);
+    });
+
+    context
+        .read<ScrollingController>()
+        .controllerScroll(scrollController: scrollController);
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final userDataProviderWatch = context.watch<ProfileController>();
+    final postInteractionProviderWatch =
+        context.watch<PostInteractionController>();
+    final user = userDataProviderWatch.userCurrentDetails?.response;
+    final photoGrid = userDataProviderWatch
+        .currentUserProfileGrid?.response?.posts?.reversed
+        .toList();
+    final bookmarkGrid =
+        postInteractionProviderWatch.getBookamark?.response?.bookmarks;
+    final gridViewScrollEnabled =
+        context.watch<ScrollingController>().gridViewScrollEnabled;
+
+    return Scaffold(
+      body: NestedScrollView(
+        controller: scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          // SliverAppBar(
+          //   // pinned: false,
+          //   // floating: false,
+          //   expandedHeight: 140,
+          //   flexibleSpace: FlexibleSpaceBar(
+          //     background: Image.asset(
+          //       ImageConstants.userProfileBg,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          //   actions: [
+          // IconButton(
+          //   onPressed: () {
+          //     AppRoutes.push(context, NotificationScreen());
+          //   },
+          //   icon: Icon(HugeIcons.strokeRoundedNotification01),
+          // ),
+          // IconButton(
+          //   onPressed: () {
+          //     AppRoutes.push(context, SettingScreen());
+          //   },
+          //   icon: Icon(Icons.more_horiz),
+          // ),
+          //   ],
+          // ),
+
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                //  User Profile Avatar
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    //icons settings and vertical more
+
+                    SizedBox(
+                      height: 180,
+                      width: double.infinity,
+                      child: Image.asset(
+                        ImageConstants.userProfileBg,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -80,
+                      left: 16,
+                      child: CircleAvatar(
+                        radius: 52,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: AppUtils.getProfile(
+                            url: user?.profilePicUrl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 5,
+                      top: 40,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              AppRoutes.push(context, NotificationScreen());
+                            },
+                            icon: Icon(HugeIcons.strokeRoundedNotification01),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              AppRoutes.push(context, SettingScreen());
+                            },
+                            icon: Icon(Icons.more_horiz),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+
+                const SizedBox(height: 20), // space for avatar
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Edit profile & and pdf icon
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ProfileActionButton(
+                            iconData: CupertinoIcons.doc_text,
+                            onTap: () {
+                              AppRoutes.push(
+                                  context, PdfViewerScreen(url: pdfUrl));
+                            },
+                          ),
+                          const SizedBox(width: 10),
+                          GradientButton(
+                            outline: user?.isFollowed ?? false,
+                            onTap: () {
+                              AppRoutes.push(
+                                context,
+                                EditProfileScreen(
+                                  username: user?.userName ?? '',
+                                  bio: 'bio',
+                                  number: user?.phone ?? 'No Number',
+                                  url: user?.profilePicUrl ?? '',
+                                ),
+                              );
+                            },
+                            height: 48,
+                            width: 120,
+                            isColored: !(user?.isFollowed ?? false),
+                            label: 'Edit Profile',
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+                      Text(user?.userName ?? '',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text('@${user?.userId ?? ''}',
+                          style: const TextStyle(color: Colors.grey)),
+                      const SizedBox(height: 5),
+                      Text(user?.collageName ?? '',
+                          style: StringStyle.normalText()),
+                      Text('Trivandrum, Kerala',
+                          style: StringStyle.normalText()),
+
+                      const SizedBox(height: 20),
+
+                      // Stats row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          counts(
+                              count:
+                                  AppUtils.formatCounts(user?.postCount ?? 0),
+                              label: "Posts"),
+                          counts(
+                              count: AppUtils.formatCounts(
+                                  user?.followingCount ?? 0),
+                              label: "Following"),
+                          counts(
+                              count: AppUtils.formatCounts(
+                                  user?.followersCount ?? 0),
+                              label: "Followers"),
+                          counts(
+                              count: AppUtils.formatCounts(0), label: "Likes"),
+                        ],
+                      ),
+                      SizedBox(height: 20)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 👇 Pinned TabBar
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _TabBarDelegate(
+              TabBar(
+                controller: _tabController,
+                labelColor: ColorConstants.secondaryColor,
+                indicatorColor: ColorConstants.secondaryColor,
+                onTap: (value) {
+                  if (value == 0) {
+                    context
+                        .read<ProfileController>()
+                        .getCurrentUserGrid(context: context);
+                  }
+                  if (value == 2) {
+                    context
+                        .read<PostInteractionController>()
+                        .getBookmark(context: context);
+                  }
+                },
+                tabs: const [
+                  Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                  Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                  Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                  Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                ],
+              ),
+            ),
+          ),
+        ],
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            ImageGrid(
+              scrollController: scrollController,
+              gridViewScrollEnabled: gridViewScrollEnabled,
+              photoGrid: photoGrid,
+              userId: user?.userId ?? '',
+            ),
+            VideoGrid(
+              scrollController: scrollController,
+              gridViewScrollEnabled: gridViewScrollEnabled,
+            ),
+            BookmarkedGrid(
+              gridViewScrollEnabled: gridViewScrollEnabled,
+              bookmarkGrid: bookmarkGrid,
+              userId: user?.userId ?? '',
+            ),
+            Center(
+              child: Text(
+                "Shopping items will be displayed here",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Pinned TabBar Delegate
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar;
+  _TabBarDelegate(this.tabBar);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      // padding: EdgeInsets.only(top: 15),
+      color: Colors.white,
+      child: tabBar,
+    );
+  }
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  bool shouldRebuild(covariant _TabBarDelegate oldDelegate) {
+    return oldDelegate.tabBar != tabBar;
+  }
+}
+
+/*
+class CurrentUserStudentProfileScreen extends StatefulWidget {
+  const CurrentUserStudentProfileScreen({super.key, this.userId});
+  final String? userId;
   @override
   State<CurrentUserStudentProfileScreen> createState() =>
       _CurrentUserStudentProfileScreenState();
@@ -82,8 +386,8 @@ class _CurrentUserStudentProfileScreenState
       controller: scrollController,
       slivers: [
         SliverAppBar(
-          pinned: true,
-          floating: true,
+          // pinned: true,
+          // floating: true,
           expandedHeight: context.screenHeight * 0.5,
           actions: [
             IconButton(
@@ -286,3 +590,6 @@ class _CurrentUserStudentProfileScreenState
     ));
   }
 }
+*/
+
+//-----------------------------------------

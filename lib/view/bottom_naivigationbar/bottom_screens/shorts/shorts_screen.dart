@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
@@ -38,19 +40,19 @@ class _ShortsScreenState extends State<ShortsScreen>
           '';
 
       context.read<ShortsController>().getReels(context: context);
-      context.read<VideoTypeController>().initialiseNetworkVideo(url: url);
-      context.read<VideoTypeController>().notifyListeners();
+      // context.read<VideoTypeController>().initialiseNetworkVideo(url: url);
+      // context.read<VideoTypeController>().notifyListeners();
     });
   }
 
   @override
   void dispose() {
     animationController.dispose();
-    final videoController =
-        context.read<VideoTypeController>().networkVideoController;
-    if (videoController != null) {
-      videoController.dispose();
-    }
+    // final videoController =
+    //     context.read<VideoTypeController>().networkVideoController;
+    // if (videoController != null) {
+    //   videoController.dispose();
+    // }
     super.dispose();
   }
 
@@ -78,7 +80,6 @@ class _ShortsScreenState extends State<ShortsScreen>
                   NetworkVideoPlayer(
                     // isGestureControll: true,
                     inistatePlay: false,
-
                     url: reel?.postContentUrl.toString() ?? '',
                   ),
                   Positioned(

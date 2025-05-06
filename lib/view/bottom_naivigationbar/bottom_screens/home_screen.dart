@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/like_controller/like_controller.dart';
 import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
@@ -33,13 +34,12 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-   
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-       if (widget.isfirstTime) {
-      final proReadHomeFeed = context.read<HomefeedController>();
-      proReadHomeFeed.changeShimmer();
-    }
+      if (widget.isfirstTime) {
+        final proReadHomeFeed = context.read<HomefeedController>();
+        proReadHomeFeed.changeShimmer();
+      }
       final currentUserId = await AppUtils.getUserId();
       log('Current userid= $currentUserId');
     });
@@ -53,8 +53,11 @@ class _HomeScreenState extends State<HomeScreen>
     super.build(context);
 
     final proWatchHomeFeed = context.watch<HomefeedController>();
+
     final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
     final scrollController = ScrollController();
+    // bool islike = false;
+    // String likeCount = '0';
 
     return Scaffold(
       body: customRefreshIndicator(
@@ -64,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
         child: proWatchHomeFeed.showShimmer
             ? HomeShimmer()
             : CustomScrollView(
+                controller: scrollController,
                 cacheExtent: context.screenHeight,
                 slivers: [
                   SliverAppBar(
@@ -75,6 +79,11 @@ class _HomeScreenState extends State<HomeScreen>
                             height: 23, width: 9, verticalGradient: true),
                         const SizedBox(width: 9),
                         GestureDetector(
+                          onTap: () {
+                            scrollController.animateTo(0.0,
+                                duration: Duration(milliseconds: 200),
+                                curve: Curves.easeIn);
+                          },
                           child: Text(
                             StringConstants.appName,
                             style: TextStyle(
@@ -128,6 +137,8 @@ class _HomeScreenState extends State<HomeScreen>
                               final item = items[index];
                               final time =
                                   AppUtils.timeAgo(item.createdAt.toString());
+                              // islike = item.isLiked ?? false;
+                              // likeCount = item.likescount.toString();
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 8),

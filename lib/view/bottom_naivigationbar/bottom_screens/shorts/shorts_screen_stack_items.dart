@@ -17,15 +17,12 @@ class BottomCaption extends StatelessWidget {
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         softWrap: true,
-        style: StringStyle.normalText(size: 12));
+        style: StringStyle.normalText(size: 12).copyWith(color: Colors.white));
   }
 }
 
 class TopBar extends StatelessWidget {
-  const TopBar({
-    super.key,
-    required this.reel
-  });
+  const TopBar({super.key, required this.reel});
 
   final Response? reel;
 
@@ -34,8 +31,7 @@ class TopBar extends StatelessWidget {
     return ListTile(
       leading: GestureDetector(
           onTap: () {
-            AppRoutes.push(
-                context, UserProfile(userId: reel?.userId ?? ''));
+            AppRoutes.push(context, UserProfile(userId: reel?.userId ?? ''));
           },
           child: CircleAvatar(
             backgroundImage: AppUtils.getProfile(url: reel?.profilePicUrl),
@@ -43,12 +39,17 @@ class TopBar extends StatelessWidget {
       title: Text(
         reel?.username ?? 'unknown user',
         style: StringStyle.normalTextBold(
-          size: 20,
+          color: Colors.white,
+          size: 17,
         ),
       ),
       subtitle: Text(
         reel?.userId ?? '',
-        style: StringStyle.normalText(size: 10),
+        style: StringStyle.normalText(
+          size: 10,
+        ).copyWith(
+          color: Colors.white,
+        ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

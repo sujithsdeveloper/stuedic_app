@@ -4,6 +4,7 @@ import 'package:video_player/video_player.dart';
 
 class VideoTypeController extends ChangeNotifier {
   double pickedVideoRatio = 9 / 18;
+  bool volume_mute = true;
 
   VideoPlayerController? networkVideoController;
   VideoPlayerController? assetVideoController;
@@ -33,8 +34,7 @@ class VideoTypeController extends ChangeNotifier {
     if (isGestureControll) {
       toggleMuteUnmute();
     } else {
-      togglePlayPause(controller)
-      ;
+      togglePlayPause(controller);
     }
   }
 
@@ -73,5 +73,16 @@ class VideoTypeController extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
+  void volumeButtonClick(VideoPlayerController controller) {
+    if (volume_mute) {
+      volume_mute = false;
+      controller.setVolume(0.0);
+      notifyListeners();
+    } else {
+      volume_mute = true;
+      controller.setVolume(1.0);
+      notifyListeners();
+    }
+  }
 }

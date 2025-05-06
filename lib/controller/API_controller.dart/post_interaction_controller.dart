@@ -15,6 +15,8 @@ import 'package:stuedic_app/utils/app_utils.dart';
 class PostInteractionController extends ChangeNotifier {
   Set<int> followers = {};
   GetBookamark? getBookamark;
+  bool? isLiked;
+  int? countLike;
 
   void toggleLike({
     required bool isLiked,
@@ -27,6 +29,26 @@ class PostInteractionController extends ChangeNotifier {
       await likePost(postId: postId, context: context);
     }
     notifyListeners();
+  }
+
+//like logic from pranav
+  void likebool({
+    required bool likebool,
+    required int likeCount,
+    required String postId,
+    required BuildContext context,
+  }) async {
+    if (likebool) {
+      isLiked = false;
+      countLike = likeCount - 1;
+      await unLikePost(postId: postId, context: context);
+      notifyListeners();
+    } else {
+      isLiked = true;
+      countLike = likeCount + 1;
+      await likePost(postId: postId, context: context);
+      notifyListeners();
+    }
   }
 
   Future<void> likePost({

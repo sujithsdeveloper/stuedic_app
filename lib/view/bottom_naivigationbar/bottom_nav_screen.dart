@@ -36,7 +36,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     AppUtils.checkConnectivity(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final token = await AppUtils.getToken();
-      log(token);
+      log(token, name: 'token --------');
 
       final profileController = context.read<ProfileController>();
       final discoverController = context.read<DiscoverController>();
