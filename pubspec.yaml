@@ -73,7 +73,12 @@ dependencies:
   flutter_native_splash: ^2.4.6
   preload_page_view: ^0.2.0
   path_provider: ^2.1.5
+  # video_editor: ^3.0.0
 
+
+# video_thumbnail:
+#   git:
+#     url: https://github.com/sujithsdeveloper/stuedic_video_edit.git
 
 
 

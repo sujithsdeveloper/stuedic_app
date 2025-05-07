@@ -8,6 +8,7 @@ import 'package:stuedic_app/model/searcheduser_model.dart';
 class UserSearchController extends ChangeNotifier {
   SearchUserModel? reslust;
   bool isSearchLoading = false;
+  List<User> filteredColleges = [];
   Future<void> searchUser(
       {required BuildContext context, required String keyword}) async {
     isSearchLoading = true;
@@ -20,6 +21,12 @@ class UserSearchController extends ChangeNotifier {
         onSucces: (p0) {
           log(p0.body);
           reslust = searchUserModelFromJson(p0.body);
+
+          // Filter users where isCollege is true
+          filteredColleges = (reslust?.response?.users ?? [])
+              .where((e) => e.isCollege == true)
+              .toList();
+          log("Filtered Colleges: ${filteredColleges.toString()}");
           notifyListeners();
         },
         onTokenExpired: () {

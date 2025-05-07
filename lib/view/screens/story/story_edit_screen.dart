@@ -255,6 +255,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppShortcuts.getPlatformDependentPop(
+                  color: Colors.white,
                   onPop: () {
                     customDialog(context,
                         titile: 'Discard Changes?',

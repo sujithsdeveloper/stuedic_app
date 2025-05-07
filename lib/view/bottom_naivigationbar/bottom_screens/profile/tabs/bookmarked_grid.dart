@@ -9,9 +9,7 @@ class BookmarkedGrid extends StatelessWidget {
     required this.bookmarkGrid,
     required this.userId,
     this.scrollController,
-    required this.gridViewScrollEnabled,
   });
-  final bool gridViewScrollEnabled;
 
   final List<Bookmark>? bookmarkGrid;
   final String? userId;
@@ -33,9 +31,7 @@ class BookmarkedGrid extends StatelessWidget {
             } else {
               return GridView.builder(
                 controller: scrollController,
-                physics: gridViewScrollEnabled
-                    ? const AlwaysScrollableScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
+              
                 itemCount: bookmarkGrid?.length ?? 0,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 9 / 16,

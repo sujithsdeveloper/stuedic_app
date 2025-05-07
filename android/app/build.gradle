@@ -14,7 +14,11 @@ plugins {
 // kotlin {
 //     jvmToolchain(17)
 // }
-
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 android {
     namespace = "com.stuedic.social"
     compileSdk = 35
@@ -41,13 +45,13 @@ android {
     }
 
 signingConfigs {
-    create("release") {
-        keyAlias = keystoreProperties["keyAlias"]
-        keyPassword = keystoreProperties["keyPassword"]
-        storeFile = keystoreProperties["storeFile"] ? file(keystoreProperties["storeFile"]) : null
-        storePassword = keystoreProperties["storePassword"]
+        release {
+            keyAlias = keystoreProperties["keyAlias"]
+            keyPassword = keystoreProperties["keyPassword"]
+            storeFile = keystoreProperties["storeFile"] ? file(keystoreProperties["storeFile"]) : null
+            storePassword = keystoreProperties["storePassword"]
+        }
     }
-}
 
     buildTypes {
         release {

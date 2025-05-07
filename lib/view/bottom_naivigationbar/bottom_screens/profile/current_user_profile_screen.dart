@@ -8,6 +8,7 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/controller/app/scrolling_controller.dart';
 import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
+import 'package:stuedic_app/elements/tabbar_delegates.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
@@ -79,258 +80,255 @@ class _CurrentUserStudentProfileScreenState
         context.watch<ScrollingController>().gridViewScrollEnabled;
 
     return Scaffold(
-      body: NestedScrollView(
-        controller: scrollController,
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          // SliverAppBar(
-          //   // pinned: false,
-          //   // floating: false,
-          //   expandedHeight: 140,
-          //   flexibleSpace: FlexibleSpaceBar(
-          //     background: Image.asset(
-          //       ImageConstants.userProfileBg,
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          //   actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     AppRoutes.push(context, NotificationScreen());
-          //   },
-          //   icon: Icon(HugeIcons.strokeRoundedNotification01),
-          // ),
-          // IconButton(
-          //   onPressed: () {
-          //     AppRoutes.push(context, SettingScreen());
-          //   },
-          //   icon: Icon(Icons.more_horiz),
-          // ),
-          //   ],
-          // ),
+      body: SafeArea(
+        child: NestedScrollView(
+          controller: scrollController,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            // SliverAppBar(
+            //   // pinned: false,
+            //   // floating: false,
+            //   expandedHeight: 140,
+            //   flexibleSpace: FlexibleSpaceBar(
+            //     background: Image.asset(
+            //       ImageConstants.userProfileBg,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            //   actions: [
+            // IconButton(
+            //   onPressed: () {
+            //     AppRoutes.push(context, NotificationScreen());
+            //   },
+            //   icon: Icon(HugeIcons.strokeRoundedNotification01),
+            // ),
+            // IconButton(
+            //   onPressed: () {
+            //     AppRoutes.push(context, SettingScreen());
+            //   },
+            //   icon: Icon(Icons.more_horiz),
+            // ),
+            //   ],
+            // ),
 
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                //  User Profile Avatar
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    //icons settings and vertical more
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  //  User Profile Avatar
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      //icons settings and vertical more
 
-                    SizedBox(
-                      height: 180,
-                      width: double.infinity,
-                      child: Image.asset(
-                        ImageConstants.userProfileBg,
-                        fit: BoxFit.cover,
+                      SizedBox(
+                        height: 180,
+                        width: double.infinity,
+                        child: Image.asset(
+                          ImageConstants.userProfileBg,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: -80,
-                      left: 16,
-                      child: CircleAvatar(
-                        radius: 52,
-                        backgroundColor: Colors.white,
+                      Positioned(
+                        bottom: -70,
+                        left: 16,
                         child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: AppUtils.getProfile(
-                            url: user?.profilePicUrl,
+                          radius: 52,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: AppUtils.getProfile(
+                              url: user?.profilePicUrl,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      right: 5,
-                      top: 40,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              AppRoutes.push(context, NotificationScreen());
-                            },
-                            icon: Icon(HugeIcons.strokeRoundedNotification01),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              AppRoutes.push(context, SettingScreen());
-                            },
-                            icon: Icon(Icons.more_horiz),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-
-                const SizedBox(height: 20), // space for avatar
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Edit profile & and pdf icon
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ProfileActionButton(
-                            iconData: CupertinoIcons.doc_text,
-                            onTap: () {
-                              AppRoutes.push(
-                                  context, PdfViewerScreen(url: pdfUrl));
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          GradientButton(
-                            outline: user?.isFollowed ?? false,
-                            onTap: () {
-                              AppRoutes.push(
-                                context,
-                                EditProfileScreen(
-                                  username: user?.userName ?? '',
-                                  bio: 'bio',
-                                  number: user?.phone ?? 'No Number',
-                                  url: user?.profilePicUrl ?? '',
-                                ),
-                              );
-                            },
-                            height: 48,
-                            width: 120,
-                            isColored: !(user?.isFollowed ?? false),
-                            label: 'Edit Profile',
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 16),
-                      Text(user?.userName ?? '',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text('@${user?.userId ?? ''}',
-                          style: const TextStyle(color: Colors.grey)),
-                      const SizedBox(height: 5),
-                      Text(user?.collageName ?? '',
-                          style: StringStyle.normalText()),
-                      Text('Trivandrum, Kerala',
-                          style: StringStyle.normalText()),
-
-                      const SizedBox(height: 20),
-
-                      // Stats row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          counts(
-                              count:
-                                  AppUtils.formatCounts(user?.postCount ?? 0),
-                              label: "Posts"),
-                          counts(
-                              count: AppUtils.formatCounts(
-                                  user?.followingCount ?? 0),
-                              label: "Following"),
-                          counts(
-                              count: AppUtils.formatCounts(
-                                  user?.followersCount ?? 0),
-                              label: "Followers"),
-                          counts(
-                              count: AppUtils.formatCounts(0), label: "Likes"),
-                        ],
-                      ),
-                      SizedBox(height: 20)
+                      Positioned(
+                        right: 5,
+                        top: 40,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                AppRoutes.push(context, NotificationScreen());
+                              },
+                              icon: Icon(HugeIcons.strokeRoundedNotification01),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                AppRoutes.push(context, SettingScreen());
+                              },
+                              icon: Icon(Icons.more_horiz),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
 
-          // 👇 Pinned TabBar
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _TabBarDelegate(
-              TabBar(
-                controller: _tabController,
-                labelColor: ColorConstants.secondaryColor,
-                indicatorColor: ColorConstants.secondaryColor,
-                onTap: (value) {
-                  if (value == 0) {
-                    context
-                        .read<ProfileController>()
-                        .getCurrentUserGrid(context: context);
-                  }
-                  if (value == 2) {
-                    context
-                        .read<PostInteractionController>()
-                        .getBookmark(context: context);
-                  }
-                },
-                tabs: const [
-                  Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
-                  Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-                  Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
-                  Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                  const SizedBox(height: 9), // space for avatar
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Edit profile & and pdf icon
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ProfileActionButton(
+                              iconData: CupertinoIcons.doc_text,
+                              onTap: () {
+                                AppRoutes.push(
+                                    context, PdfViewerScreen(url: pdfUrl));
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            GradientButton(
+                              outline: user?.isFollowed ?? false,
+                              onTap: () {
+                                AppRoutes.push(
+                                  context,
+                                  EditProfileScreen(
+                                    username: user?.userName ?? '',
+                                    bio: 'bio',
+                                    number: user?.phone ?? 'No Number',
+                                    url: user?.profilePicUrl ?? '',
+                                  ),
+                                );
+                              },
+                              height: 48,
+                              width: 120,
+                              isColored: !(user?.isFollowed ?? false),
+                              label: 'Edit Profile',
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+                        Text(user?.userName ?? '',
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text('@${user?.userId ?? ''}',
+                            style: const TextStyle(color: Colors.grey)),
+                        const SizedBox(height: 5),
+                        Text(user?.collageName ?? '',
+                            style: StringStyle.normalText()),
+                        Text('Trivandrum, Kerala',
+                            style: StringStyle.normalText()),
+
+                        const SizedBox(height: 20),
+
+                        // Stats row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            counts(
+                                count:
+                                    AppUtils.formatCounts(user?.postCount ?? 0),
+                                label: "Posts"),
+                            counts(
+                                count: AppUtils.formatCounts(
+                                    user?.followingCount ?? 0),
+                                label: "Following"),
+                            counts(
+                                count: AppUtils.formatCounts(
+                                    user?.followersCount ?? 0),
+                                label: "Followers"),
+                            counts(
+                                count: AppUtils.formatCounts(0),
+                                label: "Likes"),
+                          ],
+                        ),
+                        SizedBox(height: 20)
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-        ],
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            ImageGrid(
-              scrollController: scrollController,
-              gridViewScrollEnabled: gridViewScrollEnabled,
-              photoGrid: photoGrid,
-              userId: user?.userId ?? '',
-            ),
-            VideoGrid(
-              scrollController: scrollController,
-              gridViewScrollEnabled: gridViewScrollEnabled,
-            ),
-            BookmarkedGrid(
-              gridViewScrollEnabled: gridViewScrollEnabled,
-              bookmarkGrid: bookmarkGrid,
-              userId: user?.userId ?? '',
-            ),
-            Center(
-              child: Text(
-                "Shopping items will be displayed here",
-                style: TextStyle(fontSize: 16),
+
+            // 👇 Pinned TabBar
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: TabBarDelegate(
+                TabBar(
+                  controller: _tabController,
+                  labelColor: ColorConstants.secondaryColor,
+                  indicatorColor: ColorConstants.secondaryColor,
+                  onTap: (value) {
+                    if (value == 0) {
+                      context
+                          .read<ProfileController>()
+                          .getCurrentUserGrid(context: context);
+                    }
+                    if (value == 2) {
+                      context
+                          .read<PostInteractionController>()
+                          .getBookmark(context: context);
+                    }
+                  },
+                  tabs: const [
+                    Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                    Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                  ],
+                ),
               ),
             ),
           ],
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              ImageGrid(
+                photoGrid: photoGrid,
+                userId: user?.userId ?? '',
+              ),
+              VideoGrid(),
+              BookmarkedGrid(
+                bookmarkGrid: bookmarkGrid,
+                userId: user?.userId ?? '',
+              ),
+              Center(
+                child: Text(
+                  "Shopping items will be displayed here",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// Pinned TabBar Delegate
-class _TabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
-  _TabBarDelegate(this.tabBar);
+// /// Pinned TabBar Delegate
+// class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+//   final TabBar tabBar;
+//   _TabBarDelegate(this.tabBar);
 
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      // padding: EdgeInsets.only(top: 15),
-      color: Colors.white,
-      child: tabBar,
-    );
-  }
+//   @override
+//   Widget build(
+//       BuildContext context, double shrinkOffset, bool overlapsContent) {
+//     return Container(
+//       // padding: EdgeInsets.only(top: 15),
+//       color: Colors.white,
+//       child: tabBar,
+//     );
+//   }
 
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
+//   @override
+//   double get maxExtent => tabBar.preferredSize.height;
 
-  @override
-  double get minExtent => tabBar.preferredSize.height;
+//   @override
+//   double get minExtent => tabBar.preferredSize.height;
 
-  @override
-  bool shouldRebuild(covariant _TabBarDelegate oldDelegate) {
-    return oldDelegate.tabBar != tabBar;
-  }
-}
+//   @override
+//   bool shouldRebuild(covariant _TabBarDelegate oldDelegate) {
+//     return oldDelegate.tabBar != tabBar;
+//   }
+// }
 
 /*
 class CurrentUserStudentProfileScreen extends StatefulWidget {

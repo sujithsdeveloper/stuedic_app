@@ -8,5 +8,5 @@ flutter_native_splash:
 
   android_12:
     color: "#ffffff" # Background color of the splash screen for Android 12 and above
-    image: assets/images/splash.png # Path to the splash screen image for Android 12 and above
+    image: assets/images/splashLogo.jpg # Path to the splash screen image for Android 12 and above
     android_gravity: center # Center the image on Android 12 and above
