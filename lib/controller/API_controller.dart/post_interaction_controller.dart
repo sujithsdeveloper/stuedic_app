@@ -18,18 +18,18 @@ class PostInteractionController extends ChangeNotifier {
   bool? isLiked;
   int? countLike;
 
-  void toggleLike({
-    required bool isLiked,
-    required String postId,
-    required BuildContext context,
-  }) async {
-    if (isLiked) {
-      await unLikePost(postId: postId, context: context);
-    } else {
-      await likePost(postId: postId, context: context);
-    }
-    notifyListeners();
-  }
+  // void toggleLike({
+  //   required bool isLiked,
+  //   required String postId,
+  //   required BuildContext context,
+  // }) async {
+  //   if (isLiked) {
+  //     await unLikePost(postId: postId, context: context);
+  //   } else {
+  //     await likePost(postId: postId, context: context);
+  //   }
+  //   notifyListeners();
+  // }
 
 //like logic from pranav
   void likebool({
@@ -81,62 +81,29 @@ class PostInteractionController extends ChangeNotifier {
     );
   }
 
-  void toggleFollow({
-    required int index,
-    required BuildContext context,
-    required String userId,
-  }) {
-    if (followers.contains(index)) {
-      unFollowUserDialog(
-        context: context,
-        index: index,
-        OnUnfollow: () {
-          unfollowUser(userId: userId, context: context);
-          followers.remove(index);
-          notifyListeners();
-          Navigator.pop(context);
-        },
-      );
-    } else {
-      followers.add(index);
-      followUser(userId: userId, context: context);
-      notifyListeners();
-    }
-  }
+  // void toggleFollow({
+  //   required int index,
+  //   required BuildContext context,
+  //   required String userId,
+  // }) {
+  //   if (followers.contains(index)) {
+  //     unFollowUserDialog(
+  //       context: context,
+  //       index: index,
+  //       OnUnfollow: () {
+  //         unfollowUser(userId: userId, context: context);
+  //         followers.remove(index);
+  //         notifyListeners();
+  //         Navigator.pop(context);
+  //       },
+  //     );
+  //   } else {
+  //     followers.add(index);
+  //     followUser(userId: userId, context: context);
+  //     notifyListeners();
+  //   }
+  // }
 
-  void followUser(
-      {required String userId, required BuildContext context}) async {
-    await ApiMethods.get(
-      url: Uri.parse('${ApiUrls.baseUrl}api/v1/Profile/followUser?userId=$userId'),
-      onSucces: (p0) {
-        Logger().f(p0.body);
-        context
-            .read<ProfileController>()
-            .getUserByUserID(userId: userId, context: context);
-        notifyListeners();
-      },
-      onTokenExpired: () => followUser(userId: userId, context: context),
-      context: context,
-    );
-  }
-
-  void unfollowUser(
-      {required String userId, required BuildContext context}) async {
-    await ApiMethods.get(
-      url: Uri.parse(
-          '${ApiUrls.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
-      onSucces: (p0) {
-        Logger().f(p0.body);
-        context
-            .read<ProfileController>()
-            .getUserByUserID(userId: userId, context: context);
-
-        notifyListeners();
-      },
-      onTokenExpired: () => unfollowUser(userId: userId, context: context),
-      context: context,
-    );
-  }
 
   Future<void> bookmarkPost({
     required String postId,
@@ -220,8 +187,8 @@ class PostInteractionController extends ChangeNotifier {
         body: body,
         onSucces: (p0) async {
           log("Comment added: ${p0.body}");
-          await getComment(
-              context: context, postId: postId); // Fetch new comments
+          // await getComment(
+          //     context: context, postId: postId); // Fetch new comments
         },
         onTokenExpired: () {
           addComment(postId: postId, comment: comment, context: context);
@@ -239,7 +206,8 @@ class PostInteractionController extends ChangeNotifier {
     notifyListeners();
     log("Controller postID $postId");
 
-    var url = Uri.parse('${ApiUrls.baseUrl}api/v1/Post/comments?postid=$postId');
+    var url =
+        Uri.parse('${ApiUrls.baseUrl}api/v1/Post/comments?postid=$postId');
     await ApiMethods.get(
       url: url,
       onSucces: (p0) {
@@ -250,6 +218,9 @@ class PostInteractionController extends ChangeNotifier {
       },
       onTokenExpired: () {
         getComment(context: context, postId: postId);
+
+        isCommentLoading = false;
+        notifyListeners();
       },
       context: context,
     );

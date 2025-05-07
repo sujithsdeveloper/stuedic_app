@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -38,13 +39,13 @@ class VideoTypeController extends ChangeNotifier {
     }
   }
 
-  void onLongPress() {
-    networkVideoController!.pause();
+  void onLongPress(VideoPlayerController controller) {
+    controller.pause();
     notifyListeners();
   }
 
-  void onLongPressEnd() {
-    networkVideoController!.play();
+  void onLongPressEnd(VideoPlayerController controller) {
+    controller.play();
     notifyListeners();
   }
 

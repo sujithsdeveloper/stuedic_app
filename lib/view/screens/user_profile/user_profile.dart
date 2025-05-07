@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +41,16 @@ class _UserProfileState extends State<UserProfile>
   @override
   void initState() {
     super.initState();
+
     tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
+        final userDataProviderWatch =
+            Provider.of<ProfileController>(context, listen: false);
+        userDataProviderWatch.isFollowed =
+            userDataProviderWatch.userProfile?.response?.isFollowed ?? false;
+        log(' ${userDataProviderWatch.userProfile?.response?.isFollowed.toString()}',
+            name: 'Initstate API REspose');
         final provider = context.read<ProfileController>();
 
         provider.getUserByUserID(context: context, userId: widget.userId);
@@ -65,7 +74,9 @@ class _UserProfileState extends State<UserProfile>
               child: NestedScrollView(
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   isCollege
-                      ? SliverToBoxAdapter(
+                      ?
+///////////////////////College Profile//////////////////////////////////////////////////////////////////////////////////////////////
+                      SliverToBoxAdapter(
                           child: Stack(
                             children: [
                               Column(
@@ -132,56 +143,35 @@ class _UserProfileState extends State<UserProfile>
                                         },
                                       ),
                                       GradientButton(
-                                        outline: user?.isFollowed ?? false
-                                            ? true
-                                            : false,
+                                        outline:
+                                            userDataProviderWatch.isFollowed ??
+                                                    false
+                                                ? true
+                                                : false,
                                         onTap: () {
-                                          if (user?.isFollowed ?? false) {
-                                            context
-                                                .read<
-                                                    PostInteractionController>()
-                                                .unfollowUser(
-                                                    context: context,
-                                                    userId: user?.userId ?? '');
-                                            Future.delayed(
-                                                    Duration(milliseconds: 300))
-                                                .then(
-                                              (value) {
-                                                context
-                                                    .read<ProfileController>()
-                                                    .getUserByUserID(
-                                                        context: context,
-                                                        userId: widget.userId);
-                                              },
-                                            );
-                                          } else {
-                                            context
-                                                .read<
-                                                    PostInteractionController>()
-                                                .followUser(
-                                                    context: context,
-                                                    userId: user?.userId ?? '');
-                                            Future.delayed(
-                                                    Duration(milliseconds: 300))
-                                                .then(
-                                              (value) {
-                                                context
-                                                    .read<ProfileController>()
-                                                    .getUserByUserID(
-                                                        context: context,
-                                                        userId: widget.userId);
-                                              },
-                                            );
-                                          }
+                                          log('isFollowed ${user?.isFollowed}',
+                                              name: 'Before');
+
+                                          context
+                                              .read<ProfileController>()
+                                              .toggleUser(
+                                                  followBool:
+                                                      user?.isFollowed ?? false,
+                                                  userId: user?.userId ?? '',
+                                                  context: context);
+                                          log('isFollowed ${user?.isFollowed}',
+                                              name: 'After');
                                         },
                                         height: 48,
                                         width: 100,
                                         isColored: user?.isFollowed ?? false
                                             ? false
                                             : true,
-                                        label: user?.isFollowed ?? false
-                                            ? 'Following'
-                                            : 'Follow',
+                                        label:
+                                            userDataProviderWatch.isFollowed ??
+                                                    false
+                                                ? 'Following'
+                                                : 'Follow',
                                       ),
                                       ProfileActionButton(
                                         onTap: () {
@@ -335,7 +325,10 @@ class _UserProfileState extends State<UserProfile>
                             ],
                           ),
                         )
-                      : SliverToBoxAdapter(
+                      :
+///////////////////////User Profile//////////////////////////////////////////////////////////////////////////////////////////////
+                      // User Profile
+                      SliverToBoxAdapter(
                           child: Column(
                             children: [
                               //  User Profile Avatar
@@ -526,15 +519,13 @@ class _UserProfileState extends State<UserProfile>
                           builder: (context) {
                             if (photoGrid == null || photoGrid.isEmpty) {
                               return Column(
+                                spacing: 5,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     'Capture some amazing moments with your friends',
                                     style: StringStyle.normalTextBold(),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -574,15 +565,31 @@ class _UserProfileState extends State<UserProfile>
                           },
                         )),
                     // Videos Section
-                    Center(
-                      child: Text("Videos will be displayed here",
-                          style: TextStyle(fontSize: 16)),
+                    Column(
+                      spacing: 5,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Capture some amazing moments with your friends',
+                          style: StringStyle.normalTextBold(),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_a_photo_outlined,
+                            ),
+                            Text('Create your first video')
+                          ],
+                        )
+                      ],
                     ),
 
                     // Shopping Items
 
                     Center(
-                      child: Text("Shopping items will be displayed here",
+                      child: Text("This feature is not available yet",
                           style: TextStyle(fontSize: 16)),
                     ),
                   ],

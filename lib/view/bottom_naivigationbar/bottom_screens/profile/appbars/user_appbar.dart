@@ -123,43 +123,13 @@ class UserProfileAppbar extends StatelessWidget {
                                           ? true
                                           : false,
                                       onTap: () {
-                                        if (user?.isFollowed ?? false) {
-                                          context
-                                              .read<PostInteractionController>()
-                                              .unfollowUser(
-                                                  context: context,
-                                                  userId: user?.userId ?? '');
-                                          Future.delayed(
-                                                  Duration(milliseconds: 300))
-                                              .then(
-                                            (value) {
-                                              context
-                                                  .read<ProfileController>()
-                                                  .getUserByUserID(
-                                                      context: context,
-                                                      userId:
-                                                           '');
-                                            },
-                                          );
-                                        } else {
-                                          context
-                                              .read<PostInteractionController>()
-                                              .followUser(
-                                                  context: context,
-                                                  userId: user?.userId ?? '');
-                                          Future.delayed(
-                                                  Duration(milliseconds: 300))
-                                              .then(
-                                            (value) {
-                                              context
-                                                  .read<ProfileController>()
-                                                  .getUserByUserID(
-                                                      context: context,
-                                                      userId:
-                                                           '');
-                                            },
-                                          );
-                                        }
+                                        context
+                                            .read<ProfileController>()
+                                            .toggleUser(
+                                                followBool:
+                                                    user?.isFollowed ?? false,
+                                                userId: user?.userId ?? '',
+                                                context: context);
                                       },
                                       height: 48,
                                       width: 100,

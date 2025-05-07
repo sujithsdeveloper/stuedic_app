@@ -12,6 +12,7 @@ class StringConstants {
   static const String isStudent = 'IsStudent';
   static const String reel = 'reel';
   static const String pic = 'pic';
+  static const String profilePicUrl = 'profilePicUrl';
   static const String url = 'url';
   static const String like = 'like';
   static const String comment = 'comment';

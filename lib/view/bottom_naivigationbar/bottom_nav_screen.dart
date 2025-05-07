@@ -46,6 +46,9 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       discoverController.getDiscoverData(context);
       feedController.getAllPost(context: context);
       storyController.getStories(context);
+
+  
+
     });
   }
 

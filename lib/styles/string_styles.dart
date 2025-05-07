@@ -13,9 +13,10 @@ class StringStyle {
         fontFamily: 'Calistoga');
   }
 
-  static TextStyle smallText({bool isBold = false}) => TextStyle(
+  static TextStyle smallText({bool isBold = false,Color?color}) => TextStyle(
       fontSize: 12,
       fontWeight: isBold ? FontWeight.w700 : null,
+      color: color,
       fontFamily: 'latoRegular');
 
   static TextStyle normalText({double size = 16, bool isBold = false,Color?color}) =>

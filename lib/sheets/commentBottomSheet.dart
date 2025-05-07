@@ -8,111 +8,168 @@ import 'package:stuedic_app/model/get_comment_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/functions/shimmer/comment_shimmer.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
+import 'dart:math';
 
-dynamic commentBottomSheet(
-    {required BuildContext context,
-    required TextEditingController commentController,
-    required String postID,
-    required List<Comment> comments}) {
+dynamic commentBottomSheet({
+  required BuildContext context,
+  required TextEditingController commentController,
+  required String postID,
+  // required String userID,
+}) {
   final proReadInteraction = context.read<PostInteractionController>();
+  final proWatchInteraction =
+      Provider.of<PostInteractionController>(context, listen: false);
+  proReadInteraction.getComment(context: context, postId: postID);
+
+  final DraggableScrollableController sheetController =
+      DraggableScrollableController();
+
   return showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => StatefulBuilder(
-            builder: (context, setState) => DraggableScrollableSheet(
-              initialChildSize: 1,
-              minChildSize: 0.4,
-              maxChildSize: 1,
-              builder: (context, scrollController) {
-                // log('postID $postId');
-                return SafeArea(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        ),
-                      ],
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) {
+        // Listen for keyboard open and expand the sheet
+        final viewInsets = MediaQuery.of(context).viewInsets;
+        if (viewInsets.bottom > 0) {
+          // Keyboard is open
+          Future.microtask(() {
+            // Animate only if not already expanded
+            if (sheetController.size < 0.99) {
+              sheetController.animateTo(
+                1.0,
+                duration: Duration(milliseconds: 250),
+                curve: Curves.ease,
+              );
+            }
+          });
+        }
+
+        // List<Comment> comments =
+        //     proWatchInteraction.getComments?.comments?.reversed.toList() ?? [];
+
+        return DraggableScrollableSheet(
+          controller: sheetController,
+          initialChildSize: 0.7,
+          minChildSize: 0.4,
+          maxChildSize: 1,
+          builder: (context, scrollController) {
+            return SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
                     ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
+                  ],
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
                       children: [
-                        Container(
-                          width: 50,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(10),
+                        const Icon(HugeIcons.strokeRoundedMessageMultiple01),
+                        const SizedBox(width: 5),
+                        Consumer<PostInteractionController>(
+                          builder: (context, postInteraction, _) {
+                            final comments = postInteraction
+                                    .getComments?.comments?.reversed
+                                    .toList() ??
+                                [];
+                            return Text(
+                              '${postInteraction.isCommentLoading ? '...' : comments.length}',
+                              style: StringStyle.smallText(isBold: true),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 5),
+                        const Text(
+                          'Comments',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontFamily: 'latoRegular',
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            const Icon(
-                                HugeIcons.strokeRoundedMessageMultiple01),
-                            const SizedBox(width: 5),
-                            Text(
-                              '${comments.length}',
-                              style: StringStyle.smallText(isBold: true),
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              'Comments',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                                fontFamily: 'latoRegular',
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_horiz),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: Consumer<PostInteractionController>(
+                        builder: (context, postInteraction, _) {
+                          final comments = postInteraction
+                                  .getComments?.comments?.reversed
+                                  .toList() ??
+                              [];
+                          if (postInteraction.isCommentLoading) {
+                            return CommentShimmerList();
+                          }
+                          if (comments.isEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'No Commments',
+                                    style: StringStyle.normalTextBold(size: 20),
+                                  )
+                                ],
                               ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.more_horiz),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Expanded(child: Builder(
-                          builder: (context) {
-                            if (comments.isEmpty) {
-                              return Center(
-                                child: Column(
-                                  spacing: 20,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // SvgPicture.asset(
-                                    //     height: 160, SVGConstants.comments),
-                                    Text(
-                                      'No Commments',
-                                      style:
-                                          StringStyle.normalTextBold(size: 20),
-                                    )
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Expanded(
-                                child: ListView.builder(
-                                  controller: scrollController,
-                                  itemCount: comments.length,
-                                  itemBuilder: (context, index) {
-                                    final data = comments[index];
-                                    final time = AppUtils.timeAgo(
-                                        data?.createdAt ??
-                                            DateTime.now().toString());
+                            );
+                          }
+                          return ListView.builder(
+                            controller: scrollController,
+                            itemCount: comments.length,
+                            itemBuilder: (context, index) {
+                              final data = comments[index];
+                              final time = AppUtils.timeAgo(
+                                  data?.createdAt ?? DateTime.now().toString());
 
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: Row(
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        AppRoutes.push(
+                                            context,
+                                            UserProfile(
+                                                userId: data.userId ?? ''));
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 18,
+                                        backgroundImage: AppUtils.getProfile(
+                                          url: data.profilePicUrl ?? '',
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
@@ -124,84 +181,65 @@ dynamic commentBottomSheet(
                                                       userId:
                                                           data.userId ?? ''));
                                             },
-                                            child: CircleAvatar(
-                                              radius: 18,
-                                              backgroundImage:
-                                                  AppUtils.getProfile(
-                                                url: data.profilePicUrl ?? '',
+                                            child: Text(
+                                              data.username ?? 'Unknown',
+                                              style:
+                                                  StringStyle.normalTextBold(),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            data.content ?? '',
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: true,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "$time ago",
+                                                style: StringStyle.greyText(),
                                               ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    AppRoutes.push(
-                                                        context,
-                                                        UserProfile(
-                                                            userId:
-                                                                data.userId ??
-                                                                    ''));
-                                                  },
-                                                  child: Text(
-                                                    data.username ?? 'Unknown',
-                                                    style: StringStyle
-                                                        .normalTextBold(),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Text(
-                                                  data.content ?? '',
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: true,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "$time ago",
-                                                      style: StringStyle
-                                                          .greyText(),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
+                                            ],
+                                          )
                                         ],
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    const SizedBox(width: 16),
+                                  ],
                                 ),
                               );
-                            }
-                          },
-                        )),
-                        Column(
-                          children: [
-                            const SizedBox(height: 16),
-                          ],
-                        ),
-                        BottomCommentAddFeild(
-                          proReadInteraction: proReadInteraction,
-                          commentController: commentController,
-                          postID: postID,
-                          comments: comments,
-                          setState: setState,
-                        )
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        const SizedBox(height: 16),
                       ],
                     ),
-                  ),
-                );
-              },
-            ),
-          ));
+                    BottomCommentAddFeild(
+                      proReadInteraction: proReadInteraction,
+                      commentController: commentController,
+                      postID: postID,
+                      comments: proReadInteraction
+                              .getComments?.comments?.reversed
+                              .toList() ??
+                          [],
+                      setState: (fn) {
+                        // fetchComments();
+                      },
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ),
+  );
 }
 
 class BottomCommentAddFeild extends StatelessWidget {
@@ -231,7 +269,7 @@ class BottomCommentAddFeild extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: commentController,
-              autofocus: true,
+              // autofocus: true,
               decoration: InputDecoration(
                 prefixIcon: const Icon(CupertinoIcons.smiley),
                 hintText: 'Write a comment...',
@@ -250,27 +288,47 @@ class BottomCommentAddFeild extends StatelessWidget {
           GradientCircleAvathar(
             onTap: () async {
               if (commentController.text.isNotEmpty) {
-                await proReadInteraction.addComment(
-                  postId: postID,
-                  comment: commentController.text,
-                  context: context,
+                final text = commentController.text;
+
+                // Optimistically add the comment to the provider's list
+                final userID =
+                    await AppUtils.getCurrentUserDetails(isUserId: true);
+                final userName =
+                    await AppUtils.getCurrentUserDetails(isUserName: true);
+                final profilePicUrl =
+                    await AppUtils.getCurrentUserDetails(isProfilePicurl: true);
+                Comment newComment = Comment(
+                  content: text,
+                  createdAt: DateTime.now().toString(),
+                  userId: userID,
+                  profilePicUrl: profilePicUrl,
+                  username: userName,
                 );
-                commentController.clear();
-                // Fetch updated comments and update the UI
-                proReadInteraction
-                    .getComment(context: context, postId: postID)
-                    .then((_) {
-                  setState(() {
-                    comments.clear();
-                    comments.addAll(proReadInteraction
-                            .getComments?.comments?.reversed
-                            .toList() ??
-                        []);
-                    context
-                        .read<HomefeedController>()
-                        .getAllPost(context: context);
-                  });
+
+                setState(() {
+                  // Insert at the start of the provider's list if available
+                  if (proReadInteraction.getComments?.comments != null) {
+                    proReadInteraction.getComments!.comments!
+                        .insert(0, newComment);
+                  }
                 });
+
+                await proReadInteraction
+                    .addComment(
+                  postId: postID,
+                  comment: text,
+                  context: context,
+                )
+                    .then(
+                  (value) {
+                    commentController.clear();
+                  },
+                );
+
+                // Optionally, refresh the comments from server after posting
+                // await proReadInteraction.getComment(context: context, postId: postID);
+
+                context.read<HomefeedController>().getAllPost(context: context);
               }
             },
             radius: 30,
