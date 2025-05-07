@@ -128,6 +128,7 @@ class _MyAppState extends State<MyApp> {
             create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
+        ChangeNotifierProvider(create: (context) => StoryEditController()),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
