@@ -134,32 +134,31 @@ class _ShortsScreenState extends State<ShortsScreen>
                   child: TopBar(reel: reel),
                 ),
                 Positioned(
-                  bottom: 20,
+                  bottom: 60,
                   left: 10,
                   right: 10,
                   child: BottomCaption(reel: reel),
                 ),
                 Positioned(
-                    right: 10,
-                    bottom: 10,
-                    child: Column(
+                    right: 0,
+                    left: 5,
+                    bottom: 0,
+                    child: Row(
                       spacing: 9,
                       children: [
-                        Column(
-                          children: [
-                            PostLikeStyles(
-                                iconColor: Colors.white,
-                                horizontalDirection: false,
-                                postId: reel?.postId ?? '',
-                                likeCount: reel?.likescount.toString() ?? '0',
-                                isLiked: reel?.isLiked ?? false,
-                                callBackFunction: () {
-                                  // context
-                                  //     .read<ShortsController>()
-                                  //     .getReels(context: context);
-                                }),
-                          ],
-                        ),
+                        PostLikeStyles(
+                            spaceing: 9,
+                            iconColor: Colors.white,
+                            horizontalDirection: true,
+                            textColor: Colors.white,
+                            postId: reel?.postId ?? '',
+                            likeCount: reel?.likescount.toString() ?? '0',
+                            isLiked: reel?.isLiked ?? false,
+                            callBackFunction: () {
+                              // context
+                              //     .read<ShortsController>()
+                              //     .getReels(context: context);
+                            }),
                         IconButton(
                             onPressed: () {
                               final comments = proReadInteraction
@@ -176,14 +175,23 @@ class _ShortsScreenState extends State<ShortsScreen>
                               HugeIcons.strokeRoundedMessage01,
                               color: Colors.white,
                             )),
-                        Icon(
-                          size: 28,
-                          color: Colors.white,
-                          proWatchVideo.volume_mute
-                              ? Icons.volume_up_rounded
-                              : Icons.volume_off,
-                        ),
                       ],
+                    )),
+                Positioned(
+                    bottom: 0,
+                    right: 10,
+                    child: IconButton(
+                      onPressed: () {
+                        proReadVideo.volumeButtonClick(controller!);
+                        proReadVideo.notifyListeners();
+                      },
+                      icon: Icon(
+                        size: 28,
+                        color: Colors.white,
+                        proWatchVideo.volume_mute
+                            ? Icons.volume_up_rounded
+                            : Icons.volume_off,
+                      ),
                     ))
               ],
             );

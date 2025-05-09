@@ -146,6 +146,7 @@ class CollegeProfileAppbar extends StatelessWidget {
                             AppRoutes.push(
                                 context,
                                 EditProfileScreen(
+                                  isCollege: user?.isCollege ?? false,
                                   bio: user?.bio ?? "",
                                   number: user?.phone ?? '',
                                   url: user?.profilePicUrl ?? '',

@@ -39,8 +39,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<NotificationController>();
     final proRead = context.read<NotificationController>();
-    final notifications =
-        proWatch.getNotificationModel?.response?.toList().reversed.toList();
+    final notifications = proWatch.notifications.reversed.toList();
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -92,7 +91,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               AppRoutes.push(
                                   context,
                                   SinglepostScreen(
-                                    userID: notification?.userId.toString()??'',
+                                      userID:
+                                          notification?.userId.toString() ?? '',
                                       postID: notification?.postId.toString() ??
                                           ''));
                             },

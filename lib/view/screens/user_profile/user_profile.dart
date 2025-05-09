@@ -361,7 +361,7 @@ class _UserProfileState extends State<UserProfile>
                                   ),
                                   Positioned(
                                     right: 5,
-                                    top: 40,
+                                    top: 0,
                                     child: Row(
                                       children: [
                                         IconButton(

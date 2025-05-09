@@ -13,7 +13,6 @@ import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/club_screen.dart';
@@ -431,7 +430,7 @@ class CurrenUserCollegeProfileScreenState
                   },
                 )),
             Center(
-              child: Text("Shopping items will be displayed here",
+              child: Text("This feature is not available yet",
                   style: TextStyle(fontSize: 16)),
             ),
           ],

@@ -150,15 +150,36 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
                           child: VideoPlayer(_videoController!),
                         )
                       : CircularProgressIndicator())
-                  : Image.network(
-                      url,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                      height: double.infinity,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Center(child: CircularProgressIndicator());
-                      },
+                  : Stack(
+                      children: [
+                        Image.network(
+                          url,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          height: double.infinity,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return Center(child: CircularProgressIndicator());
+                          },
+                        ),
+                        Positioned(
+                            bottom: 20,
+                            right: 0,
+                            left: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.remove_red_eye_outlined,
+                                    color: Colors.white),
+                                SizedBox(width: 5),
+                                Text(
+                                  story.viewers ?? '0',
+                                  style: StringStyle.normalTextBold(
+                                      size: 16, color: Colors.white),
+                                ),
+                              ],
+                            ))
+                      ],
                     ),
             ),
             Positioned(

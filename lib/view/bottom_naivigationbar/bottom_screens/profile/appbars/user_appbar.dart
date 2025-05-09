@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
-import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
@@ -11,7 +10,6 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/current_user_profile_screen.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -106,6 +104,7 @@ class UserProfileAppbar extends StatelessWidget {
                                         AppRoutes.push(
                                           context,
                                           EditProfileScreen(
+                                            isCollege: user?.isCollege ?? false,
                                             username: user?.userName ?? '',
                                             bio: 'bio',
                                             number: user?.phone ?? 'No Number',
