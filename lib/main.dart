@@ -124,7 +124,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CollegeController()),
         ChangeNotifierProvider(create: (context) => StoryController()),
         ChangeNotifierProvider(create: (context) => DropdownController()),
-        ChangeNotifierProvider(create: (context) => ConnectivityCheckController()),
+        ChangeNotifierProvider(
+            create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => StoryEditController()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),

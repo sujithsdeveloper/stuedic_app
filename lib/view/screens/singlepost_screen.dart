@@ -172,7 +172,6 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 height: 5,
               ),
               SizedBox(
-                  height: 450,
                   width: double.infinity,
                   child: proWatch.isLoading
                       ? ShimmersItems.postShimmer()

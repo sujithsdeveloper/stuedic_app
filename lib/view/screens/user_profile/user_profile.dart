@@ -25,6 +25,7 @@ import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
+import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
 
@@ -234,25 +235,30 @@ class _UserProfileState extends State<UserProfile>
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Details',
-                                                style:
-                                                    StringStyle.normalTextBold(
-                                                        size: 16),
-                                              ),
+                                        Theme(
+                                          data: Theme.of(context).copyWith(
+                                              splashColor: Colors.transparent,
+                                              dividerColor: Colors.transparent),
+                                          child: ExpansionTile(
+                                            expandedCrossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            tilePadding: EdgeInsets.zero,
+                                            childrenPadding: EdgeInsets.zero,
+                                            expandedAlignment:
+                                                Alignment.topLeft,
+                                            title: Text(
+                                              'Details',
+                                              style: StringStyle.normalTextBold(
+                                                  size: 16),
                                             ),
-                                            DetailsItem(
+                                            children: [
+                                              DetailsItem(
                                                 title: 'Address',
                                                 subtitle: lorum,
                                                 iconData:
-                                                    CupertinoIcons.location),
-                                            DetailsItem(
+                                                    CupertinoIcons.location,
+                                              ),
+                                              DetailsItem(
                                                 onIconTap: () {
                                                   if (user?.email != null) {
                                                     EasyLauncher.email(
@@ -260,40 +266,42 @@ class _UserProfileState extends State<UserProfile>
                                                             user?.email ?? '');
                                                   } else {
                                                     AppUtils.showToast(
-                                                      msg: 'Email not provided',
-                                                    );
+                                                        msg:
+                                                            'Email not provided');
                                                   }
                                                 },
                                                 title: 'Email',
                                                 subtitle: user?.email ??
                                                     'Not Provided',
                                                 iconData:
-                                                    CupertinoIcons.envelope),
-                                            DetailsItem(
+                                                    CupertinoIcons.envelope,
+                                              ),
+                                              DetailsItem(
                                                 onIconTap: () {
-                                                  if (user?.email != null) {
+                                                  if (user?.phone != null) {
                                                     EasyLauncher.call(
                                                         number:
                                                             user?.phone ?? '');
                                                   } else {
                                                     AppUtils.showToast(
-                                                      msg:
-                                                          'Phone number not provided',
-                                                    );
+                                                        msg:
+                                                            'Phone number not provided');
                                                   }
                                                 },
                                                 title: 'Phone Number',
                                                 subtitle: user?.phone ??
                                                     'Not Provided',
-                                                iconData: HugeIcons
-                                                    .strokeRoundedCall),
-                                            DetailsItem(
+                                                iconData:
+                                                    HugeIcons.strokeRoundedCall,
+                                              ),
+                                              DetailsItem(
                                                 title: 'Affiliation',
                                                 subtitle: "Dummy University",
-                                                iconData:
-                                                    Icons.school_outlined),
-                                          ],
-                                        ),
+                                                iconData: Icons.school_outlined,
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -549,15 +557,26 @@ class _UserProfileState extends State<UserProfile>
                                         mainAxisSpacing: 4,
                                         crossAxisSpacing: 4),
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffF5FFBB),
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                photoGrid?[index]
-                                                        .postContentUrl ??
-                                                    ''))),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      AppRoutes.push(
+                                          context,
+                                          SinglepostScreen(
+                                            postID:
+                                                photoGrid?[index].postId ?? '',
+                                            userID: user?.userId ?? '',
+                                          ));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffF5FFBB),
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  photoGrid?[index]
+                                                          .postContentUrl ??
+                                                      ''))),
+                                    ),
                                   );
                                 },
                               );

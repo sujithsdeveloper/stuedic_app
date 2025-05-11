@@ -237,54 +237,62 @@ class CurrenUserCollegeProfileScreenState
                           SizedBox(
                             height: 20,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Details',
-                                  style: StringStyle.normalTextBold(size: 16),
-                                ),
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                                splashColor: Colors.transparent,
+                                dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              tilePadding: EdgeInsets.zero,
+                              childrenPadding: EdgeInsets.zero,
+                              expandedAlignment: Alignment.topLeft,
+                              title: Text(
+                                'Details',
+                                style: StringStyle.normalTextBold(size: 16),
                               ),
-                              DetailsItem(
+                              children: [
+                                DetailsItem(
                                   title: 'Address',
                                   subtitle: lorum,
-                                  iconData: CupertinoIcons.location),
-                              DetailsItem(
+                                  iconData: CupertinoIcons.location,
+                                ),
+                                DetailsItem(
                                   onIconTap: () {
                                     if (user?.email != null) {
                                       EasyLauncher.email(
                                           email: user?.email ?? '');
                                     } else {
                                       AppUtils.showToast(
-                                        msg: 'Email not provided',
-                                      );
+                                          msg: 'Email not provided');
                                     }
                                   },
                                   title: 'Email',
                                   subtitle: user?.email ?? 'Not Provided',
-                                  iconData: CupertinoIcons.envelope),
-                              DetailsItem(
+                                  iconData: CupertinoIcons.envelope,
+                                ),
+                                DetailsItem(
                                   onIconTap: () {
-                                    if (user?.email != null) {
+                                    if (user?.phone != null) {
                                       EasyLauncher.call(
                                           number: user?.phone ?? '');
                                     } else {
                                       AppUtils.showToast(
-                                        msg: 'Phone number not provided',
-                                      );
+                                          msg: 'Phone number not provided');
                                     }
                                   },
                                   title: 'Phone Number',
                                   subtitle: user?.phone ?? 'Not Provided',
-                                  iconData: HugeIcons.strokeRoundedCall),
-                              DetailsItem(
+                                  iconData: HugeIcons.strokeRoundedCall,
+                                ),
+                                DetailsItem(
                                   title: 'Affiliation',
                                   subtitle: "Dummy University",
-                                  iconData: Icons.school_outlined),
-                            ],
-                          ),
+                                  iconData: Icons.school_outlined,
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
