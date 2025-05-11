@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
 import 'package:stuedic_app/controller/like_controller/like_controller.dart';
 import 'package:stuedic_app/elements/postCard.dart';
 import 'package:stuedic_app/elements/story_section.dart';
@@ -142,22 +144,27 @@ class _HomeScreenState extends State<HomeScreen>
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 8),
-                                child: PostCard(
-                                  sharableLink: item.shareableLink ?? '',
-                                  isBookmarked: item.isBookmarked ?? false,
-                                  likeCount: item.likescount.toString() ?? '0',
-                                  postType: item.postType ?? '',
-                                  isLiked: item.isLiked ?? false,
-                                  commentCount:
-                                      item.commentsCount.toString() ?? '0',
-                                  index: index,
-                                  time: time,
-                                  userId: item.userId ?? '',
-                                  mediaUrl: item.postContentUrl ?? '',
-                                  name: item.username ?? '',
-                                  profileUrl: item.profilePicUrl ?? '',
-                                  caption: item.postDescription ?? '',
-                                  postId: item.postId ?? '',
+                                child: BlocProvider<PostLikeBloc>(
+                                  create: (context) => PostLikeBloc(
+                                      initialCount: item.likescount ?? -5,
+                                      initialbool: item.isLiked ?? false),
+                                  child: PostCard(
+                                    isBookmarked: item.isBookmarked ?? false,
+                                    likeCount:
+                                        item.likescount.toString() ?? '0',
+                                    postType: item.postType ?? '',
+                                    isLiked: item.isLiked ?? false,
+                                    commentCount:
+                                        item.commentsCount.toString() ?? '0',
+                                    index: index,
+                                    time: time,
+                                    userId: item.userId ?? '',
+                                    mediaUrl: item.postContentUrl ?? '',
+                                    name: item.username ?? '',
+                                    profileUrl: item.profilePicUrl ?? '',
+                                    caption: item.postDescription ?? '',
+                                    postId: item.postId ?? '',
+                                  ),
                                 ),
                               );
                             },

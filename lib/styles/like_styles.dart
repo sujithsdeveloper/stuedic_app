@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_likr_state.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -63,21 +66,19 @@ class _PostLikeStylesState extends State<PostLikeStyles>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PostInteractionController>(
-      builder: (context, postInteraction, child) {
-        // postInteraction.isLiked = widget.isLiked;
-        // postInteraction.countLike = int.parse(widget.likeCount);
+    return BlocBuilder<PostLikeBloc, PostLikrState>(
+      builder: (context, state) {
         return widget.horizontalDirection
             ? Row(
                 spacing: widget.spaceing ?? 0,
                 children: [
-                  likeIcon(postInteraction, context),
+                  likeIcon(context, blocLikeBool: state.likebool),
                   Visibility(
                     visible: widget.showCount,
                     child: Text(
-                      postInteraction.countLike.toString(),
-                      style: StringStyle.smallText(
-                          isBold: true, color: widget.textColor),
+                      state.count.toString(),
+                      // postInteraction.countLike.toString(),
+                      style: StringStyle.smallText(isBold: true),
                     ),
                   ),
                 ],
@@ -85,11 +86,11 @@ class _PostLikeStylesState extends State<PostLikeStyles>
             : Column(
                 spacing: widget.spaceing ?? 0,
                 children: [
-                  likeIcon(postInteraction, context),
+                  likeIcon(context, blocLikeBool: state.likebool),
                   Visibility(
                     visible: widget.showCount,
                     child: Text(
-                      AppUtils.formatCounts(postInteraction.countLike ?? 0),
+                      AppUtils.formatCounts(state.count),
                       style: StringStyle.smallText(
                           isBold: true, color: widget.textColor),
                     ),
@@ -100,8 +101,7 @@ class _PostLikeStylesState extends State<PostLikeStyles>
     );
   }
 
-  GestureDetector likeIcon(
-      PostInteractionController postInteraction, BuildContext context) {
+  GestureDetector likeIcon(BuildContext context, {required bool blocLikeBool}) {
     return GestureDetector(
       onTap: () async {
         await animationController.forward().then(
@@ -110,12 +110,6 @@ class _PostLikeStylesState extends State<PostLikeStyles>
           },
         );
 
-        postInteraction.likebool(
-          likebool: postInteraction.isLiked ?? widget.isLiked,
-          likeCount: postInteraction.countLike ?? int.parse(widget.likeCount),
-          postId: widget.postId,
-          context: context,
-        );
         widget.callBackFunction();
       },
       child: AnimatedBuilder(
@@ -124,12 +118,10 @@ class _PostLikeStylesState extends State<PostLikeStyles>
           return Transform.scale(
             scale: scaleAnimation.value,
             child: Icon(
-              postInteraction.isLiked == true
+              blocLikeBool == true
                   ? Icons.favorite
                   : Icons.favorite_border_outlined,
-              color: postInteraction.isLiked == true
-                  ? Colors.red
-                  : widget.iconColor,
+              color: blocLikeBool == true ? Colors.red : widget.iconColor,
               size: 28,
             ),
           );

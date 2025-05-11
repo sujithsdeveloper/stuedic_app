@@ -1,11 +1,14 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_event.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
@@ -62,13 +65,17 @@ class _PostCardState extends State<PostCard>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController animationController;
   late Animation<double> scaleAnimation;
+  bool postLlike = false;
+  int postCount = 0;
 
   @override
   void initState() {
     super.initState();
     final interaction = context.read<PostInteractionController>();
-    interaction.isLiked = widget.isLiked;
-    interaction.countLike = int.parse(widget.likeCount);
+    // interaction.isLiked = widget.isLiked;
+    // interaction.countLike = int.parse(widget.likeCount);
+    postLlike = widget.isLiked;
+    postCount = int.parse(widget.likeCount);
     animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 150),
@@ -90,10 +97,7 @@ class _PostCardState extends State<PostCard>
   Widget build(BuildContext context) {
     super.build(context); // Ensure state retention
     final commentController = TextEditingController();
-    // final proRead = context.read<AppContoller>();
-    // final proWatch = context.watch<AppContoller>();
-    // final proWatchApi = context.watch<CrudOperationController>();
-    // final proReadApi = context.read<CrudOperationController>();
+
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Container(
@@ -103,7 +107,7 @@ class _PostCardState extends State<PostCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-///////////////////Pots header////////////////////////////Post header/////////////////////////////////////////////////////////
+            ///////////////////Pots header////////////////////////////Post header/////////////////////////////////////////////////////////
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -176,7 +180,7 @@ class _PostCardState extends State<PostCard>
               ),
             ),
             SizedBox(height: 10),
-/////////////////Post media////////////////////////////Post media/////////////////////////////////////////////////////////
+            /////////////////Post media////////////////////////////Post media/////////////////////////////////////////////////////////
             GestureDetector(
               onDoubleTap: () async {
                 // proRead.toggleLikeVisible();
@@ -184,13 +188,16 @@ class _PostCardState extends State<PostCard>
                 await animationController.reverse();
                 final interaction = context.read<PostInteractionController>();
 
-                interaction.likebool(
-                  likebool: interaction.isLiked ?? widget.isLiked,
-                  likeCount:
-                      interaction.countLike ?? int.parse(widget.likeCount),
-                  postId: widget.postId,
-                  context: context,
-                );
+                BlocProvider.of<PostLikeBloc>(context).add(
+                    PostLikeEvent(postId: widget.postId, context: context));
+
+                // interaction.likebool(
+                //   likebool: interaction.isLiked ?? widget.isLiked,
+                //   likeCount:
+                //       interaction.countLike ?? int.parse(widget.likeCount),
+                //   postId: widget.postId,
+                //   context: context,
+                // );
 
                 context.read<HomefeedController>().getAllPost(context: context);
               },
@@ -253,7 +260,7 @@ class _PostCardState extends State<PostCard>
               child: Text(widget.caption, style: TextStyle(fontSize: 16)),
             ),
             SizedBox(height: 12),
-///////////////Post Bottom bar///////////////////////////Post bottom bar/////////////////////////////////////////////////////////
+            ///////////////Post Bottom bar///////////////////////////Post bottom bar/////////////////////////////////////////////////////////
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Row(
@@ -264,6 +271,18 @@ class _PostCardState extends State<PostCard>
                     likeCount: widget.likeCount,
                     isLiked: widget.isLiked,
                     callBackFunction: () {
+                      // final interaction =
+                      //     context.read<PostInteractionController>();
+
+                      BlocProvider.of<PostLikeBloc>(context).add(PostLikeEvent(
+                          postId: widget.postId, context: context));
+
+                      // interaction.likebool(
+                      //   likebool: interaction.isLiked,
+                      //   likeCount: interaction.countLike,
+                      //   postId: widget.postId,
+                      //   context: context,
+                      // );
                       // context
                       //     .read<HomefeedController>()
                       //     .getAllPost(context: context);
