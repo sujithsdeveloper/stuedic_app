@@ -21,6 +21,7 @@ class StringConstants {
   static const String Current_Theme = 'Current_Theme';
   static const String dark = 'dark';
   static const String light = 'light';
+  static const String UnknownUser = 'Unknown User';
 
 
   //Filter Names

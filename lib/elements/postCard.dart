@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
@@ -15,6 +16,7 @@ import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/like_styles.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,7 +36,8 @@ class PostCard extends StatefulWidget {
       required this.likeCount,
       required this.time,
       required this.commentCount,
-      required this.isBookmarked});
+      required this.isBookmarked,
+      required this.sharableLink});
   final String profileUrl;
   final String mediaUrl;
   final String caption;
@@ -49,6 +52,7 @@ class PostCard extends StatefulWidget {
   final String postType;
   final String time;
   final bool isBookmarked;
+  final String sharableLink;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -121,7 +125,9 @@ class _PostCardState extends State<PostCard>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.name,
+                              widget.name.isEmpty
+                                  ? StringConstants.UnknownUser
+                                  : widget.name,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -234,14 +240,7 @@ class _PostCardState extends State<PostCard>
                           ),
                         );
                       } else {
-                        return Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.grey,
-                          child: Center(
-                            child: Text('Invalid media type'),
-                          ),
-                        );
+                        return ErrorPost();
                       }
                     },
                   ),
@@ -263,7 +262,6 @@ class _PostCardState extends State<PostCard>
                     spaceing: 5,
                     postId: widget.postId,
                     likeCount: widget.likeCount,
-                    
                     isLiked: widget.isLiked,
                     callBackFunction: () {
                       // context
@@ -280,7 +278,7 @@ class _PostCardState extends State<PostCard>
                   GestureDetector(
                     onTap: () async {
                       log('post id: ${widget.postId}');
-    // final userId=await AppUtils.getUserId();
+                      // final userId=await AppUtils.getUserId();
 
                       // Open the bottom sheet immediately; comments will be fetched inside the sheet
                       commentBottomSheet(
@@ -308,8 +306,10 @@ class _PostCardState extends State<PostCard>
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () {
-                      shareBottomSheet(context);
+                    onPressed: () async {
+                      // shareBottomSheet(context);
+                      // Fix: Use Share.share instead of SharePlus.instance.share
+                      await Share.share(widget.sharableLink);
                     },
                     icon: Icon(
                       HugeIcons.strokeRoundedShare05,
@@ -338,6 +338,61 @@ class _PostCardState extends State<PostCard>
           ],
         ),
       ),
+    );
+  }
+}
+
+class ErrorPost extends StatelessWidget {
+  const ErrorPost({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 30,
+        ),
+        Icon(
+          Icons.error_outline,
+          color: Colors.red,
+          size: 50,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Oops!',
+          style: StringStyle.normalTextBold(size: 30),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Unable to display media',
+          style: StringStyle.normalText(size: 20),
+        ),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text(
+            'The media file could not be loaded because it\'s not a supported format on this device.',
+            textAlign: TextAlign.center,
+            style: StringStyle.normalText(size: 16).copyWith(
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Supported types: Image (JPG, PNG), Video (MP4,m3u8)',
+          style: StringStyle.normalText(size: 14).copyWith(
+            color: Colors.grey[500],
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+      ],
     );
   }
 }

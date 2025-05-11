@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
@@ -15,7 +17,7 @@ class HomefeedController extends ChangeNotifier {
           homeFeed = homeFeedFromJson(p0.body);
           isHomeFeedLoading = false;
           notifyListeners();
-          // log('home feed: ${p0.body}');
+          log('home feed: ${p0.body}');
         },
         onTokenExpired: () {
           isHomeFeedLoading = false;

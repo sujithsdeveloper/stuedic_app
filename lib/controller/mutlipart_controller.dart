@@ -27,8 +27,9 @@ class MutlipartController extends ChangeNotifier {
         errorSnackbar(label: 'File is empty', context: context);
         return;
       }
-      log('Uploading media...');
       isUploading = true;
+
+      log('Uploading media...isUploading: $isUploading');
       notifyListeners();
       String? token = await AppUtils.getToken();
       var request = http.MultipartRequest('POST', API);
@@ -40,6 +41,7 @@ class MutlipartController extends ChangeNotifier {
 
       if (streamedResponse.statusCode == 200) {
         isUploading = false;
+        log('isUploading: $isUploading');
         notifyListeners();
         var response = await http.Response.fromStream(streamedResponse);
         var decodedResponse = jsonDecode(response.body);

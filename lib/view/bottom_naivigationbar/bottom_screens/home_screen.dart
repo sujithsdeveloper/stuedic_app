@@ -143,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 8),
                                 child: PostCard(
+                                  sharableLink: item.shareableLink ?? '',
                                   isBookmarked: item.isBookmarked ?? false,
                                   likeCount: item.likescount.toString() ?? '0',
                                   postType: item.postType ?? '',

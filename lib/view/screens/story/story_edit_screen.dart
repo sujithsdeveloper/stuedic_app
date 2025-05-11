@@ -301,6 +301,9 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                         quarterTurns: 1,
                         child: IconButton(
                           onPressed: () async {
+                            final multipartController =
+                                Provider.of<MutlipartController>(context,
+                                    listen: false);
                             AppUtils.showToast(msg: 'Uploading story...');
                             log('Uploading story...');
                             if (proWatch.isTextFieldVisible) {
@@ -315,19 +318,36 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                                 videoPath: widget.file.path,
                                 overlays: proWatch.overlays,
                                 zoom: transformationController.value
-                                    .getMaxScaleOnAxis(), // or your zoom value
+                                    .getMaxScaleOnAxis(),
                                 colorFilter: proWatch.colorFilter,
                               );
-                              if (path != null) {
-                                log('Edited video saved at: $path');
-                                Provider.of<MutlipartController>(context,
-                                        listen: false)
-                                    .uploadMedia(
-                                  isVideo: true,
-                                  context: context,
-                                  filePath: path,
-                                  API: ApiUrls.uploadVideo,
-                                );
+                              log('exportEditedVideo returned path: $path');
+                              if (path == null) {
+                                AppUtils.showToast(
+                                    msg:
+                                        'Failed to export edited video. Please try again.');
+                                log('exportEditedVideo failed: returned null path');
+                                return;
+                              }
+                              log('Edited video saved at: $path');
+                              await Provider.of<MutlipartController>(context,
+                                      listen: false)
+                                  .uploadMedia(
+                                isVideo: true,
+                                context: context,
+                                filePath: path,
+                                API: ApiUrls.uploadVideo,
+                              );
+                              String? url = multipartController.videoUrl;
+                              if (url != null) {
+                                context.read<StoryController>().addStory(
+                                      url: url,
+                                      caption: widget.textController.text,
+                                      context: context,
+                                    );
+
+                                proWatch.overlays.clear();
+                                proWatch.selectedFilter = "none";
                               }
                             } else {
                               log('asset type is image');
@@ -336,9 +356,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                                 if (!(proWatchMediaUpload.isUploading) ||
                                     !(proWatchStory.isStoryUploading)) {
                                   log('Edited image saved at: $path');
-                                  final multipartController =
-                                      Provider.of<MutlipartController>(context,
-                                          listen: false);
+
                                   await multipartController.uploadMedia(
                                     context: context,
                                     filePath: path,
