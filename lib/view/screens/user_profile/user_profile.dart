@@ -239,73 +239,73 @@ class _UserProfileState extends State<UserProfile>
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      'Details',
-                                                      style: StringStyle
-                                                          .normalTextBold(
-                                                              size: 16),
-                                                    ),
-                                                  ),
-                                                  DetailsItem(
-                                                      title: 'Address',
-                                                      subtitle: lorum,
-                                                      iconData: CupertinoIcons
-                                                          .location),
-                                                  DetailsItem(
-                                                      onIconTap: () {
-                                                        if (user?.email !=
-                                                            null) {
-                                                          EasyLauncher.email(
-                                                              email:
-                                                                  user?.email ??
-                                                                      '');
-                                                        } else {
-                                                          AppUtils.showToast(
-                                                            msg:
-                                                                'Email not provided',
-                                                          );
-                                                        }
-                                                      },
-                                                      title: 'Email',
-                                                      subtitle: user?.email ??
-                                                          'Not Provided',
-                                                      iconData: CupertinoIcons
-                                                          .envelope),
-                                                  DetailsItem(
-                                                      onIconTap: () {
-                                                        if (user?.email !=
-                                                            null) {
-                                                          EasyLauncher.call(
-                                                              number:
-                                                                  user?.phone ??
-                                                                      '');
-                                                        } else {
-                                                          AppUtils.showToast(
-                                                            msg:
-                                                                'Phone number not provided',
-                                                          );
-                                                        }
-                                                      },
-                                                      title: 'Phone Number',
-                                                      subtitle: user?.phone ??
-                                                          'Not Provided',
-                                                      iconData: HugeIcons
-                                                          .strokeRoundedCall),
-                                                  DetailsItem(
-                                                      title: 'Affiliation',
-                                                      subtitle:
-                                                          "Dummy University",
-                                                      iconData: Icons
-                                                          .school_outlined),
-                                                ],
+                                               Theme(
+                                          data: Theme.of(context).copyWith(
+                                              splashColor: Colors.transparent,
+                                              dividerColor: Colors.transparent),
+                                          child: ExpansionTile(
+                                            expandedCrossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            tilePadding: EdgeInsets.zero,
+                                            childrenPadding: EdgeInsets.zero,
+                                            expandedAlignment:
+                                                Alignment.topLeft,
+                                            title: Text(
+                                              'Details',
+                                              style: StringStyle.normalTextBold(
+                                                  size: 16),
+                                            ),
+                                            children: [
+                                              DetailsItem(
+                                                title: 'Address',
+                                                subtitle: lorum,
+                                                iconData:
+                                                    CupertinoIcons.location,
                                               ),
+                                              DetailsItem(
+                                                onIconTap: () {
+                                                  if (user?.email != null) {
+                                                    EasyLauncher.email(
+                                                        email:
+                                                            user?.email ?? '');
+                                                  } else {
+                                                    AppUtils.showToast(
+                                                        msg:
+                                                            'Email not provided');
+                                                  }
+                                                },
+                                                title: 'Email',
+                                                subtitle: user?.email ??
+                                                    'Not Provided',
+                                                iconData:
+                                                    CupertinoIcons.envelope,
+                                              ),
+                                              DetailsItem(
+                                                onIconTap: () {
+                                                  if (user?.phone != null) {
+                                                    EasyLauncher.call(
+                                                        number:
+                                                            user?.phone ?? '');
+                                                  } else {
+                                                    AppUtils.showToast(
+                                                        msg:
+                                                            'Phone number not provided');
+                                                  }
+                                                },
+                                                title: 'Phone Number',
+                                                subtitle: user?.phone ??
+                                                    'Not Provided',
+                                                iconData:
+                                                    HugeIcons.strokeRoundedCall,
+                                              ),
+                                              DetailsItem(
+                                                title: 'Affiliation',
+                                                subtitle: "Dummy University",
+                                                iconData: Icons.school_outlined,
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                             ],
                                           ),
                                         ),

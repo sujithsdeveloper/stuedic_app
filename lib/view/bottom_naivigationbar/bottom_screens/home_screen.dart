@@ -149,9 +149,10 @@ class _HomeScreenState extends State<HomeScreen>
                                       initialCount: item.likescount ?? -5,
                                       initialbool: item.isLiked ?? false),
                                   child: PostCard(
+
                                     isBookmarked: item.isBookmarked ?? false,
-                                    likeCount:
-                                        item.likescount.toString() ?? '0',
+                                    likeCount:item.likescount.toString() ?? '0',
+                                      sharableLink: item.shareableLink ?? '',
                                     postType: item.postType ?? '',
                                     isLiked: item.isLiked ?? false,
                                     commentCount:
