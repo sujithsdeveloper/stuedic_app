@@ -13,6 +13,7 @@ import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/connection_failed_screen.dart';
 
 class AppUtils {
+////////////////////////////Token Related Functions//////////////////////////////////////////////////////////////////////////////////////
   static Future<String> getToken({bool isRefreshToken = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(isRefreshToken
@@ -45,17 +46,58 @@ class AppUtils {
         msg: msg);
   }
 
-  static Future<void> saveUserId({String? userID}) async {
-    // log('saveUserId function called with userID: $userID');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(StringConstants.userId, userID ?? '');
-    // log('User ID saved: ${prefs.getString(StringConstants.userId)}');
+  /////////////////////////User Related Functions//////////////////////////////////////////////////////////////////////////////////////
+  // static Future<void> saveUserId({String? userID}) async {
+  //   // log('saveUserId function called with userID: $userID');
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString(StringConstants.userId, userID ?? '');
+  //   // log('User ID saved: ${prefs.getString(StringConstants.userId)}');
+  // }
+
+  static Future<void> saveCurrentUserDetails({
+    bool isUserId = false,
+    bool isUserName = false,
+    bool isProfilePicurl = false,
+    String? userId,
+    String? userName,
+    String? profilePicUrl,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (isUserId) {
+      await prefs.setString(StringConstants.userId, userId ?? '');
+    }
+    if (isUserName) {
+      await prefs.setString(StringConstants.userName, userName ?? '');
+    }
+    if (isProfilePicurl) {
+      await prefs.setString(StringConstants.profilePicUrl, profilePicUrl ?? '');
+    }
   }
 
   static Future<String> getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(StringConstants.userId) ?? "";
     return token;
+  }
+
+  static Future<String> getCurrentUserDetails({
+    bool isUserId = false,
+    bool isUserName = false,
+    bool isProfilePicurl = false,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final profileUrl = prefs.getString(StringConstants.profilePicUrl);
+
+    if (isUserId) {
+      return getUserId();
+    } else if (isUserName) {
+      return getUserName();
+    } else if (isProfilePicurl) {
+      return profileUrl ?? '';
+    } else {
+      return prefs.getString(StringConstants.userId) ?? '';
+    }
   }
 
   static Future<bool> checkUserIdForCurrentUser(
@@ -80,56 +122,6 @@ class AppUtils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isStudent = prefs.getBool(StringConstants.refreshToken) ?? false;
     return isStudent;
-  }
-
-  static ImageProvider getProfile({String? url}) {
-    if (url == null || url.isEmpty) {
-      return AssetImage(ImageConstants.avathar);
-    } else {
-      return CachedNetworkImageProvider(
-        url
-      );
-    }
-  }
-
-  static ImageProvider getProfileLocal({File? image}) {
-    if (image == null) {
-      return AssetImage(ImageConstants.avathar);
-    } else {
-      return FileImage(image);
-    }
-  }
-
-  static String formatCounts(int count) {
-    if (count >= 1000000) {
-      return (count % 1000000 == 0)
-          ? '${count ~/ 1000000}M'
-          : '${(count / 1000000).toStringAsFixed(1)}M';
-    } else if (count >= 1000) {
-      return (count % 1000 == 0)
-          ? '${count ~/ 1000}K'
-          : '${(count / 1000).toStringAsFixed(1)}K';
-    } else {
-      return count.toString();
-    }
-  }
-
-  static Future<void> saveCredentials(
-      {required String email, required String password}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(StringConstants.email, email);
-    prefs.setString(StringConstants.password, password);
-  }
-
-  static Future<String?> getCredentials({required bool getMail}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? email = prefs.getString(StringConstants.email);
-    String? password = prefs.getString(StringConstants.password);
-    if (getMail) {
-      return email;
-    } else {
-      return password;
-    }
   }
 
   static Future<void> saveRole(String role) async {
@@ -169,12 +161,35 @@ class AppUtils {
     }
   }
 
-  static Future<void> deleteCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(StringConstants.email);
-    prefs.remove(StringConstants.password);
-    prefs.remove(StringConstants.role);
-    prefs.remove(StringConstants.userName);
+  static ImageProvider getProfile({String? url}) {
+    if (url == null || url.isEmpty) {
+      return AssetImage(ImageConstants.avathar);
+    } else {
+      return CachedNetworkImageProvider(url);
+    }
+  }
+
+  static ImageProvider getProfileLocal({File? image}) {
+    if (image == null) {
+      return AssetImage(ImageConstants.avathar);
+    } else {
+      return FileImage(image);
+    }
+  }
+
+///////////////////////////////Math Related Functions//////////////////////////////////////////////////////////////////////////////////////
+  static String formatCounts(int count) {
+    if (count >= 1000000) {
+      return (count % 1000000 == 0)
+          ? '${count ~/ 1000000}M'
+          : '${(count / 1000000).toStringAsFixed(1)}M';
+    } else if (count >= 1000) {
+      return (count % 1000 == 0)
+          ? '${count ~/ 1000}K'
+          : '${(count / 1000).toStringAsFixed(1)}K';
+    } else {
+      return count.toString();
+    }
   }
 
   static String timeAgo(String time) {
@@ -202,6 +217,34 @@ class AppUtils {
     }
   }
 
+  ////////////////////////local storage related functions//////////////////////////////////////////////////////////////////////////////////////
+  static Future<void> saveCredentials(
+      {required String email, required String password}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(StringConstants.email, email);
+    prefs.setString(StringConstants.password, password);
+  }
+
+  static Future<String?> getCredentials({required bool getMail}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString(StringConstants.email);
+    String? password = prefs.getString(StringConstants.password);
+    if (getMail) {
+      return email;
+    } else {
+      return password;
+    }
+  }
+
+  static Future<void> deleteCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(StringConstants.email);
+    prefs.remove(StringConstants.password);
+    prefs.remove(StringConstants.role);
+    prefs.remove(StringConstants.userName);
+  }
+
+///////////////////////////////////////Theme Related Functions//////////////////////////////////////////////////////////////////////////////////////
   static bool isDarkTheme(BuildContext context) {
     final theme = Theme.of(context).brightness == Brightness.dark;
     return theme;
@@ -225,6 +268,7 @@ class AppUtils {
     }
   }
 
+/////////////////////App Related Functions//////////////////////////////////////////////////////////////////////////////////////
   static Future<bool> checkConnectivity(BuildContext context) async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {

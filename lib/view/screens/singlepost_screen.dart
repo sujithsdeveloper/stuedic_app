@@ -13,6 +13,7 @@ import 'package:stuedic_app/players/network_video_player.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
+import 'package:stuedic_app/styles/like_styles.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
@@ -84,10 +85,10 @@ class _SinglepostScreenState extends State<SinglepostScreen>
     return WillPopScope(
       onWillPop: () async {
         proWatchInteraction.getComments = null;
-        if (prowatch.networkVideoController!.value.isPlaying) {
-          prowatch.networkVideoController!.pause();
-          return true;
-        }
+        // if (prowatch.networkVideoController!.value.isPlaying) {
+        //   prowatch.networkVideoController!.pause();
+        //   return true;
+        // }
         return true;
       },
       child: Scaffold(
@@ -214,56 +215,21 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Row(
                   children: [
-                    Consumer<PostInteractionController>(
-                      builder: (context, postInteraction, child) {
-                        return GestureDetector(
-                          onTap: () {
-                            postInteraction.toggleLike(
-                              isLiked: post?.isLiked ?? false,
-                              postId: widget.postID,
-                              context: context,
-                            );
-
-                            animationController.forward().then(
-                              (_) {
-                                animationController.reverse();
-                              },
-                            );
-                            Future.delayed(Duration(milliseconds: 50)).then(
-                              (value) {
-                                context
-                                    .read<GetSinglepostController>()
-                                    .getSinglePost(
-                                        context: context,
-                                        postId: widget.postID);
-                              },
-                            );
-                          },
-                          child: AnimatedBuilder(
-                            animation: animationController,
-                            builder: (context, child) {
-                              return Transform.scale(
-                                scale: animationController
-                                    .value, // Fixed missing scale value
-                                child: Icon(
-                                  post?.isLiked ?? false
-                                      ? Icons.favorite
-                                      : Icons.favorite_border_outlined,
-                                  color: post?.isLiked ?? false
-                                      ? Colors.red
-                                      : null,
-                                  size: 25,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                    PostLikeStyles(
+                      spaceing: 5,
+                      postId: post?.postId ?? '',
+                      likeCount: post?.likescount.toString() ?? '0',
+                      isLiked: post?.isLiked ?? false,
+                      callBackFunction: () {
+                        // context.read<GetSinglepostController>().getSinglePost(
+                        //     context: context, postId: post?.postId ?? '');
                       },
                     ),
-                    SizedBox(width: 5),
-                    Text(post?.likescount.toString() ?? '0',
-                        style: StringStyle.smallText(isBold: true)),
-                    Text(' Likes', style: StringStyle.smallText()),
+                    SizedBox(width: 8),
+                    Text(
+                      'Likes',
+                      style: StringStyle.smallText(),
+                    ),
                     SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {},

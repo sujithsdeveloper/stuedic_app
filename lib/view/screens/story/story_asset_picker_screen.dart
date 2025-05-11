@@ -64,7 +64,6 @@ class _AssetPickerPageState extends State<AssetPickerPage> {
             child: SafeArea(
               child: Scaffold(
                 backgroundColor: Colors.transparent,
-    
                 body: storyPicker.selectedAssets.isEmpty
                     ? const Center(child: Text("No media selected"))
                     : _loadedFile != null

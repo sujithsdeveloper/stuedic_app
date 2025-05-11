@@ -5,21 +5,15 @@ import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 class VideoGrid extends StatelessWidget {
   const VideoGrid(
       {super.key,
-      required this.scrollController,
-      required this.gridViewScrollEnabled});
-  final ScrollController scrollController;
+  });
 // final List<>
-  final bool gridViewScrollEnabled;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GridView.builder(
-        controller: scrollController,
-        physics: gridViewScrollEnabled
-            ? const AlwaysScrollableScrollPhysics()
-            : const NeverScrollableScrollPhysics(),
+      
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 9 / 16,
             crossAxisCount: 3,

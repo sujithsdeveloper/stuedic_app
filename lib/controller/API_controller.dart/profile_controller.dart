@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/APIs/api_services.dart';
@@ -15,6 +17,63 @@ import 'package:http/http.dart' as http;
 import 'package:stuedic_app/utils/refreshTocken.dart';
 
 class ProfileController extends ChangeNotifier {
+  bool? isFollowed;
+
+  Future<void> toggleUser({
+    required bool followBool,
+    required String userId,
+    required BuildContext context,
+  }) async {
+    log(followBool.toString(), name: '\x1B[32m Before Condition');
+    if (followBool) {
+      isFollowed = false;
+      await unfollowUser(userId: userId, context: context);
+      notifyListeners();
+      log(followBool.toString(), name: '\x1B[32m after Condition');
+    } else {
+      isFollowed = true;
+      log(followBool.toString(), name: '\x1B[32m Before Condition else');
+
+      await followUser(userId: userId, context: context);
+      notifyListeners();
+    }
+  }
+
+  Future<void> followUser(
+      {required String userId, required BuildContext context}) async {
+    await ApiMethods.get(
+      url: Uri.parse(
+          '${ApiUrls.baseUrl}api/v1/Profile/followUser?userId=$userId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        // context
+        //     .read<ProfileController>()
+        //     .getUserByUserID(userId: userId, context: context);
+        notifyListeners();
+      },
+      onTokenExpired: () => followUser(userId: userId, context: context),
+      context: context,
+    );
+  }
+
+  Future<void> unfollowUser(
+      {required String userId, required BuildContext context}) async {
+    await ApiMethods.get(
+      url: Uri.parse(
+          '${ApiUrls.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
+      onSucces: (p0) {
+        Logger().f(p0.body);
+        // context
+        //     .read<ProfileController>()
+        //     .getUserByUserID(userId: userId, context: context);
+
+        notifyListeners();
+      },
+      onTokenExpired: () => unfollowUser(userId: userId, context: context),
+      context: context,
+    );
+  }
+
   UserCurrentDetailsModel? userCurrentDetails;
   Future<void> getCurrentUserData({required BuildContext context}) async {
     await ApiMethods.get(
@@ -23,7 +82,14 @@ class ProfileController extends ChangeNotifier {
       onSucces: (res) async {
         log("Current user response ${res.body}");
         userCurrentDetails = userCurrentDetailsModelFromJson(res.body);
-        AppUtils.saveUserId(userID: userCurrentDetails?.response?.userId ?? '');
+        AppUtils.saveCurrentUserDetails(
+            userId: userCurrentDetails?.response?.userId ?? '', isUserId: true);
+        AppUtils.saveCurrentUserDetails(
+            profilePicUrl: userCurrentDetails?.response?.profilePicUrl ?? '',
+            isProfilePicurl: true);
+        AppUtils.saveCurrentUserDetails(
+            userName: userCurrentDetails?.response?.userName ?? '',
+            isUserName: true);
 
         log(userCurrentDetails!.response!.followersCount.toString());
         notifyListeners();

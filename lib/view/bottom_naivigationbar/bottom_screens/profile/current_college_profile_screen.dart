@@ -170,37 +170,10 @@ class CurrenUserCollegeProfileScreenState
                         GradientButton(
                           outline: user?.isFollowed ?? false ? true : false,
                           onTap: () {
-                            if (user?.isFollowed ?? false) {
-                              context
-                                  .read<PostInteractionController>()
-                                  .unfollowUser(
-                                      context: context,
-                                      userId: user?.userId ?? '');
-                              Future.delayed(Duration(milliseconds: 300)).then(
-                                (value) {
-                                  context
-                                      .read<ProfileController>()
-                                      .getUserByUserID(
-                                          context: context,
-                                          userId: widget.userId ?? '');
-                                },
-                              );
-                            } else {
-                              context
-                                  .read<PostInteractionController>()
-                                  .followUser(
-                                      context: context,
-                                      userId: user?.userId ?? '');
-                              Future.delayed(Duration(milliseconds: 300)).then(
-                                (value) {
-                                  context
-                                      .read<ProfileController>()
-                                      .getUserByUserID(
-                                          context: context,
-                                          userId: widget?.userId ?? '');
-                                },
-                              );
-                            }
+                            context.read<ProfileController>().toggleUser(
+                                followBool: user?.isFollowed ?? false,
+                                userId: user?.userId ?? '',
+                                context: context);
                           },
                           height: 48,
                           width: 100,

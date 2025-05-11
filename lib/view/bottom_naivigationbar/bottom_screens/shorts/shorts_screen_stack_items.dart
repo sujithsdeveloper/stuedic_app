@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
@@ -28,6 +29,8 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userDataProviderWatch = context.watch<ProfileController>();
+
     return ListTile(
       leading: GestureDetector(
           onTap: () {
@@ -56,17 +59,10 @@ class TopBar extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              if (reel?.isFollowed ?? false) {
-                context
-                    .read<PostInteractionController>()
-                    .unfollowUser(userId: reel?.userId ?? '', context: context);
-                context.read<ShortsController>().getReels(context: context);
-              } else {
-                context
-                    .read<PostInteractionController>()
-                    .followUser(userId: reel?.userId ?? '', context: context);
-                context.read<ShortsController>().getReels(context: context);
-              }
+              context.read<ProfileController>().toggleUser(
+                  followBool: reel?.isFollowed ?? false,
+                  userId: reel?.userId ?? '',
+                  context: context);
             },
             child: Container(
               height: 28,
@@ -76,7 +72,10 @@ class TopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: Text(reel?.isFollowed ?? false ? 'unfollow' : 'Follow',
+                child: Text(
+                    userDataProviderWatch.isFollowed ?? false
+                        ? 'unfollow'
+                        : 'Follow',
                     style: TextStyle(color: Colors.white)),
               ),
             ),

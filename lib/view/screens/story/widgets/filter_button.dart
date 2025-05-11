@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/story/story_edit_controller.dart';
+import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/utils/data/app_db.dart';
 
 Widget FilterButtons(BuildContext context,
@@ -10,7 +11,7 @@ Widget FilterButtons(BuildContext context,
   final proRead = context.read<StoryEditController>();
   return SizedBox(
     height: 120,
-    width: MediaQuery.of(context).size.width, // Ensure enough width
+    width: context.screenWidth,
     child: ListView.separated(
       scrollDirection: Axis.horizontal,
       itemCount: AppDb.filterOptions.length,
@@ -19,13 +20,13 @@ Widget FilterButtons(BuildContext context,
         final filter = AppDb.filterOptions[index];
         final isSelected = proWatch.selectedFilter == filter.filterKey;
 
-        log('Loading asset: ${filter.assetPath}');
+        // log('Loading asset: ${filter.assetPath}');
         return GestureDetector(
           onTap: () {
             proRead.toggleFilter(
               filter: filter.filterKey,
             );
-            log('Selected filter: ${filter.filterKey}');
+            // log('Selected filter: ${filter.filterKey}');
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,

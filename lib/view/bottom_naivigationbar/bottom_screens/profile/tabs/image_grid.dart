@@ -1,20 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/model/user_current_detail_model.dart';
 import 'package:stuedic_app/model/currentuser_grid_model.dart';
+
 class ImageGrid extends StatelessWidget {
   const ImageGrid({
     super.key,
-    required this.scrollController,
-    required this.gridViewScrollEnabled,
     required this.photoGrid,
     required this.userId,
   });
 
-  final ScrollController scrollController;
-  final bool gridViewScrollEnabled;
   final List<Post>? photoGrid;
   final String? userId;
 
@@ -23,10 +19,6 @@ class ImageGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GridView.builder(
-        controller: scrollController,
-        physics: gridViewScrollEnabled
-            ? AlwaysScrollableScrollPhysics()
-            : NeverScrollableScrollPhysics(),
         itemCount: photoGrid?.length ?? 0,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 9 / 16,

@@ -1,12 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
-import 'package:stuedic_app/controller/app/app_contoller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_event.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
@@ -14,6 +15,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/sheets/postBottomSheet.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
+import 'package:stuedic_app/styles/like_styles.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
@@ -59,16 +61,20 @@ class _PostCardState extends State<PostCard>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController animationController;
   late Animation<double> scaleAnimation;
+  bool postLlike = false;
+  int postCount = 0;
 
   @override
   void initState() {
     super.initState();
     final interaction = context.read<PostInteractionController>();
-    interaction.isLiked = widget.isLiked;
-    interaction.countLike = int.parse(widget.likeCount);
+    // interaction.isLiked = widget.isLiked;
+    // interaction.countLike = int.parse(widget.likeCount);
+    postLlike = widget.isLiked;
+    postCount = int.parse(widget.likeCount);
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 250),
+      duration: Duration(milliseconds: 150),
     );
 
     scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
@@ -87,10 +93,7 @@ class _PostCardState extends State<PostCard>
   Widget build(BuildContext context) {
     super.build(context); // Ensure state retention
     final commentController = TextEditingController();
-    // final proRead = context.read<AppContoller>();
-    // final proWatch = context.watch<AppContoller>();
-    // final proWatchApi = context.watch<CrudOperationController>();
-    // final proReadApi = context.read<CrudOperationController>();
+
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Container(
@@ -100,6 +103,7 @@ class _PostCardState extends State<PostCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ///////////////////Pots header////////////////////////////Post header/////////////////////////////////////////////////////////
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -170,6 +174,7 @@ class _PostCardState extends State<PostCard>
               ),
             ),
             SizedBox(height: 10),
+            /////////////////Post media////////////////////////////Post media/////////////////////////////////////////////////////////
             GestureDetector(
               onDoubleTap: () async {
                 // proRead.toggleLikeVisible();
@@ -177,13 +182,16 @@ class _PostCardState extends State<PostCard>
                 await animationController.reverse();
                 final interaction = context.read<PostInteractionController>();
 
-                interaction.likebool(
-                  likebool: interaction.isLiked ?? widget.isLiked,
-                  likeCount:
-                      interaction.countLike ?? int.parse(widget.likeCount),
-                  postId: widget.postId,
-                  context: context,
-                );
+                BlocProvider.of<PostLikeBloc>(context).add(
+                    PostLikeEvent(postId: widget.postId, context: context));
+
+                // interaction.likebool(
+                //   likebool: interaction.isLiked ?? widget.isLiked,
+                //   likeCount:
+                //       interaction.countLike ?? int.parse(widget.likeCount),
+                //   postId: widget.postId,
+                //   context: context,
+                // );
 
                 context.read<HomefeedController>().getAllPost(context: context);
               },
@@ -253,121 +261,50 @@ class _PostCardState extends State<PostCard>
               child: Text(widget.caption, style: TextStyle(fontSize: 16)),
             ),
             SizedBox(height: 12),
+            ///////////////Post Bottom bar///////////////////////////Post bottom bar/////////////////////////////////////////////////////////
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Row(
                 children: [
-                  Consumer<PostInteractionController>(
-                    builder: (context, postInteraction, child) {
-                      // postInteraction.isLiked = widget.isLiked;
-                      // postInteraction.countLike = int.parse(widget.likeCount);
-                      return GestureDetector(
-                        onTap: () async {
-                          // // postInteraction.toggleLike(
-                          // //   isLiked: widget.isLiked,
-                          // //   postId: widget.postId,
-                          // //   context: context,
-                          // // );
-                          // log(widget.isLiked.toString(),
-                          //     name: 'like bool from api');
-                          // log(widget.likeCount.toString(),
-                          //     name: 'like count from api');
-                          // // log(postInteraction.isLiked.toString(),
-                          // //     name: 'like bool before function call');
-                          // // log(postInteraction.countLike.toString(),
-                          // //     name: 'like count before function call');
+                  PostLikeStyles(
+                    spaceing: 5,
+                    postId: widget.postId,
+                    likeCount: widget.likeCount,
+                    isLiked: widget.isLiked,
+                    callBackFunction: () {
+                      // final interaction =
+                      //     context.read<PostInteractionController>();
 
-                          // postInteraction.likebool(
-                          //     likebool: widget.isLiked,
-                          //     likeCount: int.parse(widget.likeCount),
-                          //     postId: widget.postId,
-                          //     context: context);
+                      BlocProvider.of<PostLikeBloc>(context).add(PostLikeEvent(
+                          postId: widget.postId, context: context));
 
-                          // log(postInteraction.isLiked.toString(),
-                          //     name: 'like bool after function call');
-                          // log(postInteraction.countLike.toString(),
-                          //     name: 'like count after function call');
-
-                          // animationController.forward().then(
-                          //   (_) {
-                          //     animationController.reverse();
-                          //   },
-                          // );
-                          // Future.delayed(Duration(milliseconds: 50)).then(
-                          //   (value) {
-                          //     context
-                          //         .read<HomefeedController>()
-                          //         .getAllPost(context: context);
-                          //   },
-                          // );
-
-                          await animationController.forward();
-                          await animationController.reverse();
-
-                          postInteraction.likebool(
-                            likebool: postInteraction.isLiked ?? widget.isLiked,
-                            likeCount: postInteraction.countLike ??
-                                int.parse(widget.likeCount),
-                            postId: widget.postId,
-                            context: context,
-                          );
-
-                          context
-                              .read<HomefeedController>()
-                              .getAllPost(context: context);
-                        },
-                        child: AnimatedBuilder(
-                          animation: scaleAnimation,
-                          builder: (context, child) {
-                            return Transform.scale(
-                              scale: scaleAnimation.value,
-                              child: Icon(
-                                postInteraction.isLiked == true
-                                    ? Icons.favorite
-                                    : Icons.favorite_border_outlined,
-                                color: postInteraction.isLiked == true
-                                    ? Colors.red
-                                    : null,
-                                size: 28,
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                      // interaction.likebool(
+                      //   likebool: interaction.isLiked,
+                      //   likeCount: interaction.countLike,
+                      //   postId: widget.postId,
+                      //   context: context,
+                      // );
+                      // context
+                      //     .read<HomefeedController>()
+                      //     .getAllPost(context: context);
                     },
                   ),
-                  Row(
-                    spacing: 5,
-                    children: [
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        proReadInteraction.countLike.toString(),
-                        style: StringStyle.smallText(isBold: true),
-                      ),
-                      Text(
-                        'Likes',
-                        style: StringStyle.smallText(),
-                      ),
-                    ],
+                  SizedBox(width: 8),
+                  Text(
+                    'Likes',
+                    style: StringStyle.smallText(),
                   ),
                   SizedBox(width: 16),
-                  SizedBox(width: 8),
                   GestureDetector(
                     onTap: () async {
                       log('post id: ${widget.postId}');
+                      // final userId=await AppUtils.getUserId();
 
-                      await proReadInteraction.getComment(
-                          context: context, postId: widget.postId);
-                      final comments = proReadInteraction
-                              .getComments?.comments?.reversed
-                              .toList() ??
-                          [];
+                      // Open the bottom sheet immediately; comments will be fetched inside the sheet
                       commentBottomSheet(
                           postID: widget.postId,
-                          comments: comments,
                           context: context,
+                          // userID: userId,
                           commentController: commentController);
                     },
                     child: Row(

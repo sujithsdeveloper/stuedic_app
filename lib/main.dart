@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
@@ -13,6 +14,7 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/notification_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
@@ -127,8 +129,13 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
+        ChangeNotifierProvider(create: (context) => StoryEditController()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
         ChangeNotifierProvider(create: (context) => StoryEditController()),
+        BlocProvider<PostLikeBloc>(
+          create: (context) =>
+              PostLikeBloc(initialCount: 0, initialbool: false),
+        )
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
