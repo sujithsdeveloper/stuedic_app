@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     final proWatchHomeFeed = context.watch<HomefeedController>();
 
-    final items = proWatchHomeFeed.homeFeed?.response?.reversed.toList();
+    final items = proWatchHomeFeed.homeFeed?.response;
     final scrollController = ScrollController();
     // bool islike = false;
     // String likeCount = '0';
