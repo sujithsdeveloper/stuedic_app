@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
                               curve: Curves.easeIn);
                         },
                         child: Text(
-                          StringConstants.appName,
+                          AppInfo.appName,
                           style: TextStyle(
                             fontFamily: 'Calistoga',
                             fontSize: 18,
@@ -191,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     initialCount: item.likescount ?? -5,
                                     initialbool: item.isLiked ?? false),
                                 child: PostCard(
+                                  sharableLink: item.shareableLink ?? '',
                                   isBookmarked: item.isBookmarked ?? false,
                                   likeCount: item.likescount.toString() ?? '0',
                                   postType: item.postType ?? '',
