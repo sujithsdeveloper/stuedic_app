@@ -25,7 +25,7 @@ class ChatController extends ChangeNotifier {
     await ApiMethods.get(
         url: Uri.parse('${ApiUrls.baseUrl}api/v1/chat/history?toUser=$userId'),
         onSucces: (response) {
-          chatHistoryList = chatHistoryModelFromJson(response.body);
+          chatHistoryList = chatHistoryModelFromJson(response);
           isHistoryLoading = false;
           notifyListeners();
           scrollToBottom(isScrollVisible: false);
@@ -189,7 +189,7 @@ class ChatController extends ChangeNotifier {
           chatHistoryList.removeWhere(
               (message) => _selectedMessageIds.contains(message.id.toString()));
           notifyListeners();
-          AppUtils.showToast(msg: "Messages deleted successfully");
+          AppUtils.showToast(toastMessage: "Messages deleted successfully");
           clearSelection();
         },
         onTokenExpired: () {

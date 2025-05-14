@@ -12,6 +12,7 @@ class ImageEditController extends ChangeNotifier {
   Future<void> cropImage(
       {required File image,
       required BuildContext context,
+      bool showPresets = false,
       CropAspectRatio? ratio}) async {
     log(image.path);
 
@@ -22,6 +23,12 @@ class ImageEditController extends ChangeNotifier {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',
+          aspectRatioPresets: showPresets
+              ? [
+                  CropAspectRatioPreset.ratio3x2,
+                  CropAspectRatioPreset.ratio4x3,
+                ]
+              : [],
           toolbarColor: Colors.black,
           toolbarWidgetColor: Colors.white,
           lockAspectRatio: false,
@@ -49,6 +56,53 @@ class ImageEditController extends ChangeNotifier {
               API: ApiUrls.uploadPicForPost,
             );
       }
+    }
+  }
+
+  Future<File> cropPostImage(File image, {bool? showRatioPresets}) async {
+    final CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: image.path,
+      // aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 4),
+      uiSettings: [
+        AndroidUiSettings(
+          statusBarColor: Colors.transparent,
+
+          aspectRatioPresets: showRatioPresets ?? false
+              ? [
+                  CropAspectRatioPreset.ratio3x2,
+                  CropAspectRatioPreset.ratio4x3,
+                ]
+              : [],
+          toolbarTitle: 'Crop Image',
+
+          toolbarColor: Colors.black,
+          toolbarWidgetColor: Colors.white,
+          lockAspectRatio: false,
+          // hideBottomControls: true,
+          backgroundColor: Colors.black,
+          activeControlsWidgetColor: ColorConstants.primaryColor2,
+        ),
+        IOSUiSettings(
+          aspectRatioPresets: showRatioPresets ?? false
+              ? [
+                  CropAspectRatioPreset.ratio3x2,
+                  CropAspectRatioPreset.ratio4x3,
+                ]
+              : [],
+          title: 'Crop Image',
+          doneButtonTitle: 'Crop',
+          cancelButtonTitle: 'Cancel',
+          aspectRatioLockEnabled: false,
+        )
+      ],
+    );
+
+    if (croppedFile != null) {
+      croppedImage = File(croppedFile.path);
+      notifyListeners();
+      return croppedImage!;
+    } else {
+      throw Exception('Image cropping failed');
     }
   }
 }

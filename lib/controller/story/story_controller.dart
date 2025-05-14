@@ -4,6 +4,7 @@ import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/model/get_story_model.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 
 class StoryController extends ChangeNotifier {
   HomeStoriesModel? getstorymodel;
@@ -11,7 +12,7 @@ class StoryController extends ChangeNotifier {
     await ApiMethods.get(
         url: ApiUrls.getStoryList,
         onSucces: (p0) {
-          getstorymodel = homeStoriesModelFromJson(p0.body);
+          getstorymodel = homeStoriesModelFromJson(p0);
           log(getstorymodel?.response.toString() ?? '');
           notifyListeners();
         },
@@ -25,27 +26,30 @@ class StoryController extends ChangeNotifier {
 
   Future<void> addStory(
       {required String url,
-      required String caption,
+      String? caption, 
       required BuildContext context}) async {
     isStoryUploading = true;
     notifyListeners();
 
-    final data = {"contentURL": url, "caption": caption};
+    final data = {"contentURL": url, "caption": caption ?? ''};
     await ApiMethods.post(
         url: ApiUrls.addStory,
         body: data,
         onSucces: (p0) {
           isStoryUploading = false;
-          Future.delayed(const Duration(seconds: 1), () {
-            getStories(context);
-          });
-          notifyListeners();
+          // Future.delayed(const Duration(seconds: 1), () {
+          //   getStories(context);
+          // });
           Future.delayed(
             Duration(seconds: 2),
             () {
               getStories(context);
             },
           );
+          AppUtils.showToast(toastMessage: 'Story added successfully!');
+
+          notifyListeners();
+
           log(p0.body);
           Navigator.pop(context);
         },

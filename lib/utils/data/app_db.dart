@@ -117,4 +117,13 @@ class AppDb {
     assetPath: ImageConstants.filterSample14,
   ),
 ];
+
+
+
+  static const List<String> reportProblemcategories = [
+    'Bug',
+    'Feature Request',
+    'Performance',
+    'Other'
+  ];
 }

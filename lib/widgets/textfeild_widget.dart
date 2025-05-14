@@ -18,6 +18,7 @@ class TextfieldWidget extends StatelessWidget {
     this.dismissKeyboardOnTapOutside = false,
     this.maxline,
     this.borderColor,
+    this.borderRadius,
   });
   final String hint;
   final bool isPassword;
@@ -30,6 +31,7 @@ class TextfieldWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final Function(String?)? onChanged;
   final int? maxline;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class TextfieldWidget extends StatelessWidget {
               FocusManager.instance.primaryFocus?.unfocus();
             }
           : null,
+      maxLines: isPassword ? 1 : maxline,
       validator: validator,
       keyboardType: keyboardType,
       maxLength: maxLength,
@@ -58,10 +61,10 @@ class TextfieldWidget extends StatelessWidget {
         helperStyle: TextStyle(color: Colors.grey),
         hintStyle: TextStyle(color: Colors.grey),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(borderRadius ?? 40),
             borderSide: BorderSide(color: ColorConstants.primaryColor2)),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(borderRadius ?? 40),
             borderSide: BorderSide(
                 color: borderColor == null
                     ? ColorConstants.secondaryColor

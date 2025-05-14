@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/crud_operation_controller.dart';
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/constants/app_info.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/create_story_section.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/post_section.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/tabbar_screens/reel_section.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post/tabbar_screens/create_story_section.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post/tabbar_screens/post_section.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post/tabbar_screens/reel_section.dart';
 import 'package:stuedic_app/widgets/gradient_container.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -48,6 +49,8 @@ class _CreatePostScreenState extends State<CreatePostScreen>
         return true;
       },
       child: Scaffold(
+        extendBodyBehindAppBar: false,
+        
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () async {
         //     await proReadAsset.pickImage(
@@ -63,7 +66,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                 width: 9,
                 verticalGradient: true,
               ),
-              Text(StringConstants.appName,
+              Text(AppInfo.appName.toUpperCase(),
                   style: StringStyle.appBarText(context: context)),
             ],
           ),
@@ -183,19 +186,30 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                                 onGalleryTap: () async {
                                   await context
                                       .read<AssetPickerController>()
-                                      .pickImage(
-                                          source: ImageSource.gallery,
+                                      .pickImageForPost(
+                                          imageSource: ImageSource.gallery,
                                           context: context);
                                 },
                                 onCameraTap: () async {
                                   await context
                                       .read<AssetPickerController>()
-                                      .pickImage(
-                                          source: ImageSource.camera,
+                                      .pickImageForPost(
+                                          imageSource: ImageSource.camera,
                                           context: context);
                                 },
                               ),
-                              ReelSection(),
+                              ReelSection(
+                                onCameraTap: () {
+                                  proReadAsset.pickVideoForPost(
+                                      imageSource: ImageSource.camera,
+                                      context: context);
+                                },
+                                onGalleryTap: () {
+                                  proReadAsset.pickVideoForPost(
+                                      imageSource: ImageSource.gallery,
+                                      context: context);
+                                },
+                              ),
                               CreateStorySection(
                                 onGalleryTap: () async {
                                   await context

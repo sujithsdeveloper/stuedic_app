@@ -41,6 +41,8 @@ class AuthController extends ChangeNotifier {
             accessToken: loginModelResponse.token ?? '',
             refreshToken: loginModelResponse.refreshToken ?? '');
 
+        await AppUtils.saveNotificationConfigure(true);
+
         isLoginLoading = false;
         notifyListeners();
         AppRoutes.pushAndRemoveUntil(
@@ -123,6 +125,8 @@ class AuthController extends ChangeNotifier {
       if (response.statusCode == 200) {
         registrationModel = registrationModelFromJson(response.body);
         notifyListeners();
+        await AppUtils.saveNotificationConfigure(true);
+
         await AppUtils.saveToken(
             accessToken: registrationModel?.token ?? '',
             refreshToken: registrationModel?.refreshToken ?? '');

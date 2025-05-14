@@ -25,11 +25,10 @@ class SinglepostScreen extends StatefulWidget {
   const SinglepostScreen(
       {super.key,
       required this.postID,
-      required this.userID,
-      this.isCurrentUser = false});
+       this.userID,
+      });
   final String postID;
-  final String userID;
-  final bool isCurrentUser;
+ final  String? userID;
   @override
   State<SinglepostScreen> createState() => _SinglepostScreenState();
 }
@@ -54,7 +53,7 @@ class _SinglepostScreenState extends State<SinglepostScreen>
       await provider.getSinglePost(context: context, postId: widget.postID);
       await context
           .read<ProfileController>()
-          .getUserByUserID(userId: widget.userID, context: context);
+          .getUserByUserID(userId: widget.userID!, context: context);
       await context
           .read<PostInteractionController>()
           .getComment(context: context, postId: widget.postID);
@@ -100,11 +99,11 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 padding: EdgeInsets.only(left: 9),
                 child: GestureDetector(
                   onTap: () {
-                    if (widget.isCurrentUser) {
+                    if (widget.userID == null) {
                       Navigator.pop(context);
                     } else {
                       AppRoutes.push(
-                          context, UserProfile(userId: widget.userID));
+                          context, UserProfile(userId: widget.userID!));
                     }
                   },
                   child: Padding(
@@ -151,7 +150,7 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                           onPressed: () async {
                             bool isRightUser =
                                 await AppUtils.checkUserIdForCurrentUser(
-                                    IDtoCheck: widget.userID);
+                                    IDtoCheck: widget.userID!);
 
                             postBottomSheet(
                                 isSaved: post?.isBookmarked ?? false,
@@ -172,7 +171,6 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                 height: 5,
               ),
               SizedBox(
-                  height: 450,
                   width: double.infinity,
                   child: proWatch.isLoading
                       ? ShimmersItems.postShimmer()

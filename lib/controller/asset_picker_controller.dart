@@ -9,12 +9,15 @@ import 'package:stuedic_app/controller/image/image_edit_controller.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/snackbar__style.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/app_default_settings.dart';
 import 'package:stuedic_app/view/screens/media/upload_video_player.dart';
 
 class AssetPickerController extends ChangeNotifier {
   File? pickedImage;
   File? pickedVideo;
   bool isLoading = false;
+
   Future<void> pickMedia({
     bool isVideo = false,
     bool UplaodMedia = false,
@@ -22,6 +25,7 @@ class AssetPickerController extends ChangeNotifier {
     required BuildContext context,
     required ImageSource source,
   }) async {
+    log('pick media called');
     final picker = ImagePicker();
     if (isVideo) {
       final video = await picker.pickVideo(source: source);
@@ -29,27 +33,34 @@ class AssetPickerController extends ChangeNotifier {
       notifyListeners();
 
       if (video != null) {
-        // pickedVideo = File(video.path);
-        // notifyListeners();
+        final pickedVideoDuration = await AppUtils.getVideoDuration(video);
+        final maximumVideoDuration = AppDefaultSettings.videoDuration;
 
-        // log('Picked video path ${pickedVideo.toString()}');
+        if (pickedVideoDuration > maximumVideoDuration) {
+          AppUtils.showToast(
+              toastMessage:
+                  'Video duration should be less than ${maximumVideoDuration.inSeconds} seconds');
+          log('Picked video duration: $pickedVideoDuration');
+          pickedVideo = null;
+          isLoading = false;
+          notifyListeners();
 
-        // if (context.mounted && UplaodMedia) {
-        //   await Provider.of<MutlipartController>(context, listen: false)
-        //       .uploadMedia(
-        //     context: context,
-        //     isVideo: true,
-        //     filePath: video.path,
-        //     API: APIs.uploadVideo,
-        //   );
-        // }
+          return;
+        } else {
+          pickedVideo = File(video.path);
+          // log('Picked video path: ${pickedVideo?.path}');
+          notifyListeners();
+          // Upload video before navigating, and only use context if still mounted
+          await context.read<MutlipartController>().uploadMedia(
+              context: context,
+              filePath: pickedVideo!.path,
+              API: ApiUrls.uploadVideo,
+              isVideo: true);
 
-        context.read<MutlipartController>().uploadMedia(
-            context: context,
-            filePath: video.path,
-            API: ApiUrls.uploadVideo,
-            isVideo: true);
-        AppRoutes.push(context, upload_video_player(file: File(video.path)));
+          // if (context.mounted) {
+          //   AppRoutes.push(context, upload_video_player(file: pickedVideo!));
+          // }
+        }
       } else {
         if (context.mounted) {
           errorSnackbar(label: 'No video selected', context: context);
@@ -86,10 +97,12 @@ class AssetPickerController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImage(
-      {required ImageSource source,
-      required BuildContext context,
-      bool squreCrop = false}) async {
+  Future<void> pickImage({
+    required ImageSource source,
+    CropAspectRatio? aspectRatio,
+    bool showPresets = false,
+    required BuildContext context,
+  }) async {
     isLoading = true;
     notifyListeners();
 
@@ -100,13 +113,12 @@ class AssetPickerController extends ChangeNotifier {
       source: source,
     );
     if (image != null) {
-      
       log('Picked image path: ${image.path}');
       CroppedFile? croppedFile = await cropper.cropImage(
         sourcePath: image.path,
-        aspectRatio: squreCrop
-            ? CropAspectRatio(ratioX: 1, ratioY: 1)
-            : const CropAspectRatio(ratioX: 3, ratioY: 4),
+        aspectRatio: aspectRatio == null
+            ? const CropAspectRatio(ratioX: 3, ratioY: 4)
+            : aspectRatio,
         uiSettings: [
           AndroidUiSettings(
               hideBottomControls: true,
@@ -150,6 +162,60 @@ class AssetPickerController extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
       errorSnackbar(label: 'No Image Selected', context: context);
+    }
+  }
+
+  Future<void> pickImageForPost(
+      {required ImageSource imageSource, required BuildContext context}) async {
+    isLoading = true;
+    notifyListeners();
+    final imagePicker = ImagePicker();
+    final image =
+        File((await imagePicker.pickImage(source: imageSource))?.path ?? '');
+    if (image != null) {
+      isLoading = false;
+      notifyListeners();
+      context
+          .read<ImageEditController>()
+          .cropPostImage(image, showRatioPresets: true)
+          .then((value) {
+        if (value != null) {
+          pickedImage = value;
+          context.read<MutlipartController>().uploadMedia(
+              context: context,
+              filePath: pickedImage!.path,
+              API: ApiUrls.uploadPicForPost,
+              isVideo: false);
+          notifyListeners();
+        }
+      });
+    } else {
+      isLoading = false;
+      notifyListeners();
+      errorSnackbar(label: 'No Image Selected', context: context);
+    }
+  }
+
+  Future<void> pickVideoForPost(
+      {required ImageSource imageSource, required BuildContext context}) async {
+    log('pick video for post called');
+    isLoading = true;
+    notifyListeners();
+    final imagePicker = ImagePicker();
+    final video =
+        File((await imagePicker.pickVideo(source: imageSource))?.path ?? '');
+    if (video != null) {
+      log('picked video path: ${video.path}');
+      isLoading = false;
+      pickedVideo = video;
+      notifyListeners();
+
+      final videoUrl = await context.read<MutlipartController>().uploadVideo(
+            context: context,
+            file: pickedVideo!,
+          );
+      notifyListeners();
+      log('Video URL: $videoUrl');
     }
   }
 }

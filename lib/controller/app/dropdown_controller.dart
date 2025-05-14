@@ -18,7 +18,7 @@ class DropdownController extends ChangeNotifier {
     ApiMethods.get(
       url: url,
       onSucces: (p0) {
-        log(p0.body);
+        log(p0);
       },
       onTokenExpired: () {
         onChanged(

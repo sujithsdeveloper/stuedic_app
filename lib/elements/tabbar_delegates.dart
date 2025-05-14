@@ -1,17 +1,20 @@
-
 import 'package:flutter/material.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 
 /// Pinned TabBar Delegate
 class TabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
-  TabBarDelegate(this.tabBar);
+  final BuildContext context;
+  TabBarDelegate(this.tabBar, {required this.context});
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      // padding: EdgeInsets.only(top: 15),
-      color: Colors.white,
+      color: AppUtils.isDarkTheme(context)
+          ? ColorConstants.darkColor
+          : Colors.white,
       child: tabBar,
     );
   }

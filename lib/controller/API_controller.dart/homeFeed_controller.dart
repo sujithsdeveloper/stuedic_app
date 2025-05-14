@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/APIs/API_Methods.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
@@ -14,10 +16,10 @@ class HomefeedController extends ChangeNotifier {
         url:
             Uri.parse("${ApiUrls.baseUrl}api/v1/Post/homeFeed?page=1&limit=50"),
         onSucces: (p0) {
-          homeFeed = homeFeedFromJson(p0.body);
+          homeFeed = homeFeedFromJson(p0);
           isHomeFeedLoading = false;
           notifyListeners();
-          // log('home feed: ${p0.body}');
+          // log('home feed: ${p0}');
         },
         onTokenExpired: () {
           isHomeFeedLoading = false;

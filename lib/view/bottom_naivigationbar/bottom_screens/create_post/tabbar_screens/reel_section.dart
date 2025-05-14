@@ -17,8 +17,10 @@ import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
 class ReelSection extends StatefulWidget {
-  const ReelSection({super.key});
-
+  const ReelSection(
+      {super.key, required this.onGalleryTap, required this.onCameraTap});
+  final Function() onGalleryTap;
+  final Function() onCameraTap;
   @override
   State<ReelSection> createState() => _ReelSectionState();
 }
@@ -58,8 +60,12 @@ class _ReelSectionState extends State<ReelSection> {
                     } else if (proWatchAsset.pickedVideo != null) {
                       return Stack(
                         children: [
-                          AssetVideoPlayer(
-                              videoFile: proWatchAsset.pickedVideo!),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 418,
+                            child: AssetVideoPlayer(
+                                videoFile: proWatchAsset.pickedVideo!),
+                          ),
                           Positioned(
                               right: 0,
                               child: IconButton(
@@ -79,18 +85,8 @@ class _ReelSectionState extends State<ReelSection> {
                             onTap: () {
                               mediaBottomSheet(
                                 context: context,
-                                onCameraTap: () {
-                                  proReadAsset.pickMedia(
-                                      context: context,
-                                      source: ImageSource.camera,
-                                      isVideo: true);
-                                },
-                                onGalleryTap: () {
-                                  proReadAsset.pickMedia(
-                                      context: context,
-                                      source: ImageSource.gallery,
-                                      isVideo: true);
-                                },
+                                onCameraTap: widget.onCameraTap,
+                                onGalleryTap: widget.onGalleryTap,
                               );
                             },
                           ),
@@ -107,7 +103,11 @@ class _ReelSectionState extends State<ReelSection> {
               ),
               const SizedBox(height: 9),
               TextfieldWidget(
-                validator: (p0) => nameValidator(p0, 'Description'),
+                validator: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return 'Caption is required';
+                  }
+                },
                 hint: 'Write a caption',
                 controller: controller,
                 maxLength: 250,
@@ -137,7 +137,7 @@ class _ReelSectionState extends State<ReelSection> {
                               context: context)
                           .then(
                         (value) {
-                          Navigator.pop(context);
+                          proReadAsset.clearAsset();
                         },
                       );
                     }

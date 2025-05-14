@@ -1,5 +1,4 @@
 class StringConstants {
-  static const String appName = 'STUEDIC';
   static const String accessToken = 'token';
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
@@ -21,6 +20,8 @@ class StringConstants {
   static const String Current_Theme = 'Current_Theme';
   static const String dark = 'dark';
   static const String light = 'light';
+  static const String UnknownUser = 'Unknown User';
+  static const String isNotificationEnabled = 'isNotificationEnabled';
 
 
   //Filter Names

@@ -67,3 +67,6 @@ class Post {
         "postContentURL": postContentUrl,
     };
 }
+
+
+

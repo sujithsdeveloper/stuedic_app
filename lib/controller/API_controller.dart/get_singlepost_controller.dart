@@ -18,7 +18,7 @@ class GetSinglepostController extends ChangeNotifier {
         onSucces: (p0) {
           // log(p0.body);
           log(postId);
-          singlePostModel = singlePostModelFromJson(p0.body);
+          singlePostModel = singlePostModelFromJson(p0);
           isLoading = false;
           notifyListeners();
         },

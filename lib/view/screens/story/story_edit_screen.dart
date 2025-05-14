@@ -11,10 +11,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/mutlipart_controller.dart';
+import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/controller/story/story_edit_controller.dart';
 import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/model/app/overlay_text.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/shortcuts/app_shortcuts.dart';
@@ -74,6 +76,9 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<StoryEditController>();
     final proRead = context.read<StoryEditController>();
+    final proWatchMediaUpload =
+        Provider.of<MutlipartController>(context, listen: false);
+    final proWatchStory = context.watch<StoryController>();
     final mediaWidget = widget.assetType == AssetType.image
         ? FutureBuilder<Size>(
             future: getImageSize(widget.file),
@@ -280,71 +285,111 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                         ]);
                   },
                 ),
-                RotatedBox(
-                  quarterTurns: 1,
-                  child: IconButton(
-                    onPressed: () async {
-                      if (proWatch.isTextFieldVisible) {
-                        proRead
-                            .toggleTextFieldVisibility(widget.textController);
-                      } else if (proWatch.isFilterVisible) {
-                        proRead.toggleFilterVisibility();
-                      } else // ...inside your share button onPressed...
-                      if (widget.assetType == AssetType.video) {
-                        log('asset type is video');
-                        String? path = await exportEditedVideo(
-                          videoPath: widget.file.path,
-                          overlays: proWatch.overlays,
-                          zoom: transformationController.value
-                              .getMaxScaleOnAxis(), // or your zoom value
-                          colorFilter: proWatch.colorFilter,
-                        );
-                        if (path != null) {
-                          log('Edited video saved at: $path');
-                          context.read<MutlipartController>().uploadMedia(
+                proWatchStory.isStoryUploading ||
+                        proWatchMediaUpload.isUploading
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator.adaptive(
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      )
+                    : RotatedBox(
+                        quarterTurns: 1,
+                        child: IconButton(
+                          onPressed: () async {
+                            final multipartController =
+                                Provider.of<MutlipartController>(context,
+                                    listen: false);
+                            AppUtils.showToast(
+                                toastMessage: 'Uploading story...');
+                            log('Uploading story...');
+                            if (proWatch.isTextFieldVisible) {
+                              proRead.toggleTextFieldVisibility(
+                                  widget.textController);
+                            } else if (proWatch.isFilterVisible) {
+                              proRead.toggleFilterVisibility();
+                            } else // ...inside your share button onPressed...
+                            if (widget.assetType == AssetType.video) {
+                              log('asset type is video');
+                              String? path = await exportEditedVideo(
+                                videoPath: widget.file.path,
+                                overlays: proWatch.overlays,
+                                zoom: transformationController.value
+                                    .getMaxScaleOnAxis(),
+                                colorFilter: proWatch.colorFilter,
+                              );
+                              log('exportEditedVideo returned path: $path');
+                              if (path == null) {
+                                AppUtils.showToast(
+                                    toastMessage:
+                                        'Failed to export edited video. Please try again.');
+                                log('exportEditedVideo failed: returned null path');
+                                return;
+                              }
+                              log('Edited video saved at: $path');
+                              await Provider.of<MutlipartController>(context,
+                                      listen: false)
+                                  .uploadMedia(
                                 isVideo: true,
                                 context: context,
                                 filePath: path,
                                 API: ApiUrls.uploadVideo,
                               );
-                        }
-                      } else {
-                        log('asset type is image');
-                        String? path = await captureEditedImage();
-                        if (path != null) {
-                          log('Edited image saved at: $path');
-                          context.read<MutlipartController>().uploadMedia(
-                                context: context,
-                                filePath: path,
-                                API: ApiUrls.uploadPicForPost,
-                              );
-                        }
-                      }
-                      {
-                        String? path = await captureEditedImage();
-                        if (path != null) {
-                          // Use the path for sharing
-                          log('Edited image saved at: $path');
-                          context.read<MutlipartController>().uploadMedia(
-                              context: context,
-                              filePath: path,
-                              API: ApiUrls.uploadPicForPost);
-                        }
-                      }
-                    },
-                    icon: Icon(
-                      size: 30,
-                      CupertinoIcons.share,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                              String? url = multipartController.videoUrl;
+                              if (url != null) {
+                                context.read<StoryController>().addStory(
+                                      url: url,
+                                      caption: widget.textController.text,
+                                      context: context,
+                                    );
+
+                                proWatch.overlays.clear();
+                                proWatch.selectedFilter = "none";
+                              }
+                            } else {
+                              log('asset type is image');
+                              String? path = await captureEditedImage();
+                              if (path != null) {
+                                if (!(proWatchMediaUpload.isUploading) ||
+                                    !(proWatchStory.isStoryUploading)) {
+                                  log('Edited image saved at: $path');
+
+                                  await multipartController.uploadMedia(
+                                    context: context,
+                                    filePath: path,
+                                    API: ApiUrls.uploadPicForPost,
+                                  );
+                                  String? url = multipartController.imageUrl;
+                                  if (url != null) {
+                                    context.read<StoryController>().addStory(
+                                          url: url,
+                                          caption: widget.textController.text,
+                                          context: context,
+                                        );
+
+                                    proWatch.overlays.clear();
+                                    proWatch.selectedFilter = "none";
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          icon: Icon(
+                            size: 30,
+                            CupertinoIcons.share,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),
         ),
 //////////////Delete icon section///////////////////////////////////////////////////////////Delete icon section///////////////////////////////////////////////////////////
-        // Delete icon overlay
         if (draggingOverlayIndex != null)
           Positioned(
             bottom: 20,
@@ -396,13 +441,12 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
       }
     } catch (e) {
       log('Error capturing image: $e');
-      AppUtils.showToast(msg: 'Error capturing image: $e');
+      AppUtils.showToast(toastMessage: 'Error capturing image: $e');
     }
     return null;
   }
 
 ////ImageSize section///////////////////////////////////////////////////////////ImageSize section///////////////////////////////////////////////////////////
-  // Helper to get image size
 
   Future<Size> getImageSize(File file) async {
     final completer = Completer<Size>();
@@ -457,7 +501,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                 (draggingOffset!.dy) + 20, // approx text height/2
               );
               isNearDelete =
-                  (deleteCenter - textCenter).distance < (deleteIconSize + 40);
+                  (deleteCenter - textCenter).distance < (deleteIconSize + 100);
               proRead.notifyListeners();
             },
             onPanEnd: (_) {

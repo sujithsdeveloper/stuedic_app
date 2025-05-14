@@ -39,8 +39,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     final proWatch = context.watch<NotificationController>();
     final proRead = context.read<NotificationController>();
-    final notifications =
-        proWatch.getNotificationModel?.response?.toList().reversed.toList();
+    final notifications = proWatch.notifications.reversed.toList();
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -92,7 +91,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               AppRoutes.push(
                                   context,
                                   SinglepostScreen(
-                                    userID: notification?.userId.toString()??'',
+                                      userID:
+                                          notification?.userId.toString() ?? '',
                                       postID: notification?.postId.toString() ??
                                           ''));
                             },
@@ -129,10 +129,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     if (notification!.type ==
                                         StringConstants.like) {
                                       return Text(
-                                          '${notification.fromUserName} Liked your post');
+                                          '${ AppUtils.getUserNameById(notification.fromUserName)} Liked your post');
                                     } else {
                                       return Text(
-                                          '${notification.fromUserName} Commented on your post');
+                                          '${AppUtils.getUserNameById(notification.fromUserName)} Commented on your post');
                                     }
                                   },
                                 ),

@@ -18,7 +18,7 @@ class ChatListScreenController extends ChangeNotifier {
         url: ApiUrls.chatList,
         onSucces: (response) {
           // log(response.body);
-          usersList = chatListUsersModelFromJson(response.body);
+          usersList = chatListUsersModelFromJson(response);
           isLoading = false;
           notifyListeners();
         },

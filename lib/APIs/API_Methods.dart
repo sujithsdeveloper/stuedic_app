@@ -44,7 +44,7 @@ class ApiMethods {
 
   static Future<void> get({
     required Uri url,
-    required Function(http.Response) onSucces,
+    required Function(String) onSucces,
     required Function() onTokenExpired,
     required BuildContext context,
   }) async {
@@ -57,7 +57,8 @@ class ApiMethods {
           await http.get(url, headers: ApiServices.getHeadersWithToken(token));
 
       if (response.statusCode == 200) {
-        onSucces(response);
+        final utf8Body = utf8.decode(response.bodyBytes);
+        onSucces(utf8Body);
       } else if (response.statusCode == 401) {
         await refreshAccessToken(context: context);
 

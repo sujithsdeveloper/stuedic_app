@@ -9,7 +9,7 @@ class CollegeController extends ChangeNotifier {
     await ApiMethods.get(
         url: ApiUrls.getCollegeList,
         onSucces: (p0) {
-          getCollegeListModel = getCollegeListModelFromJson(p0.body);
+          getCollegeListModel = getCollegeListModelFromJson(p0);
           notifyListeners();
         },
         onTokenExpired: () {

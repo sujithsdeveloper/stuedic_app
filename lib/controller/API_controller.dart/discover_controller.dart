@@ -9,7 +9,7 @@ class DiscoverController extends ChangeNotifier {
     await ApiMethods.get(
         url: ApiUrls.discover,
         onSucces: (p0) {
-          discoverModel = discoverModelFromJson(p0.body);
+          discoverModel = discoverModelFromJson(p0);
           notifyListeners();
         },
         onTokenExpired: () async {

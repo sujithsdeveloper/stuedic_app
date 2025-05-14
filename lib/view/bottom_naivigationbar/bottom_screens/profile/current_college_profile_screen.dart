@@ -3,23 +3,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
+import 'package:stuedic_app/elements/tabbar_delegates.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
+import 'package:stuedic_app/utils/shortcuts/app_shortcuts.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs_view/tabsView.dart';
 import 'package:stuedic_app/view/screens/chat/chat_screen.dart';
 import 'package:stuedic_app/view/screens/club_screen.dart';
 import 'package:stuedic_app/view/screens/college/college_departments.dart';
+import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/tabbar_sections/user_profile_tabbar_section.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
 
@@ -68,322 +73,217 @@ class CurrenUserCollegeProfileScreenState
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              expandedHeight: context.screenHeight,
-              actions: [
-                // IconButton(
-                //     onPressed: () {},
-                //     icon: Icon(HugeIcons.strokeRoundedNotification01)),
-                IconButton(
-                    onPressed: () {
-                      AppRoutes.push(context, SettingScreen());
-                    },
-                    icon: Icon(Icons.more_horiz))
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          height: 178,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      ImageConstants.collegeProfileBg))),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 110,
-                                ),
-                                CircleAvatar(
-                                  radius: 62,
-                                  backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundImage: AppUtils.getProfile(
-                                        url: user?.profilePicUrl ?? null),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  user?.userName ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '@${user?.userId ?? ''}',
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 8,
-                      children: [
-                        ProfileActionButton(
-                          iconData: CupertinoIcons.envelope,
-                          onTap: () {
-                            AppRoutes.push(
-                                context,
-                                ChatScreen(
-                                    name: user?.userName ??
-                                        'Username not available',
-                                    imageUrl: user?.profilePicUrl ?? '',
-                                    userId: user!.userId.toString()));
-                          },
-                        ),
-                        GradientButton(
-                          outline: user?.isFollowed ?? false ? true : false,
-                          onTap: () {
-                            context.read<ProfileController>().toggleUser(
-                                followBool: user?.isFollowed ?? false,
-                                userId: user?.userId ?? '',
-                                context: context);
-                          },
-                          height: 48,
-                          width: 100,
-                          isColored: user?.isFollowed ?? false ? false : true,
-                          label: user?.isFollowed ?? false
-                              ? 'Following'
-                              : 'Follow',
-                        ),
-                        ProfileActionButton(
-                          onTap: () {
-                            shareBottomSheet(context);
-                          },
-                          iconData: Icons.share_outlined,
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 9,
-                    ),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: StuedicPointContainer(
-                    //     point: '0',
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
+            SliverToBoxAdapter(
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        height: 178,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                    ImageConstants.collegeProfileBg))),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  counts(
-                                      count: AppUtils.formatCounts(
-                                          user?.collageStrength ?? 0),
-                                      label: "Students"),
-                                  counts(
-                                      count: AppUtils.formatCounts(0),
-                                      label: "Staffs"),
-                                  counts(
-                                      onTap: () {
-                                        AppRoutes.push(
-                                            context, CollegeDepartments());
-                                      },
-                                      count: AppUtils.formatCounts(
-                                          user?.allDepartments?.length ?? 0),
-                                      label: "Departments"),
-                                  counts(
-                                      onTap: () {
-                                        AppRoutes.push(context, ClubScreen());
-                                      },
-                                      count: AppUtils.formatCounts(0),
-                                      label: "Clubs"),
+                                  Text(
+                                    AppUtils.getUserNameById(user?.userName),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '@${user?.userId ?? ''}',
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
                                 ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Details',
-                                  style: StringStyle.normalTextBold(size: 16),
-                                ),
                               ),
-                              DetailsItem(
-                                  title: 'Address',
-                                  subtitle: lorum,
-                                  iconData: CupertinoIcons.location),
-                              DetailsItem(
-                                  onIconTap: () {
-                                    if (user?.email != null) {
-                                      EasyLauncher.email(
-                                          email: user?.email ?? '');
-                                    } else {
-                                      AppUtils.showToast(
-                                        msg: 'Email not provided',
-                                      );
-                                    }
-                                  },
-                                  title: 'Email',
-                                  subtitle: user?.email ?? 'Not Provided',
-                                  iconData: CupertinoIcons.envelope),
-                              DetailsItem(
-                                  onIconTap: () {
-                                    if (user?.email != null) {
-                                      EasyLauncher.call(
-                                          number: user?.phone ?? '');
-                                    } else {
-                                      AppUtils.showToast(
-                                        msg: 'Phone number not provided',
-                                      );
-                                    }
-                                  },
-                                  title: 'Phone Number',
-                                  subtitle: user?.phone ?? 'Not Provided',
-                                  iconData: HugeIcons.strokeRoundedCall),
-                              DetailsItem(
-                                  title: 'Affiliation',
-                                  subtitle: "Dummy University",
-                                  iconData: Icons.school_outlined),
                             ],
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
-                child: Container(
-                  color: Colors.white,
-                  child: TabBar(
-                    controller: _tabController,
-                    onTap: (value) {
-                      if (value == 0) {
-                        context
-                            .read<ProfileController>()
-                            .getCurrentUserGrid(context: context);
-                      }
-                      if (value == 1) {
-                        // context
-                        //     .read<ProfileController>()
-                        //     .getCurrentUserVideos(context: context);
-                      }
-                      if (value == 2) {
-                        context
-                            .read<PostInteractionController>()
-                            .getBookmark(context: context);
-                      }
-                    },
-                    tabs: const [
-                      Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
-                      Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-                      Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 8,
+                        children: [
+                          GradientButton(
+                            onTap: () {
+                              AppRoutes.push(
+                                  context,
+                                  EditProfileScreen(
+                                    username: user?.userName ?? '',
+                                    bio: user?.bio ?? '',
+                                    isCollege: user?.isCollege ?? false,
+                                    url: user?.profilePicUrl ?? '',
+                                    number: user?.phone ?? '',
+                                  ));
+                            },
+                            height: 48,
+                            width: 100,
+                            isColored: true,
+                            label: 'Edit Profile',
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 9,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    counts(
+                                        count: AppUtils.formatCounts(
+                                            user?.collageStrength ?? 0),
+                                        label: "Students"),
+                                    counts(
+                                        count: AppUtils.formatCounts(0),
+                                        label: "Staffs"),
+                                    counts(
+                                        onTap: () {
+                                          AppRoutes.push(
+                                              context, CollegeDepartments());
+                                        },
+                                        count: AppUtils.formatCounts(
+                                            user?.allDepartments?.length ?? 0),
+                                        label: "Departments"),
+                                    counts(
+                                        onTap: () {
+                                          AppRoutes.push(context, ClubScreen());
+                                        },
+                                        count: AppUtils.formatCounts(0),
+                                        label: "Clubs"),
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                  splashColor: Colors.transparent,
+                                  dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                expandedCrossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                tilePadding: EdgeInsets.zero,
+                                childrenPadding: EdgeInsets.zero,
+                                expandedAlignment: Alignment.topLeft,
+                                title: Text(
+                                  'Details',
+                                  style: StringStyle.normalTextBold(size: 16),
+                                ),
+                                children: [
+                                  DetailsItem(
+                                    title: 'Address',
+                                    subtitle: lorum,
+                                    iconData: CupertinoIcons.location,
+                                  ),
+                                  DetailsItem(
+                                    onIconTap: () {
+                                      if (user?.email != null) {
+                                        EasyLauncher.email(
+                                            email: user?.email ?? '');
+                                      } else {
+                                        AppUtils.showToast(
+                                            toastMessage: 'Email not provided');
+                                      }
+                                    },
+                                    title: 'Email',
+                                    subtitle: user?.email ?? 'Not Provided',
+                                    iconData: CupertinoIcons.envelope,
+                                  ),
+                                  DetailsItem(
+                                    onIconTap: () {
+                                      if (user?.phone != null) {
+                                        EasyLauncher.call(
+                                            number: user?.phone ?? '');
+                                      } else {
+                                        AppUtils.showToast(
+                                            toastMessage:
+                                                'Phone number not provided');
+                                      }
+                                    },
+                                    title: 'Phone Number',
+                                    subtitle: user?.phone ?? 'Not Provided',
+                                    iconData: HugeIcons.strokeRoundedCall,
+                                  ),
+                                  DetailsItem(
+                                    title: 'Affiliation',
+                                    subtitle: "Dummy University",
+                                    iconData: Icons.school_outlined,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
+                  Positioned(
+                    top: 90,
+                    left: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 62,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundImage: AppUtils.getProfile(
+                            url: user?.profilePicUrl ?? null),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
+            SliverPersistentHeader(
+                pinned: true,
+                delegate: TabBarDelegate(
+                    context: context,
+                    TabBar(
+                      controller: _tabController,
+                      tabs: [
+                        Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                        Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                        Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                        Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
+                      ],
+                    )))
           ];
         },
         body: TabBarView(
           controller: _tabController,
           children: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Builder(
-                  builder: (context) {
-                    if (photoGrid == null || photoGrid.isEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Capture some amazing moments with your friends',
-                            style: StringStyle.normalTextBold(),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_a_photo_outlined,
-                              ),
-                              Text('Create your first post')
-                            ],
-                          )
-                        ],
-                      );
-                    } else {
-                      return GridView.builder(
-                        itemCount: photoGrid?.length ?? 0,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 9 / 16,
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 4,
-                            crossAxisSpacing: 4),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xffF5FFBB),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                        photoGrid?[index].postContentUrl ??
-                                            ''))),
-                          );
-                        },
-                      );
-                    }
-                  },
-                )),
+            CurrentUserImageview(photoGrid: photoGrid),
             // Videos Section
-            Center(
-              child: Text("Videos will be displayed here",
-                  style: TextStyle(fontSize: 16)),
-            ),
+            CurrentUserVideoView(),
 
             // Shopping Items
             Padding(
@@ -431,7 +331,7 @@ class CurrenUserCollegeProfileScreenState
                   },
                 )),
             Center(
-              child: Text("Shopping items will be displayed here",
+              child: Text("This feature is not available yet",
                   style: TextStyle(fontSize: 16)),
             ),
           ],

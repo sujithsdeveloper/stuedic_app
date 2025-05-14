@@ -18,8 +18,8 @@ class CallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ZegoUIKitPrebuiltCall(
-      appID: AppInfo.zegoAppID,
-      appSign: AppInfo.zegoAppSign,
+      appID: ZegoSDKInfo.zegoAppID,
+      appSign: ZegoSDKInfo.zegoAppSign,
       userID: userId,
       userName: username,
       callID: callID,

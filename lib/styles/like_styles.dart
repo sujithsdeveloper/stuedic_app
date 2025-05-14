@@ -19,10 +19,12 @@ class PostLikeStyles extends StatefulWidget {
       this.showCount = true,
       this.horizontalDirection = true,
       this.spaceing,
-      this.iconColor = ColorConstants.secondaryColor});
+      this.iconColor = ColorConstants.secondaryColor,
+      this.textColor});
   final String postId;
   final Color iconColor;
   final String likeCount;
+  final Color? textColor;
   final bool isLiked;
   final Function() callBackFunction;
   final bool showCount;
@@ -90,7 +92,7 @@ class _PostLikeStylesState extends State<PostLikeStyles>
                     child: Text(
                       AppUtils.formatCounts(state.count),
                       style: StringStyle.smallText(
-                          isBold: true, color: Colors.white),
+                          isBold: true, color: widget.textColor),
                     ),
                   ),
                 ],

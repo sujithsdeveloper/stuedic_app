@@ -13,7 +13,6 @@ Future<dynamic> mediaBottomSheet(
     bool isVideo = false,
     required Function() onCameraTap,
     required Function() onGalleryTap}) {
-
   return showModalBottomSheet(
     context: context,
     builder: (context) => Container(
@@ -25,7 +24,10 @@ Future<dynamic> mediaBottomSheet(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
-            onTap: onCameraTap,
+            onTap: () {
+              Navigator.pop(context);
+              onCameraTap();
+            },
             child: Container(
               height: 112,
               width: 159,
@@ -55,7 +57,10 @@ Future<dynamic> mediaBottomSheet(
             ),
           ),
           GestureDetector(
-            onTap: onGalleryTap,
+            onTap: () {
+              Navigator.pop(context);
+              onGalleryTap();
+            },
             child: Container(
               height: 112,
               width: 159,

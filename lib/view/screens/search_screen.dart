@@ -87,22 +87,44 @@ class _SearchScreenState extends State<SearchScreen>
                       Tab(text: "Marketplace"),
                     ]),
         ),
-        body: prowatch.reslust == null
-            ? Center(child: Text('No results found'))
-            : TabBarView(
+        body: Builder(
+          builder: (context) {
+            if (controller.text.isEmpty) {
+              return Center(
+                child: Text('Search for users'),
+              );
+            } else if (prowatch.reslust == null && controller.text.isEmpty) {
+              return Center(
+                child: Text(
+                  'Search Users',
+                  style: StringStyle.normalTextBold(size: 18),
+                ),
+              );
+            } else {
+              return TabBarView(
                 controller: tabController,
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  const TopBar(),
+                  TopBar(
+                    toChat: widget.toChat,
+                    controller: controller,
+                  ),
                   GeFilterdtSearchResult(
-                      isCollege: true, controller: controller, toChat: false),
+                    isCollege: true,
+                    controller: controller,
+                    toChat: widget.toChat,
+                  ),
                   GeFilterdtSearchResult(
-                      isCollege: false,
-                      onlyStudents: true,
-                      controller: controller,
-                      toChat: false),
-                  MarketPlaceView()
+                    onlyStudents: true,
+                    controller: controller,
+                    toChat: widget.toChat,
+                  ),
+                  MarketPlaceView(),
                 ],
-              ));
+              );
+            }
+          },
+        ));
   }
 
   // Modified getSearchResult to support filtering for colleges and students
@@ -161,6 +183,7 @@ class GeFilterdtSearchResult extends StatelessWidget {
       builder: (context) {
         if (prowatch.isSearchLoading) {
           return ListView.builder(
+            itemCount: 20,
             itemBuilder: (context, index) {
               return searchShimmer();
             },
@@ -195,7 +218,7 @@ class GeFilterdtSearchResult extends StatelessWidget {
                         AppUtils.getProfile(url: user.profilePicUrl ?? null),
                   ),
                   title: Text(
-                    user.username ?? '',
+                    AppUtils.getUserNameById(user?.username),
                     style: StringStyle.normalTextBold(),
                   ),
                   subtitle: Text(user.userId ?? ''),
@@ -214,27 +237,66 @@ class GeFilterdtSearchResult extends StatelessWidget {
 class TopBar extends StatelessWidget {
   const TopBar({
     super.key,
+    required this.toChat,
+    required this.controller,
   });
+  final bool toChat;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-      child: GridView.builder(
-        itemCount: 20,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 5 / 7,
-            crossAxisCount: 3,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5),
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Color(0xffF5FFBB),
-                borderRadius: BorderRadius.circular(20)),
+    final prowatch = context.watch<UserSearchController>();
+    final users = prowatch.reslust?.response?.users;
+
+    return Builder(
+      builder: (context) {
+        if (prowatch.isSearchLoading) {
+          return ListView.builder(
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              return searchShimmer();
+            },
           );
-        },
-      ),
+        } else if ((users == null || users.isEmpty) &&
+            controller.text.isNotEmpty) {
+          return Center(
+            child: Text('No user found'),
+          );
+        } else if (users != null && users.isNotEmpty) {
+          return ListView.builder(
+              itemCount: users?.length ?? 0,
+              itemBuilder: (context, index) {
+                final user = users![index];
+                return ListTile(
+                  onTap: () {
+                    if (toChat) {
+                      AppRoutes.push(
+                          context,
+                          ChatScreen(
+                              imageUrl: user.profilePicUrl ?? '',
+                              name: user.username ?? '',
+                              userId: user.userId ?? ''));
+                    } else {
+                      log('isCOllege: ${user.isCollege}');
+                      AppRoutes.push(
+                          context, UserProfile(userId: user.userId ?? ''));
+                    }
+                  },
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        AppUtils.getProfile(url: user.profilePicUrl ?? null),
+                  ),
+                  title: Text(
+                    AppUtils.getUserNameById(user?.username),
+                    style: StringStyle.normalTextBold(),
+                  ),
+                  subtitle: Text(user.userId ?? ''),
+                );
+              });
+        } else {
+          return SizedBox();
+        }
+      },
     );
   }
 }

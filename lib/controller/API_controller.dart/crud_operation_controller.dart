@@ -10,7 +10,6 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 
 class CrudOperationController extends ChangeNotifier {
-  
   Future<void> uploadPost(
       {required String mediaUrl,
       required String caption,
@@ -55,13 +54,12 @@ class CrudOperationController extends ChangeNotifier {
           log(p0.body);
           Navigator.pop(context);
           context.read<HomefeedController>().getAllPost(context: context);
-          AppUtils.showToast(msg: 'Post deleted');
+          AppUtils.showToast(toastMessage: 'Post deleted');
+          Navigator.pop(context);
         },
         onTokenExpired: () {
           deletePost(context: context, postId: postId);
         },
         context: context);
   }
-
-  
 }
