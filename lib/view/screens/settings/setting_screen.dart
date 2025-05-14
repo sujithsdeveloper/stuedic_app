@@ -8,6 +8,7 @@ import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/theme_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/app_info.dart';
 import 'package:stuedic_app/view/screens/settings/about_page.dart';
 
@@ -43,8 +44,13 @@ class SettingScreen extends StatelessWidget {
       {
         'label': 'Notifications',
         'icon': CupertinoIcons.bell,
-        'onTap': () {
-          AppRoutes.push(context, NotificationSettings());
+        'onTap': () async {
+          bool isNotificationEnabled =
+              await AppUtils.getNotificationConfigure();
+          AppRoutes.push(
+              context,
+              NotificationSettings(
+                  isNotificationEnabled: isNotificationEnabled));
         },
       },
       {

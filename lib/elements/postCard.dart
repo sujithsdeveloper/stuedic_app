@@ -65,6 +65,8 @@ class _PostCardState extends State<PostCard>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController animationController;
   late Animation<double> scaleAnimation;
+  TransformationController transformationController =
+      TransformationController(); // Initialize the controller
   bool postLlike = false;
   int postCount = 0;
 
@@ -208,30 +210,7 @@ class _PostCardState extends State<PostCard>
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Stack(
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.mediaUrl,
-                                  placeholder: (context, url) =>
-                                      Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(
-                                      height: 400,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  useOldImageOnUrlChange:
-                                      true, // Prevent reloading
-                                  cacheKey: widget.mediaUrl, // Ensure caching
-                                ),
-                              ),
+                              ZoomableImageView(mediaUrl: widget.mediaUrl)
                             ],
                           ),
                         );
@@ -410,6 +389,65 @@ class ErrorPost extends StatelessWidget {
           height: 30,
         ),
       ],
+    );
+  }
+}
+
+//////////////Zoomable Image View///////////////////////Zoomable Image View/////////////////////////////////////////////////////////
+
+class ZoomableImageView extends StatefulWidget {
+  final String mediaUrl;
+  const ZoomableImageView({super.key, required this.mediaUrl});
+
+  @override
+  State<ZoomableImageView> createState() => _ZoomableImageViewState();
+}
+
+class _ZoomableImageViewState extends State<ZoomableImageView> {
+  late TransformationController transformationController;
+
+  @override
+  void initState() {
+    super.initState();
+    transformationController = TransformationController();
+  }
+
+  @override
+  void dispose() {
+    transformationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: InteractiveViewer(
+        transformationController: transformationController,
+        onInteractionEnd: (details) {
+          // Animate back to identity (original) scale
+          transformationController.value = Matrix4.identity();
+          setState(() {});
+        },
+        child: CachedNetworkImage(
+          imageUrl: widget.mediaUrl,
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              height: 400,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+          useOldImageOnUrlChange: true,
+          cacheKey: widget.mediaUrl,
+        ),
+      ),
     );
   }
 }

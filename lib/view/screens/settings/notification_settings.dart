@@ -5,23 +5,27 @@ import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 
 class NotificationSettings extends StatefulWidget {
-  const NotificationSettings({super.key});
-
+   NotificationSettings({super.key, required this.isNotificationEnabled});
+ 
+  bool isNotificationEnabled;
   @override
   State<NotificationSettings> createState() => _NotificationSettingsState();
 }
 
 class _NotificationSettingsState extends State<NotificationSettings> {
-  late bool isNotificationEnabled;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
-        isNotificationEnabled = await AppUtils.getNotificationConfigure();
-      },
-    );
-  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback(
+  //     (timeStamp) async {
+  //       bool value = await AppUtils.getNotificationConfigure();
+  //       setState(() {
+  //         isNotificationEnabled = value;
+  //       });
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +44,12 @@ class _NotificationSettingsState extends State<NotificationSettings> {
               style: StringStyle.normalTextBold(size: 18),
             ),
             trailing: Switch(
-              value: isNotificationEnabled,
-              onChanged: (value) {
+              value:widget. isNotificationEnabled,
+              onChanged: (value) async {
+                setState(() {
+                widget.  isNotificationEnabled = value;
+                });
+                await AppUtils.saveNotificationConfigure(value);
                 proRead.toggleNotification(value);
               },
             ),

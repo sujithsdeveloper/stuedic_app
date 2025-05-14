@@ -1,3 +1,4 @@
+import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
@@ -90,9 +91,14 @@ class AboutPage extends StatelessWidget {
               style: StringStyle.normalText(),
             ),
             const SizedBox(height: 20),
-            Text(
-              'Contact Us: ${AppInfo.appSupportEmail}',
-              style: StringStyle.normalTextBold(color: Colors.blue),
+            GestureDetector(
+              onTap: () async {
+                await EasyLauncher.email(email: AppInfo.appSupportEmail);
+              },
+              child: Text(
+                'Contact Us: ${AppInfo.appSupportEmail}',
+                style: StringStyle.normalTextBold(color: Colors.blue),
+              ),
             ),
           ],
         ),

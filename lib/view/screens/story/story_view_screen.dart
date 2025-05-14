@@ -35,6 +35,7 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   Ticker? _ticker;
   Duration _elapsed = Duration.zero;
   Duration _pausedElapsed = Duration.zero; // Add this line
+  bool isImageLoading = false; // Add this flag
 
   @override
   void dispose() {
@@ -140,6 +141,11 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
     final storyProwatch = context.watch<StoryController>();
     final homeStories = storyProwatch.getstorymodel?.response?.groupedStories;
     final stories = homeStories?[widget.Profileindex].stories ?? [];
+    // WidgetsBinding.instance.addPersistentFrameCallback(
+    //   (timeStamp) {
+
+    //   },
+    // );
     if (stories.isNotEmpty) {
       _loadStory(stories, currentIndex);
     }
@@ -199,6 +205,13 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
                         onLongPress: _pauseStory,
                         onLongPressUp: () =>
                             _resumeStory(stories, currentIndex),
+                        onLoading: (loading) {
+                          if (isImageLoading != loading) {
+                            setState(() {
+                              isImageLoading = loading;
+                            });
+                          }
+                        },
                       ),
               ),
               Positioned(
@@ -211,8 +224,8 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
                   isVideo: isVideo,
                   videoDurationValue: videoDurationValue,
                   imageStoryDuration: imageStoryDuration,
-                  imageProgress: imageProgress,
-                  isPaused: isPaused,
+                  imageProgress: isImageLoading ? 0.0 : imageProgress,
+                  isPaused: isPaused || isImageLoading,
                 ),
               ),
               Positioned(
@@ -318,12 +331,14 @@ class ImageStoryView extends StatelessWidget {
     required this.story,
     this.onLongPress,
     this.onLongPressUp,
+    this.onLoading,
   });
 
   final String url;
   final Story story;
   final VoidCallback? onLongPress;
   final VoidCallback? onLongPressUp;
+  final ValueChanged<bool>? onLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -338,8 +353,12 @@ class ImageStoryView extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return Center(child: CircularProgressIndicator());
+              if (progress == null) {
+                onLoading?.call(false);
+                return child;
+              }
+              onLoading?.call(true);
+              return SizedBox.shrink();
             },
           ),
         ),
