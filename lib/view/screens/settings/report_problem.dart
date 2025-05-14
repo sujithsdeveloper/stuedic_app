@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/report_problem_controller.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/data/app_db.dart';
 import 'package:stuedic_app/widgets/dropdown_widget.dart';
@@ -93,12 +94,14 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                       : null,
                 ),
                 SizedBox(height: 36),
-                Center(
-                  child: GradientButton(
-                      isColored: true,
-                      label: 'Submit Report',
-                      onTap: _submitReport),
-                ),
+                proWatch.isLoading
+                    ? loadingIndicator()
+                    : Center(
+                        child: GradientButton(
+                            isColored: true,
+                            label: 'Submit Report',
+                            onTap: _submitReport),
+                      ),
               ],
             ),
           ),

@@ -9,7 +9,7 @@ class CurrentUserImageview extends StatelessWidget {
   const CurrentUserImageview({
     super.key,
     required this.photoGrid,
-     this.userId,  
+    this.userId,
   });
 
   final List<Post>? photoGrid;
@@ -70,10 +70,11 @@ class CurrentUserImageview extends StatelessWidget {
           );
   }
 }
+
 ///////////////////Video Grid//////////////////////////////////////////////Video Grid//////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CurrentUserVideoView extends StatelessWidget {
   const CurrentUserVideoView({super.key, this.videoGrid});
-final List<Post>? videoGrid;
+  final List<Post>? videoGrid;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -99,55 +100,60 @@ final List<Post>? videoGrid;
   }
 }
 
-
 class SavedItemsView extends StatelessWidget {
   const SavedItemsView({super.key, this.bookmarkGrid});
-final List<Bookmark>? bookmarkGrid;
+  final List<Bookmark>? bookmarkGrid;
   @override
   Widget build(BuildContext context) {
-    return bookmarkGrid==null||bookmarkGrid!.isEmpty?
-    Column(
-      spacing: 5,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'There is nothing saved yet',
-          style: StringStyle.normalTextBold(),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.bookmark_add_outlined,
-            ),
-            Text('Save your first post')
-          ],
-        )
-      ],
-    ):GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 9 / 16,
-          crossAxisCount: 3,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4),
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              AppRoutes.push(
-                  context,
-                  SinglepostScreen(
-                      postID: bookmarkGrid?[index]?.postId ?? '',
+    return bookmarkGrid == null || bookmarkGrid!.isEmpty
+        ? Column(
+            spacing: 5,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'There is nothing saved yet',
+                style: StringStyle.normalTextBold(),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.bookmark_add_outlined,
+                  ),
+                  Text('Save your first post')
+                ],
+              )
+            ],
+          )
+        : GridView.builder(
+            itemCount: bookmarkGrid?.length ?? 0,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 9 / 16,
+                crossAxisCount: 3,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  AppRoutes.push(
+                      context,
+                      SinglepostScreen(
+                        postID: bookmarkGrid?[index]?.postId ?? '',
                       ));
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Color(0xffF5FFBB),
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          bookmarkGrid?[index].postContentUrl ?? ''))),
-            ),
-          );
-        });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffF5FFBB),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                              bookmarkGrid?[index].postContentUrl ?? ''))),
+                ),
+              );
+            });
   }
 }

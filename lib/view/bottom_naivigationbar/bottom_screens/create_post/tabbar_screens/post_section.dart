@@ -109,7 +109,12 @@ class PostSection extends StatelessWidget {
                   style: StringStyle.normalTextBold(size: 18),
                 ),
                 TextfieldWidget(
-                  validator: (p0) => nameValidator(p0, 'Caption'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a caption';
+                    }
+                    return null;
+                  },
                   hint: 'Write a caption',
                   controller: controller,
                   maxLength: 250,

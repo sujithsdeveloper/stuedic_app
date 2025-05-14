@@ -49,6 +49,8 @@ class _CreatePostScreenState extends State<CreatePostScreen>
         return true;
       },
       child: Scaffold(
+        extendBodyBehindAppBar: false,
+        
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () async {
         //     await proReadAsset.pickImage(

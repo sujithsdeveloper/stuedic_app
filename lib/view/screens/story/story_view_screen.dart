@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/model/get_story_model.dart';
@@ -28,10 +29,60 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   int imageStoryDuration = 5;
   VideoPlayerController? _videoController;
 
+  // Add these fields for image story pause/resume
+  bool isPaused = false;
+  double imageProgress = 0.0;
+  Ticker? _ticker;
+  Duration _elapsed = Duration.zero;
+  Duration _pausedElapsed = Duration.zero; // Add this line
+
   @override
   void dispose() {
     _videoController?.dispose();
+    _ticker?.dispose();
     super.dispose();
+  }
+
+  void _startImageTicker(List stories, int index, {Duration? from}) {
+    _ticker?.dispose();
+    imageProgress = 0.0;
+    _elapsed = from ?? Duration.zero;
+    _ticker = Ticker((elapsed) {
+      if (!isPaused) {
+        setState(() {
+          _elapsed = (from ?? Duration.zero) + elapsed;
+          imageProgress = _elapsed.inMilliseconds / (imageStoryDuration * 1000);
+          if (imageProgress >= 1.0) {
+            imageProgress = 1.0;
+            _ticker?.stop();
+            _pausedElapsed = Duration.zero;
+            _nextStory(stories);
+          }
+        });
+      }
+    });
+    _ticker?.start();
+  }
+
+  void _pauseStory() {
+    setState(() {
+      isPaused = true;
+      _pausedElapsed = _elapsed; // Save elapsed time at pause
+    });
+    _ticker?.stop();
+    _videoController?.pause();
+  }
+
+  void _resumeStory(List stories, int index) {
+    setState(() {
+      isPaused = false;
+    });
+    if (_videoController != null) {
+      _videoController?.play();
+    } else {
+      _startImageTicker(stories, index,
+          from: _pausedElapsed); // Resume from paused time
+    }
   }
 
   void _loadStory(List stories, int index) async {
@@ -41,6 +92,9 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
     final url = story.contentUrl ?? '';
     final isVideo = url.endsWith('.m3u8');
     if (isVideo) {
+      _ticker?.dispose();
+      _ticker = null;
+      _pausedElapsed = Duration.zero;
       _videoController = VideoPlayerController.network(url);
       await _videoController!.initialize();
       _videoController!.play();
@@ -52,12 +106,9 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
         }
       });
     } else {
+      _pausedElapsed = Duration.zero;
+      _startImageTicker(stories, index);
       setState(() {});
-      Future.delayed(Duration(seconds: imageStoryDuration), () {
-        if (mounted && currentIndex == index) {
-          _nextStory(stories);
-        }
-      });
     }
   }
 
@@ -128,6 +179,12 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
               _nextStory(stories);
             }
           },
+          onLongPress: () {
+            _pauseStory();
+          },
+          onLongPressUp: () {
+            _resumeStory(stories, currentIndex);
+          },
           child: Stack(
             children: [
               Center(
@@ -136,13 +193,27 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
                             _videoController!.value.isInitialized
                         ? VideoStoryView(videoController: _videoController)
                         : CircularProgressIndicator())
-                    : ImageStoryView(url: url, story: story),
+                    : ImageStoryView(
+                        url: url,
+                        story: story,
+                        onLongPress: _pauseStory,
+                        onLongPressUp: () =>
+                            _resumeStory(stories, currentIndex),
+                      ),
               ),
               Positioned(
                 top: 10,
                 left: 10,
                 right: 10,
-                child: StoryProgressBar(stories: stories, currentIndex: currentIndex, isVideo: isVideo, videoDurationValue: videoDurationValue, imageStoryDuration: imageStoryDuration),
+                child: StoryProgressBar(
+                  stories: stories,
+                  currentIndex: currentIndex,
+                  isVideo: isVideo,
+                  videoDurationValue: videoDurationValue,
+                  imageStoryDuration: imageStoryDuration,
+                  imageProgress: imageProgress,
+                  isPaused: isPaused,
+                ),
               ),
               Positioned(
                   top: 20,
@@ -198,6 +269,8 @@ class StoryProgressBar extends StatelessWidget {
     required this.isVideo,
     required this.videoDurationValue,
     required this.imageStoryDuration,
+    this.imageProgress = 0.0,
+    this.isPaused = false,
   });
 
   final List<Story> stories;
@@ -205,6 +278,8 @@ class StoryProgressBar extends StatelessWidget {
   final bool isVideo;
   final double videoDurationValue;
   final int imageStoryDuration;
+  final double imageProgress;
+  final bool isPaused;
 
   @override
   Widget build(BuildContext context) {
@@ -223,16 +298,9 @@ class StoryProgressBar extends StatelessWidget {
                           value: videoDurationValue,
                           color: Colors.white,
                         )
-                      : TweenAnimationBuilder<double>(
-                          tween: Tween(begin: 0.0, end: 1.0),
-                          duration:
-                              Duration(seconds: imageStoryDuration),
-                          builder: (context, value, child) {
-                            return StoryProgressIndicator(
-                              value: value,
-                              color: Colors.white,
-                            );
-                          },
+                      : StoryProgressIndicator(
+                          value: imageProgress,
+                          color: Colors.white,
                         ))
                   : StoryProgressIndicator(
                       value: 0,
@@ -248,16 +316,23 @@ class ImageStoryView extends StatelessWidget {
     super.key,
     required this.url,
     required this.story,
+    this.onLongPress,
+    this.onLongPressUp,
   });
 
   final String url;
   final Story story;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onLongPressUp;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-        children: [
-          Image.network(
+      children: [
+        GestureDetector(
+          onLongPress: onLongPress,
+          onLongPressUp: onLongPressUp,
+          child: Image.network(
             url,
             fit: BoxFit.contain,
             width: double.infinity,
@@ -267,25 +342,25 @@ class ImageStoryView extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             },
           ),
-          Positioned(
-              bottom: 20,
-              right: 0,
-              left: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.remove_red_eye_outlined,
-                      color: Colors.white),
-                  SizedBox(width: 5),
-                  Text(
-                    story.viewers ?? '0',
-                    style: StringStyle.normalTextBold(
-                        size: 16, color: Colors.white),
-                  ),
-                ],
-              ))
-        ],
-      );
+        ),
+        Positioned(
+            bottom: 20,
+            right: 0,
+            left: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.remove_red_eye_outlined, color: Colors.white),
+                SizedBox(width: 5),
+                Text(
+                  story.viewers ?? '0',
+                  style:
+                      StringStyle.normalTextBold(size: 16, color: Colors.white),
+                ),
+              ],
+            ))
+      ],
+    );
   }
 }
 
