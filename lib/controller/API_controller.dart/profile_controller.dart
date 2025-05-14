@@ -105,6 +105,7 @@ class ProfileController extends ChangeNotifier {
   Future<void> getUserByUserID(
       {required String userId, required BuildContext context}) async {
     userByUserIdIsloading = true;
+    log(userId, name: '\x1B[32m profile id');
     notifyListeners();
     await ApiMethods.get(
         url: Uri.parse(

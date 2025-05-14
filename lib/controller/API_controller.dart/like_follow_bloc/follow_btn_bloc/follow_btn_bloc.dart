@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,8 @@ class FollowBtnBloc extends Bloc<FollowBtnEvent, FollowBtnState> {
       FollowBtnEvent event, Emitter<FollowBtnState> emit) async {
     final followApiCall = event.context.read<ProfileController>();
     bool followfrominitial = state.isFollow;
+    log(followfrominitial.toString(),
+        name: "\x1B[37m initial follow status from bloc");
     if (followfrominitial) {
       emit(FollowBtnState(isFollow: !followfrominitial));
       await followApiCall.unfollowUser(

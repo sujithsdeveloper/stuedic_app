@@ -30,7 +30,7 @@ class ShortsController extends ChangeNotifier {
       isBuffering = false;
       errorSnackbar(label: StringConstants.wrong, context: context);
       notifyListeners();
-      debugPrint('Error fetching reels: $e'); 
+      debugPrint('Error fetching reels: $e');
     }
   }
 }

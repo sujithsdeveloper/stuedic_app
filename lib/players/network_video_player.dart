@@ -25,55 +25,91 @@ class NetworkVideoPlayer extends StatefulWidget {
 }
 
 class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
-  VideoPlayerController? videoController;
+  late VideoPlayerController videoController;
   bool _isOwner = false;
+  bool _isVisible = false;
 
   @override
   void initState() {
     super.initState();
+
+    // videoController = widget.controller;
+    _isOwner = false;
+
+    videoController = VideoPlayerController.network(widget.url)
+      ..initialize().then((value) {
+        if (_isVisible) videoController?.play();
+        setState(() {});
+      });
+    videoController?.setLooping(true);
+    _isOwner = true;
+  }
+
+  /*
+   sujith code commented 
+
+
     if (widget.controller != null) {
-      videoController = widget.controller;
+      // videoController = widget.controller;
       _isOwner = false;
     } else if (widget.url.isNotEmpty) {
       videoController = VideoPlayerController.network(widget.url)
         ..initialize().then((value) {
+          if (_isVisible) videoController?.play();
           setState(() {});
         });
       videoController?.setLooping(true);
       _isOwner = true;
     }
   }
+  */
 
   @override
   void dispose() {
     if (_isOwner && videoController != null) {
-      videoController!.dispose();
+      videoController.dispose();
     }
+    videoController.dispose();
     super.dispose();
+  }
+
+  void _onVisibilityChanged(VisibilityInfo info) {
+    bool isVisible = info.visibleFraction > 0.6;
+    if (isVisible != _isVisible) {
+      setState(() {
+        _isVisible = isVisible;
+        if (_isVisible) {
+          videoController.play();
+        } else {
+          videoController.pause();
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final proWatch = context.watch<VideoTypeController>();
     final proRead = context.read<VideoTypeController>();
-    log(widget.url, name: 'reel url');
+    log(widget.url, name: 'reel url from video player');
     if (widget.url.isEmpty) {
       return const Center(child: Text('No video URL provided'));
     }
     final controller = videoController;
     return VisibilityDetector(
       key: Key(widget.url),
-      onVisibilityChanged: (visibilityInfo) {
-        if (controller != null &&
-            controller.value.isInitialized &&
-            widget.inistatePlay) {
-          if (visibilityInfo.visibleFraction > 0.5) {
-            controller.play();
-          } else {
-            controller.pause();
-          }
-        }
-      },
+      onVisibilityChanged: _onVisibilityChanged,
+      // onVisibilityChanged: (visibilityInfo) {
+      //   if (controller != null &&
+      //       controller.value.isInitialized &&
+      //       widget.inistatePlay) {
+      //     if (visibilityInfo.visibleFraction > 0.5) {
+      //       controller.play();
+      //     } else {
+      //       controller.pause();
+      //     }
+      //   }
+      // },
       child: GestureDetector(
         onLongPress: () {
           proRead.onLongPress(controller!);

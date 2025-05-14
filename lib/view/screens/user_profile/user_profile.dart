@@ -51,12 +51,13 @@ class _UserProfileState extends State<UserProfile>
             Provider.of<ProfileController>(context, listen: false);
         userDataProviderWatch.isFollowed =
             userDataProviderWatch.userProfile?.response?.isFollowed ?? false;
-        log(' ${userDataProviderWatch.userProfile?.response?.isFollowed.toString()}',
-            name: 'Initstate API REspose');
+
         final provider = context.read<ProfileController>();
 
         provider.getUserByUserID(context: context, userId: widget.userId);
         provider.getUseGrid(context: context, userID: widget.userId);
+        log(' ${userDataProviderWatch.userProfile?.response?.isFollowed.toString()}',
+            name: 'inite api call follow Status ');
       },
     );
   }
@@ -66,6 +67,8 @@ class _UserProfileState extends State<UserProfile>
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userProfile?.response;
     final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
+    log('${user?.isFollowed.toString()}',
+        name: 'passing bloc follow status inside build method');
 
     final isCollege = user?.isCollege ?? false;
     // final isCollege = false;

@@ -6,11 +6,13 @@ import 'package:stuedic_app/model/home_feed_model.dart';
 class HomefeedController extends ChangeNotifier {
   bool isHomeFeedLoading = false;
   HomeFeed? homeFeed;
+  int page = 1;
   Future<void> getAllPost({required BuildContext context}) async {
     isHomeFeedLoading = true;
     notifyListeners();
     await ApiMethods.get(
-        url: ApiUrls.homeFeedAPI,
+        url:
+            Uri.parse("${ApiUrls.baseUrl}api/v1/Post/homeFeed?page=1&limit=50"),
         onSucces: (p0) {
           homeFeed = homeFeedFromJson(p0.body);
           isHomeFeedLoading = false;

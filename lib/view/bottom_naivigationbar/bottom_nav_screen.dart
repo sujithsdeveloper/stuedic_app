@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:stuedic_app/controller/API_controller.dart/discover_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/homeFeed_Api_call_bloc/bloc/homefeed_data_fetch_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/app/app_contoller.dart';
@@ -46,9 +48,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       discoverController.getDiscoverData(context);
       feedController.getAllPost(context: context);
       storyController.getStories(context);
-
-  
-
     });
   }
 
@@ -161,10 +160,13 @@ class _HomePageState extends State<HomePage> {
         controller: pageController,
       )
     ];
-    return PageView(
-      controller: pageController,
-      restorationId: 'home_page_view',
-      children: pages,
+    return BlocProvider(
+      create: (context) => HomefeedDataFetchBloc(context: context),
+      child: PageView(
+        controller: pageController,
+        restorationId: 'home_page_view',
+        children: pages,
+      ),
     );
   }
 }

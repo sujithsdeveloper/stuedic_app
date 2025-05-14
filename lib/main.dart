@@ -17,6 +17,7 @@ import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/notification_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/reel_section_API_call_bloc/bloc/reel_data_fetch_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/search_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/upload_profile_image.dart';
@@ -135,7 +136,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<PostLikeBloc>(
           create: (context) =>
               PostLikeBloc(initialCount: 0, initialbool: false),
-        )
+        ),
+        BlocProvider<ReelDataFetchBloc>(
+          create: (context) => ReelDataFetchBloc(context: context),
+        ),
       ],
       child: MaterialApp(
           theme: AppTheme.lightTheme,
