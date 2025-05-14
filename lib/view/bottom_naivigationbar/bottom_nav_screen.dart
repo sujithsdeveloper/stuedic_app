@@ -10,7 +10,7 @@ import 'package:stuedic_app/controller/app/app_contoller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post_screen.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post/create_post_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/discover_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/home_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/current_college_profile_screen.dart';
@@ -34,7 +34,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
     AppUtils.checkConnectivity(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final token = await AppUtils.getToken();
-      log(token, name: 'token --------');
+      log(token, name: 'token -------->>>');
 
       final profileController = context.read<ProfileController>();
       final discoverController = context.read<DiscoverController>();
@@ -46,9 +46,6 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       discoverController.getDiscoverData(context);
       feedController.getAllPost(context: context);
       storyController.getStories(context);
-
-  
-
     });
   }
 
@@ -105,27 +102,33 @@ class _BottomNavScreenState extends State<BottomNavScreen>
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          onTap: (value) {
-            proRead.changeBottomNav(index: value, context: context);
-          },
-          currentIndex: proWatch.currentIndex,
-          elevation: 3,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.grid_view_rounded), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(HugeIcons.strokeRoundedDiscoverSquare),
-                label: "Discover"),
-            BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
-            BottomNavigationBarItem(
-                icon: Icon(HugeIcons.strokeRoundedAiVideo), label: "Shorts"),
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.person_alt_circle), label: "Profile"),
-          ],
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+              splashFactory: NoSplash.splashFactory,
+              splashColor: Colors.transparent),
+          child: BottomNavigationBar(
+            showSelectedLabels: false,
+            onTap: (value) {
+              proRead.changeBottomNav(index: value, context: context);
+            },
+            currentIndex: proWatch.currentIndex,
+            elevation: 3,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.grid_view_rounded), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(HugeIcons.strokeRoundedDiscoverSquare),
+                  label: "Discover"),
+              BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
+              BottomNavigationBarItem(
+                  icon: Icon(HugeIcons.strokeRoundedAiVideo), label: "Shorts"),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.person_alt_circle),
+                  label: "Profile"),
+            ],
+          ),
         ),
       ),
     );

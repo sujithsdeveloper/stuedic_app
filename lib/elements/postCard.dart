@@ -107,7 +107,7 @@ class _PostCardState extends State<PostCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ///////////////////Pots header////////////////////////////Post header/////////////////////////////////////////////////////////
+///////////////////Pots header////////////////////////////Post header/////////////////////////////////////////////////////////
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -129,9 +129,7 @@ class _PostCardState extends State<PostCard>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.name.isEmpty
-                                  ? StringConstants.UnknownUser
-                                  : widget.name,
+                              AppUtils.getUserNameById(widget.name),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -180,7 +178,7 @@ class _PostCardState extends State<PostCard>
               ),
             ),
             SizedBox(height: 10),
-            /////////////////Post media////////////////////////////Post media/////////////////////////////////////////////////////////
+/////////////////Post media////////////////////////////Post media/////////////////////////////////////////////////////////
             GestureDetector(
               onDoubleTap: () async {
                 // proRead.toggleLikeVisible();

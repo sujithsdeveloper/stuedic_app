@@ -57,7 +57,7 @@ class PostInteractionController extends ChangeNotifier {
     await ApiMethods.get(
       url: Uri.parse('${ApiUrls.baseUrl}api/v1/Post/likePost?postid=$postId'),
       onSucces: (p0) {
-        Logger().f(p0.body);
+        Logger().f(p0);
         notifyListeners();
       },
       onTokenExpired: () => likePost(postId: postId, context: context),
@@ -72,7 +72,7 @@ class PostInteractionController extends ChangeNotifier {
     await ApiMethods.get(
       url: Uri.parse('${ApiUrls.baseUrl}api/v1/Post/unlikePost?postid=$postId'),
       onSucces: (p0) {
-        Logger().f(p0.body);
+        // Logger().f(p0.body);
         notifyListeners();
       },
       onTokenExpired: () => unLikePost(postId: postId, context: context),
@@ -113,7 +113,7 @@ class PostInteractionController extends ChangeNotifier {
       onSucces: (p0) {
         Logger().f(p0.body);
         context.read<HomefeedController>().getAllPost(context: context);
-        AppUtils.showToast(msg: 'Post Saved');
+        AppUtils.showToast(toastMessage: 'Post Saved');
         notifyListeners();
       },
       onTokenExpired: () => bookmarkPost(postId: postId, context: context),
@@ -131,7 +131,7 @@ class PostInteractionController extends ChangeNotifier {
       onSucces: (p0) {
         Logger().f(p0.body);
         context.read<HomefeedController>().getAllPost(context: context);
-        AppUtils.showToast(msg: 'Post UnSaved');
+        AppUtils.showToast(toastMessage: 'Post UnSaved');
 
         notifyListeners();
       },
@@ -148,7 +148,7 @@ class PostInteractionController extends ChangeNotifier {
       onSucces: (p0) {
         // Logger().f(p0.body);
         // log(p0.body);
-        getBookamark = getBookamarkFromJson(p0.body);
+        getBookamark = getBookamarkFromJson(p0);
         notifyListeners();
       },
       onTokenExpired: () => getBookmark(context: context),
@@ -209,7 +209,7 @@ class PostInteractionController extends ChangeNotifier {
     await ApiMethods.get(
       url: url,
       onSucces: (p0) {
-        getComments = getCommentsModelFromJson(p0.body);
+        getComments = getCommentsModelFromJson(p0);
         isCommentLoading = false;
         notifyListeners();
         // log(p0.body);

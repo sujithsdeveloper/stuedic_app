@@ -57,7 +57,7 @@ Future<String?> exportEditedVideo({
     }
   } catch (e) {
     log('Error exporting video: $e');
-    AppUtils.showToast(msg: 'Error exporting video: $e');
+    AppUtils.showToast(toastMessage: 'Error exporting video: $e');
   }
   return null;
 }

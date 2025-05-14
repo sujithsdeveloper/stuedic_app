@@ -5,12 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/connection_failed_screen.dart';
+import 'package:video_player/video_player.dart';
 
 class AppUtils {
 ////////////////////////////Token Related Functions//////////////////////////////////////////////////////////////////////////////////////
@@ -38,12 +40,12 @@ class AppUtils {
     preff.setString(StringConstants.accessToken, accessToken ?? '');
   }
 
-  static void showToast({required String msg}) {
+  static void showToast({required String toastMessage}) {
     Fluttertoast.showToast(
         gravity: ToastGravity.BOTTOM,
         backgroundColor: ColorConstants.secondaryColor,
         textColor: Colors.white,
-        msg: msg);
+        msg: toastMessage);
   }
 
   /////////////////////////User Related Functions//////////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +55,16 @@ class AppUtils {
   //   prefs.setString(StringConstants.userId, userID ?? '');
   //   // log('User ID saved: ${prefs.getString(StringConstants.userId)}');
   // }
+
+
+static  String getUserNameById(String? userId){
+    if (userId==null || userId.isEmpty) {
+      return StringConstants.UnknownUser;
+    } else {
+      return userId;
+      
+    }
+  }
 
   static Future<void> saveCurrentUserDetails({
     bool isUserId = false,
@@ -244,6 +256,22 @@ class AppUtils {
     prefs.remove(StringConstants.userName);
   }
 
+  static Future<void> saveNotificationConfigure(
+      bool isNotificationEnabled) async {
+    final preff = await SharedPreferences.getInstance();
+    preff.remove(StringConstants.isNotificationEnabled);
+    preff.setBool(StringConstants.isNotificationEnabled, isNotificationEnabled);
+    log('Notification status: $isNotificationEnabled');
+  }
+
+  static Future<bool> getNotificationConfigure() async {
+    final preff = await SharedPreferences.getInstance();
+    bool isNotificationEnabled =
+        preff.getBool(StringConstants.isNotificationEnabled) ?? true;
+    log('Notification status: $isNotificationEnabled');
+    return isNotificationEnabled;
+  }
+
 ///////////////////////////////////////Theme Related Functions//////////////////////////////////////////////////////////////////////////////////////
   static bool isDarkTheme(BuildContext context) {
     final theme = Theme.of(context).brightness == Brightness.dark;
@@ -276,5 +304,32 @@ class AppUtils {
       return true;
     }
     return false;
+  }
+
+//////////////////////////Media Related Functions//////////////////////////////////////////////////////////////////////////////////////
+  static String getFileName(String filePath) {
+    return filePath.split('/').last;
+  }
+
+  static String getFileExtension(String filePath) {
+    return filePath.split('.').last;
+  }
+
+  static bool isVideoFile(String filePath) {
+    final extension = getFileExtension(filePath);
+    return ['mp4', 'mov', 'avi', 'mkv'].contains(extension.toLowerCase());
+  }
+
+  static bool isImageFile(String filePath) {
+    final extension = getFileExtension(filePath);
+    return ['jpg', 'jpeg', 'png', 'gif'].contains(extension.toLowerCase());
+  }
+
+  static Future<Duration> getVideoDuration(XFile videoFile) async {
+    final videoController = VideoPlayerController.file(File(videoFile.path));
+    await videoController.initialize();
+    final duration = videoController.value.duration;
+    await videoController.dispose();
+    return duration;
   }
 }

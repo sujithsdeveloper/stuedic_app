@@ -28,6 +28,7 @@ import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/controller/chat/listen_to_chatList.dart';
 import 'package:stuedic_app/controller/connectivity_check_controller.dart';
 import 'package:stuedic_app/controller/image/image_edit_controller.dart';
+import 'package:stuedic_app/controller/report_problem_controller.dart';
 import 'package:stuedic_app/controller/story/story_controller.dart';
 import 'package:stuedic_app/controller/story/story_edit_controller.dart';
 import 'package:stuedic_app/controller/video/video_trim_controller.dart';
@@ -126,6 +127,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CollegeController()),
         ChangeNotifierProvider(create: (context) => StoryController()),
         ChangeNotifierProvider(create: (context) => DropdownController()),
+        ChangeNotifierProvider(create: (context) => ReportProblemController()),
         ChangeNotifierProvider(
             create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),

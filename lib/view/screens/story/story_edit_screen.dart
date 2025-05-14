@@ -304,7 +304,8 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                             final multipartController =
                                 Provider.of<MutlipartController>(context,
                                     listen: false);
-                            AppUtils.showToast(msg: 'Uploading story...');
+                            AppUtils.showToast(
+                                toastMessage: 'Uploading story...');
                             log('Uploading story...');
                             if (proWatch.isTextFieldVisible) {
                               proRead.toggleTextFieldVisibility(
@@ -324,7 +325,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                               log('exportEditedVideo returned path: $path');
                               if (path == null) {
                                 AppUtils.showToast(
-                                    msg:
+                                    toastMessage:
                                         'Failed to export edited video. Please try again.');
                                 log('exportEditedVideo failed: returned null path');
                                 return;
@@ -440,7 +441,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
       }
     } catch (e) {
       log('Error capturing image: $e');
-      AppUtils.showToast(msg: 'Error capturing image: $e');
+      AppUtils.showToast(toastMessage: 'Error capturing image: $e');
     }
     return null;
   }

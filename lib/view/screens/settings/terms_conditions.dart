@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
-import 'package:stuedic_app/utils/constants/string_constants.dart';
+import 'package:stuedic_app/utils/constants/app_info.dart';
 
 class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({super.key});
@@ -19,18 +19,18 @@ class TermsAndConditions extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            const Text(
-              "Effective Date: 18/01/2025",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
+            // const Text(
+            //   "Effective Date: 18/01/2025",
+            //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            // ),
             const SizedBox(height: 10),
-            _buildSectionTitle("Welcome to STUEDIC!"),
+            _buildSectionTitle("Welcome to ${AppInfo.appNameCapital}!"),
             _buildContentText(
               "By accessing or using our platform, you agree to comply with these Terms & Conditions. If you do not agree, please refrain from using the app.",
             ),
             _buildSectionTitle("1. Eligibility"),
             _buildContentText(
-              "STUEDIC is intended for college students aged 17 and above. By registering, you confirm that the information you provide is accurate and that you are eligible to use the platform.",
+              "${AppInfo.appName} is intended for college students aged 17 and above. By registering, you confirm that the information you provide is accurate and that you are eligible to use the platform.",
             ),
             _buildSectionTitle("2. Account Responsibilities"),
             _buildBulletPoint(
@@ -46,11 +46,11 @@ class TermsAndConditions extends StatelessWidget {
                 "Avoid spamming, phishing, or engaging in any fraudulent activities."),
             _buildSectionTitle("4. Intellectual Property"),
             _buildContentText(
-              "All content and features on STUEDIC, including text, graphics, logos, and software, are owned by us or licensed to us. You may not reproduce, distribute, or exploit this content without prior permission.",
+              "All content and features on ${AppInfo.appName}, including text, graphics, logos, and software, are owned by us or licensed to us. You may not reproduce, distribute, or exploit this content without prior permission.",
             ),
             _buildSectionTitle("5. User-Generated Content"),
             _buildBulletPoint(
-                "By posting content on STUEDIC, you grant us a non-exclusive, royalty-free license to use, modify, and distribute your content for platform-related purposes."),
+                "By posting content on ${AppInfo.appName}, you grant us a non-exclusive, royalty-free license to use, modify, and distribute your content for platform-related purposes."),
             _buildBulletPoint(
                 "You retain ownership of your content but agree not to upload anything that infringes on third-party rights or violates laws."),
             _buildSectionTitle("6. Prohibited Activities"),
@@ -62,7 +62,7 @@ class TermsAndConditions extends StatelessWidget {
                 "Engage in cyberbullying, harassment, or impersonation of others."),
             _buildSectionTitle("7. Limitation of Liability"),
             _buildContentText(
-              "STUEDIC is provided “as is.” We do not guarantee uninterrupted service or the accuracy of content on the platform. To the fullest extent permitted by law, we are not liable for any damages, losses, or misuse resulting from your use of the app.",
+              "${AppInfo.appName} is provided “as is.” We do not guarantee uninterrupted service or the accuracy of content on the platform. To the fullest extent permitted by law, we are not liable for any damages, losses, or misuse resulting from your use of the app.",
             ),
             _buildSectionTitle("8. Termination"),
             _buildContentText(
@@ -70,15 +70,11 @@ class TermsAndConditions extends StatelessWidget {
             ),
             _buildSectionTitle("9. Modifications to the Terms"),
             _buildContentText(
-              "We may update these Terms & Conditions at any time. We will notify users of significant changes. Continued use of STUEDIC indicates your acceptance of the updated terms.",
+              "We may update these Terms & Conditions at any time. We will notify users of significant changes. Continued use of ${AppInfo.appName} indicates your acceptance of the updated terms.",
             ),
             _buildSectionTitle("10. Governing Law"),
             _buildContentText(
-              "These Terms & Conditions are governed by the laws of Kerala High Court, Eranakulam. Any disputes arising from the use of STUEDIC will be resolved exclusively in the courts of Kerala High Court, Eranakulam.",
-            ),
-            _buildSectionTitle("11. Contact Us"),
-            _buildContentText(
-              "For questions or concerns about these Terms & Conditions, contact us at: stuedic.varts@gmail.com",
+              "These Terms & Conditions are governed by the laws of Kerala High Court, Eranakulam. Any disputes arising from the use of ${AppInfo.appName} will be resolved exclusively in the courts of Kerala High Court, Eranakulam.",
             ),
           ],
         ),

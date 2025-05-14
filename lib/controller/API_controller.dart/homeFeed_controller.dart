@@ -14,10 +14,10 @@ class HomefeedController extends ChangeNotifier {
     await ApiMethods.get(
         url: ApiUrls.homeFeedAPI,
         onSucces: (p0) {
-          homeFeed = homeFeedFromJson(p0.body);
+          homeFeed = homeFeedFromJson(p0);
           isHomeFeedLoading = false;
           notifyListeners();
-          log('home feed: ${p0.body}');
+          // log('home feed: ${p0}');
         },
         onTokenExpired: () {
           isHomeFeedLoading = false;

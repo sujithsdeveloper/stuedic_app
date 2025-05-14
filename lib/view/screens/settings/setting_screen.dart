@@ -8,9 +8,13 @@ import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/theme_sheet.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/utils/constants/app_info.dart';
+import 'package:stuedic_app/view/screens/settings/about_page.dart';
 
 import 'package:stuedic_app/view/screens/settings/account/account_settings.dart';
+import 'package:stuedic_app/view/screens/settings/contact_us.dart';
 import 'package:stuedic_app/view/screens/settings/language_screen.dart';
+import 'package:stuedic_app/view/screens/settings/notification_settings.dart';
 import 'package:stuedic_app/view/screens/settings/report_problem.dart';
 import 'package:stuedic_app/view/screens/settings/terms_conditions.dart';
 
@@ -39,7 +43,9 @@ class SettingScreen extends StatelessWidget {
       {
         'label': 'Notifications',
         'icon': CupertinoIcons.bell,
-        'onTap': () {},
+        'onTap': () {
+          AppRoutes.push(context, NotificationSettings());
+        },
       },
       {
         'label': 'Language',
@@ -58,12 +64,16 @@ class SettingScreen extends StatelessWidget {
       {
         'label': 'About Studeic',
         'icon': CupertinoIcons.info_circle,
-        'onTap': () {},
+        'onTap': () {
+          AppRoutes.push(context, AboutPage());
+        },
       },
       {
         'label': 'Contact us',
         'icon': HugeIcons.strokeRoundedMail01,
-        'onTap': () {},
+        'onTap': () {
+          AppRoutes.push(context, ContactUs());
+        },
       },
       {
         'label': 'Terms and conditions',
@@ -108,10 +118,10 @@ class SettingScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Stuedic",
+            AppInfo.appName,
             style: StringStyle.topHeading(size: 25),
           ),
-          Text("Version 1.0.0"),
+          Text("Version ${AppInfo.appVersion}"),
           SizedBox(
             height: 25,
           ),

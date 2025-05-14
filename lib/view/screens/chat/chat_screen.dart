@@ -10,11 +10,13 @@ import 'package:stuedic_app/controller/chat/chat_list_screen_controller.dart';
 import 'package:stuedic_app/dialogs/call_alert_dialog.dart';
 import 'package:stuedic_app/dialogs/custom_alert_dialog.dart';
 import 'package:stuedic_app/menu/custom_popup_menu.dart';
+import 'package:stuedic_app/model/chat/chat_history_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
+import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/date_formater.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 
@@ -53,6 +55,14 @@ class _ChatScreenState extends State<ChatScreen> {
         chatController.scrollToBottom(isScrollVisible: true);
       });
     });
+  }
+
+  bool isOnlyEmoji(String input) {
+    final regex = RegExp(
+      r'^(?:[\u2700-\u27BF]|[\u1F300-\u1F6FF]|[\u1F900-\u1F9FF]|[\u1F1E6-\u1F1FF]|[\u2600-\u26FF]|\uD83C[\uDDE6-\uDDFF]|\uD83D[\uDC00-\uDE4F]|\uD83D[\uDE80-\uDEFF])+$',
+      unicode: true,
+    );
+    return regex.hasMatch(input.trim());
   }
 
   @override
@@ -142,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       const SizedBox(width: 10),
                       Flexible(
                         child: Text(
-                          widget.name,
+                          AppUtils.getUserNameById(widget.name),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           softWrap: true,
@@ -242,8 +252,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   final difference =
                       currentTimestamp.difference(previousTimestamp).inMinutes;
 
-// Check if time gap > 5 minutes or if it's the first message
                   final showTimeSeparator = index == 0 || difference > 5;
+                  final onlyEmoji = isOnlyEmoji(chatData.content.toString());
+
                   return Column(
                     children: [
                       if (showTimeSeparator)
@@ -275,45 +286,16 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: IntrinsicWidth(
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                minWidth: 0,
+                                minWidth: 90,
+                                maxHeight: 70,
                                 maxWidth:
                                     MediaQuery.of(context).size.width * 0.8,
                               ),
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: isCurrentUser
-                                      ? isSelected
-                                          ? Colors.grey.shade500
-                                          : Colors.white
-                                      : isSelected
-                                          ? Colors.grey.shade500
-                                          : Color(0xffC2FFC7),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      chatData.content.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 18, color: Colors.black),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        DateFormatter.dateformat_hh_mm_a(
-                                            currentTimestamp),
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              child: ChatBubble(
+                                  onlyEmoji: onlyEmoji,
+                                  isCurrentUser,
+                                  isSelected,
+                                  chatData),
                             ),
                           ),
                         ),
@@ -331,6 +313,46 @@ class _ChatScreenState extends State<ChatScreen> {
           isDarkTheme: isDarkTheme,
           toUserID: int.parse(widget.userId),
         ),
+      ),
+    );
+  }
+
+  Container ChatBubble(
+      bool isCurrentUser, bool isSelected, ChatHistoryModel chatData,
+      {bool onlyEmoji = false}) {
+    if (!onlyEmoji) {
+      return Container(
+        margin: EdgeInsets.only(
+            left: isCurrentUser ? 0 : 5, right: isCurrentUser ? 5 : 0),
+        alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
+        child: Text(
+          chatData.content.toString(),
+          style: const TextStyle(fontSize: 30), // large emoji size
+        ),
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: isCurrentUser
+            ? isSelected
+                ? Colors.grey.shade500
+                : Colors.white
+            : isSelected
+                ? Colors.grey.shade500
+                : const Color(0xffC2FFC7),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            chatData.content.toString(),
+            style: const TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ],
       ),
     );
   }

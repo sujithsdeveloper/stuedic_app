@@ -28,20 +28,20 @@ class AccountSettings extends StatelessWidget {
           // Show delete account confirmation dialog
         }
       },
-      {
-        'label': 'Privacy Settings',
-        'icon': Icons.privacy_tip,
-        'onTap': () {
-          // Navigate to privacy settings screen
-        }
-      },
-      {
-        'label': 'Notification Settings',
-        'icon': Icons.notifications,
-        'onTap': () {
-          // Navigate to notification settings screen
-        }
-      }
+      // {
+      //   'label': 'Privacy Settings',
+      //   'icon': Icons.privacy_tip,
+      //   'onTap': () {
+      //     // Navigate to privacy settings screen
+      //   }
+      // },
+      // {
+      //   'label': 'Notification Settings',
+      //   'icon': Icons.notifications,
+      //   'onTap': () {
+      //     // Navigate to notification settings screen
+      //   }
+      // }
     ];
     return Scaffold(
       appBar: AppBar(

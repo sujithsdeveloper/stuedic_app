@@ -12,6 +12,7 @@ import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/app_info.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/homeShimmer.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 curve: Curves.easeIn);
                           },
                           child: Text(
-                            StringConstants.appName,
+                            AppInfo.appName.toUpperCase(),
                             style: TextStyle(
                               fontFamily: 'Calistoga',
                               fontSize: 18,
@@ -149,10 +150,10 @@ class _HomeScreenState extends State<HomeScreen>
                                       initialCount: item.likescount ?? -5,
                                       initialbool: item.isLiked ?? false),
                                   child: PostCard(
-
                                     isBookmarked: item.isBookmarked ?? false,
-                                    likeCount:item.likescount.toString() ?? '0',
-                                      sharableLink: item.shareableLink ?? '',
+                                    likeCount:
+                                        item.likescount.toString() ?? '0',
+                                    sharableLink: item.shareableLink ?? '',
                                     postType: item.postType ?? '',
                                     isLiked: item.isLiked ?? false,
                                     commentCount:

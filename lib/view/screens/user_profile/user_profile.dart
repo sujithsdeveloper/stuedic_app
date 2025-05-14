@@ -12,6 +12,7 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/elements/tabbar_delegates.dart';
+import 'package:stuedic_app/model/userGridModel.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
@@ -28,6 +29,7 @@ import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/view/screens/singlepost_screen.dart';
+import 'package:stuedic_app/view/screens/user_profile/tabbar_sections/user_profile_tabbar_section.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
 
@@ -83,7 +85,7 @@ class _UserProfileState extends State<UserProfile>
                       headerSliverBuilder: (context, innerBoxIsScrolled) => [
                         isCollege
                             ?
-                            ///////////////////////College Profile//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////College Profile//////////////////////////////////////////////////////////////////////////////////////////////
                             SliverToBoxAdapter(
                                 child: Stack(
                                   children: [
@@ -115,7 +117,8 @@ class _UserProfileState extends State<UserProfile>
                                                       CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      user?.userName ?? '',
+                                                      AppUtils.getUserNameById(
+                                                          user?.userName),
                                                       style: const TextStyle(
                                                         fontSize: 18,
                                                         fontWeight:
@@ -239,73 +242,84 @@ class _UserProfileState extends State<UserProfile>
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                               Theme(
-                                          data: Theme.of(context).copyWith(
-                                              splashColor: Colors.transparent,
-                                              dividerColor: Colors.transparent),
-                                          child: ExpansionTile(
-                                            expandedCrossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            tilePadding: EdgeInsets.zero,
-                                            childrenPadding: EdgeInsets.zero,
-                                            expandedAlignment:
-                                                Alignment.topLeft,
-                                            title: Text(
-                                              'Details',
-                                              style: StringStyle.normalTextBold(
-                                                  size: 16),
-                                            ),
-                                            children: [
-                                              DetailsItem(
-                                                title: 'Address',
-                                                subtitle: lorum,
-                                                iconData:
-                                                    CupertinoIcons.location,
-                                              ),
-                                              DetailsItem(
-                                                onIconTap: () {
-                                                  if (user?.email != null) {
-                                                    EasyLauncher.email(
-                                                        email:
-                                                            user?.email ?? '');
-                                                  } else {
-                                                    AppUtils.showToast(
-                                                        msg:
-                                                            'Email not provided');
-                                                  }
-                                                },
-                                                title: 'Email',
-                                                subtitle: user?.email ??
-                                                    'Not Provided',
-                                                iconData:
-                                                    CupertinoIcons.envelope,
-                                              ),
-                                              DetailsItem(
-                                                onIconTap: () {
-                                                  if (user?.phone != null) {
-                                                    EasyLauncher.call(
-                                                        number:
-                                                            user?.phone ?? '');
-                                                  } else {
-                                                    AppUtils.showToast(
-                                                        msg:
-                                                            'Phone number not provided');
-                                                  }
-                                                },
-                                                title: 'Phone Number',
-                                                subtitle: user?.phone ??
-                                                    'Not Provided',
-                                                iconData:
-                                                    HugeIcons.strokeRoundedCall,
-                                              ),
-                                              DetailsItem(
-                                                title: 'Affiliation',
-                                                subtitle: "Dummy University",
-                                                iconData: Icons.school_outlined,
-                                              ),
-                                            ],
-                                          ),
-                                        )
+                                              Theme(
+                                                data: Theme.of(context)
+                                                    .copyWith(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        dividerColor:
+                                                            Colors.transparent),
+                                                child: ExpansionTile(
+                                                  expandedCrossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  tilePadding: EdgeInsets.zero,
+                                                  childrenPadding:
+                                                      EdgeInsets.zero,
+                                                  expandedAlignment:
+                                                      Alignment.topLeft,
+                                                  title: Text(
+                                                    'Details',
+                                                    style: StringStyle
+                                                        .normalTextBold(
+                                                            size: 16),
+                                                  ),
+                                                  children: [
+                                                    DetailsItem(
+                                                      title: 'Address',
+                                                      subtitle: lorum,
+                                                      iconData: CupertinoIcons
+                                                          .location,
+                                                    ),
+                                                    DetailsItem(
+                                                      onIconTap: () {
+                                                        if (user?.email !=
+                                                            null) {
+                                                          EasyLauncher.email(
+                                                              email:
+                                                                  user?.email ??
+                                                                      '');
+                                                        } else {
+                                                          AppUtils.showToast(
+                                                              toastMessage:
+                                                                  'Email not provided');
+                                                        }
+                                                      },
+                                                      title: 'Email',
+                                                      subtitle: user?.email ??
+                                                          'Not Provided',
+                                                      iconData: CupertinoIcons
+                                                          .envelope,
+                                                    ),
+                                                    DetailsItem(
+                                                      onIconTap: () {
+                                                        if (user?.phone !=
+                                                            null) {
+                                                          EasyLauncher.call(
+                                                              number:
+                                                                  user?.phone ??
+                                                                      '');
+                                                        } else {
+                                                          AppUtils.showToast(
+                                                              toastMessage:
+                                                                  'Phone number not provided');
+                                                        }
+                                                      },
+                                                      title: 'Phone Number',
+                                                      subtitle: user?.phone ??
+                                                          'Not Provided',
+                                                      iconData: HugeIcons
+                                                          .strokeRoundedCall,
+                                                    ),
+                                                    DetailsItem(
+                                                      title: 'Affiliation',
+                                                      subtitle:
+                                                          "Dummy University",
+                                                      iconData:
+                                                          Icons.school_outlined,
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -339,7 +353,7 @@ class _UserProfileState extends State<UserProfile>
                                 ),
                               )
                             :
-                            ///////////////////////User Profile//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////User Profile//////////////////////////////////////////////////////////////////////////////////////////////
                             // User Profile
                             SliverToBoxAdapter(
                                 child: Column(
@@ -459,7 +473,9 @@ class _UserProfileState extends State<UserProfile>
                                           ),
 
                                           const SizedBox(height: 16),
-                                          Text(user?.userName ?? '',
+                                          Text(
+                                              AppUtils.getUserNameById(
+                                                  user?.userId),
                                               style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold)),
@@ -509,6 +525,7 @@ class _UserProfileState extends State<UserProfile>
                         SliverPersistentHeader(
                           pinned: true,
                           delegate: TabBarDelegate(
+                            context: context,
                             TabBar(
                               controller: tabController,
                               labelColor: ColorConstants.secondaryColor,
@@ -541,81 +558,11 @@ class _UserProfileState extends State<UserProfile>
                       body: TabBarView(
                         controller: tabController,
                         children: [
-                          Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Builder(
-                                builder: (context) {
-                                  if (photoGrid == null || photoGrid.isEmpty) {
-                                    return Column(
-                                      spacing: 5,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Capture some amazing moments with your friends',
-                                          style: StringStyle.normalTextBold(),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.add_a_photo_outlined,
-                                            ),
-                                            Text('Create your first post')
-                                          ],
-                                        )
-                                      ],
-                                    );
-                                  } else {
-                                    return GridView.builder(
-                                      itemCount: photoGrid?.length ?? 0,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              childAspectRatio: 9 / 16,
-                                              crossAxisCount: 3,
-                                              mainAxisSpacing: 4,
-                                              crossAxisSpacing: 4),
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                              color: Color(0xffF5FFBB),
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                      photoGrid?[index]
-                                                              .postContentUrl ??
-                                                          ''))),
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
-                              )),
+                          UserImageGrid(
+                              photoGrid: photoGrid, userId: user?.userId),
+
                           // Videos Section
-                          Column(
-                            spacing: 5,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Capture some amazing moments with your friends',
-                                style: StringStyle.normalTextBold(),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add_a_photo_outlined,
-                                  ),
-                                  Text('Create your first video')
-                                ],
-                              )
-                            ],
-                          ),
+                          UserVideoGrid(),
 
                           // Shopping Items
 

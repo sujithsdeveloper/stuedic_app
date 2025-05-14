@@ -26,7 +26,6 @@ class PostSection extends StatelessWidget {
     final proWatchAsset = context.watch<AssetPickerController>();
 
     final multipartObj = context.watch<MutlipartController>();
-    final proWatchCrop = context.watch<ImageEditController>();
     final controller = TextEditingController();
     bool isDarkTheme = AppUtils.isDarkTheme(context);
 
@@ -125,6 +124,13 @@ class PostSection extends StatelessWidget {
                               label: 'Please upload a image', context: context);
                           return;
                         }
+                        if (multipartObj.isUploading) {
+                          errorSnackbar(
+                              label: 'Please wait for upload to finish',
+                              context: context);
+                          return;
+                        }
+
                         await proRead.uploadPost(
                             mediaUrl: multipartObj.imageUrl ?? '',
                             caption:

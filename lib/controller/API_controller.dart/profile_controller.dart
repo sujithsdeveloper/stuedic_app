@@ -45,7 +45,7 @@ class ProfileController extends ChangeNotifier {
       url: Uri.parse(
           '${ApiUrls.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
-        Logger().f(p0.body);
+        Logger().f(p0);
         // context
         //     .read<ProfileController>()
         //     .getUserByUserID(userId: userId, context: context);
@@ -62,7 +62,7 @@ class ProfileController extends ChangeNotifier {
       url: Uri.parse(
           '${ApiUrls.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
-        Logger().f(p0.body);
+        Logger().f(p0);
         // context
         //     .read<ProfileController>()
         //     .getUserByUserID(userId: userId, context: context);
@@ -80,8 +80,8 @@ class ProfileController extends ChangeNotifier {
       url: ApiUrls.getUserDetail,
       context: context,
       onSucces: (res) async {
-        log("Current user response ${res.body}");
-        userCurrentDetails = userCurrentDetailsModelFromJson(res.body);
+        log("Current user response ${res}");
+        userCurrentDetails = userCurrentDetailsModelFromJson(res);
         AppUtils.saveCurrentUserDetails(
             userId: userCurrentDetails?.response?.userId ?? '', isUserId: true);
         AppUtils.saveCurrentUserDetails(
@@ -110,8 +110,8 @@ class ProfileController extends ChangeNotifier {
         url: Uri.parse(
             '${ApiUrls.baseUrl}api/v1/Profile/getUserDetails?userId=$userId'),
         onSucces: (p0) {
-          log(p0.body);
-          userProfile = getUserByUserIdModelFromJson(p0.body);
+          log(p0);
+          userProfile = getUserByUserIdModelFromJson(p0);
           userByUserIdIsloading = false;
           notifyListeners();
           log(userProfile!.response!.followersCount.toString());
@@ -125,12 +125,22 @@ class ProfileController extends ChangeNotifier {
   }
 
   UserProfileGrid? currentUserProfileGrid;
+  List imageGrid=[];
+  List videoGrid=[];
   Future<void> getCurrentUserGrid({required BuildContext context}) async {
     await ApiMethods.get(
         url: ApiUrls.profileGridUrl,
         onSucces: (p0) {
           // log(p0.body);
-          currentUserProfileGrid = userProfileGridFromJson(p0.body);
+          currentUserProfileGrid = userProfileGridFromJson(p0);
+        //   if (currentUserProfileGrid != null) {
+        // if (currentUserProfileGrid.response.posts.map((e) => e.,)) {
+          
+        // } else {
+          
+        // }
+            
+        //   }
           notifyListeners();
         },
         onTokenExpired: () {
@@ -148,7 +158,7 @@ class ProfileController extends ChangeNotifier {
       url: url,
       onSucces: (p0) {
         // log(p0.body);
-        userGridModel = userGridModelFromJson(p0.body);
+        userGridModel = userGridModelFromJson(p0);
         notifyListeners();
       },
       onTokenExpired: () {
@@ -165,8 +175,8 @@ class ProfileController extends ChangeNotifier {
     await ApiMethods.get(
         url: url,
         onSucces: (p0) {
-          // log(p0.body);
-          singlePostModel = singlePostModelFromJson(p0.body);
+          // log(p0);
+          singlePostModel = singlePostModelFromJson(p0);
           notifyListeners();
         },
         onTokenExpired: () {

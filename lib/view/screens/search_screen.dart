@@ -218,7 +218,7 @@ class GeFilterdtSearchResult extends StatelessWidget {
                         AppUtils.getProfile(url: user.profilePicUrl ?? null),
                   ),
                   title: Text(
-                    user.username ?? '',
+                    AppUtils.getUserNameById(user?.username),
                     style: StringStyle.normalTextBold(),
                   ),
                   subtitle: Text(user.userId ?? ''),
@@ -287,7 +287,7 @@ class TopBar extends StatelessWidget {
                         AppUtils.getProfile(url: user.profilePicUrl ?? null),
                   ),
                   title: Text(
-                    user.username ?? '',
+                    AppUtils.getUserNameById(user?.username),
                     style: StringStyle.normalTextBold(),
                   ),
                   subtitle: Text(user.userId ?? ''),

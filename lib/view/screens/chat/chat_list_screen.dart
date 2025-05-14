@@ -12,6 +12,7 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
+import 'package:stuedic_app/utils/constants/app_info.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
@@ -142,7 +143,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     GradientContainer(
                         height: 23, width: 9, verticalGradient: true),
                     const SizedBox(width: 9),
-                    Text(StringConstants.appName,
+                    Text(AppInfo.appName.toUpperCase(),
                         style: StringStyle.appBarText(context: context)),
                   ],
                 ),
@@ -215,7 +216,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                 AppUtils.getProfile(
                                                     url: user.profilePicUrl)),
                                         title: Text(
-                                          user.username ?? '',
+                                          AppUtils.getUserNameById(user.username),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),

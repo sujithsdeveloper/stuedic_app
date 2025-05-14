@@ -14,7 +14,6 @@ import 'package:stuedic_app/view/auth/registration_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/textfeild_widget.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -92,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen>
                       dividerColor: Colors.transparent,
                       onTap: (value) {
                         if (value == 1) {
-
                           showDialog(
                             barrierDismissible: false,
                             context: context,
@@ -171,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen>
                         ],
                       ),
                       TextfieldWidget(
+                        maxline: 1,
                         onChanged: (p0) {
                           prowatch.phoneNumber = p0!;
                           proRead.changeButtonColor();

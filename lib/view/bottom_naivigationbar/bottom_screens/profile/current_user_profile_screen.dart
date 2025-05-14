@@ -13,9 +13,7 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/data/dummyDB.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/bookmarked_grid.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/image_grid.dart';
-import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs/video_grid.dart';
+import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/profile/tabs_view/tabsView.dart';
 import 'package:stuedic_app/view/screens/edit_profile_screen.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
@@ -171,7 +169,7 @@ class _CurrentUserStudentProfileScreenState
                         ),
 
                         const SizedBox(height: 16),
-                        Text(user?.userName ?? '',
+                        Text(AppUtils.getUserNameById(user?.userName),
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                         Text('@${user?.userId ?? ''}',
@@ -217,6 +215,7 @@ class _CurrentUserStudentProfileScreenState
             SliverPersistentHeader(
               pinned: true,
               delegate: TabBarDelegate(
+                context: context,
                 TabBar(
                   controller: _tabController,
                   labelColor: ColorConstants.secondaryColor,
@@ -243,25 +242,26 @@ class _CurrentUserStudentProfileScreenState
               ),
             ),
           ],
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              ImageGrid(
-                photoGrid: photoGrid,
-                userId: user?.userId ?? '',
-              ),
-              VideoGrid(),
-              BookmarkedGrid(
-                bookmarkGrid: bookmarkGrid,
-                userId: user?.userId ?? '',
-              ),
-              Center(
-                child: Text(
-                  "This feature is not available ye",
-                  style: TextStyle(fontSize: 16),
+          body: Padding(
+            padding: EdgeInsets.only(top: kToolbarHeight * 0.5),
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                CurrentUserImageview(
+                  photoGrid: photoGrid,
                 ),
-              ),
-            ],
+                CurrentUserVideoView(),
+                SavedItemsView(
+                  bookmarkGrid: bookmarkGrid,
+                ),
+                Center(
+                  child: Text(
+                    "This feature is not available ye",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

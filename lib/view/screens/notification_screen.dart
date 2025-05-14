@@ -129,10 +129,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     if (notification!.type ==
                                         StringConstants.like) {
                                       return Text(
-                                          '${notification.fromUserName} Liked your post');
+                                          '${ AppUtils.getUserNameById(notification.fromUserName)} Liked your post');
                                     } else {
                                       return Text(
-                                          '${notification.fromUserName} Commented on your post');
+                                          '${AppUtils.getUserNameById(notification.fromUserName)} Commented on your post');
                                     }
                                   },
                                 ),

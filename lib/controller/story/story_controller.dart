@@ -12,7 +12,7 @@ class StoryController extends ChangeNotifier {
     await ApiMethods.get(
         url: ApiUrls.getStoryList,
         onSucces: (p0) {
-          getstorymodel = homeStoriesModelFromJson(p0.body);
+          getstorymodel = homeStoriesModelFromJson(p0);
           log(getstorymodel?.response.toString() ?? '');
           notifyListeners();
         },
@@ -26,7 +26,7 @@ class StoryController extends ChangeNotifier {
 
   Future<void> addStory(
       {required String url,
-      String? caption,
+      String? caption, 
       required BuildContext context}) async {
     isStoryUploading = true;
     notifyListeners();
@@ -46,7 +46,7 @@ class StoryController extends ChangeNotifier {
               getStories(context);
             },
           );
-          AppUtils.showToast(msg: 'Story added successfully!');
+          AppUtils.showToast(toastMessage: 'Story added successfully!');
 
           notifyListeners();
 

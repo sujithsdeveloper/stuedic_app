@@ -40,7 +40,7 @@ class TopBar extends StatelessWidget {
             backgroundImage: AppUtils.getProfile(url: reel?.profilePicUrl),
           )),
       title: Text(
-        reel?.username ?? 'unknown user',
+        AppUtils.getUserNameById(reel?.username),
         style: StringStyle.normalTextBold(
           color: Colors.white,
           size: 17,
