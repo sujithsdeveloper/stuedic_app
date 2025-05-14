@@ -58,11 +58,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   bool isOnlyEmoji(String input) {
-    final regex = RegExp(
-      r'^(?:[\u2700-\u27BF]|[\u1F300-\u1F6FF]|[\u1F900-\u1F9FF]|[\u1F1E6-\u1F1FF]|[\u2600-\u26FF]|\uD83C[\uDDE6-\uDDFF]|\uD83D[\uDC00-\uDE4F]|\uD83D[\uDE80-\uDEFF])+$',
+    final trimmed = input.trim();
+
+    // This regex includes most emojis and uses Unicode properly.
+    final emojiRegex = RegExp(
+      r'^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)+$',
       unicode: true,
     );
-    return regex.hasMatch(input.trim());
+
+    return trimmed.isNotEmpty && emojiRegex.hasMatch(trimmed);
   }
 
   @override
@@ -287,7 +291,6 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
                                 minWidth: 90,
-                                maxHeight: 70,
                                 maxWidth:
                                     MediaQuery.of(context).size.width * 0.8,
                               ),
@@ -320,14 +323,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Container ChatBubble(
       bool isCurrentUser, bool isSelected, ChatHistoryModel chatData,
       {bool onlyEmoji = false}) {
-    if (!onlyEmoji) {
+    if (onlyEmoji) {
       return Container(
         margin: EdgeInsets.only(
             left: isCurrentUser ? 0 : 5, right: isCurrentUser ? 5 : 0),
         alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
-        child: Text(
-          chatData.content.toString(),
-          style: const TextStyle(fontSize: 30), // large emoji size
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.grey.shade500 : null,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Text(
+            chatData.content.toString(),
+            style: const TextStyle(fontSize: 30), // large emoji size
+          ),
         ),
       );
     }
