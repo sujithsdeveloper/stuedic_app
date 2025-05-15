@@ -14,6 +14,7 @@ import 'package:stuedic_app/controller/API_controller.dart/discover_controller.d
 import 'package:stuedic_app/controller/API_controller.dart/editprofile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/get_singlepost_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/homeFeed_controller.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/follow_btn_bloc/follow_btn_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/notification_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
@@ -141,6 +142,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<ReelDataFetchBloc>(
           create: (context) => ReelDataFetchBloc(context: context),
+        ),
+        BlocProvider<FollowBtnBloc>(
+          create: (context) => FollowBtnBloc(initialFollowStatus: false),
         ),
       ],
       child: MaterialApp(

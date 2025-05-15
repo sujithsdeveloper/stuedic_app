@@ -35,7 +35,7 @@ class HomefeedDataFetchBloc
     try {
       var response = await http.get(
           Uri.parse(
-              'https://api.stuedic.com/api/v1/Post/homeFeed?page=$pageCount&limit=3'),
+              'https://api.stuedic.com/api/v1/Post/homeFeed?page=$pageCount&limit=50'),
           headers: ApiServices.getHeadersWithToken(token));
 
       if (response.statusCode == 200) {

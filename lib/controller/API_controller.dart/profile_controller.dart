@@ -115,7 +115,7 @@ class ProfileController extends ChangeNotifier {
           userProfile = getUserByUserIdModelFromJson(p0);
           userByUserIdIsloading = false;
           notifyListeners();
-          log(userProfile!.response!.followersCount.toString());
+          // log(userProfile!.response!.followersCount.toString());
         },
         onTokenExpired: () {
           userByUserIdIsloading = false;
@@ -126,22 +126,22 @@ class ProfileController extends ChangeNotifier {
   }
 
   UserProfileGrid? currentUserProfileGrid;
-  List imageGrid=[];
-  List videoGrid=[];
+  List imageGrid = [];
+  List videoGrid = [];
   Future<void> getCurrentUserGrid({required BuildContext context}) async {
     await ApiMethods.get(
         url: ApiUrls.profileGridUrl,
         onSucces: (p0) {
           // log(p0.body);
           currentUserProfileGrid = userProfileGridFromJson(p0);
-        //   if (currentUserProfileGrid != null) {
-        // if (currentUserProfileGrid.response.posts.map((e) => e.,)) {
-          
-        // } else {
-          
-        // }
-            
-        //   }
+          //   if (currentUserProfileGrid != null) {
+          // if (currentUserProfileGrid.response.posts.map((e) => e.,)) {
+
+          // } else {
+
+          // }
+
+          //   }
           notifyListeners();
         },
         onTokenExpired: () {
