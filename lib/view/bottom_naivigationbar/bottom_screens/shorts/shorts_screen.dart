@@ -1,21 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_event.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/reel_section_API_call_bloc/bloc/reel_data_fetch_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/reel_section_API_call_bloc/bloc/reel_data_fetch_state.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
 import 'package:stuedic_app/controller/video_type_controller.dart';
 import 'package:stuedic_app/players/network_video_player.dart';
-import 'package:stuedic_app/sheets/commentBottomSheet.dart';
 import 'package:stuedic_app/styles/like_styles.dart';
-import 'package:stuedic_app/styles/string_styles.dart';
+import 'package:stuedic_app/styles/loading_style.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/shorts/shorts_screen_stack_items.dart';
 import 'package:video_player/video_player.dart';
 
 class ShortsScreen extends StatefulWidget {
   const ShortsScreen({super.key});
-
   @override
   State<ShortsScreen> createState() => _ShortsScreenState();
 }
@@ -41,20 +43,9 @@ class _ShortsScreenState extends State<ShortsScreen>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<ReelDataFetchBloc>(context).add(ReelDataFetchEvent());
-      // context.read<ShortsController>().getReels(context: context);
+
       // context.read<VideoTypeController>().initialiseNetworkVideo(url: url);
       // context.read<VideoTypeController>().notifyListeners();
-    });
-  }
-
-  onpaginationscroll() {
-    _scrollController.addListener(() {
-      final bloc = BlocProvider.of<ReelDataFetchBloc>(context);
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          bloc.isMore) {
-        bloc.add(ReelDataFetchEvent());
-      }
     });
   }
 
@@ -93,9 +84,10 @@ class _ShortsScreenState extends State<ShortsScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     final proWatch = context.watch<ShortsController>();
     final proWatchVideo = context.watch<VideoTypeController>();
-    final proReadVideo = context.read<VideoTypeController>();
+    // final proReadVideo = context.read<VideoTypeController>();
     final proReadInteraction = context.read<PostInteractionController>();
     final reels = proWatch.getShortsModel?.response;
 
@@ -119,7 +111,9 @@ class _ShortsScreenState extends State<ShortsScreen>
           builder: (context, state) {
             var bloc = BlocProvider.of<ReelDataFetchBloc>(context);
             if (state is ReelDataFetchLoading) {
-              return CircularProgressIndicator();
+              return Center(
+                child: loadingIndicator(),
+              );
             }
             if (state is ReelDataFetchSussess || state is ReelDataFetchMore) {
               return PageView.builder(
@@ -148,7 +142,7 @@ class _ShortsScreenState extends State<ShortsScreen>
                 },
                 itemBuilder: (context, index) {
                   if (index == bloc.blocResponse.length) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: loadingIndicator());
                   }
                   // final reel = reels?[index];
                   final reel = bloc.blocResponse[index];
@@ -180,21 +174,36 @@ class _ShortsScreenState extends State<ShortsScreen>
                           child: Column(
                             spacing: 9,
                             children: [
-                              Column(
-                                children: [
-                                  PostLikeStyles(
-                                      iconColor: Colors.white,
-                                      horizontalDirection: false,
-                                      postId: reel.postId ?? '',
-                                      likeCount:
-                                          reel.likescount.toString() ?? '0',
-                                      isLiked: reel.isLiked ?? false,
-                                      callBackFunction: () {
-                                        // context
-                                        //     .read<ShortsController>()
-                                        //     .getReels(context: context);
-                                      }),
-                                ],
+                              BlocProvider<PostLikeBloc>(
+                                create: (context) {
+                                  return PostLikeBloc(
+                                      initialCount: reel.likescount ?? -3,
+                                      initialbool: reel.isLiked ?? false);
+                                },
+                                child: Column(
+                                  children: [
+                                    PostLikeStyles(
+                                        iconColor: Colors.white,
+                                        showCount: true,
+                                        // iconColor: Colors.red,
+                                        horizontalDirection: false,
+                                        postId: reel.postId ?? '',
+                                        // likeCount:
+                                        //     reel.likescount.toString() ?? '0',
+                                        likeCount: 100.toString(),
+                                        isLiked: reel.isLiked ?? false,
+                                        callBackFunction: () {
+                                          BlocProvider.of<PostLikeBloc>(context)
+                                              .add(PostLikeEvent(
+                                                  postId:
+                                                      reel.postId.toString(),
+                                                  context: context));
+                                          // context
+                                          //     .read<ShortsController>()
+                                          //     .getReels(context: context);
+                                        }),
+                                  ],
+                                ),
                               ),
                               IconButton(
                                   onPressed: () {

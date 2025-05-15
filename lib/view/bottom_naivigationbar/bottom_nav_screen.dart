@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
@@ -67,72 +68,84 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       ShortsScreen(),
       CurrenUserCollegeProfileScreen()
     ];
-    final proWatch = context.watch<AppContoller>();
-    final proRead = context.read<AppContoller>();
+    final proWatchAppController = context.watch<AppContoller>();
+    final proReadAppcontroller = context.read<AppContoller>();
     final profileControllerWatch = context.watch<ProfileController>();
 
     bool isCollege =
         profileControllerWatch.userCurrentDetails?.response?.isCollege ?? false;
-    String userId =
-        profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
+    // String userId =
+    //     profileControllerWatch.userCurrentDetails?.response?.userId ?? '';
 
     return WillPopScope(
       onWillPop: () async {
-        if (proWatch.currentIndex != 0) {
-          proRead.changeBottomNav(index: 0, context: context);
+        if (proWatchAppController.currentIndex != 0) {
+          proReadAppcontroller.changeBottomNav(index: 0, context: context);
           return false;
         }
         return true;
       },
-      child: Scaffold(
-        //by using indexedstack.....we can keep the state of the page when switching between them
-        body: IndexedStack(
-            index: proWatch.currentIndex,
-            //there are two screen screens for profile(student user and college user)
-            children: isCollege ? CollegeuserScreens : userScreens),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Transform.translate(
-          offset: const Offset(0, 10),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 35,
-            child: GradientCircleAvathar(
-              onTap: () {
-                AppRoutes.push(context, CreatePostScreen());
-              },
-              child: Icon(Icons.add),
+      child: Consumer<AppContoller>(builder: (context, navProvider, child) {
+        return Scaffold(
+          //by using indexedstack.....we can keep the state of the page when switching between them
+          // body: IndexedStack(
+          //     index: proWatch.currentIndex,
+          //     //there are two screen screens for profile(student user and college user)
+          //     children: isCollege ? CollegeuserScreens : userScreens),
+          body: Builder(
+            builder: (context) {
+              return isCollege
+                  ? CollegeuserScreens[navProvider.currentIndex]
+                  : userScreens[navProvider.currentIndex];
+            },
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Transform.translate(
+            offset: const Offset(0, 10),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 35,
+              child: GradientCircleAvathar(
+                onTap: () {
+                  AppRoutes.push(context, CreatePostScreen());
+                },
+                child: Icon(Icons.add),
+              ),
             ),
           ),
-        ),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-              splashFactory: NoSplash.splashFactory,
-              splashColor: Colors.transparent),
-          child: BottomNavigationBar(
-            showSelectedLabels: false,
-            onTap: (value) {
-              proRead.changeBottomNav(index: value, context: context);
-            },
-            currentIndex: proWatch.currentIndex,
-            elevation: 3,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.grid_view_rounded), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(HugeIcons.strokeRoundedDiscoverSquare),
-                  label: "Discover"),
-              BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
-              BottomNavigationBarItem(
-                  icon: Icon(HugeIcons.strokeRoundedAiVideo), label: "Shorts"),
-              BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.person_alt_circle),
-                  label: "Profile"),
-            ],
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+                splashFactory: NoSplash.splashFactory,
+                splashColor: Colors.transparent),
+            child: BottomNavigationBar(
+              showSelectedLabels: false,
+              onTap: (value) {
+                proReadAppcontroller.changeBottomNav(
+                    index: value, context: context);
+              },
+              currentIndex: proWatchAppController.currentIndex,
+              elevation: 3,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.grid_view_rounded), label: "Home"),
+                BottomNavigationBarItem(
+                    icon: Icon(HugeIcons.strokeRoundedDiscoverSquare),
+                    label: "Discover"),
+                BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
+                BottomNavigationBarItem(
+                    icon: Icon(HugeIcons.strokeRoundedAiVideo),
+                    label: "Shorts"),
+                BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.person_alt_circle),
+                    label: "Profile"),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

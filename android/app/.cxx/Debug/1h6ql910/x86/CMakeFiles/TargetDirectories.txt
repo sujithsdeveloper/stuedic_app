@@ -1,0 +1,2 @@
+E:/flutter-studic/stuedic_app/android/app/.cxx/Debug/1h6ql910/x86/CMakeFiles/edit_cache.dir
+E:/flutter-studic/stuedic_app/android/app/.cxx/Debug/1h6ql910/x86/CMakeFiles/rebuild_cache.dir

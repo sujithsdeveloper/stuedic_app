@@ -2,5 +2,6 @@ part of 'follow_btn_bloc.dart';
 
 class FollowBtnState {
   bool isFollow;
-  FollowBtnState({required this.isFollow});
+  bool? reelboolChange;
+  FollowBtnState({required this.isFollow, this.reelboolChange});
 }

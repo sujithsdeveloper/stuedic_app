@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/follow_btn_bloc/follow_btn_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/profile_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/shorts_controller.dart';
@@ -30,6 +34,7 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
+    log(reel!.isFollowed.toString(), name: '\x1B[32m reel follow bool ');
 
     return ListTile(
       leading: GestureDetector(
@@ -57,28 +62,28 @@ class TopBar extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
-            onTap: () {
-              context.read<ProfileController>().toggleUser(
-                  followBool: reel?.isFollowed ?? false,
-                  userId: reel?.userId ?? '',
-                  context: context);
+          BlocBuilder<FollowBtnBloc, FollowBtnState>(
+            builder: (context, state) {
+              return GestureDetector(
+                onTap: () {
+                  BlocProvider.of<FollowBtnBloc>(context).add(FollowBtnEvent(
+                      userId: reel!.userId.toString(), context: context));
+                },
+                child: Container(
+                  height: 28,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                        state.reelboolChange ?? false ? 'following' : 'Follow',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              );
             },
-            child: Container(
-              height: 28,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(
-                    userDataProviderWatch.isFollowed ?? false
-                        ? 'unfollow'
-                        : 'Follow',
-                    style: TextStyle(color: Colors.white)),
-              ),
-            ),
           ),
           IconButton(
             onPressed: () async {

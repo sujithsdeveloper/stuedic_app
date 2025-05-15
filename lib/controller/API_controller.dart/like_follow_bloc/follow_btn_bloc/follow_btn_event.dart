@@ -9,3 +9,12 @@ class FollowBtnEvent {
     required this.context,
   });
 }
+
+class UpdateFollowStatusEvent extends FollowBtnEvent {
+  final bool isFollowed;
+
+  UpdateFollowStatusEvent(
+      {required this.isFollowed,
+      required super.userId,
+      required super.context});
+}

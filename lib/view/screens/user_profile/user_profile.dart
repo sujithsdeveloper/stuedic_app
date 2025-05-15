@@ -49,16 +49,16 @@ class _UserProfileState extends State<UserProfile>
 
     tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
+      (timeStamp) async {
         final userDataProviderWatch =
             Provider.of<ProfileController>(context, listen: false);
+
+        final provider = context.read<ProfileController>();
+        await provider.getUserByUserID(context: context, userId: widget.userId);
+        await provider.getUseGrid(context: context, userID: widget.userId);
         userDataProviderWatch.isFollowed =
             userDataProviderWatch.userProfile?.response?.isFollowed ?? false;
 
-        final provider = context.read<ProfileController>();
-
-        provider.getUserByUserID(context: context, userId: widget.userId);
-        provider.getUseGrid(context: context, userID: widget.userId);
         log(' ${userDataProviderWatch.userProfile?.response?.isFollowed.toString()}',
             name: 'inite api call follow Status ');
       },
@@ -69,516 +69,478 @@ class _UserProfileState extends State<UserProfile>
   Widget build(BuildContext context) {
     final userDataProviderWatch = context.watch<ProfileController>();
     final user = userDataProviderWatch.userProfile?.response;
+    if (userDataProviderWatch.userByUserIdIsloading || user == null) {
+      return Scaffold(body: loadingIndicator());
+    }
     final photoGrid = userDataProviderWatch.userGridModel?.response?.posts;
-    log('${user?.isFollowed.toString()}',
-        name: 'passing bloc follow status inside build method');
+    log('${user.isFollowed.toString()}', name: 'ui bloc passing follow bool');
 
-    final isCollege = user?.isCollege ?? false;
+    final isCollege = user.isCollege ?? false;
     // final isCollege = false;
     return BlocProvider(
       create: (context) =>
-          FollowBtnBloc(initialFollowStatus: user?.isFollowed ?? false),
+          FollowBtnBloc(initialFollowStatus: user.isFollowed ?? false),
       child: Scaffold(
-        body: userDataProviderWatch.userByUserIdIsloading
-            ? loadingIndicator()
-            : BlocBuilder<FollowBtnBloc, FollowBtnState>(
-                builder: (context, followState) {
-                  return SafeArea(
-                    child: NestedScrollView(
-                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                        isCollege
-                            ?
+        body: BlocBuilder<FollowBtnBloc, FollowBtnState>(
+          builder: (context, followState) {
+            return SafeArea(
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  isCollege
+                      ?
 ///////////////////////College Profile//////////////////////////////////////////////////////////////////////////////////////////////
-                            SliverToBoxAdapter(
-                                child: Stack(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          height: 178,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: AssetImage(
-                                                      ImageConstants
-                                                          .collegeProfileBg))),
-                                        ),
-                                        SizedBox(
-                                          height: 50,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      AppUtils.getUserNameById(
-                                                          user?.userName),
-                                                      style: const TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '@${user?.userId ?? ''}',
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                  ],
+                      SliverToBoxAdapter(
+                          child: Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 178,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(ImageConstants
+                                                .collegeProfileBg))),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                AppUtils.getUserNameById(
+                                                    user.userName),
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          spacing: 8,
+                                              ),
+                                              Text(
+                                                '@${user.userId ?? ''}',
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 8,
+                                    children: [
+                                      ProfileActionButton(
+                                        iconData: CupertinoIcons.envelope,
+                                        onTap: () {
+                                          AppRoutes.push(
+                                              context,
+                                              ChatScreen(
+                                                  name: user.userName ??
+                                                      'Username not available',
+                                                  imageUrl:
+                                                      user.profilePicUrl ?? '',
+                                                  userId:
+                                                      user.userId.toString()));
+                                        },
+                                      ),
+                                      GradientButton(
+                                        outline:
+                                            userDataProviderWatch.isFollowed ??
+                                                    false
+                                                ? true
+                                                : false,
+                                        onTap: () {
+                                          BlocProvider.of<FollowBtnBloc>(
+                                                  context)
+                                              .add(
+                                                  FollowBtnEvent(
+                                                      userId: user.userId
+                                                          .toString(),
+                                                      context: context));
+                                        },
+                                        height: 48,
+                                        width: 100,
+                                        isColored: followState.isFollow,
+                                        label: followState.isFollow
+                                            ? 'Following'
+                                            : 'Follow',
+                                      ),
+                                      ProfileActionButton(
+                                        onTap: () {
+                                          shareBottomSheet(context);
+                                        },
+                                        iconData: Icons.share_outlined,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 9,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            ProfileActionButton(
-                                              iconData: CupertinoIcons.envelope,
-                                              onTap: () {
-                                                AppRoutes.push(
-                                                    context,
-                                                    ChatScreen(
-                                                        name: user?.userName ??
-                                                            'Username not available',
-                                                        imageUrl:
-                                                            user?.profilePicUrl ??
-                                                                '',
-                                                        userId: user!.userId
-                                                            .toString()));
-                                              },
-                                            ),
-                                            GradientButton(
-                                              outline: userDataProviderWatch
-                                                          .isFollowed ??
-                                                      false
-                                                  ? true
-                                                  : false,
-                                              onTap: () {
-                                                BlocProvider.of<FollowBtnBloc>(
-                                                        context)
-                                                    .add(FollowBtnEvent(
-                                                        userId: user!.userId
-                                                            .toString(),
-                                                        context: context));
-                                              },
-                                              height: 48,
-                                              width: 100,
-                                              isColored: followState.isFollow,
-                                              label: followState.isFollow
-                                                  ? 'Following'
-                                                  : 'Follow',
-                                            ),
-                                            ProfileActionButton(
-                                              onTap: () {
-                                                shareBottomSheet(context);
-                                              },
-                                              iconData: Icons.share_outlined,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                counts(
+                                                    count: AppUtils.formatCounts(
+                                                        user.collageStrength ??
+                                                            0),
+                                                    label: "Students"),
+                                                counts(
+                                                    count:
+                                                        AppUtils.formatCounts(
+                                                            0),
+                                                    label: "Staffs"),
+                                                counts(
+                                                    onTap: () {
+                                                      AppRoutes.push(context,
+                                                          CollegeDepartments());
+                                                    },
+                                                    count:
+                                                        AppUtils.formatCounts(
+                                                            user.allDepartments
+                                                                    ?.length ??
+                                                                0),
+                                                    label: "Departments"),
+                                                counts(
+                                                    onTap: () {
+                                                      AppRoutes.push(context,
+                                                          ClubScreen());
+                                                    },
+                                                    count:
+                                                        AppUtils.formatCounts(
+                                                            0),
+                                                    label: "Clubs"),
+                                              ],
                                             )
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 9,
+                                          height: 20,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Column(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      counts(
-                                                          count: AppUtils
-                                                              .formatCounts(
-                                                                  user?.collageStrength ??
-                                                                      0),
-                                                          label: "Students"),
-                                                      counts(
-                                                          count: AppUtils
-                                                              .formatCounts(0),
-                                                          label: "Staffs"),
-                                                      counts(
-                                                          onTap: () {
-                                                            AppRoutes.push(
-                                                                context,
-                                                                CollegeDepartments());
-                                                          },
-                                                          count: AppUtils
-                                                              .formatCounts(user
-                                                                      ?.allDepartments
-                                                                      ?.length ??
-                                                                  0),
-                                                          label: "Departments"),
-                                                      counts(
-                                                          onTap: () {
-                                                            AppRoutes.push(
-                                                                context,
-                                                                ClubScreen());
-                                                          },
-                                                          count: AppUtils
-                                                              .formatCounts(0),
-                                                          label: "Clubs"),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Theme(
-                                                data: Theme.of(context)
-                                                    .copyWith(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        dividerColor:
-                                                            Colors.transparent),
-                                                child: ExpansionTile(
-                                                  expandedCrossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  tilePadding: EdgeInsets.zero,
-                                                  childrenPadding:
-                                                      EdgeInsets.zero,
-                                                  expandedAlignment:
-                                                      Alignment.topLeft,
-                                                  title: Text(
-                                                    'Details',
-                                                    style: StringStyle
-                                                        .normalTextBold(
-                                                            size: 16),
-                                                  ),
-                                                  children: [
-                                                    DetailsItem(
-                                                      title: 'Address',
-                                                      subtitle: lorum,
-                                                      iconData: CupertinoIcons
-                                                          .location,
-                                                    ),
-                                                    DetailsItem(
-                                                      onIconTap: () {
-                                                        if (user?.email !=
-                                                            null) {
-                                                          EasyLauncher.email(
-                                                              email:
-                                                                  user?.email ??
-                                                                      '');
-                                                        } else {
-                                                          AppUtils.showToast(
-                                                              toastMessage:
-                                                                  'Email not provided');
-                                                        }
-                                                      },
-                                                      title: 'Email',
-                                                      subtitle: user?.email ??
-                                                          'Not Provided',
-                                                      iconData: CupertinoIcons
-                                                          .envelope,
-                                                    ),
-                                                    DetailsItem(
-                                                      onIconTap: () {
-                                                        if (user?.phone !=
-                                                            null) {
-                                                          EasyLauncher.call(
-                                                              number:
-                                                                  user?.phone ??
-                                                                      '');
-                                                        } else {
-                                                          AppUtils.showToast(
-                                                              toastMessage:
-                                                                  'Phone number not provided');
-                                                        }
-                                                      },
-                                                      title: 'Phone Number',
-                                                      subtitle: user?.phone ??
-                                                          'Not Provided',
-                                                      iconData: HugeIcons
-                                                          .strokeRoundedCall,
-                                                    ),
-                                                    DetailsItem(
-                                                      title: 'Affiliation',
-                                                      subtitle:
-                                                          "Dummy University",
-                                                      iconData:
-                                                          Icons.school_outlined,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Positioned(
-                                      top: 90,
-                                      left: 0,
-                                      right: 0,
-                                      child: CircleAvatar(
-                                        radius: 62,
-                                        backgroundColor: Colors.white,
-                                        child: CircleAvatar(
-                                          radius: 60,
-                                          backgroundImage: AppUtils.getProfile(
-                                              url: user?.profilePicUrl ?? null),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        child: AppShortcuts
-                                            .getPlatformDependentPop(
-                                          color: Colors.black,
-                                          onPop: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ))
-                                  ],
-                                ),
-                              )
-                            :
-///////////////////////User Profile//////////////////////////////////////////////////////////////////////////////////////////////
-                            // User Profile
-                            SliverToBoxAdapter(
-                                child: Column(
-                                  children: [
-                                    //  User Profile Avatar
-                                    Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        //icons settings and vertical more
-
-                                        SizedBox(
-                                          height: 180,
-                                          width: double.infinity,
-                                          child: Image.asset(
-                                            ImageConstants.userProfileBg,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: -70,
-                                          left: 16,
-                                          child: CircleAvatar(
-                                            radius: 52,
-                                            backgroundColor: Colors.white,
-                                            child: CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage:
-                                                  AppUtils.getProfile(
-                                                url: user?.profilePicUrl,
-                                              ),
+                                        Theme(
+                                          data: Theme.of(context).copyWith(
+                                              splashColor: Colors.transparent,
+                                              dividerColor: Colors.transparent),
+                                          child: ExpansionTile(
+                                            expandedCrossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            tilePadding: EdgeInsets.zero,
+                                            childrenPadding: EdgeInsets.zero,
+                                            expandedAlignment:
+                                                Alignment.topLeft,
+                                            title: Text(
+                                              'Details',
+                                              style: StringStyle.normalTextBold(
+                                                  size: 16),
                                             ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 5,
-                                          top: 40,
-                                          child: Row(
                                             children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  AppRoutes.push(context,
-                                                      NotificationScreen());
-                                                },
-                                                icon: Icon(HugeIcons
-                                                    .strokeRoundedNotification01),
+                                              DetailsItem(
+                                                title: 'Address',
+                                                subtitle: lorum,
+                                                iconData:
+                                                    CupertinoIcons.location,
                                               ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  AppRoutes.push(
-                                                      context, SettingScreen());
+                                              DetailsItem(
+                                                onIconTap: () {
+                                                  if (user.email != null) {
+                                                    EasyLauncher.email(
+                                                        email:
+                                                            user.email ?? '');
+                                                  } else {
+                                                    AppUtils.showToast(
+                                                        toastMessage:
+                                                            'Email not provided');
+                                                  }
                                                 },
-                                                icon: Icon(Icons.more_horiz),
+                                                title: 'Email',
+                                                subtitle: user.email ??
+                                                    'Not Provided',
+                                                iconData:
+                                                    CupertinoIcons.envelope,
+                                              ),
+                                              DetailsItem(
+                                                onIconTap: () {
+                                                  if (user.phone != null) {
+                                                    EasyLauncher.call(
+                                                        number:
+                                                            user.phone ?? '');
+                                                  } else {
+                                                    AppUtils.showToast(
+                                                        toastMessage:
+                                                            'Phone number not provided');
+                                                  }
+                                                },
+                                                title: 'Phone Number',
+                                                subtitle: user.phone ??
+                                                    'Not Provided',
+                                                iconData:
+                                                    HugeIcons.strokeRoundedCall,
+                                              ),
+                                              DetailsItem(
+                                                title: 'Affiliation',
+                                                subtitle: "Dummy University",
+                                                iconData: Icons.school_outlined,
                                               ),
                                             ],
                                           ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                top: 90,
+                                left: 0,
+                                right: 0,
+                                child: CircleAvatar(
+                                  radius: 62,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    radius: 60,
+                                    backgroundImage: AppUtils.getProfile(
+                                        url: user.profilePicUrl ?? null),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: AppShortcuts.getPlatformDependentPop(
+                                    color: Colors.black,
+                                    onPop: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ))
+                            ],
+                          ),
+                        )
+                      :
+///////////////////////User Profile//////////////////////////////////////////////////////////////////////////////////////////////
+                      // User Profile
+                      SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              //  User Profile Avatar
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  //icons settings and vertical more
+
+                                  SizedBox(
+                                    height: 180,
+                                    width: double.infinity,
+                                    child: Image.asset(
+                                      ImageConstants.userProfileBg,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: -70,
+                                    left: 16,
+                                    child: CircleAvatar(
+                                      radius: 52,
+                                      backgroundColor: Colors.white,
+                                      child: CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: AppUtils.getProfile(
+                                          url: user.profilePicUrl,
                                         ),
-                                        Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            child: AppShortcuts
-                                                .getPlatformDependentPop(
-                                              color: Colors.black,
-                                              onPop: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ))
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 5,
+                                    top: 40,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            AppRoutes.push(
+                                                context, NotificationScreen());
+                                          },
+                                          icon: Icon(HugeIcons
+                                              .strokeRoundedNotification01),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            AppRoutes.push(
+                                                context, SettingScreen());
+                                          },
+                                          icon: Icon(Icons.more_horiz),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      child:
+                                          AppShortcuts.getPlatformDependentPop(
+                                        color: Colors.black,
+                                        onPop: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ))
+                                ],
+                              ),
+
+                              const SizedBox(height: 9), // space for avatar
+
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Edit profile & and pdf icon
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ProfileActionButton(
+                                          iconData: CupertinoIcons.doc_text,
+                                          onTap: () {
+                                            AppRoutes.push(context,
+                                                PdfViewerScreen(url: pdfUrl));
+                                          },
+                                        ),
+                                        const SizedBox(width: 10),
+                                        GradientButton(
+                                          height: 48,
+                                          width: 120,
+                                          onTap: () {
+                                            BlocProvider.of<FollowBtnBloc>(
+                                                    context)
+                                                .add(
+                                                    FollowBtnEvent(
+                                                        userId: user.userId
+                                                            .toString(),
+                                                        context: context));
+                                          },
+                                          isColored: followState.isFollow,
+                                          label: followState.isFollow
+                                              ? 'Following'
+                                              : 'Follow',
+                                        ),
                                       ],
                                     ),
 
-                                    const SizedBox(
-                                        height: 9), // space for avatar
+                                    const SizedBox(height: 16),
+                                    Text(AppUtils.getUserNameById(user.userId),
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    Text('@${user.userId ?? ''}',
+                                        style: const TextStyle(
+                                            color: Colors.grey)),
+                                    const SizedBox(height: 5),
+                                    Text(user.collageName ?? '',
+                                        style: StringStyle.normalText()),
+                                    Text('Trivandrum, Kerala',
+                                        style: StringStyle.normalText()),
 
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Edit profile & and pdf icon
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              ProfileActionButton(
-                                                iconData:
-                                                    CupertinoIcons.doc_text,
-                                                onTap: () {
-                                                  AppRoutes.push(
-                                                      context,
-                                                      PdfViewerScreen(
-                                                          url: pdfUrl));
-                                                },
-                                              ),
-                                              const SizedBox(width: 10),
-                                              GradientButton(
-                                                outline:
-                                                    user?.isFollowed ?? false,
-                                                onTap: () {
-                                                  // AppRoutes.push(
-                                                  //   context,
-                                                  //   EditProfileScreen(
-                                                  //     username: user?.userName ?? '',
-                                                  //     bio: 'bio',
-                                                  //     number: user?.phone ?? 'No Number',
-                                                  //     url: user?.profilePicUrl ?? '',
-                                                  //   ),
-                                                  // );
-                                                },
-                                                height: 48,
-                                                width: 120,
-                                                isColored: !(user?.isFollowed ??
-                                                    false),
-                                                label: 'Follow',
-                                              ),
-                                            ],
-                                          ),
+                                    const SizedBox(height: 20),
 
-                                          const SizedBox(height: 16),
-                                          Text(
-                                              AppUtils.getUserNameById(
-                                                  user?.userId),
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text('@${user?.userId ?? ''}',
-                                              style: const TextStyle(
-                                                  color: Colors.grey)),
-                                          const SizedBox(height: 5),
-                                          Text(user?.collageName ?? '',
-                                              style: StringStyle.normalText()),
-                                          Text('Trivandrum, Kerala',
-                                              style: StringStyle.normalText()),
-
-                                          const SizedBox(height: 20),
-
-                                          // Stats row
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              counts(
-                                                  count: AppUtils.formatCounts(
-                                                      user?.postCount ?? 0),
-                                                  label: "Posts"),
-                                              counts(
-                                                  count: AppUtils.formatCounts(
-                                                      user?.followingCount ??
-                                                          0),
-                                                  label: "Following"),
-                                              counts(
-                                                  count: AppUtils.formatCounts(
-                                                      user?.followersCount ??
-                                                          0),
-                                                  label: "Followers"),
-                                              counts(
-                                                  count:
-                                                      AppUtils.formatCounts(0),
-                                                  label: "Likes"),
-                                            ],
-                                          ),
-                                          SizedBox(height: 20)
-                                        ],
-                                      ),
+                                    // Stats row
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        counts(
+                                            count: AppUtils.formatCounts(
+                                                user.postCount ?? 0),
+                                            label: "Posts"),
+                                        counts(
+                                            count: AppUtils.formatCounts(
+                                                user.followingCount ?? 0),
+                                            label: "Following"),
+                                        counts(
+                                            count: AppUtils.formatCounts(
+                                                user.followersCount ?? 0),
+                                            label: "Followers"),
+                                        counts(
+                                            count: AppUtils.formatCounts(0),
+                                            label: "Likes"),
+                                      ],
                                     ),
+                                    SizedBox(height: 20)
                                   ],
                                 ),
                               ),
-                        SliverPersistentHeader(
-                          pinned: true,
-                          delegate: TabBarDelegate(
-                            context: context,
-                            TabBar(
-                              controller: tabController,
-                              labelColor: ColorConstants.secondaryColor,
-                              indicatorColor: ColorConstants.secondaryColor,
-                              onTap: (value) {
-                                if (value == 0) {
-                                  context
-                                      .read<ProfileController>()
-                                      .getCurrentUserGrid(context: context);
-                                }
-                                if (value == 2) {
-                                  context
-                                      .read<PostInteractionController>()
-                                      .getBookmark(context: context);
-                                }
-                              },
-                              tabs: const [
-                                Tab(
-                                    icon: Icon(
-                                        HugeIcons.strokeRoundedLayoutGrid)),
-                                Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-                                Tab(
-                                    icon: Icon(
-                                        HugeIcons.strokeRoundedShoppingBag03)),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                      ],
-                      body: TabBarView(
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: TabBarDelegate(
+                      context: context,
+                      TabBar(
                         controller: tabController,
-                        children: [
-                          UserImageGrid(
-                              photoGrid: photoGrid, userId: user?.userId),
-
-                          // Videos Section
-                          UserVideoGrid(),
-
-                          // Shopping Items
-
-                          Center(
-                            child: Text("This feature is not available yet",
-                                style: TextStyle(fontSize: 16)),
-                          ),
+                        labelColor: ColorConstants.secondaryColor,
+                        indicatorColor: ColorConstants.secondaryColor,
+                        onTap: (value) {
+                          if (value == 0) {
+                            context
+                                .read<ProfileController>()
+                                .getCurrentUserGrid(context: context);
+                          }
+                          if (value == 2) {
+                            context
+                                .read<PostInteractionController>()
+                                .getBookmark(context: context);
+                          }
+                        },
+                        tabs: const [
+                          Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                          Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                          Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
                         ],
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
+                body: TabBarView(
+                  controller: tabController,
+                  children: [
+                    UserImageGrid(photoGrid: photoGrid, userId: user?.userId),
+
+                    // Videos Section
+                    UserVideoGrid(),
+
+                    // Shopping Items
+
+                    Center(
+                      child: Text("This feature is not available yet",
+                          style: TextStyle(fontSize: 16)),
+                    ),
+                  ],
+                ),
               ),
+            );
+          },
+        ),
       ),
     );
   }

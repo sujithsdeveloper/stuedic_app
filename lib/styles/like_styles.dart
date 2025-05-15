@@ -92,7 +92,7 @@ class _PostLikeStylesState extends State<PostLikeStyles>
                     child: Text(
                       AppUtils.formatCounts(state.count),
                       style: StringStyle.smallText(
-                          isBold: true, color: widget.textColor),
+                          isBold: true, color: Colors.white),
                     ),
                   ),
                 ],
