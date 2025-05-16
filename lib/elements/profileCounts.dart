@@ -6,6 +6,7 @@ class counts extends StatelessWidget {
 
   final String count; // Change from int to String
   final String label;
+  
 final Function()? onTap;
   @override
   Widget build(BuildContext context) {

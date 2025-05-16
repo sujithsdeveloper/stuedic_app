@@ -20,6 +20,7 @@ import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
+import 'package:stuedic_app/widgets/refresh_indicator_widget.dart';
 
 class CurrentUserStudentProfileScreen extends StatefulWidget {
   const CurrentUserStudentProfileScreen({super.key, this.userId});
@@ -70,197 +71,209 @@ class _CurrentUserStudentProfileScreenState
 
     return Scaffold(
       body: SafeArea(
-        child: NestedScrollView(
-          controller: scrollController,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  //  User Profile Avatar
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      //icons settings and vertical more
+        child: customRefreshIndicator(
+          onRefresh: () async {
+            context
+                .read<ProfileController>()
+                .getCurrentUserData(context: context);
+            context
+                .read<ProfileController>()
+                .getCurrentUserGrid(context: context);
+          },
+          child: NestedScrollView(
+            controller: scrollController,
+            physics: AlwaysScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    //  User Profile Avatar
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        //icons settings and vertical more
 
-                      SizedBox(
-                        height: 180,
-                        width: double.infinity,
-                        child: Image.asset(
-                          ImageConstants.userProfileBg,
-                          fit: BoxFit.cover,
+                        SizedBox(
+                          height: 180,
+                          width: double.infinity,
+                          child: Image.asset(
+                            ImageConstants.userProfileBg,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: -70,
-                        left: 16,
-                        child: CircleAvatar(
-                          radius: 52,
-                          backgroundColor: Colors.white,
+                        Positioned(
+                          bottom: -70,
+                          left: 16,
                           child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AppUtils.getProfile(
-                              url: user?.profilePicUrl,
+                            radius: 52,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: AppUtils.getProfile(
+                                url: user?.profilePicUrl,
+                              ),
                             ),
                           ),
                         ),
+                        Positioned(
+                          right: 5,
+                          top: 5,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  AppRoutes.push(context, NotificationScreen());
+                                },
+                                icon:
+                                    Icon(HugeIcons.strokeRoundedNotification01),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  AppRoutes.push(context, SettingScreen());
+                                },
+                                icon: Icon(Icons.more_horiz),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+
+                    const SizedBox(height: 9), // space for avatar
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Edit profile & and pdf icon
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ProfileActionButton(
+                                iconData: CupertinoIcons.doc_text,
+                                onTap: () {
+                                  AppRoutes.push(
+                                      context, PdfViewerScreen(url: pdfUrl));
+                                },
+                              ),
+                              const SizedBox(width: 10),
+                              GradientButton(
+                                outline: user?.isFollowed ?? false,
+                                onTap: () {
+                                  AppRoutes.push(
+                                    context,
+                                    EditProfileScreen(
+                                      isCollege: user?.isCollege ?? false,
+                                      username: user?.userName ?? '',
+                                      bio: 'bio',
+                                      number: user?.phone ?? 'No Number',
+                                      url: user?.profilePicUrl ?? '',
+                                    ),
+                                  );
+                                },
+                                height: 48,
+                                width: 120,
+                                isColored: !(user?.isFollowed ?? false),
+                                label: 'Edit Profile',
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+                          Text(AppUtils.getUserNameById(user?.userName),
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          Text('@${user?.userId ?? ''}',
+                              style: const TextStyle(color: Colors.grey)),
+                          const SizedBox(height: 5),
+                          Text(user?.collageName ?? '',
+                              style: StringStyle.normalText()),
+                          // Text('Trivandrum, Kerala',
+                          //     style: StringStyle.normalText()),
+
+                          const SizedBox(height: 20),
+
+                          // Stats row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              counts(
+                                  count: AppUtils.formatCounts(
+                                      user?.postCount ?? 0),
+                                  label: "Posts"),
+                              counts(
+                                  count: AppUtils.formatCounts(
+                                      user?.followingCount ?? 0),
+                                  label: "Following"),
+                              counts(
+                                  count: AppUtils.formatCounts(
+                                      user?.followersCount ?? 0),
+                                  label: "Followers"),
+                              counts(
+                                  count: AppUtils.formatCounts(0),
+                                  label: "Likes"),
+                            ],
+                          ),
+                          SizedBox(height: 20)
+                        ],
                       ),
-                      Positioned(
-                        right: 5,
-                        top: 5,
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                AppRoutes.push(context, NotificationScreen());
-                              },
-                              icon: Icon(HugeIcons.strokeRoundedNotification01),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                AppRoutes.push(context, SettingScreen());
-                              },
-                              icon: Icon(Icons.more_horiz),
-                            ),
-                          ],
-                        ),
-                      )
+                    ),
+                  ],
+                ),
+              ),
+
+              // 👇 Pinned TabBar
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: TabBarDelegate(
+                  context: context,
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: ColorConstants.secondaryColor,
+                    indicatorColor: ColorConstants.secondaryColor,
+                    onTap: (value) {
+                      if (value == 0) {
+                        context
+                            .read<ProfileController>()
+                            .getCurrentUserGrid(context: context);
+                      }
+                      if (value == 2) {
+                        context
+                            .read<PostInteractionController>()
+                            .getBookmark(context: context);
+                      }
+                    },
+                    tabs: const [
+                      Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
+                      Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
                     ],
                   ),
-
-                  const SizedBox(height: 9), // space for avatar
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Edit profile & and pdf icon
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ProfileActionButton(
-                              iconData: CupertinoIcons.doc_text,
-                              onTap: () {
-                                AppRoutes.push(
-                                    context, PdfViewerScreen(url: pdfUrl));
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            GradientButton(
-                              outline: user?.isFollowed ?? false,
-                              onTap: () {
-                                AppRoutes.push(
-                                  context,
-                                  EditProfileScreen(
-                                    isCollege: user?.isCollege ?? false,
-                                    username: user?.userName ?? '',
-                                    bio: 'bio',
-                                    number: user?.phone ?? 'No Number',
-                                    url: user?.profilePicUrl ?? '',
-                                  ),
-                                );
-                              },
-                              height: 48,
-                              width: 120,
-                              isColored: !(user?.isFollowed ?? false),
-                              label: 'Edit Profile',
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-                        Text(AppUtils.getUserNameById(user?.userName),
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('@${user?.userId ?? ''}',
-                            style: const TextStyle(color: Colors.grey)),
-                        const SizedBox(height: 5),
-                        Text(user?.collageName ?? '',
-                            style: StringStyle.normalText()),
-                        // Text('Trivandrum, Kerala',
-                        //     style: StringStyle.normalText()),
-
-                        const SizedBox(height: 20),
-
-                        // Stats row
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            counts(
-                                count:
-                                    AppUtils.formatCounts(user?.postCount ?? 0),
-                                label: "Posts"),
-                            counts(
-                                count: AppUtils.formatCounts(
-                                    user?.followingCount ?? 0),
-                                label: "Following"),
-                            counts(
-                                count: AppUtils.formatCounts(
-                                    user?.followersCount ?? 0),
-                                label: "Followers"),
-                            counts(
-                                count: AppUtils.formatCounts(0),
-                                label: "Likes"),
-                          ],
-                        ),
-                        SizedBox(height: 20)
-                      ],
+                ),
+              ),
+            ],
+            body: Padding(
+              padding: EdgeInsets.only(top: kToolbarHeight * 0.5),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  CurrentUserImageview(
+                    photoGrid: photoGrid,
+                  ),
+                  CurrentUserVideoView(),
+                  SavedItemsView(
+                    bookmarkGrid: bookmarkGrid,
+                  ),
+                  Center(
+                    child: Text(
+                      "This feature is not available ye",
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ],
               ),
-            ),
-
-            // 👇 Pinned TabBar
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: TabBarDelegate(
-                context: context,
-                TabBar(
-                  controller: _tabController,
-                  labelColor: ColorConstants.secondaryColor,
-                  indicatorColor: ColorConstants.secondaryColor,
-                  onTap: (value) {
-                    if (value == 0) {
-                      context
-                          .read<ProfileController>()
-                          .getCurrentUserGrid(context: context);
-                    }
-                    if (value == 2) {
-                      context
-                          .read<PostInteractionController>()
-                          .getBookmark(context: context);
-                    }
-                  },
-                  tabs: const [
-                    Tab(icon: Icon(HugeIcons.strokeRoundedLayoutGrid)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedAiVideo)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedAllBookmark)),
-                    Tab(icon: Icon(HugeIcons.strokeRoundedShoppingBag03)),
-                  ],
-                ),
-              ),
-            ),
-          ],
-          body: Padding(
-            padding: EdgeInsets.only(top: kToolbarHeight * 0.5),
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                CurrentUserImageview(
-                  photoGrid: photoGrid,
-                ),
-                CurrentUserVideoView(),
-                SavedItemsView(
-                  bookmarkGrid: bookmarkGrid,
-                ),
-                Center(
-                  child: Text(
-                    "This feature is not available ye",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
             ),
           ),
         ),

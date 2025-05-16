@@ -42,29 +42,33 @@ class _SearchScreenState extends State<SearchScreen>
     final proRead = context.read<UserSearchController>();
     return Scaffold(
         appBar: AppBar(
-          title: TextField(
-            controller: controller,
-            onChanged: (value) {
-              if (value != null && value.isNotEmpty) {
-                proRead.searchUser(context: context, keyword: value);
-              }
-              if (value == null || value.isEmpty) {
-                proRead.reslust = null;
-                proRead.notifyListeners();
-              }
-            },
-            autofocus: true,
-            decoration: InputDecoration(
-                filled: true,
-                hintText: "Search",
-                prefixIcon: Icon(
-                  CupertinoIcons.search,
-                  size: 20,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(99),
-                )),
+          title: Material(
+            elevation: 2,
+            borderRadius: BorderRadius.circular(99),
+            child: TextField(
+              controller: controller,
+              onChanged: (value) {
+                if (value != null && value.isNotEmpty) {
+                  proRead.searchUser(context: context, keyword: value);
+                }
+                if (value == null || value.isEmpty) {
+                  proRead.reslust = null;
+                  proRead.notifyListeners();
+                }
+              },
+              autofocus: true,
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppUtils.isDarkTheme(context)
+                      ? const Color(0xFF1A1A1A)
+                      : ColorConstants.greyColor,
+                  hintText: "Search",
+                  prefixIcon: Icon(CupertinoIcons.search, size: 20),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(99),
+                  )),
+            ),
           ),
           bottom: controller.text.isEmpty
               ? null

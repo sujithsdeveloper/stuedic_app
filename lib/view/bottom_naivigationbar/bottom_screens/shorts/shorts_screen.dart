@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_bloc.dart';
 import 'package:stuedic_app/controller/API_controller.dart/like_follow_bloc/like_bloc/post_like_event.dart';
 import 'package:stuedic_app/controller/API_controller.dart/post_interaction_controller.dart';
@@ -30,7 +31,8 @@ class _ShortsScreenState extends State<ShortsScreen>
   final Map<int, VideoPlayerController> _controllers = {};
   final Set<int> _watchedIndices = {}; // track watched indices
   int _currentIndex = 0;
-  final PageController _scrollController = PageController();
+  // final PageController _scrollController = PageController();
+  final pageviewController = PreloadPageController();
 
   @override
   void initState() {
@@ -54,7 +56,7 @@ class _ShortsScreenState extends State<ShortsScreen>
     for (final c in _controllers.values) {
       c.dispose();
     }
-    _scrollController.dispose();
+    pageviewController.dispose();
     _controllers.clear();
     animationController.dispose();
     super.dispose();
@@ -116,8 +118,9 @@ class _ShortsScreenState extends State<ShortsScreen>
               );
             }
             if (state is ReelDataFetchSussess || state is ReelDataFetchMore) {
-              return PageView.builder(
-                controller: _scrollController,
+              return PreloadPageView.builder(
+                controller: pageviewController,
+                preloadPagesCount: 2,
                 scrollDirection: Axis.vertical,
                 itemCount: bloc.blocResponse.length + (bloc.isMore ? 1 : 0),
                 pageSnapping: true,

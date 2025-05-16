@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:easy_url_launcher/easy_url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:stuedic_app/controller/API_controller.dart/profile_controller.da
 import 'package:stuedic_app/elements/details_item.dart';
 import 'package:stuedic_app/elements/profileCounts.dart';
 import 'package:stuedic_app/elements/tabbar_delegates.dart';
-import 'package:stuedic_app/model/userGridModel.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/sheets/shareBottomSheet.dart';
 import 'package:stuedic_app/styles/loading_style.dart';
@@ -28,7 +26,6 @@ import 'package:stuedic_app/view/screens/college/college_departments.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
 import 'package:stuedic_app/view/screens/pdf_viewer_screen.dart';
 import 'package:stuedic_app/view/screens/settings/setting_screen.dart';
-import 'package:stuedic_app/view/screens/singlepost_screen.dart';
 import 'package:stuedic_app/view/screens/user_profile/tabbar_sections/user_profile_tabbar_section.dart';
 import 'package:stuedic_app/widgets/gradient_button.dart';
 import 'package:stuedic_app/widgets/profile_action_button.dart';
@@ -173,7 +170,7 @@ class _UserProfileState extends State<UserProfile>
                                         },
                                         height: 48,
                                         width: 100,
-                                        isColored: followState.isFollow,
+                                        isColored: !followState.isFollow,
                                         label: followState.isFollow
                                             ? 'Following'
                                             : 'Follow',
@@ -439,7 +436,7 @@ class _UserProfileState extends State<UserProfile>
                                                             .toString(),
                                                         context: context));
                                           },
-                                          isColored: followState.isFollow,
+                                          isColored: !followState.isFollow,
                                           label: followState.isFollow
                                               ? 'Following'
                                               : 'Follow',
@@ -458,8 +455,7 @@ class _UserProfileState extends State<UserProfile>
                                     const SizedBox(height: 5),
                                     Text(user.collageName ?? '',
                                         style: StringStyle.normalText()),
-                                    Text('Trivandrum, Kerala',
-                                        style: StringStyle.normalText()),
+                              
 
                                     const SizedBox(height: 20),
 

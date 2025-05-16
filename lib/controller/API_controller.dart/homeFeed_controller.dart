@@ -23,7 +23,7 @@ class HomefeedController extends ChangeNotifier {
         },
         onTokenExpired: () {
           isHomeFeedLoading = false;
-          notifyListeners();
+          notifyListeners(); 
           getAllPost(context: context);
         },
         context: context);
@@ -31,14 +31,14 @@ class HomefeedController extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool showShimmer = false;
+  // bool showShimmer = false;
 
-  void changeShimmer() {
-    showShimmer = true;
-    notifyListeners();
-    Future.delayed(const Duration(seconds: 2), () {
-      showShimmer = false;
-      notifyListeners();
-    });
-  }
+  // void changeShimmer() {
+  //   showShimmer = true;
+  //   notifyListeners();
+  //   Future.delayed(const Duration(seconds: 2), () {
+  //     showShimmer = false;
+  //     notifyListeners();
+  //   });
+  // }
 }

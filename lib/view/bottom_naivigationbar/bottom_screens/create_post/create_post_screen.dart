@@ -144,7 +144,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: Center(
                                   child: Text(
-                                    'Reel',
+                                    'Video',
                                     style: StringStyle.normalTextBold(),
                                   ),
                                 ),

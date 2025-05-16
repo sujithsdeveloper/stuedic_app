@@ -17,6 +17,8 @@ import 'package:stuedic_app/routes/app_routes.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/app_info.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
+import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/homeShimmer.dart';
 import 'package:stuedic_app/view/screens/notification_screen.dart';
@@ -107,6 +109,9 @@ class _HomeScreenState extends State<HomeScreen>
               return bloc.add(HomefeedDataFetchEvent());
             },
             child: Scaffold(
+              backgroundColor: AppUtils.isDarkTheme(context)
+                  ? const Color(0xFF1A1A1A)
+                  : Colors.white,
               body: CustomScrollView(
                 controller: scrollController,
                 cacheExtent: context.screenHeight,
@@ -117,9 +122,11 @@ class _HomeScreenState extends State<HomeScreen>
                     elevation: 0,
                     title: Row(
                       children: [
-                        GradientContainer(
-                            height: 23, width: 9, verticalGradient: true),
-                        const SizedBox(width: 9),
+                        Image.asset(
+                          height: 50,
+                          width: 50,
+                          ImageConstants.appLogo,
+                        ),
                         GestureDetector(
                           onTap: () {
                             scrollController.animateTo(0.0,
