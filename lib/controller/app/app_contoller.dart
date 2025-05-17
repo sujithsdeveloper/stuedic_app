@@ -29,6 +29,7 @@ class AppContoller extends ChangeNotifier {
     isEmailSelected = true;
     isButtonColored = false;
     singleFieldColored = false;
+    maxLines = 2;
     currentIndex = 0;
     pageIndex = 0;
     email = "";
@@ -57,12 +58,11 @@ class AppContoller extends ChangeNotifier {
         Provider.of<VideoTypeController>(context, listen: false)
             .networkVideoController;
 
-
     if (currentIndex == index) return;
     currentIndex = index;
 
     notifyListeners();
-  
+
     if (videoController != null && videoController.value.isInitialized) {
       if (currentIndex != 2) {
         videoController.pause();
@@ -103,10 +103,6 @@ class AppContoller extends ChangeNotifier {
   }
 
   Set<int> following = {};
-
-  bool isFollowing(int index) {
-    return following.contains(index);
-  }
 
   bool isClickedStoryLoading = false;
   int? tappedStoryIndex; // Store the tapped story index
@@ -170,7 +166,7 @@ class AppContoller extends ChangeNotifier {
       collegeStaff = true;
       log('School/University selected');
       customDialog(context,
-          titile: 'School/University',
+          title: 'School/University',
           subtitle:
               'University/ School Registrations are requested to be done through Desktop page of the application.',
           actions: [
@@ -201,6 +197,16 @@ class AppContoller extends ChangeNotifier {
 
   void changeChip(List<String> selected) {
     val = selected;
+    notifyListeners();
+  }
+
+  int? maxLines = 2;
+  void changeMaxLines() {
+    if (maxLines == 2) {
+      maxLines = null;
+    } else {
+      maxLines = 2;
+    }
     notifyListeners();
   }
 }

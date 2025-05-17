@@ -1,7 +1,9 @@
 class ApiUrls {
   static Uri baseUrl = Uri.parse('https://api.stuedic.com/');
   static Uri socketBaseUrl = Uri.parse('ws://api.stuedic.com/');
-
+//maintenance
+  static Uri checkMaintenance =
+      Uri.parse('${baseUrl}health');
   //auth
   static Uri onBoardUrl = Uri.parse('${baseUrl}api/v1/User/onBoard');
   static Uri grantAccessTokenUrl =

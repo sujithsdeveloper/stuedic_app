@@ -263,7 +263,7 @@ class _StoryEditScreenState extends State<StoryEditScreen> {
                   color: Colors.white,
                   onPop: () {
                     customDialog(context,
-                        titile: 'Discard Changes?',
+                        title: 'Discard Changes?',
                         subtitle:
                             'Are you sure you want to discard your changes?',
                         actions: [

@@ -94,7 +94,7 @@ class SettingScreen extends StatelessWidget {
         'onTap': () {
           customDialog(
             context,
-            titile: "You're leaving",
+            title: "You're leaving",
             subtitle: "Are you sure to want logout?",
             actions: [
               CupertinoDialogAction(

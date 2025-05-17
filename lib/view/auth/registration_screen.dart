@@ -77,13 +77,13 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: TabBar(
-                            onTap: (value) {
+                      onTap: (value) {
                         if (value == 1) {
                           customDialog(context, onPop: () {
                             _tabController.animateTo(0);
                             return true;
                           },
-                              titile: 'Not Available Now',
+                              title: 'Not Available Now',
                               subtitle:
                                   'Login using phone number is not available yet',
                               actions: [
@@ -108,7 +108,6 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                           color: ColorConstants.secondaryColor,
                           borderRadius: BorderRadius.circular(100)),
                       dividerColor: Colors.transparent,
-      
                       tabs: [
                         Tab(
                           text: "Email",

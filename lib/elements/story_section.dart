@@ -69,7 +69,7 @@ class _StorySectionState extends State<StorySection> {
                             height: 5,
                           ),
                           Text(
-                            'Your Story',
+                            profileName ?? 'Unknown user',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 10),
                           ),
@@ -88,6 +88,7 @@ class _StorySectionState extends State<StorySection> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
                         child: Column(
+                          
                           children: [
                             Stack(
                               children: [

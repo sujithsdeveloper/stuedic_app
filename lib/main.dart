@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:stuedic_app/APIs/API_Methods.dart';
+import 'package:stuedic_app/APIs/APIs.dart';
 import 'package:stuedic_app/controller/API_controller.dart/OTP_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/auth_controller.dart';
 import 'package:stuedic_app/controller/API_controller.dart/college_controller.dart';
@@ -48,6 +50,7 @@ import 'package:stuedic_app/theme/app_theme.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/view/auth/login_screen.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_nav_screen.dart';
+import 'package:stuedic_app/view/maintainance_screen.dart';
 
 Future<void> main() async {
   final WidgetsBinding widgetsBinding =
@@ -83,6 +86,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool isMaintaining = false;
   @override
   void initState() {
     super.initState();
@@ -92,10 +96,35 @@ class _MyAppState extends State<MyApp> {
         FlutterNativeSplash.remove();
       },
     );
+    // Call checkMaintaining on init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkMaintaining(context);
+    });
+  }
+
+  void checkMaintaining(BuildContext context) async {
+    await ApiMethods.get(
+        url: ApiUrls.checkMaintenance,
+        onSucces: (p0) {
+          log('Maintenance response: $p0');
+          // If response contains 'OK', show maintenance
+          if (p0 == 'OK') {
+            isMaintaining = false;
+          } else {
+            isMaintaining = true;
+          }
+          setState(() {});
+        },
+        onTokenExpired: () async {
+          checkMaintaining(context);
+        },
+        context: context);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Use the local state variable
+    // final isMaintaining = MaintainaceController.isMaintaining;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ShortsController()),
@@ -110,14 +139,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CrudOperationController()),
         ChangeNotifierProvider(create: (context) => UserSearchController()),
         ChangeNotifierProvider(create: (context) => ChatListScreenController()),
-        ChangeNotifierProvider(
-            create: (context) => UploadProfileImageController()),
+        ChangeNotifierProvider(create: (context) => UploadProfileImageController()),
         ChangeNotifierProvider(create: (context) => ChatController()),
         ChangeNotifierProvider(create: (context) => HomefeedController()),
         ChangeNotifierProvider(create: (context) => VideoTypeController()),
         ChangeNotifierProvider(create: (context) => OtpController()),
-        ChangeNotifierProvider(
-            create: (context) => PostInteractionController()),
+        ChangeNotifierProvider(create: (context) => PostInteractionController()),
         ChangeNotifierProvider(create: (context) => PdfController()),
         ChangeNotifierProvider(create: (context) => ScanimageController()),
         ChangeNotifierProvider(create: (context) => VideoEditController()),
@@ -130,31 +157,36 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => StoryController()),
         ChangeNotifierProvider(create: (context) => DropdownController()),
         ChangeNotifierProvider(create: (context) => ReportProblemController()),
-        ChangeNotifierProvider(
-            create: (context) => ConnectivityCheckController()),
+        ChangeNotifierProvider(create: (context) => ConnectivityCheckController()),
         ChangeNotifierProvider(create: (context) => ListenToChatlist()),
         ChangeNotifierProvider(create: (context) => StoryEditController()),
         ChangeNotifierProvider(create: (context) => ScrollingController()),
         ChangeNotifierProvider(create: (context) => StoryEditController()),
-        BlocProvider<PostLikeBloc>(
-          create: (context) =>
-              PostLikeBloc(initialCount: 0, initialbool: false),
-        ),
-        BlocProvider<ReelDataFetchBloc>(
-          create: (context) => ReelDataFetchBloc(context: context),
-        ),
-        BlocProvider<FollowBtnBloc>(
-          create: (context) => FollowBtnBloc(initialFollowStatus: false),
-        ),
+        BlocProvider<PostLikeBloc>(create: (context) =>PostLikeBloc(initialCount: 0, initialbool: false)),
+        BlocProvider<ReelDataFetchBloc>(create: (context) => ReelDataFetchBloc(context: context)),
+        BlocProvider<FollowBtnBloc>(create: (context) => FollowBtnBloc(initialFollowStatus: false)),
       ],
       child: MaterialApp(
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: widget.themeMode,
-          debugShowCheckedModeBanner: false,
-          home: (widget.token == null || widget.token!.isEmpty)
-              ? LoginScreen()
-              : BottomNavScreen(showShimmer: true)),
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: widget.themeMode,
+        debugShowCheckedModeBanner: false,
+        // home: (widget.token == null || widget.token!.isEmpty)
+        //     ? LoginScreen()
+        //     : BottomNavScreen(showShimmer: true),
+
+        home: Builder(
+          builder: (context) {
+            if (isMaintaining) {
+              return MaintainanceScreen();
+            } else {
+              return (widget.token == null || widget.token!.isEmpty)
+                  ? LoginScreen()
+                  : const BottomNavScreen(showShimmer: true);
+            }
+          },
+        ),
+      ),
     );
   }
 }

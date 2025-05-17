@@ -14,6 +14,7 @@ import 'package:stuedic_app/elements/story_section.dart';
 import 'package:stuedic_app/extensions/shortcuts.dart';
 import 'package:stuedic_app/model/home_feed_model.dart';
 import 'package:stuedic_app/routes/app_routes.dart';
+import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/app_info.dart';
@@ -129,6 +130,10 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                         GestureDetector(
                           onTap: () {
+                            // errorSnackbar(
+                            //   label: 'App name tapped',
+                            //   context: context,
+                            // );
                             scrollController.animateTo(0.0,
                                 duration: Duration(milliseconds: 200),
                                 curve: Curves.easeIn);

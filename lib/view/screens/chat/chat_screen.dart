@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () {
                       customDialog(
                         context,
-                        titile: 'Delete',
+                        title: 'Delete',
                         subtitle:
                             'Are you sure you want to delete the selected message(s)? This action cannot be undone.',
                         actions: [
@@ -200,7 +200,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     PopupMenuItem(
                         onTap: () {
                           customDialog(context,
-                              titile: 'Clear Chat',
+                              title: 'Clear Chat',
                               subtitle: 'Are you sure you want to clear chat?',
                               actions: [
                                 CupertinoDialogAction(

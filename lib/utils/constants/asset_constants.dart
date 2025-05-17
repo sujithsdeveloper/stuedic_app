@@ -78,6 +78,8 @@ class LottieAnimations {
       'assets/animations/stuedic_loading_animation.json';
   static const String deleteAnimation =
       'assets/animations/deleteAnimation.json';
+  static const String maintainanceAnimation =
+      'assets/animations/maintainance.json';
 }
 
 class SVGConstants {

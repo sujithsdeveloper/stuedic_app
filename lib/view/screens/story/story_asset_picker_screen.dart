@@ -39,9 +39,8 @@ class _AssetPickerPageState extends State<AssetPickerPage> {
               Provider.of<MutlipartController>(context, listen: false);
           return WillPopScope(
             onWillPop: () async {
-              
               customDialog(context,
-                  titile: 'Discard Changes?',
+                  title: 'Discard Changes?',
                   subtitle: 'Are you sure you want to discard your changes?',
                   actions: [
                     CupertinoDialogAction(

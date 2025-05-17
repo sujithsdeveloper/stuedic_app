@@ -5,6 +5,7 @@ import 'package:stuedic_app/controller/API_controller.dart/crud_operation_contro
 import 'package:stuedic_app/controller/asset_picker_controller.dart';
 import 'package:stuedic_app/styles/string_styles.dart';
 import 'package:stuedic_app/utils/constants/app_info.dart';
+import 'package:stuedic_app/utils/constants/asset_constants.dart';
 import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/bottom_naivigationbar/bottom_screens/create_post/tabbar_screens/create_story_section.dart';
@@ -50,7 +51,7 @@ class _CreatePostScreenState extends State<CreatePostScreen>
       },
       child: Scaffold(
         extendBodyBehindAppBar: false,
-        
+
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () async {
         //     await proReadAsset.pickImage(
@@ -59,15 +60,20 @@ class _CreatePostScreenState extends State<CreatePostScreen>
         // ),
         appBar: AppBar(
           title: Row(
-            spacing: 9,
             children: [
-              GradientContainer(
-                height: 23,
-                width: 9,
-                verticalGradient: true,
+              Image.asset(
+                height: 50,
+                width: 50,
+                ImageConstants.appLogo,
               ),
-              Text(AppInfo.appName.toUpperCase(),
-                  style: StringStyle.appBarText(context: context)),
+              Text(
+                AppInfo.appName,
+                style: TextStyle(
+                  fontFamily: 'Calistoga',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ],
           ),
         ),

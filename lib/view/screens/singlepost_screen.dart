@@ -19,16 +19,17 @@ import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/utils/functions/shimmer/shimmers_items.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
+import 'package:stuedic_app/widgets/caption_widget.dart';
 import 'package:stuedic_app/widgets/gradient_circle_avathar.dart';
 
 class SinglepostScreen extends StatefulWidget {
-  const SinglepostScreen(
-      {super.key,
-      required this.postID,
-       this.userID,
-      });
+  const SinglepostScreen({
+    super.key,
+    required this.postID,
+    this.userID,
+  });
   final String postID;
- final  String? userID;
+  final String? userID;
   @override
   State<SinglepostScreen> createState() => _SinglepostScreenState();
 }
@@ -270,6 +271,14 @@ class _SinglepostScreenState extends State<SinglepostScreen>
                   ],
                 ),
               ),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CaptionWidget(caption: post?.postDescription ?? ''),
+                  )),
+
+//////////////////////Comment Section/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 9),
                 child: ListView.builder(

@@ -23,6 +23,7 @@ import 'package:stuedic_app/utils/constants/color_constants.dart';
 import 'package:stuedic_app/utils/constants/string_constants.dart';
 import 'package:stuedic_app/view/screens/user_profile/user_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stuedic_app/widgets/caption_widget.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard(
@@ -235,7 +236,9 @@ class _PostCardState extends State<PostCard>
             SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(widget.caption, style: TextStyle(fontSize: 16)),
+              child: CaptionWidget(
+                caption: widget.caption,
+              ),
             ),
             SizedBox(height: 12),
             ///////////////Post Bottom bar///////////////////////////Post bottom bar/////////////////////////////////////////////////////////

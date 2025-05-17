@@ -8,12 +8,24 @@ import 'package:stuedic_app/utils/app_utils.dart';
 
 class StoryController extends ChangeNotifier {
   HomeStoriesModel? getstorymodel;
+  final List<GroupedStory> homeStories = [];
   Future<void> getStories(BuildContext context) async {
+    final currentUserId = await AppUtils.getCurrentUserDetails(isUserId: true);
+
     await ApiMethods.get(
         url: ApiUrls.getStoryList,
         onSucces: (p0) {
           getstorymodel = homeStoriesModelFromJson(p0);
-          log(getstorymodel?.response.toString() ?? '');
+
+          // Sort groupedStories: isCurrentUser == true to the front
+          if (getstorymodel?.response?.groupedStories != null) {
+            getstorymodel!.response!.groupedStories!.sort((a, b) {
+              if ((a.isCurrentUser ?? false) == (b.isCurrentUser ?? false))
+                return 0;
+              return (a.isCurrentUser ?? false) ? -1 : 1;
+            });
+          }
+
           notifyListeners();
         },
         onTokenExpired: () async {
@@ -26,7 +38,7 @@ class StoryController extends ChangeNotifier {
 
   Future<void> addStory(
       {required String url,
-      String? caption, 
+      String? caption,
       required BuildContext context}) async {
     isStoryUploading = true;
     notifyListeners();

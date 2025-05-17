@@ -71,7 +71,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     icon: Icon(CupertinoIcons.delete),
                     onPressed: () {
                       customDialog(context,
-                          titile: 'Delete User',
+                          title: 'Delete User',
                           subtitle:
                               'Are you sure you want to delete the selected user(s)? This action cannot be undone.',
                           actions: [
@@ -103,7 +103,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 ],
               )
             : AppBar(
-                centerTitle: true,
                 leading: IconButton(
                   onPressed: () {
                     widget.controller.previousPage(
@@ -139,12 +138,21 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   // )
                 ],
                 title: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    GradientContainer(
-                        height: 23, width: 9, verticalGradient: true),
-                    const SizedBox(width: 9),
-                    Text(AppInfo.appName.toUpperCase(),
-                        style: StringStyle.appBarText(context: context)),
+                    Image.asset(
+                      height: 50,
+                      width: 50,
+                      ImageConstants.appLogo,
+                    ),
+                    Text(
+                      AppInfo.appName,
+                      style: TextStyle(
+                        fontFamily: 'Calistoga',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -216,7 +224,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                 AppUtils.getProfile(
                                                     url: user.profilePicUrl)),
                                         title: Text(
-                                          AppUtils.getUserNameById(user.username),
+                                          AppUtils.getUserNameById(
+                                              user.username),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),

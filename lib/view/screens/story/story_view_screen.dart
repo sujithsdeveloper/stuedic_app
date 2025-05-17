@@ -354,10 +354,18 @@ class ImageStoryView extends StatelessWidget {
             height: double.infinity,
             loadingBuilder: (context, child, progress) {
               if (progress == null) {
-                onLoading?.call(false);
+                if (onLoading != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onLoading!(false);
+                  });
+                }
                 return child;
               }
-              onLoading?.call(true);
+              if (onLoading != null) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  onLoading!(true);
+                });
+              }
               return SizedBox.shrink();
             },
           ),

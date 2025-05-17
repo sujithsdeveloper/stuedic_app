@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
@@ -88,10 +87,7 @@ class _BottomNavScreenState extends State<BottomNavScreen>
       child: Consumer<AppContoller>(builder: (context, navProvider, child) {
         return Scaffold(
           //by using indexedstack.....we can keep the state of the page when switching between them
-          // body: IndexedStack(
-          //     index: proWatch.currentIndex,
-          //     //there are two screen screens for profile(student user and college user)
-          //     children: isCollege ? CollegeuserScreens : userScreens),
+
           body: Builder(
             builder: (context) {
               return isCollege
@@ -99,6 +95,11 @@ class _BottomNavScreenState extends State<BottomNavScreen>
                   : userScreens[navProvider.currentIndex];
             },
           ),
+          // body: IndexedStack(
+          //   index: proWatchAppController.currentIndex,
+          //   //there are two screen screens for profile(student user and college user)
+          //   children: isCollege ? CollegeuserScreens : userScreens,
+          // ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Transform.translate(
