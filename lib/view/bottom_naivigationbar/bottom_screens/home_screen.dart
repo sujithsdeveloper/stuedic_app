@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: Scaffold(
               backgroundColor: AppUtils.isDarkTheme(context)
                   ? const Color(0xFF1A1A1A)
-                  : Colors.white,
+                  : Color(0xffF6F8F9),
               body: CustomScrollView(
                 controller: scrollController,
                 cacheExtent: context.screenHeight,
@@ -165,10 +165,7 @@ class _HomeScreenState extends State<HomeScreen>
                   SliverToBoxAdapter(
                     child: SizedBox(
                       height: 110,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: StorySection(),
-                      ),
+                      child: StorySection(),
                     ),
                   ),
                   items == null || items.isEmpty

@@ -103,7 +103,8 @@ class _PostCardState extends State<PostCard>
     final proReadInteraction = context.read<PostInteractionController>();
 
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12), color: Colors.white),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
         child: Column(

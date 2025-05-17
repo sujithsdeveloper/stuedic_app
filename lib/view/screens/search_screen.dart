@@ -42,8 +42,9 @@ class _SearchScreenState extends State<SearchScreen>
     final proRead = context.read<UserSearchController>();
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 90,
           title: Material(
-            elevation: 2,
+            elevation: 3,
             borderRadius: BorderRadius.circular(99),
             child: TextField(
               controller: controller,
@@ -61,9 +62,10 @@ class _SearchScreenState extends State<SearchScreen>
                   filled: true,
                   fillColor: AppUtils.isDarkTheme(context)
                       ? const Color(0xFF1A1A1A)
-                      : ColorConstants.greyColor,
-                  hintText: "Search",
-                  prefixIcon: Icon(CupertinoIcons.search, size: 20),
+                      : Colors.white,
+                  hintText: "Search...",
+                  hintStyle: TextStyle(color: Colors.black),
+                  prefixIcon: Icon(CupertinoIcons.search),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(99),

@@ -27,120 +27,123 @@ class _StorySectionState extends State<StorySection> {
     // final storyProwatch = context.watch<StoryController>();
     final profileUrl = proWatchUser.userCurrentDetails?.response?.profilePicUrl;
     final profileName = proWatchUser.userCurrentDetails?.response?.userName;
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(children: [
-          (homeStories == null || homeStories.isEmpty)
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      AppRoutes.push(context, AssetPickerPage());
-                    },
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: ColorConstants.primaryColor,
-                              radius: 34,
-                              child: CircleAvatar(
-                                radius: 32,
-                                backgroundImage:
-                                    AppUtils.getProfile(url: profileUrl ?? ''),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 3,
-                              right: 3,
-                              child: GradientCircleAvathar(
-                                radius: 20,
-                                child: Icon(
-                                  Icons.add,
-                                  size: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Your Story',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: homeStories?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final homeStory = homeStories?[index];
-                    return Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+    return Container(
+      color: Colors.white,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [
+            (homeStories == null || homeStories.isEmpty)
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: GestureDetector(
+                      onTap: () {
+                        AppRoutes.push(context, AssetPickerPage());
+                      },
                       child: Column(
                         children: [
                           Stack(
                             children: [
-                              AnimatedGradientRing(
-                                  index: index,
-                                  onTap: proWatch.isClickedStoryLoading
-                                      ? null
-                                      : () {
-                                          proRead.onStoryTap(
-                                              context: context,
-                                              index: index,
-                                              url: homeStory?.profilePicUrl ??
-                                                  '',
-                                              name: homeStory?.authorName ??
-                                                  'unknown user');
-                                        },
-                                  profileUrl: homeStory?.profilePicUrl ?? ''),
+                              CircleAvatar(
+                                backgroundColor: ColorConstants.primaryColor,
+                                radius: 34,
+                                child: CircleAvatar(
+                                  radius: 32,
+                                  backgroundImage: AppUtils.getProfile(
+                                      url: profileUrl ?? ''),
+                                ),
+                              ),
                               Positioned(
-                                  bottom: 3,
-                                  right: 3,
-                                  child: Builder(
-                                    builder: (context) {
-                                      if (index == 0) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            AppRoutes.push(
-                                                context, AssetPickerPage());
-                                          },
-                                          child: GradientCircleAvathar(
-                                            radius: 20,
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 12,
-                                            ),
-                                          ),
-                                        );
-                                      } else {
-                                        return const SizedBox();
-                                      }
-                                    },
-                                  )),
+                                bottom: 3,
+                                right: 3,
+                                child: GradientCircleAvathar(
+                                  radius: 20,
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 12,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                          SizedBox(height: 5),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
-                            homeStory?.authorName ?? 'Unknown user',
+                            'Your Story',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 10),
-                          )
+                          ),
                         ],
                       ),
-                    );
-                  },
-                ),
-        ]));
+                    ),
+                  )
+                : ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeStories?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final homeStory = homeStories?[index];
+                      return Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                AnimatedGradientRing(
+                                    index: index,
+                                    onTap: proWatch.isClickedStoryLoading
+                                        ? null
+                                        : () {
+                                            proRead.onStoryTap(
+                                                context: context,
+                                                index: index,
+                                                url: homeStory?.profilePicUrl ??
+                                                    '',
+                                                name: homeStory?.authorName ??
+                                                    'unknown user');
+                                          },
+                                    profileUrl: homeStory?.profilePicUrl ?? ''),
+                                Positioned(
+                                    bottom: 3,
+                                    right: 3,
+                                    child: Builder(
+                                      builder: (context) {
+                                        if (index == 0) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              AppRoutes.push(
+                                                  context, AssetPickerPage());
+                                            },
+                                            child: GradientCircleAvathar(
+                                              radius: 20,
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 12,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return const SizedBox();
+                                        }
+                                      },
+                                    )),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              homeStory?.authorName ?? 'Unknown user',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 10),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+          ])),
+    );
   }
 }
 
