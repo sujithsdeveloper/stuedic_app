@@ -75,8 +75,15 @@ class _UserProfileState extends State<UserProfile>
     final isCollege = user.isCollege ?? false;
     // final isCollege = false;
     return BlocProvider(
-      create: (context) =>
-          FollowBtnBloc(initialFollowStatus: user.isFollowed ?? false),
+      create: (context) => FollowBtnBloc(
+        initialFollowStatus: user.isFollowed ?? false,
+      )..emit(
+          FollowBtnState(
+            isFollow: user.isFollowed ?? false,
+            reelboolChange: user.isFollowed ?? false,
+            followersCount: user.followersCount ?? 0,
+          ),
+        ),
       child: Scaffold(
         body: BlocBuilder<FollowBtnBloc, FollowBtnState>(
           builder: (context, followState) {
@@ -162,11 +169,12 @@ class _UserProfileState extends State<UserProfile>
                                         onTap: () {
                                           BlocProvider.of<FollowBtnBloc>(
                                                   context)
-                                              .add(
-                                                  FollowBtnEvent(
-                                                      userId: user.userId
-                                                          .toString(),
-                                                      context: context));
+                                              .add(FollowBtnEvent(
+                                                  followersCount:
+                                                      user.followersCount ?? 0,
+                                                  userId:
+                                                      user.userId.toString(),
+                                                  context: context));
                                         },
                                         height: 48,
                                         width: 100,
@@ -410,80 +418,83 @@ class _UserProfileState extends State<UserProfile>
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Edit profile & and pdf icon
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ProfileActionButton(
-                                          iconData: CupertinoIcons.doc_text,
-                                          onTap: () {
-                                            AppRoutes.push(context,
-                                                PdfViewerScreen(url: pdfUrl));
-                                          },
-                                        ),
-                                        const SizedBox(width: 10),
-                                        GradientButton(
-                                          height: 48,
-                                          width: 120,
-                                          onTap: () {
-                                            BlocProvider.of<FollowBtnBloc>(
-                                                    context)
-                                                .add(
-                                                    FollowBtnEvent(
-                                                        userId: user.userId
-                                                            .toString(),
-                                                        context: context));
-                                          },
-                                          isColored: !followState.isFollow,
-                                          label: followState.isFollow
-                                              ? 'Following'
-                                              : 'Follow',
-                                        ),
-                                      ],
-                                    ),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Edit profile & and pdf icon
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ProfileActionButton(
+                                            iconData: CupertinoIcons.doc_text,
+                                            onTap: () {
+                                              AppRoutes.push(context,
+                                                  PdfViewerScreen(url: pdfUrl));
+                                            },
+                                          ),
+                                          const SizedBox(width: 10),
+                                          GradientButton(
+                                            height: 48,
+                                            width: 120,
+                                            onTap: () {
+                                              BlocProvider.of<
+                                                      FollowBtnBloc>(context)
+                                                  .add(FollowBtnEvent(
+                                                      followersCount:
+                                                          followState
+                                                              .followersCount,
+                                                      userId: user.userId
+                                                          .toString(),
+                                                      context: context));
+                                            },
+                                            isColored: !followState.isFollow,
+                                            label: followState.isFollow
+                                                ? 'Following'
+                                                : 'Follow',
+                                          ),
+                                        ],
+                                      ),
 
-                                    const SizedBox(height: 16),
-                                    Text(AppUtils.getUserNameById(user.userId),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                    Text('@${user.userId ?? ''}',
-                                        style: const TextStyle(
-                                            color: Colors.grey)),
-                                    const SizedBox(height: 5),
-                                    Text(user.collageName ?? '',
-                                        style: StringStyle.normalText()),
-                              
+                                      const SizedBox(height: 16),
+                                      Text(
+                                          AppUtils.getUserNameById(user.userId),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text('@${user.userId ?? ''}',
+                                          style: const TextStyle(
+                                              color: Colors.grey)),
+                                      const SizedBox(height: 5),
+                                      Text(user.collageName ?? '',
+                                          style: StringStyle.normalText()),
 
-                                    const SizedBox(height: 20),
+                                      const SizedBox(height: 20),
 
-                                    // Stats row
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        counts(
-                                            count: AppUtils.formatCounts(
-                                                user.postCount ?? 0),
-                                            label: "Posts"),
-                                        counts(
-                                            count: AppUtils.formatCounts(
-                                                user.followingCount ?? 0),
-                                            label: "Following"),
-                                        counts(
-                                            count: AppUtils.formatCounts(
-                                                user.followersCount ?? 0),
-                                            label: "Followers"),
-                                        counts(
-                                            count: AppUtils.formatCounts(0),
-                                            label: "Likes"),
-                                      ],
-                                    ),
-                                    SizedBox(height: 20)
-                                  ],
-                                ),
+                                      // Stats row
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          counts(
+                                              count: AppUtils.formatCounts(
+                                                  user.postCount ?? 0),
+                                              label: "Posts"),
+                                          counts(
+                                              count: AppUtils.formatCounts(
+                                                  user.followingCount ?? 0),
+                                              label: "Following"),
+                                          counts(
+                                              count: AppUtils.formatCounts(
+                                                  followState.followersCount),
+                                              label: "Followers"),
+                                          counts(
+                                              count: AppUtils.formatCounts(0),
+                                              label: "Likes"),
+                                        ],
+                                      ),
+                                      SizedBox(height: 20)
+                                    ]),
                               ),
                             ],
                           ),

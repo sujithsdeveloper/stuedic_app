@@ -9,10 +9,11 @@ class FollowButton extends StatelessWidget {
       required this.userId,
       required this.followState,
       this.outLinedButton = false,
-      required this.isFollowed});
+      required this.isFollowed, required this.followersCount});
   final String userId;
   final FollowBtnState followState;
   final bool outLinedButton;
+  final int followersCount;
   final bool isFollowed;
   @override
   Widget build(BuildContext context) {
@@ -20,14 +21,16 @@ class FollowButton extends StatelessWidget {
         ? CustomOutLinedButton(
             label: followState.isFollow ? 'Following' : 'Follow',
             onTap: () {
-              BlocProvider.of<FollowBtnBloc>(context)
-                  .add(FollowBtnEvent(userId: userId, context: context));
+              BlocProvider.of<FollowBtnBloc>(context).add(FollowBtnEvent(
+                  userId: userId,
+                  context: context,
+                  followersCount: followersCount));
             },
           )
         : GradientButton(
             onTap: () {
               BlocProvider.of<FollowBtnBloc>(context)
-                  .add(FollowBtnEvent(userId: userId, context: context));
+                  .add(FollowBtnEvent(userId: userId, context: context, followersCount: followersCount));
             },
             height: 48,
             width: 100,

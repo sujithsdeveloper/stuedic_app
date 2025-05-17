@@ -46,6 +46,7 @@ class ProfileController extends ChangeNotifier {
           '${ApiUrls.baseUrl}api/v1/Profile/followUser?userId=$userId'),
       onSucces: (p0) {
         Logger().f(p0);
+        AppUtils.showToast(toastMessage: 'Followed');
         // context
         //     .read<ProfileController>()
         //     .getUserByUserID(userId: userId, context: context);
@@ -62,6 +63,7 @@ class ProfileController extends ChangeNotifier {
       url: Uri.parse(
           '${ApiUrls.baseUrl}api/v1/Profile/unfollowUser?userId=$userId'),
       onSucces: (p0) {
+        AppUtils.showToast(toastMessage: 'Unfollowed');
         Logger().f(p0);
         // context
         //     .read<ProfileController>()

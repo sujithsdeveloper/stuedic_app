@@ -67,6 +67,7 @@ class TopBar extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   BlocProvider.of<FollowBtnBloc>(context).add(FollowBtnEvent(
+                    followersCount: 0,
                       userId: reel!.userId.toString(), context: context));
                 },
                 child: Container(
