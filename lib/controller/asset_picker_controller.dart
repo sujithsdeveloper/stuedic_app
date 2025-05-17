@@ -12,6 +12,7 @@ import 'package:stuedic_app/styles/snackbar__style.dart';
 import 'package:stuedic_app/utils/app_utils.dart';
 import 'package:stuedic_app/utils/constants/app_default_settings.dart';
 import 'package:stuedic_app/view/screens/media/upload_video_player.dart';
+import 'package:video_player/video_player.dart';
 
 class AssetPickerController extends ChangeNotifier {
   File? pickedImage;
@@ -196,26 +197,44 @@ class AssetPickerController extends ChangeNotifier {
     }
   }
 
-  Future<void> pickVideoForPost(
+  Future<File?> pickVideoForPost(
       {required ImageSource imageSource, required BuildContext context}) async {
     log('pick video for post called');
     isLoading = true;
     notifyListeners();
     final imagePicker = ImagePicker();
-    final video =
-        File((await imagePicker.pickVideo(source: imageSource))?.path ?? '');
-    if (video != null) {
-      log('picked video path: ${video.path}');
+    final videoXfile = await imagePicker.pickVideo(source: imageSource);
+    if (videoXfile != null) {
+      final videoFile = File(videoXfile.path);
+      log('picked video path: ${videoFile.path}');
       isLoading = false;
-      pickedVideo = video;
       notifyListeners();
 
-      final videoUrl = await context.read<MutlipartController>().uploadVideo(
-            context: context,
-            file: pickedVideo!,
-          );
-      notifyListeners();
-      log('Video URL: $videoUrl');
+      final VideoPlayerController videoPlayerController =
+          VideoPlayerController.file(videoFile);
+      log('Picked video duration: ${videoPlayerController.value.duration}');
+
+      if (videoPlayerController.value.duration >
+          AppDefaultSettings.videoDuration) {
+        AppUtils.showToast(
+            toastMessage:
+                'Video duration should be less than ${AppDefaultSettings.videoDuration.inSeconds} seconds');
+        log('Picked video duration: ${videoPlayerController.value.duration}');
+        pickedVideo = null;
+        isLoading = false;
+        notifyListeners();
+        return null;
+      } else {
+        log('Video duration is within limit');
+        pickedVideo = videoFile;
+        notifyListeners();
+        final videoUrl = await context.read<MutlipartController>().uploadVideo(
+              context: context,
+              file: pickedVideo!,
+            );
+        log('Video URL: $videoUrl');
+        return videoFile;
+      }
     }
   }
 }

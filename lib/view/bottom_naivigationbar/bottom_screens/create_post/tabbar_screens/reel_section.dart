@@ -62,7 +62,6 @@ class _ReelSectionState extends State<ReelSection> {
                         children: [
                           SizedBox(
                             width: double.infinity,
-                            height: 418,
                             child: AssetVideoPlayer(
                                 videoFile: proWatchAsset.pickedVideo!),
                           ),

@@ -91,7 +91,7 @@ class _ShortsScreenState extends State<ShortsScreen>
     final proWatchVideo = context.watch<VideoTypeController>();
     // final proReadVideo = context.read<VideoTypeController>();
     final proReadInteraction = context.read<PostInteractionController>();
-    final reels = proWatch.getShortsModel?.response;
+    final reels = proWatch.getShortsModel?.response?.reversed.toList();
 
     if (reels != null && reels.isNotEmpty) {
       _initController(_currentIndex, reels);

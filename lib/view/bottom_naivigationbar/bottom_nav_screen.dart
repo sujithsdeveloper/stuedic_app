@@ -102,7 +102,8 @@ class _BottomNavScreenState extends State<BottomNavScreen>
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Transform.translate(
-            offset: Offset(0, proWatchAppController.currentIndex == 3 ? 30 : 0),
+            offset:
+                Offset(0, proWatchAppController.currentIndex == 3 ? 30 : 11),
             child: CircleAvatar(
               backgroundColor: proWatchAppController.currentIndex == 3
                   ? Colors.transparent
